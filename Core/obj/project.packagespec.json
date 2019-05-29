@@ -1,10 +1,10 @@
 ﻿{
   "version": "1.0.0",
   "restore": {
-    "projectUniqueName": "/home/datalab/Bureaublad/Projects/PopOptBox/PopOptBox/Core/Core.csproj",
+    "projectUniqueName": "/home/datalab/Bureaublad/Projects/PopOptBox/Core/Core.csproj",
     "projectName": "Core",
-    "projectPath": "/home/datalab/Bureaublad/Projects/PopOptBox/PopOptBox/Core/Core.csproj",
-    "outputPath": "/home/datalab/Bureaublad/Projects/PopOptBox/PopOptBox/Core/obj/",
+    "projectPath": "/home/datalab/Bureaublad/Projects/PopOptBox/Core/Core.csproj",
+    "outputPath": "/home/datalab/Bureaublad/Projects/PopOptBox/Core/obj/",
     "projectStyle": "PackageReference",
     "fallbackFolders": [
       "/usr/share/dotnet/sdk/NuGetFallbackFolder"

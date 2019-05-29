@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks.Sources;
 
 namespace Optimisation.Core.Population
 {
@@ -8,14 +9,12 @@ namespace Optimisation.Core.Population
     /// "Individual" class, which contains information about 
     /// a given single solution for an optimisation problem.
     /// </summary>
-    /// <typeparam name="TDecVec">The type of the Decision Vector, 
-    /// e.g. int for a Genetic Algorithm</typeparam>
-    public class Individual<TDecVec>
+    public class Individual
     {
         #region Fields
 
         // Definition of the individual from the optimiser
-        public readonly IReadOnlyList<TDecVec> DecisionVector;
+        public readonly DecisionVector DecisionVector;
 
         // Properties contain any numeric information an 
         // evaluator wishes to add.
@@ -57,17 +56,17 @@ namespace Optimisation.Core.Population
         /// Construct individual
         /// </summary>
         /// <param name="decisionVector">Vector of type defined at class construction</param>
-        public Individual(IEnumerable<TDecVec> decisionVector)
+        public Individual(DecisionVector decisionVector)
         {
-            DecisionVector = decisionVector.ToArray();
+            DecisionVector = decisionVector;
         }
 
         /// <summary>
         /// Returns a shallow copy of the Individual
         /// </summary>
-        public Individual<TDecVec> Clone()
+        public Individual Clone()
         {
-            return new Individual<TDecVec>(DecisionVector)
+            return new Individual(DecisionVector)
             {
                 SolutionVector = SolutionVector,
                 Score = Score,
@@ -201,14 +200,11 @@ namespace Optimisation.Core.Population
         #region Equals, GetHashCode
 
         /// <summary>
-        /// We use a very limited form of Equals (should really be ApproxEquals)
-        /// which only checks for Decision Vector equivalence.
+        /// We use a very limited form of Equals which only checks for Decision Vector equivalence.
         /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
         public override bool Equals(object obj)
         {
-            if (!(obj is Individual<TDecVec> other))
+            if (!(obj is Individual other))
                 return false;
 
             return DecisionVector.Equals(other.DecisionVector);

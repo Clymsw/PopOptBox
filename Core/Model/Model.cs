@@ -3,13 +3,13 @@ using Optimisation.Core.Population;
 namespace Optimisation.Core.Model
 {
     /// <inheritdoc />
-    public abstract class Model<TDecVec, TReality> : IModel<TDecVec>
+    public abstract class Model : IModel
     {
         #region Constructor
 
         /// <inheritdoc />
         protected Model(
-            IConverter<TDecVec, TReality> converter,
+            IConverter converter,
             string keyForEvaluator)
         {
             conversionModel = converter;
@@ -20,7 +20,7 @@ namespace Optimisation.Core.Model
 
         #region Fields
 
-        private readonly IConverter<TDecVec, TReality> conversionModel;
+        private readonly IConverter conversionModel;
         private readonly string evaluatorDefinitionKey;
 
         #endregion
@@ -28,7 +28,7 @@ namespace Optimisation.Core.Model
         #region Activity
 
         /// <inheritdoc />
-        public Individual<TDecVec> GetNewIndividual()
+        public Individual GetNewIndividual()
         {
             return CreateNewIndividual();
         }
@@ -38,10 +38,10 @@ namespace Optimisation.Core.Model
         ///     Called by <see cref="GetNewIndividual" />
         /// </summary>
         /// <returns>A new Individual.</returns>
-        protected abstract Individual<TDecVec> CreateNewIndividual();
+        protected abstract Individual CreateNewIndividual();
 
         /// <inheritdoc />
-        public void PrepareForEvaluation(Individual<TDecVec> ind)
+        public void PrepareForEvaluation(Individual ind)
         {
             ind.SetProperty(evaluatorDefinitionKey,
                 conversionModel.ConvertToReality(ind.DecisionVector));

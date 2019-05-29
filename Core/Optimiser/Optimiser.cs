@@ -5,7 +5,7 @@ using Optimisation.Core.Population;
 namespace Optimisation.Core.Optimiser
 {
     /// <inheritdoc />
-    public abstract class Optimiser<TDecVec> : IOptimiser<TDecVec>
+    public abstract class Optimiser : IOptimiser
     {
         #region Constructor
 
@@ -25,12 +25,12 @@ namespace Optimisation.Core.Optimiser
 
         #region Fields
 
-        protected Population<TDecVec> population;
+        protected Population.Population population;
 
         /// <summary>
         ///     The current population in the optimiser
         /// </summary>
-        public Population<TDecVec> Population => population;
+        public Population.Population Population => population;
 
         private readonly string solutionProperty;
         private readonly Func<double[], double[]> solToScore;
@@ -44,8 +44,8 @@ namespace Optimisation.Core.Optimiser
         /// <summary>
         ///     Optimiser-specific logic to implement, which works out what to try next
         /// </summary>
-        /// <returns>The most useful next Individual to evaluate</returns>
-        protected abstract Individual<TDecVec> GetNextInd();
+        /// <returns>The most useful next Decision Vector to evaluate</returns>
+        protected abstract DecisionVector GetNewIndividual();
 
         /// <summary>
         ///     Logic to check if a new individual is legal, according to rules
@@ -53,17 +53,19 @@ namespace Optimisation.Core.Optimiser
         /// </summary>
         /// <param name="ind">Individual to check</param>
         /// <returns>True/False</returns>
-        protected abstract bool CheckAcceptable(Individual<TDecVec> ind);
+        protected abstract bool CheckAcceptable(Individual ind);
 
         /// <inheritdoc />
         /// <exception cref="TimeoutException">Thrown if not enough individuals can be created.</exception>
-        public IReadOnlyList<Individual<TDecVec>> GetNextToEvaluate(int numDesired)
+        public IReadOnlyList<Individual> GetNextToEvaluate(int numDesired)
         {
-            var listOfInds = new List<Individual<TDecVec>>();
+            var listOfInds = new List<Individual>();
             var i = 0;
             while (listOfInds.Count < numDesired)
             {
-                var newInd = GetNextInd();
+                var newDv = GetNewIndividual();
+                var newInd = new Individual(newDv);
+                
                 if (CheckAcceptable(newInd))
                 {
                     newInd.SendForEvaluation();
@@ -91,10 +93,10 @@ namespace Optimisation.Core.Optimiser
         ///     <see langword="true" /> if <see cref="ind" /> was actually inserted;
         ///     <see langword="false" /> if rejected.
         /// </returns>
-        protected abstract bool ReInsert(Individual<TDecVec> ind);
+        protected abstract bool ReInsert(Individual ind);
 
         /// <inheritdoc />
-        public int ReInsert(IEnumerable<Individual<TDecVec>> individualList)
+        public int ReInsert(IEnumerable<Individual> individualList)
         {
             var numInserted = 0;
             foreach (var ind in individualList)

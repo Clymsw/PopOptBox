@@ -9,9 +9,7 @@ namespace Optimisation.Core.Helpers
     /// <summary>
     ///     Helper class for creating a full optimisation environment
     /// </summary>
-    /// <typeparam name="TDecVec">Decision Vector type</typeparam>
-    /// <typeparam name="TReality">Solution Vector type</typeparam>
-    public abstract class OptimiserBuilder<TDecVec, TReality>
+    public abstract class OptimiserBuilder
     {
         private readonly Dictionary<string, object> Settings;
 
@@ -46,20 +44,20 @@ namespace Optimisation.Core.Helpers
         /// <param name="penaltyFcn"></param>
         /// <param name="settings"></param>
         /// <returns></returns>
-        public abstract Optimiser<TDecVec> CreateOptimiser();
+        public abstract Optimiser.Optimiser CreateOptimiser();
 
         /// <summary>
         ///     The model
         /// </summary>
         /// <returns></returns>
-        public abstract Model<TDecVec, TReality> CreateModel();
+        public abstract Model.Model CreateModel();
 
         /// <summary>
         ///     The Decision Vector generator for population initialisation
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        protected Func<Individual<TDecVec>> CreateDecisionVectorGenerator()
+        protected Func<Individual> CreateDecisionVectorGenerator()
         {
             var model = CreateModel();
             return model.GetNewIndividual;

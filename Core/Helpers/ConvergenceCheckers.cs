@@ -14,8 +14,8 @@ namespace Optimisation.Core.Helpers
         /// <param name="pop">population</param>
         /// <param name="tolerance">the absolute tolerance in the units of the fitness</param>
         /// <returns><see langword="true" /> if converged</returns>
-        public static bool CheckAbsoluteFitnessDivergence<TDecVec>(
-            this Population<TDecVec> pop,
+        public static bool CheckAbsoluteFitnessDivergence(
+            this Population pop,
             double tolerance = 1)
         {
             // Math.Abs is not, strictly speaking, necessary. But this is safe.
@@ -31,7 +31,7 @@ namespace Optimisation.Core.Helpers
         /// <param name="tolerance">relative amount</param>
         /// <returns><see langword="true" /> if converged</returns>
         public static bool CheckRelativeFitnessDivergence<TDecVec>(
-            this Population<TDecVec> pop,
+            this Population pop,
             double tolerance = 0.001)
         {
             var difference = pop.Worst().Fitness - pop.Best().Fitness;
@@ -51,7 +51,7 @@ namespace Optimisation.Core.Helpers
         /// <param name="tolerance">absolute tolerance, in the units of the decision vector</param>
         /// <returns><see langword="true" /> if converged</returns>
         public static bool CheckAbsoluteDecVecDivergence(
-            this Population<double> pop,
+            this Population pop,
             double tolerance)
         {
             var worst = pop.Worst().DecisionVector;
@@ -72,7 +72,7 @@ namespace Optimisation.Core.Helpers
         /// </param>
         /// <returns><see langword="true" /> if converged</returns>
         public static bool CheckAbsoluteDecVecDivergence(
-            this Population<double> pop,
+            this Population pop,
             double[] tolerance)
         {
             var worst = pop.Worst().DecisionVector;
@@ -95,7 +95,7 @@ namespace Optimisation.Core.Helpers
         /// <param name="tolerance">relative amount</param>
         /// <returns><see langword="true" /> if converged</returns>
         public static bool CheckRelativeDecVecDivergence(
-            this Population<double> pop,
+            this Population pop,
             double tolerance = 0.001)
         {
             var worstVec = pop.Worst().DecisionVector;
@@ -117,7 +117,7 @@ namespace Optimisation.Core.Helpers
         /// </param>
         /// <returns><see langword="true" /> if converged</returns>
         public static bool CheckRelativeDecVecDivergence(
-            this Population<double> pop,
+            this Population pop,
             double[] tolerance)
         {
             var worstVec = pop.Worst().DecisionVector;

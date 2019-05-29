@@ -9,18 +9,16 @@ namespace Optimisation.Core.Population
     /// The Population contains a number of possible solutions ("Individuals")
     /// for an optimisation problem.
     /// </summary>
-    /// <typeparam name="TDecVec">The type of the Decision Vector, 
-    /// e.g. int for a Genetic Algorithm</typeparam>
-    public class Population<TDecVec> : IReadOnlyCollection<Individual<TDecVec>>
+    public class Population : IReadOnlyCollection<Individual>
     {
         #region Fields
 
         // A list of all members of the population.
-        private readonly List<Individual<TDecVec>> members;
-
-        private readonly int initialSize;
-
+        private readonly List<Individual> members;
+        
         public readonly bool ConstantLengthDecisionVector;
+        
+        private readonly int initialSize;
 
         public bool IsTargetSizeReached => members.Count >= initialSize;
 
@@ -36,7 +34,7 @@ namespace Optimisation.Core.Population
         /// <param name="constantLengthDv">Whether the decision vector should be expected to be constant</param>
         public Population(
             int initialSize = 100,
-            IEnumerable<Individual<TDecVec>> initialPopulation = null,
+            IEnumerable<Individual> initialPopulation = null,
             bool constantLengthDv = true)
         {
             if (initialSize > 0)
@@ -44,7 +42,7 @@ namespace Optimisation.Core.Population
 
             ConstantLengthDecisionVector = constantLengthDv;
 
-            members = new List<Individual<TDecVec>>(this.initialSize);
+            members = new List<Individual>(this.initialSize);
 
             if (initialPopulation == null)
                 return;
@@ -56,9 +54,9 @@ namespace Optimisation.Core.Population
         /// Returns a shallow copy of the Population
         /// (member list is copied)
         /// </summary>
-        public virtual Population<TDecVec> Clone()
+        public virtual Population Clone()
         {
-            return new Population<TDecVec>(
+            return new Population(
                 initialSize,
                 members.ToArray(),
                 ConstantLengthDecisionVector);
@@ -74,19 +72,19 @@ namespace Optimisation.Core.Population
         /// </summary>
         /// <param name="index">Integer index into population</param>
         /// <returns>Individual</returns>
-        public Individual<TDecVec> this[int index] => members[index];
+        public Individual this[int index] => members[index];
 
-        public IReadOnlyList<Individual<TDecVec>> GetMemberList()
+        public IReadOnlyList<Individual> GetMemberList()
         {
             return members;
         }
 
-        public Individual<TDecVec> Best()
+        public Individual Best()
         {
             return members[0];
         }
 
-        public Individual<TDecVec> Worst()
+        public Individual Worst()
         {
             return members[members.Count - 1];
         }
@@ -122,9 +120,9 @@ namespace Optimisation.Core.Population
         /// Get the DVs of all individuals
         /// </summary>
         /// <returns>List of TDecVec arrays: DV</returns>
-        public List<TDecVec[]> ListDecision()
+        public List<object[]> ListDecision()
         {
-            return members.Select(i => i.DecisionVector.ToArray()).ToList();
+            return members.Select(i => i.DecisionVector.Vector.ToArray()).ToList();
         }
 
         #endregion
@@ -136,10 +134,10 @@ namespace Optimisation.Core.Population
         /// </summary>
         /// <param name="ind">The individual to add</param>
         /// <exception cref="ArgumentException"></exception>
-        public void AddIndividual(Individual<TDecVec> ind)
+        public void AddIndividual(Individual ind)
         {
             if (ConstantLengthDecisionVector && members.Count > 0)
-                if (ind.DecisionVector.Count != members[0].DecisionVector.Count)
+                if (ind.DecisionVector.Vector.Count != members[0].DecisionVector.Vector.Count)
                     throw new ArgumentException(
                         "Decision Vectors not the same length!");
 
@@ -155,7 +153,7 @@ namespace Optimisation.Core.Population
         /// Replaces worst individual with a new one
         /// </summary>
         /// <param name="ind">New individual to insert</param>
-        public void ReplaceWorst(Individual<TDecVec> ind)
+        public void ReplaceWorst(Individual ind)
         {
             members[members.Count - 1] = ind;
             Sort();
@@ -174,7 +172,7 @@ namespace Optimisation.Core.Population
         #region Implementation of IEnumerable
 
         /// <inheritdoc />
-        public IEnumerator<Individual<TDecVec>> GetEnumerator()
+        public IEnumerator<Individual> GetEnumerator()
         {
             return members.GetEnumerator();
         }

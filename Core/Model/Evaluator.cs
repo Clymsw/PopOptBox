@@ -4,7 +4,7 @@ using Optimisation.Core.Population;
 namespace Optimisation.Core.Model
 {
     /// <inheritdoc />
-    public abstract class Evaluator<TDecVec> : IEvaluator<TDecVec>
+    public abstract class Evaluator : IEvaluator
     {
         private readonly string solutionProperty;
 
@@ -15,9 +15,9 @@ namespace Optimisation.Core.Model
         }
 
         /// <inheritdoc />
-        public abstract void Evaluate(Individual<TDecVec> ind);
+        public abstract void Evaluate(Individual ind);
 
-        protected void SetSingleObjectiveSolution(Individual<TDecVec> ind, double solution)
+        protected void SetSingleObjectiveSolution(Individual ind, double solution)
         {
             var solVector = new[]
             {
@@ -26,12 +26,12 @@ namespace Optimisation.Core.Model
             setSolution(ind, solVector);
         }
 
-        protected void SetMultiObjectiveSolution(Individual<TDecVec> ind, IEnumerable<double> solVector)
+        protected void SetMultiObjectiveSolution(Individual ind, IEnumerable<double> solVector)
         {
             setSolution(ind, solVector);
         }
 
-        private void setSolution(Individual<TDecVec> ind, IEnumerable<double> solVector)
+        private void setSolution(Individual ind, IEnumerable<double> solVector)
         {
             ind.SetProperty(solutionProperty, solVector);
             ind.FinishEvaluating();

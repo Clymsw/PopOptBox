@@ -692,11 +692,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/datalab/Bureaublad/Projects/PopOptBox/PopOptBox/Core/Core.csproj",
+      "projectUniqueName": "/home/datalab/Bureaublad/Projects/PopOptBox/Core/Core.csproj",
       "projectName": "Core",
-      "projectPath": "/home/datalab/Bureaublad/Projects/PopOptBox/PopOptBox/Core/Core.csproj",
+      "projectPath": "/home/datalab/Bureaublad/Projects/PopOptBox/Core/Core.csproj",
       "packagesPath": "/home/datalab/.nuget/packages/",
-      "outputPath": "/home/datalab/Bureaublad/Projects/PopOptBox/PopOptBox/Core/obj/",
+      "outputPath": "/home/datalab/Bureaublad/Projects/PopOptBox/Core/obj/",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "/usr/share/dotnet/sdk/NuGetFallbackFolder"
