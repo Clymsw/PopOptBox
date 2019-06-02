@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Optimisation.Core.Population;
+using Optimisation.Base.Management;
 
-namespace Optimisation.Core.Helpers
+namespace Optimisation.Base.Helpers
 {
     public static class ConvergenceCheckers
     {
@@ -54,8 +54,8 @@ namespace Optimisation.Core.Helpers
             this Population pop,
             double tolerance)
         {
-            var worst = pop.Worst().DecisionVector;
-            var best = pop.Best().DecisionVector;
+            var worst = (IEnumerable<double>)pop.Worst().DecisionVector.Vector;
+            var best = (IEnumerable<double>)pop.Best().DecisionVector.Vector;
 
             var differences = best.Zip(worst, (b, w) => Math.Abs(w - b));
             return differences.All(dif => dif < tolerance);
@@ -75,10 +75,10 @@ namespace Optimisation.Core.Helpers
             this Population pop,
             double[] tolerance)
         {
-            var worst = pop.Worst().DecisionVector;
-            var best = pop.Best().DecisionVector;
+            var worst = (IEnumerable<double>)pop.Worst().DecisionVector.Vector;
+            var best = (IEnumerable<double>)pop.Best().DecisionVector.Vector;
 
-            if (best.Count != tolerance.Length)
+            if (best.Count() != tolerance.Length)
                 throw new ArgumentOutOfRangeException(nameof(tolerance),
                     "Tolerance must have same length as decision vector");
 
@@ -98,8 +98,8 @@ namespace Optimisation.Core.Helpers
             this Population pop,
             double tolerance = 0.001)
         {
-            var worstVec = pop.Worst().DecisionVector;
-            var bestVec = pop.Best().DecisionVector;
+            var worstVec = (IEnumerable<double>)pop.Worst().DecisionVector.Vector;
+            var bestVec = (IEnumerable<double>)pop.Best().DecisionVector.Vector;
 
             var relativeDifferences = bestVec.Zip(worstVec, (best, worst) => Math.Abs((worst - best) / best));
             return relativeDifferences.All(dif => dif < tolerance);
@@ -120,10 +120,10 @@ namespace Optimisation.Core.Helpers
             this Population pop,
             double[] tolerance)
         {
-            var worstVec = pop.Worst().DecisionVector;
-            var bestVec = pop.Best().DecisionVector;
+            var worstVec = (IEnumerable<double>)pop.Worst().DecisionVector.Vector;
+            var bestVec = (IEnumerable<double>)pop.Best().DecisionVector.Vector;
 
-            if (bestVec.Count != tolerance.Length)
+            if (bestVec.Count() != tolerance.Length)
                 throw new ArgumentOutOfRangeException(nameof(tolerance),
                     "Tolerance must have same length as decision vector");
 

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Optimisation.Core.Population
+namespace Optimisation.Base.Management
 {
     /// <summary>
     /// The Population contains a number of possible solutions ("Individuals")
@@ -146,7 +146,7 @@ namespace Optimisation.Core.Population
                 // Add to population
                 members.Add(ind);
 
-            Sort();
+            sort();
         }
 
         /// <summary>
@@ -156,13 +156,13 @@ namespace Optimisation.Core.Population
         public void ReplaceWorst(Individual ind)
         {
             members[members.Count - 1] = ind;
-            Sort();
+            sort();
         }
 
         /// <summary>
         /// Sorts array by fitness, best (lowest!) at top.
         /// </summary>
-        private void Sort()
+        private void sort()
         {
             members.Sort((p, q) => p.Fitness.CompareTo(q.Fitness));
         }

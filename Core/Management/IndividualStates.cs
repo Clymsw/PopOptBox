@@ -1,4 +1,4 @@
-namespace Optimisation.Core.Population
+namespace Optimisation.Base.Management
 {
     public enum IndividualStates
     {

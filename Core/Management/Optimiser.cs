@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Optimisation.Core.Population;
+using Optimisation.Base.Management;
+using Optimisation.Base.Variables;
 
-namespace Optimisation.Core.Optimiser
+namespace Optimisation.Base.Management
 {
     /// <inheritdoc />
     public abstract class Optimiser : IOptimiser
@@ -25,12 +26,12 @@ namespace Optimisation.Core.Optimiser
 
         #region Fields
 
-        protected Population.Population population;
+        protected Population population;
 
         /// <summary>
         ///     The current population in the optimiser
         /// </summary>
-        public Population.Population Population => population;
+        public Population Population => population;
 
         private readonly string solutionProperty;
         private readonly Func<double[], double[]> solToScore;
@@ -68,7 +69,6 @@ namespace Optimisation.Core.Optimiser
                 
                 if (CheckAcceptable(newInd))
                 {
-                    newInd.SendForEvaluation();
                     newInd.SetProperty(
                         OptimiserDefinitions.CreationTime,
                         DateTime.Now);

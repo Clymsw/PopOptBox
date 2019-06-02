@@ -1,4 +1,4 @@
-namespace Optimisation.Core
+namespace Optimisation.Base.Variables
 {
     /// <summary>
     /// The definition of a dimension, which is used for optimisation.
@@ -10,6 +10,7 @@ namespace Optimisation.Core
         /// </summary>
         /// <param name="testValue">The value to test</param>
         /// <returns>True/false (whether the value is supported)</returns>
+        /// <exception cref="System.FormatException">Thrown when object is of the wrong type.</exception>
         bool IsInBounds(object testValue);
     }
 }

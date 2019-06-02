@@ -1,6 +1,6 @@
-using Optimisation.Core.Population;
+using Optimisation.Base.Management;
 
-namespace Optimisation.Core.Model
+namespace Optimisation.Base.Conversion
 {
     /// <summary>
     /// The Evaluator decides how good a particular Individual (solution) is

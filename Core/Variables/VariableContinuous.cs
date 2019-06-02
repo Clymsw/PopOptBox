@@ -1,6 +1,6 @@
 using System;
 
-namespace Optimisation.Core
+namespace Optimisation.Base.Variables
 {
     /// <summary>
     /// Continuous dimension, represented by a double type.
@@ -31,7 +31,30 @@ namespace Optimisation.Core
         /// <inheritdoc />
         public bool IsInBounds(object testValue)
         {
-            return (double)testValue >= lowerBound && (double)testValue < upperBound;
+            var test = System.Convert.ToDouble(testValue);
+            return test >= lowerBound && test < upperBound;
         }
+
+        #region Equals, GetHashCode
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is VariableContinuous other))
+                return false;
+
+            return lowerBound.Equals(other.lowerBound) && 
+                upperBound.Equals(other.upperBound);
+        }
+
+        public override int GetHashCode()
+        {
+            return new
+            {
+                lowerBound,
+                upperBound
+            }.GetHashCode();
+        }
+
+        #endregion
     }
 }

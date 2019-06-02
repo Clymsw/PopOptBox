@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Optimisation.Core.Population;
+using Optimisation.Base.Management;
 
-namespace Optimisation.Core.Optimiser
+namespace Optimisation.Base.Management
 {
     /// <summary>
     /// The Optimiser handles the logic for deciding which individuals to try.

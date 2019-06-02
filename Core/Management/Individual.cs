@@ -1,9 +1,8 @@
-﻿using System;
+﻿using Optimisation.Base.Variables;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks.Sources;
 
-namespace Optimisation.Core.Population
+namespace Optimisation.Base.Management
 {
     /// <summary>
     /// "Individual" class, which contains information about 

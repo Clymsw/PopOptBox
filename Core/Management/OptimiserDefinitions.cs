@@ -1,4 +1,4 @@
-namespace Optimisation.Core.Optimiser
+namespace Optimisation.Base.Management
 {
     public static partial class OptimiserDefinitions
     {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Optimisation.Core.Population
+namespace Optimisation.Base.Variables
 {
     public class DecisionSpace
     {
@@ -12,7 +12,7 @@ namespace Optimisation.Core.Population
             Dimensions = decisionSpace.ToArray();
         }
 
-        public static DecisionSpace CreateForIntArray(int numDimensions, 
+        public static DecisionSpace CreateForUniformIntArray(int numDimensions, 
             int lowerBound, int upperBound)
         {
             return new DecisionSpace(
@@ -21,7 +21,7 @@ namespace Optimisation.Core.Population
                     .ToArray());
         }
         
-        public static DecisionSpace CreateForDoubleArray(int numDimensions, 
+        public static DecisionSpace CreateForUniformDoubleArray(int numDimensions, 
             double lowerBound, double upperBound)
         {
             return new DecisionSpace(
@@ -37,7 +37,7 @@ namespace Optimisation.Core.Population
             if (!(obj is DecisionSpace other))
                 return false;
 
-            return Dimensions.Equals(other.Dimensions);
+            return Dimensions.SequenceEqual(other.Dimensions);
         }
         
         public override int GetHashCode()

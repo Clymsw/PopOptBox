@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using Optimisation.Core.Model;
-using Optimisation.Core.Optimiser;
-using Optimisation.Core.Population;
+using Optimisation.Base.Conversion;
+using Optimisation.Base.Management;
 
-namespace Optimisation.Core.Helpers
+namespace Optimisation.Base.Helpers
 {
     /// <summary>
-    ///     Helper class for creating a full optimisation environment
+    /// Helper class for creating a full optimisation environment
     /// </summary>
     public abstract class OptimiserBuilder
     {
@@ -44,13 +43,13 @@ namespace Optimisation.Core.Helpers
         /// <param name="penaltyFcn"></param>
         /// <param name="settings"></param>
         /// <returns></returns>
-        public abstract Optimiser.Optimiser CreateOptimiser();
+        public abstract Optimiser CreateOptimiser();
 
         /// <summary>
         ///     The model
         /// </summary>
         /// <returns></returns>
-        public abstract Model.Model CreateModel();
+        public abstract Model CreateModel();
 
         /// <summary>
         ///     The Decision Vector generator for population initialisation

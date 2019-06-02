@@ -1,6 +1,6 @@
 using System;
 
-namespace Optimisation.Core
+namespace Optimisation.Base.Variables
 {
     /// <summary>
     /// Discrete dimension, represented by an integer type.
@@ -32,7 +32,30 @@ namespace Optimisation.Core
         /// <inheritdoc />
         public bool IsInBounds(object testValue)
         {
-            return (int)testValue >= lowerBound && (int)testValue <= upperBound;
+            var test = System.Convert.ToInt32(testValue);
+            return test >= lowerBound && test <= upperBound;
         }
+
+        #region Equals, GetHashCode
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is VariableDiscrete other))
+                return false;
+
+            return lowerBound.Equals(other.lowerBound) &&
+                upperBound.Equals(other.upperBound);
+        }
+
+        public override int GetHashCode()
+        {
+            return new
+            {
+                lowerBound,
+                upperBound
+            }.GetHashCode();
+        }
+
+        #endregion
     }
 }

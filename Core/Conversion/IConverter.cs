@@ -1,7 +1,8 @@
 using System.Collections.Generic;
-using Optimisation.Core.Population;
+using Optimisation.Base.Management;
+using Optimisation.Base.Variables;
 
-namespace Optimisation.Core.Model
+namespace Optimisation.Base.Conversion
 {
     /// <summary>
     /// The Converter converts Decision Vectors to reality and vice versa.
