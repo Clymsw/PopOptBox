@@ -3,6 +3,9 @@ using System.Linq;
 
 namespace Optimisation.Base.Variables
 {
+    /// <summary>
+    /// TODO!
+    /// </summary>
     public class DecisionSpace
     {
         public readonly IReadOnlyList<IVariable> Dimensions;
@@ -28,6 +31,25 @@ namespace Optimisation.Base.Variables
                 Enumerable.Range(0, numDimensions)
                     .Select(i => new VariableContinuous(lowerBound, upperBound))
                     .ToArray());
+        }
+
+        public bool IsAcceptableDecisionVector(IEnumerable<object> vector)
+        {
+            bool acceptable = true;
+            for (int i = 0; i < vector.Count(); i++)
+            {
+                try
+                {
+                    var ok = Dimensions.ElementAt(i).IsInBounds(vector.ElementAt(i));
+                    acceptable &= ok;
+                }
+                catch
+                {
+                    acceptable = false;
+                    break;
+                }
+            }
+            return acceptable;
         }
 
         #region Equals, GetHashCode

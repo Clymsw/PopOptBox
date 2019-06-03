@@ -12,7 +12,7 @@ namespace Optimisation.Base.Management.Test
         {
             var ds = DecisionSpace.CreateForUniformDoubleArray(2, 0, 2);
             var vector = new double[] { 1, 1.5 };
-            var dv = new DecisionVector(ds, vector);
+            var dv = DecisionVector.CreateFromArray(ds, vector);
             ind = new Individual(dv);
         }
 
@@ -28,7 +28,7 @@ namespace Optimisation.Base.Management.Test
 
             var ds = DecisionSpace.CreateForUniformDoubleArray(2, 0, 2);
             var vector = new double[] { 1, 1.5 };
-            var dv = new DecisionVector(ds, vector);
+            var dv = DecisionVector.CreateFromArray(ds, vector);
             var ind2 = new Individual(dv);
 
             Assert.Equal(ind2, ind);
