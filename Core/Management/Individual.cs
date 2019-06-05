@@ -1,6 +1,7 @@
 ﻿using Optimisation.Base.Variables;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Optimisation.Base.Management
 {
@@ -68,12 +69,17 @@ namespace Optimisation.Base.Management
         /// </summary>
         public Individual Clone()
         {
+            var propCopy = new Dictionary<string, object>();
+            foreach (var key in properties.Keys)
+            {
+                propCopy.Add(key, properties[key]);
+            }
             return new Individual(DecisionVector)
             {
-                SolutionVector = SolutionVector,
-                Score = Score,
+                SolutionVector = (double[])SolutionVector?.Clone(),
+                Score = (double[])Score?.Clone(),
                 Fitness = Fitness,
-                properties = properties,
+                properties = propCopy,
                 Legal = Legal,
                 State = State
             };
@@ -210,15 +216,13 @@ namespace Optimisation.Base.Management
 
         #region Equals, GetHashCode
 
-        /// <summary>
-        /// We use a very limited form of Equals which only checks for Decision Vector equivalence.
-        /// </summary>
         public override bool Equals(object obj)
         {
             if (!(obj is Individual other))
                 return false;
 
-            return DecisionVector.Equals(other.DecisionVector);
+            return DecisionVector.Equals(other.DecisionVector) &&
+                   (SolutionVector?.SequenceEqual(other.SolutionVector) ?? true);
         }
 
         public override int GetHashCode()
