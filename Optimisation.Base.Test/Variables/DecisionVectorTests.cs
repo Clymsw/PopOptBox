@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+using Optimisation.Base.Test.Helpers;
 using Xunit;
 
 namespace Optimisation.Base.Variables.Test
@@ -9,22 +11,32 @@ namespace Optimisation.Base.Variables.Test
         private const int Dims = 4;
         private const double MinValueContinuous = -3.5;
         private const double MaxValueContinuous = 2.9;
+        private readonly double[] exampleContinuousVector;
+        private readonly int[] exampleDiscreteVector;
 
         public DecisionVectorTests()
         {
             space = DecisionSpace.CreateForUniformDoubleArray(
                 Dims, MinValueContinuous, MaxValueContinuous);
+            
+            var range = MaxValueContinuous - MinValueContinuous - 1.01;
+            exampleContinuousVector = Enumerable.Range(0, Dims)
+                .Select(i => MinValueContinuous + range / (Dims - 1) * i + 1)
+                .ToArray();
+
+            exampleDiscreteVector = Enumerable.Range(0, Dims)
+                .Select(i => (int)Math.Ceiling(MinValueContinuous) + i)
+                .ToArray();
         }
 
         [Fact]
         public void CreatedWithArray_ConstructsOk()
         {
-            var values = new[] { -2.1, 2.5, 0.4, -1 };
-            var dv = DecisionVector.CreateFromArray(space, values);
+            var dv = DecisionVector.CreateFromArray(space, exampleContinuousVector);
 
             for (var i = 0; i < space.Dimensions.Count; i++)
             {
-                Assert.Equal(dv.Vector.ElementAt(i), values[i]);
+                Assert.Equal(dv.Vector.ElementAt(i), exampleContinuousVector[i]);
                 Assert.True(space.Dimensions.ElementAt(i).IsInBounds(dv.Vector.ElementAt(i)));
             }
         }
@@ -32,12 +44,11 @@ namespace Optimisation.Base.Variables.Test
         [Fact]
         public void CreatedWithArrayOfInts_ConstructsOk()
         {
-            var values = new[] { -2, 2, 0, -1 };
-            var dv = DecisionVector.CreateFromArray(space, values);
+            var dv = DecisionVector.CreateFromArray(space, exampleDiscreteVector);
 
             for (var i = 0; i < space.Dimensions.Count; i++)
             {
-                Assert.Equal(dv.Vector.ElementAt(i), values[i]);
+                Assert.Equal(dv.Vector.ElementAt(i), exampleDiscreteVector[i]);
                 Assert.True(space.Dimensions.ElementAt(i).IsInBounds(dv.Vector.ElementAt(i)));
             }
         }
@@ -45,21 +56,20 @@ namespace Optimisation.Base.Variables.Test
         [Fact]
         public void CreatedWithParams_ConstructsOk()
         {
-            var values = new[] { -2.1, 2.5, 0.4, -1 };
-            var dv = DecisionVector.CreateFromItems(space, values[0], values[1], values[2], values[3]);
+            var dv = DecisionVector.CreateFromItems(space,
+                exampleContinuousVector[0], exampleContinuousVector[1], exampleContinuousVector[2], exampleContinuousVector[3]);
 
             for (var i = 0; i < space.Dimensions.Count; i++)
             {
-                Assert.Equal(dv.Vector.ElementAt(i), values[i]);
+                Assert.Equal(dv.Vector.ElementAt(i), exampleContinuousVector[i]);
             }
         }
         
         [Fact]
         public void TwoEqualVectors_WithSameSpace_AreEqual()
         {
-            var values1 = new[] { -2.1, 2.5, 0.4, -1 };
-            var values2 = values1.ToArray();
-            var dv1 = DecisionVector.CreateFromArray(space, values1);
+            var values2 = exampleContinuousVector.ToArray();
+            var dv1 = DecisionVector.CreateFromArray(space, exampleContinuousVector);
             var dv2 = DecisionVector.CreateFromArray(space, values2);
 
             Assert.Equal(dv1, dv2);
@@ -68,11 +78,9 @@ namespace Optimisation.Base.Variables.Test
         [Fact]
         public void TwoEqualVectors_WithDifferentSpace_AreNotEqual()
         {
-            var values = new[] { -2.1, 2.5, 0.4, -1 };
-            var space2 = DecisionSpace.CreateForUniformDoubleArray(
-                Dims, MinValueContinuous - 1, MaxValueContinuous + 1);
-            var dv1 = DecisionVector.CreateFromArray(space, values);
-            var dv2 = DecisionVector.CreateFromArray(space2, values);
+            var space2 = ObjectCreators.GetDecisionSpace(Dims, MinValueContinuous - 1, MaxValueContinuous + 1);
+            var dv1 = DecisionVector.CreateFromArray(space, exampleContinuousVector);
+            var dv2 = DecisionVector.CreateFromArray(space2, exampleContinuousVector);
 
             Assert.NotEqual(dv1, dv2);
         }
@@ -80,9 +88,8 @@ namespace Optimisation.Base.Variables.Test
         [Fact]
         public void TwoDifferentVectors_WithSameSpace_AreNotEqual()
         {
-            var values1 = new[] { -2.1, 2.5, 0.4, -1 };
-            var values2 = values1.Select(i => i - 1).ToArray();
-            var dv1 = DecisionVector.CreateFromArray(space, values1);
+            var values2 = exampleContinuousVector.Select(i => i - 1).ToArray();
+            var dv1 = DecisionVector.CreateFromArray(space, exampleContinuousVector);
             var dv2 = DecisionVector.CreateFromArray(space, values2);
 
             Assert.NotEqual(dv1, dv2);

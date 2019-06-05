@@ -38,7 +38,7 @@ namespace Optimisation.Base.Helpers
             if (Math.Abs(difference) <= double.Epsilon)
                 return true;
 
-            var allFitness = pop.ListFitness();
+            var allFitness = pop.GetMemberFitnesses();
             var average = allFitness.Average();
             return Math.Abs(difference / average) < tolerance;
         }

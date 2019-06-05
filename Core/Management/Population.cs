@@ -6,20 +6,27 @@ using System.Linq;
 namespace Optimisation.Base.Management
 {
     /// <summary>
-    /// The Population contains a number of possible solutions ("Individuals")
-    /// for an optimisation problem.
+    /// The Population contains and manages a number of solutions for an optimisation problem.
+    /// <seealso cref="Individual"/>.
     /// </summary>
     public class Population : IReadOnlyCollection<Individual>
     {
         #region Fields
 
-        // A list of all members of the population.
         private readonly List<Individual> members;
         
+        /// <summary>
+        /// Whether or not one should expect every individual to have the same length of Decision Space. 
+        /// </summary>
         public readonly bool ConstantLengthDecisionVector;
         
+        // TODO: Remove??
         private readonly int initialSize;
 
+        /// <summary>
+        /// Whether we have exceeded our desired size of population.
+        /// TODO: Remove??
+        /// </summary>
         public bool IsTargetSizeReached => members.Count >= initialSize;
 
         #endregion
@@ -58,7 +65,7 @@ namespace Optimisation.Base.Management
         {
             return new Population(
                 initialSize,
-                members.ToArray(),
+                members.Select(m => m.Clone()),
                 ConstantLengthDecisionVector);
         }
 
@@ -74,55 +81,75 @@ namespace Optimisation.Base.Management
         /// <returns>Individual</returns>
         public Individual this[int index] => members[index];
 
+        /*
+        /// <summary>
+        /// Allows read-only access to the individuals
+        /// </summary>
+        /// <returns>List of <see cref="Individual"/>s.</returns>
         public IReadOnlyList<Individual> GetMemberList()
         {
             return members;
         }
-
+        */
+        
+        /// <summary>
+        /// Gets the individual with the best (lowest) fitness.
+        /// </summary>
+        /// <returns>An evaluated <see cref="Individual"/> with the best fitness.</returns>
+        /// <exception cref="System.InvalidOperationException">Thrown when the population is empty.</exception>
         public Individual Best()
         {
-            return members[0];
-        }
-
-        public Individual Worst()
-        {
-            return members[members.Count - 1];
+            return members.Count > 0
+                ? members[0]
+                : throw new InvalidOperationException("Population has no members.");
         }
 
         /// <summary>
-        /// Get the Fitnesses of all individuals
+        /// Gets the individual with the worst (highest) fitness.
+        /// </summary>
+        /// <returns>An evaluated <see cref="Individual"/> with the worst fitness.</returns>
+        /// <exception cref="System.InvalidOperationException">Thrown when the population is empty.</exception>
+        public Individual Worst()
+        {
+            return members.Count > 0
+                ? members[members.Count - 1]
+                : throw new InvalidOperationException("Population has no members.");
+        }
+
+        /// <summary>
+        /// Get the Fitness values of all individuals
         /// </summary>
         /// <returns>List of doubles: Fitness</returns>
-        public List<double> ListFitness()
+        public IEnumerable<double> GetMemberFitnesses()
         {
-            return members.Select(i => i.Fitness).ToList();
+            return members.Select(i => i.Fitness);
         }
 
         /// <summary>
         /// Get the Scores of all individuals
         /// </summary>
         /// <returns>List of double arrays: Score</returns>
-        public List<double[]> ListScore()
+        public IEnumerable<double[]> GetMemberScores()
         {
-            return members.Select(i => i.Score).ToList();
+            return members.Select(i => i.Score);
         }
 
         /// <summary>
         /// Get the Solution Vectors of all individuals
         /// </summary>
         /// <returns>List of double arrays: Solution Vector</returns>
-        public List<double[]> ListSolution()
+        public IEnumerable<double[]> GetMemberSolutionVectors()
         {
-            return members.Select(i => i.SolutionVector).ToList();
+            return members.Select(i => i.SolutionVector);
         }
 
         /// <summary>
         /// Get the DVs of all individuals
         /// </summary>
         /// <returns>List of TDecVec arrays: DV</returns>
-        public List<object[]> ListDecision()
+        public IEnumerable<object[]> GetMemberDecisionVectors()
         {
-            return members.Select(i => i.DecisionVector.Vector.ToArray()).ToList();
+            return members.Select(i => i.DecisionVector.Vector.ToArray());
         }
 
         #endregion
@@ -130,43 +157,49 @@ namespace Optimisation.Base.Management
         #region Management
 
         /// <summary>
-        /// Adds an individual to the population
+        /// Adds an <see cref="Individual"/> to the population
         /// </summary>
-        /// <param name="ind">The individual to add</param>
-        /// <exception cref="ArgumentException"></exception>
+        /// <param name="ind">The individual to add.</param>
+        /// <exception cref="ArgumentException">Thrown if: 
+        /// 1) we are expecting individuals to have the same length Decision Vector and it is not true; 
+        /// 2) The Individual is not yet evaluated.</exception>
         public void AddIndividual(Individual ind)
         {
             if (ConstantLengthDecisionVector && members.Count > 0)
                 if (ind.DecisionVector.Vector.Count != members[0].DecisionVector.Vector.Count)
                     throw new ArgumentException(
-                        "Decision Vectors not the same length!");
+                        "Decision Vector is not the right length!");
+            
+            if (ind.State != IndividualStates.Evaluated)
+                throw new ArgumentException("Individual is not yet evaluated.");
+            
+            // Add to population
+            members.Add(ind);
 
-            if (IsTargetSizeReached)
-
-                // Add to population
-                members.Add(ind);
-
-            sort();
-        }
-
-        /// <summary>
-        /// Replaces worst individual with a new one
-        /// </summary>
-        /// <param name="ind">New individual to insert</param>
-        public void ReplaceWorst(Individual ind)
-        {
-            members[members.Count - 1] = ind;
-            sort();
+            Sort();
         }
 
         /// <summary>
         /// Sorts array by fitness, best (lowest!) at top.
         /// </summary>
-        private void sort()
+        private void Sort()
         {
             members.Sort((p, q) => p.Fitness.CompareTo(q.Fitness));
         }
-
+        
+        /// <summary>
+        /// Replaces worst individual with a new one
+        /// </summary>
+        /// <param name="ind">New individual to insert</param>
+        /// <exception cref="System.InvalidOperationException">Thrown when the population is empty.</exception>
+        public void ReplaceWorst(Individual ind)
+        {
+            if (members.Count == 0)
+                throw new InvalidOperationException("Population has no members.");
+            
+            members[members.Count - 1] = ind;
+        }
+        
         #endregion
 
         #region Implementation of IEnumerable

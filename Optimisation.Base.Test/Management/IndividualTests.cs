@@ -1,31 +1,22 @@
 ﻿using Optimisation.Base.Variables;
 using System.Linq;
+using Optimisation.Base.Test.Helpers;
 using Xunit;
 
 namespace Optimisation.Base.Management.Test
 {
     public class IndividualTests
     {
-        private const int Dims = 2;
-        private const double MinBound = 0;
-        private const double MaxBound = 2;
-        
-        private const string SolutionKey = "solution";
         private const string CloningKey = "cloneTest";
 
         private readonly double[] testVector;
 
-        private readonly DecisionSpace space;
         private readonly Individual ind;
 
         public IndividualTests()
         {
-            space = DecisionSpace.CreateForUniformDoubleArray(
-                Dims, MinBound, MaxBound);
-            
-            testVector = new[] { 1, 1.5 };
-            var dv = DecisionVector.CreateFromArray(space, testVector);
-            
+            testVector = new double[] { 0, 2 };
+            var dv = ObjectCreators.GetDecisionVector(testVector);
             ind = new Individual(dv);
         }
 
@@ -38,20 +29,28 @@ namespace Optimisation.Base.Management.Test
         [Fact]
         public void NewIndividuals_HaveSameDecisionVector_AreEqual()
         {
-            var space2 = DecisionSpace.CreateForUniformDoubleArray(
-                Dims, MinBound, MaxBound);
             var vector2 = testVector.ToArray();
-            var dv2 = DecisionVector.CreateFromArray(space2, vector2);
+            var dv2 = ObjectCreators.GetDecisionVector(vector2);
             var ind2 = new Individual(dv2);
 
             Assert.Equal(ind2, ind);
         }
         
         [Fact]
-        public void NewIndividuals_HaveDifferentDecisionVector_AreNotEqual()
+        public void NewIndividuals_HaveDifferentDecisionVectorValues_AreNotEqual()
         {
-            var vector2 = testVector.Select(i => i - 0.01).ToArray();
-            var dv2 = DecisionVector.CreateFromArray(space, vector2);
+            var vector2 = testVector.Select(i => i + 0.0001).ToArray();
+            var dv2 = ObjectCreators.GetDecisionVector(vector2);
+            var ind2 = new Individual(dv2);
+
+            Assert.NotEqual(ind2, ind);
+        }
+        
+        [Fact]
+        public void NewIndividuals_HaveDifferentDecisionSpace_AreNotEqual()
+        {
+            var vector2 = testVector.Select(i => (int)i).ToArray();
+            var dv2 = ObjectCreators.GetDecisionVector(vector2);
             var ind2 = new Individual(dv2);
 
             Assert.NotEqual(ind2, ind);
@@ -65,8 +64,8 @@ namespace Optimisation.Base.Management.Test
             Assert.Equal(ind1, ind);
 
             ind1.SetProperty(CloningKey, 1.2);
-            ind1.SetProperty(SolutionKey, new[]{0.2, 5.1, 55});
-            ind1.SetSolution(SolutionKey);
+            ind1.SetProperty(ObjectCreators.SolutionKey, new[]{0.2, 5.1, 55});
+            ind1.SetSolution(ObjectCreators.SolutionKey);
             ind1.SetScore(sol => sol);
             ind1.SetFitness(score => score[0]);
 
@@ -82,15 +81,15 @@ namespace Optimisation.Base.Management.Test
         public void TwoIndividuals_HaveSameSolutionVector_AreEqual()
         {
             var vector2 = testVector.ToArray();
-            var dv2 = DecisionVector.CreateFromArray(space, vector2);
+            var dv2 = ObjectCreators.GetDecisionVector(vector2);
             var ind2 = new Individual(dv2);
             
             var ind1 = ind.Clone();
             
-            ind1.SetProperty(SolutionKey, new[] { 2.6 });
-            ind1.SetSolution(SolutionKey);
-            ind2.SetProperty(SolutionKey, new[] { 2.6 });
-            ind2.SetSolution(SolutionKey);
+            ind1.SetProperty(ObjectCreators.SolutionKey, new[] { 2.6 });
+            ind1.SetSolution(ObjectCreators.SolutionKey);
+            ind2.SetProperty(ObjectCreators.SolutionKey, new[] { 2.6 });
+            ind2.SetSolution(ObjectCreators.SolutionKey);
             
             Assert.Equal(ind2, ind1);
         }
@@ -101,8 +100,8 @@ namespace Optimisation.Base.Management.Test
             var ind1 = ind.Clone();
 
             var solution = new[] {0.2, 5.1, 55};
-            ind1.SetProperty(SolutionKey, solution);
-            ind1.SetSolution(SolutionKey);
+            ind1.SetProperty(ObjectCreators.SolutionKey, solution);
+            ind1.SetSolution(ObjectCreators.SolutionKey);
 
             Assert.Equal(solution[0], ind1.SolutionVector.ElementAt(0));
             Assert.Equal(solution[1], ind1.SolutionVector.ElementAt(1));
@@ -115,8 +114,8 @@ namespace Optimisation.Base.Management.Test
             var ind1 = ind.Clone();
 
             var solution = new[] {0.2, 5.1, 55};
-            ind1.SetProperty(SolutionKey, solution);
-            ind1.SetSolution(SolutionKey);
+            ind1.SetProperty(ObjectCreators.SolutionKey, solution);
+            ind1.SetSolution(ObjectCreators.SolutionKey);
             ind1.SetScore(sol => sol.Select(s => s * 2).ToArray());
 
             Assert.Equal(solution[0] * 2, ind1.Score.ElementAt(0));
@@ -130,8 +129,8 @@ namespace Optimisation.Base.Management.Test
             var ind1 = ind.Clone();
 
             var solution = new[] {0.2, 5.1, 55};
-            ind1.SetProperty(SolutionKey, solution);
-            ind1.SetSolution(SolutionKey);
+            ind1.SetProperty(ObjectCreators.SolutionKey, solution);
+            ind1.SetSolution(ObjectCreators.SolutionKey);
             ind1.SetScore(sol => sol.Select(s => s * 2).ToArray());
             ind1.SetFitness(score => score[0]);
 

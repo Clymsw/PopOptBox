@@ -28,7 +28,7 @@ namespace Optimisation.Base.Variables
             //Check that all values are sensible
             if (!decisionSpace.IsAcceptableDecisionVector(values))
                 throw new ArgumentOutOfRangeException(nameof(values),
-                    "Vector values are not accepted by the decision space");
+                    "These values are not accepted by the decision space");
 
             Vector = values.ToArray();
         }
