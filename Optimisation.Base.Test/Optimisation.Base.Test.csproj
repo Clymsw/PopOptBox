@@ -23,8 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Helpers\" />
     <Folder Include="Conversion\" />
+    <Folder Include="Runtime\" />
   </ItemGroup>
 
 </Project>

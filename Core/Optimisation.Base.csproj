@@ -3,6 +3,15 @@
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
         <RootNamespace>Optimisation.Base</RootNamespace>
+        <ApplicationIcon />
+        <Win32Resource />
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <Version>2.0.0</Version>
+        <NeutralLanguage>en-GB</NeutralLanguage>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
     </PropertyGroup>
 
     <ItemGroup>

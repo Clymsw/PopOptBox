@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using Optimisation.Base.Conversion;
-using Optimisation.Base.Helpers;
 using Optimisation.Base.Management;
 
 namespace Optimisation.Base.Runtime

@@ -4,7 +4,7 @@ using Optimisation.Base.Conversion;
 using Optimisation.Base.Management;
 using Optimisation.Base.Variables;
 
-namespace Optimisation.Base.Helpers
+namespace Optimisation.Base.Management
 {
     /// <summary>
     /// Helper class for creating a full optimisation environment
