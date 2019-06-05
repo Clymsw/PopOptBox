@@ -12,12 +12,15 @@ namespace Optimisation.Base.Management
     {
         #region Fields
 
-        // Definition of the individual from the optimiser
+        /// <summary>
+        /// Definition of the individual
+        /// </summary>
         public readonly DecisionVector DecisionVector;
 
-        // Properties contain any numeric information an 
-        // evaluator wishes to add.
-        // Not readonly otherwise not cloneable...
+        /// <summary>
+        /// This contains any numeric information an evaluator wishes to store.
+        /// </summary>
+        /// <remarks>Not readonly to enable Individual cloning</remarks>
         private Dictionary<string, object> properties =
             new Dictionary<string, object>();
 
@@ -52,9 +55,9 @@ namespace Optimisation.Base.Management
         #region Constructors
 
         /// <summary>
-        /// Construct individual
+        /// Construct individual, immutable by design.
         /// </summary>
-        /// <param name="decisionVector">Vector of type defined at class construction</param>
+        /// <param name="decisionVector">The numerical definition of the individual for the optimisation</param>
         public Individual(DecisionVector decisionVector)
         {
             DecisionVector = decisionVector;
@@ -81,7 +84,7 @@ namespace Optimisation.Base.Management
         #region Utility
 
         /// <summary>
-        /// Returns the DV as a string
+        /// Returns the decision vector as a string
         /// </summary>
         /// <returns>string version of DV</returns>
         public override string ToString()
@@ -89,6 +92,10 @@ namespace Optimisation.Base.Management
             return $"{Fitness} [{string.Join(", ", DecisionVector)}]";
         }
 
+        /// <summary>
+        /// Obtain all the keys currently stored in the properties
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<string> GetPropertyNames()
         {
             var keynames = properties.Keys;
@@ -100,7 +107,8 @@ namespace Optimisation.Base.Management
         #region Runtime
 
         /// <summary>
-        /// Call when sending for evaluation
+        /// Call when sending for evaluation.
+        /// Managed automatically by <see cref="Optimisation.Base.Conversion.Model"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Individual is not new</exception>
         internal void SendForEvaluation()
@@ -112,7 +120,8 @@ namespace Optimisation.Base.Management
         }
 
         /// <summary>
-        /// Call when finished evaluating
+        /// Call when finished evaluating.
+        /// Managed automatically by <see cref="Optimisation.Base.Conversion.Evaluator"/>.
         /// </summary>
         /// <exception cref="InvalidOperationException">Individual is not evaluating</exception>
         internal void FinishEvaluating()
@@ -126,6 +135,7 @@ namespace Optimisation.Base.Management
         /// <summary>
         /// Stores a Key-Value pair in the individual's properties.
         /// If key already exists, value is over-written with a warning.
+        /// Use <see cref="GetPropertyNames"/> to find existing strings.
         /// </summary>
         /// <param name="key">String acting as key for the property</param>
         /// <param name="value">Value of the property</param>
@@ -160,14 +170,15 @@ namespace Optimisation.Base.Management
         }
 
         /// <summary>
-        /// Assigns SolutionVector based on a given Property key value
+        /// Assigns Solution Vector based on a given Property key value
         /// </summary>
-        /// <param name="keyname">Name of property key</param>
-        public void SetSolution(string keyname)
+        /// <param name="keyName">Name of property key</param>
+        public void SetSolution(string keyName)
         {
-            var solutionValue = GetProperty<double[]>(keyname);
+            var solutionValue = GetProperty<double[]>(keyName);
             SolutionVector = solutionValue ??
-                             throw new ArgumentOutOfRangeException(nameof(keyname), "Invalid key to set solution!");
+                             throw new ArgumentOutOfRangeException(nameof(keyName), 
+                                 "Invalid key to set solution!");
         }
 
         /// <summary>
@@ -185,7 +196,8 @@ namespace Optimisation.Base.Management
         /// Assigns Fitness based on a function which must be passed
         /// in as a delegate that converts a double array into a single value
         /// </summary>
-        /// <param name="scoreToFit">Delegate converting (solution or) score to fitness</param>
+        /// <remarks>Will bypass multi-objective and convert Solution Vector to Fitness if <see cref="SetScore"/> is not used.</remarks>
+        /// <param name="scoreToFit">Delegate converting Score to Fitness.</param>
         public void SetFitness(Func<double[], double> scoreToFit)
         {
             var fitnessValue = Score == null

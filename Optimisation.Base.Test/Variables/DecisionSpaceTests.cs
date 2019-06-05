@@ -6,8 +6,14 @@ namespace Optimisation.Base.Variables.Test
 {
     public class DecisionSpaceTests
     {
+        private const int Dims = 4;
+        private const int MinValueDiscrete = 2;
+        private const int MaxValueDiscrete = 4;
+        private const double MinValueContinuous = -3.5;
+        private const double MaxValueContinuous = 2.9;
+        
         [Fact]
-        public void CreatedWithMixedArray_ContructsOk()
+        public void CreatedWithMixedArray_ConstructsOk()
         {
             var vbl1 = new VariableContinuous(-2.5, 2.6);
             var vbl2 = new VariableDiscrete(-6, 1);
@@ -24,47 +30,39 @@ namespace Optimisation.Base.Variables.Test
         }
 
         [Fact]
-        public void CreatedWithUniformIntArray_ContructsOk()
+        public void CreatedWithUniformIntArray_ConstructsOk()
         {
-            int dims = 4;
-            int min = 2;
-            int max = 4;
+            var space = DecisionSpace.CreateForUniformIntArray(
+                Dims, MinValueDiscrete, MaxValueDiscrete);
 
-            var space = DecisionSpace.CreateForUniformIntArray(dims, min, max);
-
-            Assert.Equal(dims, space.Dimensions.Count);
-            Assert.True(space.Dimensions.First().IsInBounds(min));
-            Assert.True(space.Dimensions.First().IsInBounds(max));
-            Assert.False(space.Dimensions.First().IsInBounds(min - 1));
-            Assert.False(space.Dimensions.First().IsInBounds(max + 1));
+            Assert.Equal(Dims, space.Dimensions.Count);
+            Assert.True(space.Dimensions.First().IsInBounds(MinValueDiscrete));
+            Assert.True(space.Dimensions.First().IsInBounds(MaxValueDiscrete));
+            Assert.False(space.Dimensions.First().IsInBounds(MinValueDiscrete - 1));
+            Assert.False(space.Dimensions.First().IsInBounds(MaxValueDiscrete + 1));
         }
 
         [Fact]
-        public void CreatedWithUniformDoubleArray_ContructsOk()
+        public void CreatedWithUniformDoubleArray_ConstructsOk()
         {
-            int dims = 4;
-            var min = -3.5;
-            var max = 2.9;
+            var space = DecisionSpace.CreateForUniformDoubleArray(
+                Dims, MinValueContinuous, MaxValueContinuous);
 
-            var space = DecisionSpace.CreateForUniformDoubleArray(dims, min, max);
+            var range = MaxValueContinuous - MinValueContinuous;
 
-            var range = max - min;
-
-            Assert.Equal(dims, space.Dimensions.Count);
-            Assert.True(space.Dimensions.First().IsInBounds(min + range/2));
-            Assert.False(space.Dimensions.First().IsInBounds(min - range/2));
-            Assert.False(space.Dimensions.First().IsInBounds(max + range/2));
+            Assert.Equal(Dims, space.Dimensions.Count);
+            Assert.True(space.Dimensions.First().IsInBounds(MinValueContinuous + range/2));
+            Assert.False(space.Dimensions.First().IsInBounds(MinValueContinuous - range/2));
+            Assert.False(space.Dimensions.First().IsInBounds(MaxValueContinuous + range/2));
         }
 
         [Fact]
         public void TwoUniformIntArrays_WithEqualBounds_AreEqual()
         {
-            int dims = 4;
-            int min = 2;
-            int max = 4;
-
-            var space1 = DecisionSpace.CreateForUniformIntArray(dims, min, max);
-            var space2 = DecisionSpace.CreateForUniformIntArray(dims, min, max);
+            var space1 = DecisionSpace.CreateForUniformIntArray(
+                Dims, MinValueDiscrete, MaxValueDiscrete);
+            var space2 = DecisionSpace.CreateForUniformIntArray(
+                Dims, MinValueDiscrete, MaxValueDiscrete);
 
             Assert.Equal(space1, space2);
         }
@@ -72,12 +70,10 @@ namespace Optimisation.Base.Variables.Test
         [Fact]
         public void TwoUniformDoubleArrays_WithEqualBounds_AreEqual()
         {
-            int dims = 4;
-            var min = -3.5;
-            var max = 2.9;
-
-            var space1 = DecisionSpace.CreateForUniformDoubleArray(dims, min, max);
-            var space2 = DecisionSpace.CreateForUniformDoubleArray(dims, min, max); 
+            var space1 = DecisionSpace.CreateForUniformDoubleArray(
+                Dims, MinValueContinuous, MaxValueContinuous);
+            var space2 = DecisionSpace.CreateForUniformDoubleArray(
+                Dims, MinValueContinuous, MaxValueContinuous); 
 
             Assert.Equal(space1, space2);
         }
@@ -85,12 +81,10 @@ namespace Optimisation.Base.Variables.Test
         [Fact]
         public void UniformIntAndDoubleArrays_WithEqualBounds_AreNotEqual()
         {
-            int dims = 4;
-            int min = 2;
-            int max = 4;
-
-            var space1 = DecisionSpace.CreateForUniformIntArray(dims, min, max);
-            var space2 = DecisionSpace.CreateForUniformDoubleArray(dims, min, max);
+            var space1 = DecisionSpace.CreateForUniformIntArray(
+                Dims, MinValueDiscrete, MaxValueDiscrete);
+            var space2 = DecisionSpace.CreateForUniformDoubleArray(
+                Dims, MinValueDiscrete, MaxValueDiscrete);
 
             Assert.NotEqual(space1, space2);
         }

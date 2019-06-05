@@ -4,17 +4,36 @@ using System.Linq;
 namespace Optimisation.Base.Variables
 {
     /// <summary>
-    /// TODO!
+    /// An array of dimensions which together specify the N-D space for optimisation.
+    /// Immutable by design.
     /// </summary>
     public class DecisionSpace
     {
+        /// <summary>
+        /// The list of <see cref="IVariable"/> definitions for the dimensions.
+        /// </summary>
         public readonly IReadOnlyList<IVariable> Dimensions;
 
+        #region Constructor
+        
+        /// <summary>
+        /// The constructor can be used for mixed arrays.
+        /// For uniform arrays, it is easier to use static constructors:
+        /// <see cref="CreateForUniformDoubleArray"/> and <see cref="CreateForUniformIntArray"/>
+        /// </summary>
+        /// <param name="decisionSpace">The array of <see cref="IVariable"/>s.</param>
         public DecisionSpace(IEnumerable<IVariable> decisionSpace)
         {
             Dimensions = decisionSpace.ToArray();
         }
 
+        /// <summary>
+        /// Static constructor for a hypercube which will take discrete values.
+        /// </summary>
+        /// <param name="numDimensions">Number of dimensions</param>
+        /// <param name="lowerBound">The lower bound for each dimension</param>
+        /// <param name="upperBound">The upper bound for each dimension</param>
+        /// <returns>A new decision space</returns>
         public static DecisionSpace CreateForUniformIntArray(int numDimensions, 
             int lowerBound, int upperBound)
         {
@@ -24,6 +43,13 @@ namespace Optimisation.Base.Variables
                     .ToArray());
         }
         
+        /// <summary>
+        /// Static constructor for a hypercube which will take continuous values.
+        /// </summary>
+        /// <param name="numDimensions">Number of dimensions</param>
+        /// <param name="lowerBound">The lower bound for each dimension</param>
+        /// <param name="upperBound">The upper bound for each dimension</param>
+        /// <returns>A new decision space</returns>
         public static DecisionSpace CreateForUniformDoubleArray(int numDimensions, 
             double lowerBound, double upperBound)
         {
@@ -33,10 +59,18 @@ namespace Optimisation.Base.Variables
                     .ToArray());
         }
 
+        #endregion
+        
+        /// <summary>
+        /// Helper function, which can be used to check an array for validity,
+        /// before using it to construct a <see cref="DecisionVector"/>.
+        /// </summary>
+        /// <param name="vector">The array of values.</param>
+        /// <returns>True (acceptable) or false (not acceptable).</returns>
         public bool IsAcceptableDecisionVector(IEnumerable<object> vector)
         {
-            bool acceptable = true;
-            for (int i = 0; i < vector.Count(); i++)
+            var acceptable = true;
+            for (var i = 0; i < vector.Count(); i++)
             {
                 try
                 {
