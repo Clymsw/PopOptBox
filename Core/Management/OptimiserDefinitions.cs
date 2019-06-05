@@ -4,7 +4,6 @@ namespace Optimisation.Base.Management
     {
         /// <summary>
         /// An index to indicate how far through the optimisation process the individual was created.
-        /// TODO: move to the Evolutionary Algorithm section
         /// For evolutionary type algorithms, it would be the generation.
         /// </summary>
         public const string CreationIndex = "Generation created";
@@ -17,7 +16,6 @@ namespace Optimisation.Base.Management
         
         /// <summary>
         /// An index to indicate how far through the optimisation process the individual was reinserted into the Population.
-        /// TODO: move to the Evolutionary Algorithm section
         /// </summary>
         public const string ReinsertionIndex = "Generation reinserted";
         

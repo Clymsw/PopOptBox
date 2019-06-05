@@ -34,6 +34,10 @@
           "target": "Package",
           "version": "[2.0.3, )",
           "autoReferenced": true
+        },
+        "System.Threading.Tasks.Dataflow": {
+          "target": "Package",
+          "version": "[4.10.0-preview5.19224.8, )"
         }
       },
       "imports": [

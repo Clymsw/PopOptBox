@@ -20,14 +20,12 @@ namespace Optimisation.Base.Management
         /// </summary>
         public readonly bool ConstantLengthDecisionVector;
         
-        // TODO: Remove??
-        private readonly int initialSize;
+        public readonly int TargetSize;
 
         /// <summary>
         /// Whether we have exceeded our desired size of population.
-        /// TODO: Remove??
         /// </summary>
-        public bool IsTargetSizeReached => members.Count >= initialSize;
+        public bool IsTargetSizeReached => members.Count >= TargetSize;
 
         #endregion
 
@@ -45,11 +43,11 @@ namespace Optimisation.Base.Management
             bool constantLengthDv = true)
         {
             if (initialSize > 0)
-                this.initialSize = initialSize;
+                this.TargetSize = initialSize;
 
             ConstantLengthDecisionVector = constantLengthDv;
 
-            members = new List<Individual>(this.initialSize);
+            members = new List<Individual>(this.TargetSize);
 
             if (initialPopulation == null)
                 return;
@@ -64,7 +62,7 @@ namespace Optimisation.Base.Management
         public virtual Population Clone()
         {
             return new Population(
-                initialSize,
+                TargetSize,
                 members.Select(m => m.Clone()),
                 ConstantLengthDecisionVector);
         }

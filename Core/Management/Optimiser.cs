@@ -31,7 +31,7 @@ namespace Optimisation.Base.Management
         /// <summary>
         /// The current population in the optimiser
         /// </summary>
-        protected Population Population { get; }
+        public Population Population { get; }
 
         private readonly string solutionProperty;
         private readonly Func<double[], double[]> solToScore;
