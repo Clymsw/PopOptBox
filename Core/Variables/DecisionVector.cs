@@ -76,6 +76,37 @@ namespace Optimisation.Base.Variables
 
         // TODO: Extend this to retrieve the elements of each type, based on the decision space.
         
+        #region Operators
+
+        public static IEnumerable<double> operator -(DecisionVector v1, DecisionVector v2)
+        {
+            if (!v1.decisionSpace.Equals(v2.decisionSpace))
+                throw new ArgumentException("Decision vectors for comparison must have identical decision spaces.");
+
+            var difference = new double[v1.Vector.Count];
+            for (var i = 0; i < v1.Vector.Count; i++)
+            {
+                difference[i] = (double) v1.Vector[i] - (double) v2.Vector[i];
+            }
+
+            return difference;
+        }
+        
+        public static IEnumerable<double> operator +(DecisionVector v1, DecisionVector v2)
+        {
+            if (!v1.decisionSpace.Equals(v2.decisionSpace))
+                throw new ArgumentException("Decision vectors for comparison must have identical decision spaces.");
+
+            var sum = new double[v1.Vector.Count];
+            for (var i = 0; i < v1.Vector.Count; i++)
+            {
+                sum[i] = (double) v1.Vector[i] + (double) v2.Vector[i];
+            }
+
+            return sum;
+        }
+
+        #endregion
         
         #region Equals, GetHashCode
         

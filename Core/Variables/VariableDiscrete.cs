@@ -11,6 +11,8 @@ namespace Optimisation.Base.Variables
         private readonly int lowerBound;
         private readonly int upperBound;
         
+        public string Name { get; }
+        
         /// <summary>
         /// Constructor specifies the dimension bounds
         /// </summary>
@@ -19,7 +21,8 @@ namespace Optimisation.Base.Variables
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public VariableDiscrete(
             int lowerBound = 0, 
-            int upperBound = int.MaxValue)
+            int upperBound = int.MaxValue,
+            string name = "")
         {
             if (upperBound <= lowerBound)
                 throw new ArgumentOutOfRangeException(nameof(upperBound), 
@@ -27,6 +30,7 @@ namespace Optimisation.Base.Variables
             
             this.lowerBound = lowerBound;
             this.upperBound = upperBound;
+            Name = name;
         }
 
         /// <inheritdoc />
@@ -34,6 +38,11 @@ namespace Optimisation.Base.Variables
         {
             var test = System.Convert.ToInt32(testValue);
             return test >= lowerBound && test <= upperBound;
+        }
+
+        public override string ToString()
+        {
+            return $"{Name} [{lowerBound} - {upperBound}]";
         }
 
         #region Equals, GetHashCode

@@ -22,7 +22,7 @@ namespace Optimisation.Base.Management
         /// </summary>
         /// <param name="individualList">List of Individuals</param>
         /// <returns>The number successfully reinserted.</returns>
-        /// <exception cref="InvalidOperationException">One of the individuals is not yet evaluated.</exception>
+        /// <exception cref="ArgumentException">One of the individuals is not yet evaluated.</exception>
         int ReInsert(IEnumerable<Individual> individualList);
     }
 }

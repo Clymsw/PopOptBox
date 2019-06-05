@@ -17,21 +17,31 @@ namespace Optimisation.Base.Conversion
         /// <inheritdoc />
         public abstract void Evaluate(Individual ind);
 
+        /// <summary>
+        /// Helpful wrapper function for <see cref="Individual"/>.SetSolution()
+        /// </summary>
+        /// <param name="ind">The individual to set the solution for</param>
+        /// <param name="solution">The value.</param>
         protected void SetSingleObjectiveSolution(Individual ind, double solution)
         {
             var solVector = new[]
             {
                 solution
             };
-            setSolution(ind, solVector);
+            SetSolution(ind, solVector);
         }
 
-        protected void SetMultiObjectiveSolution(Individual ind, IEnumerable<double> solVector)
+        /// <summary>
+        /// Unnecessary wrapper function for <see cref="Individual"/>.SetSolution()
+        /// </summary>
+        /// <param name="ind">The individual to set the solution for</param>
+        /// <param name="solutionVector">The values.</param>
+        protected void SetMultiObjectiveSolution(Individual ind, IEnumerable<double> solutionVector)
         {
-            setSolution(ind, solVector);
+            SetSolution(ind, solutionVector);
         }
 
-        private void setSolution(Individual ind, IEnumerable<double> solVector)
+        private void SetSolution(Individual ind, IEnumerable<double> solVector)
         {
             ind.SetProperty(solutionProperty, solVector);
             ind.FinishEvaluating();

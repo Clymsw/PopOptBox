@@ -12,5 +12,10 @@ namespace Optimisation.Base.Variables
         /// <returns>True/false (whether the value is supported)</returns>
         /// <exception cref="System.FormatException">Thrown when object is of the wrong type.</exception>
         bool IsInBounds(object testValue);
+
+        /// <summary>
+        /// A string which describes the variable
+        /// </summary>
+        string Name { get; }
     }
 }

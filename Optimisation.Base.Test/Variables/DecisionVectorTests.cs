@@ -94,5 +94,43 @@ namespace Optimisation.Base.Variables.Test
 
             Assert.NotEqual(dv1, dv2);
         }
+        
+        [Fact]
+        public void DifferenceOfTwoDifferentVectors_WithDifferentSpace_Fails()
+        {
+            var dv1 = DecisionVector.CreateFromArray(space, exampleContinuousVector);
+            var dv2 = DecisionVector.CreateFromArray(
+                ObjectCreators.GetDecisionSpace(4,MinValueContinuous - 1, MaxValueContinuous + 1),
+                exampleContinuousVector);
+
+            Assert.Throws<ArgumentException>(
+                () => dv1 - dv2);
+        }
+        
+        [Fact]
+        public void DifferenceOfTwoDifferentVectors_WithSameSpace_IsCorrect()
+        {
+            var values2 = exampleContinuousVector.Select(i => i - 1).ToArray();
+            var dv1 = DecisionVector.CreateFromArray(space, exampleContinuousVector);
+            var dv2 = DecisionVector.CreateFromArray(space, values2);
+
+            var difference = dv1 - dv2;
+
+            for (var i = 0; i < Dims; i++)
+                Assert.Equal(1, difference.ElementAt(i));
+        }
+
+        [Fact]
+        public void SumOfTwoDifferentVectors_WithSameSpace_IsCorrect()
+        {
+            var values2 = exampleContinuousVector.Select(i => i - 1).ToArray();
+            var dv1 = DecisionVector.CreateFromArray(space, exampleContinuousVector);
+            var dv2 = DecisionVector.CreateFromArray(space, values2);
+
+            var sum = dv1 + dv2;
+
+            for (var i = 0; i < Dims; i++)
+                Assert.Equal(exampleContinuousVector.ElementAt(i) * 2 - 1, sum.ElementAt(i));
+        }
     }
 }

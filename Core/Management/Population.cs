@@ -71,7 +71,7 @@ namespace Optimisation.Base.Management
 
         #endregion
 
-        #region FakeProperties
+        #region Information Extraction
 
         /// <summary>
         /// An indexer to allow direct indexation to the Population 
@@ -151,6 +151,27 @@ namespace Optimisation.Base.Management
         {
             return members.Select(i => i.DecisionVector.Vector.ToArray());
         }
+        
+        /// <summary>
+        /// Calculates the difference in fitness between the best and worst individuals in the population.
+        /// </summary>
+        /// <returns>The fitness range for the population</returns>
+        public double FitnessRange() => Worst().Fitness - Best().Fitness;
+        
+        /// <summary>
+        /// Calculates the difference in fitness between the best and worst individuals in the population.
+        /// </summary>
+        /// <returns>The fitness range for the population</returns>
+        public double FitnessAverage() => GetMemberFitnesses().Average();
+
+        /// <summary>
+        /// Calculates the absolute differences in decision vector values between the best and worst individuals in the population.
+        /// </summary>
+        /// <returns>The range of each variable in the decision space</returns>
+        /// <exception cref="ArgumentException">If the individuals do not have the same decision space.</exception>
+        public IEnumerable<double> DecisionVectorRangeByFitness() => 
+            (Worst().DecisionVector - Best().DecisionVector).Select(Math.Abs); 
+        
 
         #endregion
 

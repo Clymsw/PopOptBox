@@ -14,13 +14,11 @@ namespace Optimisation.Base.Helpers
         /// <param name="pop">population</param>
         /// <param name="tolerance">the absolute tolerance in the units of the fitness</param>
         /// <returns><see langword="true" /> if converged</returns>
-        public static bool CheckAbsoluteFitnessDivergence(
+        public static bool AbsoluteFitnessConvergence(
             this Population pop,
             double tolerance = 1)
         {
-            // Math.Abs is not, strictly speaking, necessary. But this is safe.
-            var difference = Math.Abs(pop.Worst().Fitness - pop.Best().Fitness);
-            return difference < tolerance;
+            return pop.FitnessRange() <= tolerance;
         }
 
         /// <summary>
@@ -30,17 +28,14 @@ namespace Optimisation.Base.Helpers
         /// <param name="pop">population</param>
         /// <param name="tolerance">relative amount</param>
         /// <returns><see langword="true" /> if converged</returns>
-        public static bool CheckRelativeFitnessDivergence<TDecVec>(
+        public static bool RelativeFitnessConvergence(
             this Population pop,
             double tolerance = 0.001)
         {
-            var difference = pop.Worst().Fitness - pop.Best().Fitness;
-            if (Math.Abs(difference) <= double.Epsilon)
+            if (Math.Abs(pop.FitnessRange()) <= double.Epsilon)
                 return true;
 
-            var allFitness = pop.GetMemberFitnesses();
-            var average = allFitness.Average();
-            return Math.Abs(difference / average) < tolerance;
+            return Math.Abs(pop.FitnessRange() / pop.FitnessAverage()) <= tolerance;
         }
 
         /// <summary>
@@ -50,15 +45,13 @@ namespace Optimisation.Base.Helpers
         /// <param name="pop">population</param>
         /// <param name="tolerance">absolute tolerance, in the units of the decision vector</param>
         /// <returns><see langword="true" /> if converged</returns>
-        public static bool CheckAbsoluteDecVecDivergence(
+        /// <exception cref="ArgumentException">If the individuals do not have the same decision space.</exception>
+        public static bool AbsoluteDecisionVectorConvergence(
             this Population pop,
             double tolerance)
         {
-            var worst = (IEnumerable<double>)pop.Worst().DecisionVector.Vector;
-            var best = (IEnumerable<double>)pop.Best().DecisionVector.Vector;
-
-            var differences = best.Zip(worst, (b, w) => Math.Abs(w - b));
-            return differences.All(dif => dif < tolerance);
+            var dvRange = pop.DecisionVectorRangeByFitness();
+            return dvRange.All(dif => dif <= tolerance);
         }
 
         /// <summary>
@@ -71,19 +64,18 @@ namespace Optimisation.Base.Helpers
         ///     Any elements with 0 tolerance are ignored
         /// </param>
         /// <returns><see langword="true" /> if converged</returns>
-        public static bool CheckAbsoluteDecVecDivergence(
+        /// <exception cref="ArgumentException">If the individuals do not have the same decision space, or if the tolerance does not have the right length.</exception>
+        public static bool AbsoluteDecisionVectorConvergence(
             this Population pop,
             double[] tolerance)
         {
-            var worst = (IEnumerable<double>)pop.Worst().DecisionVector.Vector;
-            var best = (IEnumerable<double>)pop.Best().DecisionVector.Vector;
+            var dvRange = pop.DecisionVectorRangeByFitness();
 
-            if (best.Count() != tolerance.Length)
-                throw new ArgumentOutOfRangeException(nameof(tolerance),
-                    "Tolerance must have same length as decision vector");
+            if (dvRange.Count() != tolerance.Length)
+                throw new ArgumentException("Tolerance must have same length as decision vector",
+                    nameof(tolerance));
 
-            var differences = best.Zip(worst, (b, w) => Math.Abs(w - b));
-            return AllWithinTolerances(differences, tolerance);
+            return AllWithinTolerances(dvRange, tolerance);
         }
 
         /// <summary>
@@ -94,15 +86,16 @@ namespace Optimisation.Base.Helpers
         /// <param name="pop">population</param>
         /// <param name="tolerance">relative amount</param>
         /// <returns><see langword="true" /> if converged</returns>
-        public static bool CheckRelativeDecVecDivergence(
+        /// <exception cref="ArgumentException">If the individuals do not have the same decision space.</exception>
+        public static bool RelativeDecisionVectorDivergence(
             this Population pop,
             double tolerance = 0.001)
         {
-            var worstVec = (IEnumerable<double>)pop.Worst().DecisionVector.Vector;
-            var bestVec = (IEnumerable<double>)pop.Best().DecisionVector.Vector;
-
-            var relativeDifferences = bestVec.Zip(worstVec, (best, worst) => Math.Abs((worst - best) / best));
-            return relativeDifferences.All(dif => dif < tolerance);
+            var dvRange = pop.DecisionVectorRangeByFitness();
+            var relativeDifferences = pop.Best().DecisionVector.Vector
+                .Select((n,i) => dvRange.ElementAt(i) / (double) n);
+            
+            return relativeDifferences.All(r => r <= tolerance);
         }
 
         /// <summary>
@@ -116,18 +109,20 @@ namespace Optimisation.Base.Helpers
         ///     Any elements with 0 tolerance are ignored
         /// </param>
         /// <returns><see langword="true" /> if converged</returns>
-        public static bool CheckRelativeDecVecDivergence(
+        /// <exception cref="ArgumentException">If the individuals do not have the same decision space, or if the tolerance does not have the right length.</exception>
+        public static bool RelativeDecisionVectorDivergence(
             this Population pop,
             double[] tolerance)
         {
-            var worstVec = (IEnumerable<double>)pop.Worst().DecisionVector.Vector;
-            var bestVec = (IEnumerable<double>)pop.Best().DecisionVector.Vector;
+            var dvRange = pop.DecisionVectorRangeByFitness();
 
-            if (bestVec.Count() != tolerance.Length)
-                throw new ArgumentOutOfRangeException(nameof(tolerance),
-                    "Tolerance must have same length as decision vector");
+            if (dvRange.Count() != tolerance.Length)
+                throw new ArgumentException("Tolerance must have same length as decision vector",
+                    nameof(tolerance));
+            
+            var relativeDifferences = pop.Best().DecisionVector.Vector
+                .Select((n,i) => dvRange.ElementAt(i) / (double) n);
 
-            var relativeDifferences = bestVec.Zip(worstVec, (best, worst) => Math.Abs((worst - best) / best));
             return AllWithinTolerances(relativeDifferences, tolerance);
         }
 
@@ -135,7 +130,7 @@ namespace Optimisation.Base.Helpers
         {
             bool IsWithinTolerance(double dif, double tol)
             {
-                return tol <= 0 || dif < tol;
+                return tol <= 0 || dif <= tol;
             }
 
             var withinTolerance = differences.Zip(tolerance, IsWithinTolerance);

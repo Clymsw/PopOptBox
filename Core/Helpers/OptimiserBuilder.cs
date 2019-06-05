@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Optimisation.Base.Conversion;
 using Optimisation.Base.Management;
+using Optimisation.Base.Variables;
 
 namespace Optimisation.Base.Helpers
 {
@@ -10,23 +11,29 @@ namespace Optimisation.Base.Helpers
     /// </summary>
     public abstract class OptimiserBuilder
     {
-        private readonly Dictionary<string, object> Settings;
+        private readonly Dictionary<IVariable, object> settings;
 
         protected OptimiserBuilder()
         {
-            Settings = new Dictionary<string, object>();
+            settings = new Dictionary<IVariable, object>();
         }
 
-        public virtual IEnumerable<KeyValuePair<string, object>> GetTunableSettings()
+        public IEnumerable<IVariable> GetTunableSettings()
         {
-            return Settings;
+            return settings.Keys;
         }
 
-        public virtual bool SetSetting(string name, object newValue)
+        /// <summary>
+        /// Allows setting an optimisation hyperparameter
+        /// </summary>
+        /// <param name="definition">Setting definition in form of a <see cref="IVariable"/></param>
+        /// <param name="value">The value for the setting</param>
+        /// <returns><see langword="true" /> if set ok</returns>
+        public bool SetSetting(IVariable definition, object value)
         {
             try
             {
-                Settings[name] = newValue;
+                settings[definition] = value;
                 return true;
             }
             catch
@@ -63,10 +70,16 @@ namespace Optimisation.Base.Helpers
         }
 
         /// <summary>
-        ///     The solution vector to fitness converter
+        ///     The score to fitness converter
         /// </summary>
         /// <returns></returns>
         protected abstract Func<double[], double> CreateObjective();
+        
+        /// <summary>
+        ///     The solution vector to score converter
+        /// </summary>
+        /// <returns></returns>
+        protected abstract Func<double[], double[]> CreateMultiObjectiveScore();
 
         /// <summary>
         ///     The solution vector to penalty converter for illegal individuals

@@ -34,8 +34,8 @@ namespace Optimisation.Base.Conversion
         }
 
         /// <summary>
-        ///     Creates a new individual using some real-world logic
-        ///     Called by <see cref="GetNewIndividual" />
+        /// Creates a new individual using some real-world logic
+        /// Called by <see cref="GetNewIndividual" />
         /// </summary>
         /// <returns>A new Individual.</returns>
         protected abstract Individual CreateNewIndividual();

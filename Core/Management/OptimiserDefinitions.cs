@@ -26,5 +26,10 @@ namespace Optimisation.Base.Management
         /// Set by <see cref="Optimiser"/>.
         /// </summary>
         public const string ReinsertionTime = "Time reinserted";
+
+        /// <summary>
+        /// If an error has been encountered on reinsertion, it is stored here.
+        /// </summary>
+        public const string ReinsertionError = "Reinsertion error";
     }
 }

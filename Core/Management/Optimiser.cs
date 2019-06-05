@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Optimisation.Base.Management;
 using Optimisation.Base.Variables;
 
 namespace Optimisation.Base.Management
@@ -11,11 +10,14 @@ namespace Optimisation.Base.Management
         #region Constructor
 
         /// <inheritdoc />
-        protected Optimiser(string solProp,
+        protected Optimiser(
+            Population initialPopulation,
+            string solProp,
             Func<double[], double> scoreToFitDelegate,
             Func<double[], double> penaltyDelegate,
             Func<double[], double[]> solutionToScoreDelegate)
         {
+            Population = initialPopulation;
             solutionProperty = solProp;
             scoreToFit = scoreToFitDelegate;
             solToScore = solutionToScoreDelegate;
@@ -26,12 +28,10 @@ namespace Optimisation.Base.Management
 
         #region Fields
 
-        protected Population population;
-
         /// <summary>
-        ///     The current population in the optimiser
+        /// The current population in the optimiser
         /// </summary>
-        public Population Population => population;
+        protected Population Population { get; }
 
         private readonly string solutionProperty;
         private readonly Func<double[], double[]> solToScore;
@@ -93,7 +93,20 @@ namespace Optimisation.Base.Management
         ///     <see langword="true" /> if <see cref="ind" /> was actually inserted;
         ///     <see langword="false" /> if rejected.
         /// </returns>
-        protected abstract bool ReInsert(Individual ind);
+        protected virtual bool ReInsert(Individual ind)
+        {
+            try
+            {
+                Population.AddIndividual(ind);
+            }
+            catch (Exception e)
+            {
+                ind.SetProperty(OptimiserDefinitions.ReinsertionError, e);
+                return false;
+            }
+
+            return true;
+        }
 
         /// <inheritdoc />
         public int ReInsert(IEnumerable<Individual> individualList)
@@ -102,15 +115,15 @@ namespace Optimisation.Base.Management
             foreach (var ind in individualList)
             {
                 if (ind.State != IndividualStates.Evaluated)
-                    //TODO: Use logging function instead
-                    throw new InvalidOperationException("Individual not yet evaluated");
-
+                    throw new ArgumentException("Individual is not evaluated!");
+                
                 ind.SetSolution(solutionProperty);
 
                 //If the individual has been evaluated and is legal, 
                 // assign fitness and store in population.
                 //If the individual has been evaluated but is not legal, 
                 // assign soft penalty and store in population.
+                ind.SetScore(ind.Legal ? solToScore : sol => sol);
                 ind.SetFitness(ind.Legal ? scoreToFit : penalty);
 
                 ind.SetProperty(
