@@ -19,12 +19,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\Optimisation.Base.csproj" />
+    <Folder Include="Conversion\" />
+    <Folder Include="Runtime\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Conversion\" />
-    <Folder Include="Runtime\" />
+    <ProjectReference Include="..\Optimisation.Base\Optimisation.Base.csproj" />
   </ItemGroup>
 
 </Project>
