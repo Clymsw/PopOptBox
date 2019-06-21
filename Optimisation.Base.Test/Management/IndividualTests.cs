@@ -1,5 +1,4 @@
-﻿using Optimisation.Base.Variables;
-using System.Linq;
+﻿using System.Linq;
 using Optimisation.Base.Test.Helpers;
 using Xunit;
 

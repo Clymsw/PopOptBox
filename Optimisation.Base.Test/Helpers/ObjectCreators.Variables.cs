@@ -20,16 +20,24 @@ namespace Optimisation.Base.Test.Helpers
 
         internal static DecisionVector GetDecisionVector(IEnumerable<int> vector)
         {
+            var dv = vector.ToArray();
             return DecisionVector.CreateFromArray(
-                GetDecisionSpace(vector.Count(), vector.Min(), vector.Max()), 
-                vector);
+                GetDecisionSpace(
+                    dv.Length,
+                    dv.Min(),
+                    dv.Max()), 
+                dv);
         }
         
         internal static DecisionVector GetDecisionVector(IEnumerable<double> vector)
         {
+            var dv = vector.ToArray();
             return DecisionVector.CreateFromArray(
-                GetDecisionSpace(vector.Count(), vector.Min(), vector.Max() + 0.01), 
-                vector);
+                GetDecisionSpace(
+                    dv.Count(),
+                    dv.Min(),
+                    dv.Max() + 0.01), 
+                dv);
         }
     }
 }
