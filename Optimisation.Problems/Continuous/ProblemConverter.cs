@@ -5,14 +5,14 @@ using System.Linq;
 
 namespace Optimisation.Problems.Continuous
 {
-    internal class ProblemConverter : IConverter
+    internal class ProblemConverter : IConverter<double[]>
     {
-        public DecisionVector ConvertToDV(object realityDefinition)
+        public DecisionVector ConvertToDV(double[] realityDefinition)
         {
             throw new NotImplementedException();
         }
 
-        public object ConvertToReality(DecisionVector decisionVector)
+        public double[] ConvertToReality(DecisionVector decisionVector)
         {
             return decisionVector.Vector.Select(Convert.ToDouble).ToArray();
         }

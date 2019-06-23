@@ -56,7 +56,7 @@ namespace Optimisation.Base.Management
         ///     The model
         /// </summary>
         /// <returns></returns>
-        public abstract Model CreateModel();
+        public abstract IModel CreateModel();
 
         /// <summary>
         ///     The Decision Vector generator for population initialisation

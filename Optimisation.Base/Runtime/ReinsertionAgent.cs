@@ -39,7 +39,7 @@ namespace Optimisation.Base.Runtime
         public readonly int ReportingFrequency;
 
         private readonly Optimiser optimiser;
-        private readonly Model model;
+        private readonly IModel model;
 
         public int NumberGenerated { get; private set; }
         public int NumberProcessed { get; private set; }
@@ -63,7 +63,7 @@ namespace Optimisation.Base.Runtime
         /// <param name="reportingFrequency">Number of reinsertions between reports on current population</param>
         public ReinsertionAgent(
             Optimiser optimiser,
-            Model model,
+            IModel model,
             int timeOut,
             Func<Population, bool> convergenceCheckers,
             int reportingFrequency)
