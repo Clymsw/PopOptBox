@@ -1,6 +1,8 @@
 ﻿using Optimisation.Base.Conversion;
 using Optimisation.Base.Variables;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Optimisation.Problems.Continuous
 {
@@ -34,7 +36,7 @@ namespace Optimisation.Problems.Continuous
 
         public override bool IsLegal(double[] definition)
         {
-            return globalOptimum.GetDecisionSpace().IsAcceptableDecisionVector(definition);
+            return globalOptimum.GetDecisionSpace().IsAcceptableDecisionVector(definition.Select(i => (object)i));
         }
 
         #endregion
