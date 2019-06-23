@@ -212,6 +212,15 @@ namespace Optimisation.Base.Management
             Fitness = fitnessValue;
         }
 
+        /// <summary>
+        /// Sets the legality of the individual.
+        /// </summary>
+        /// <param name="legal">True/false: is/isn't legal</param>
+        public void SetLegality(bool legal)
+        {
+            Legal = legal;
+        }
+
         #endregion
 
         #region Equals, GetHashCode

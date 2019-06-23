@@ -31,7 +31,12 @@ namespace Optimisation.Problems.Continuous
         #endregion
 
         #region Evaluator
-        
+
+        public override bool IsLegal(double[] definition)
+        {
+            return globalOptimum.GetDecisionSpace().IsAcceptableDecisionVector(definition);
+        }
+
         #endregion
 
         #region IProblemSpace

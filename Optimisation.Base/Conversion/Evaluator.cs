@@ -20,16 +20,31 @@ namespace Optimisation.Base.Conversion
         public virtual void Evaluate(Individual ind)
         {
             TReality definition = ind.GetProperty<TReality>(definitionKey);
-            var solution = Evaluate(definition);
-            SetSolution(ind, solution);
+            if (!IsLegal(definition))
+            {
+                ind.SetLegality(false);
+            }
+            else
+            {
+                var solution = Evaluate(definition);
+                SetSolution(ind, solution);
+                ind.SetLegality(true);
+            }
         }
 
         /// <summary>
         /// Calls evaluation logic on a solution.
         /// </summary>
-        /// <param name="solution">The definition of a solution to evaluate</param>
+        /// <param name="definition">The definition of a object to evaluate</param>
         /// <returns>An array representing how good it is.</returns>
-        public abstract IEnumerable<double> Evaluate(TReality solution);
+        public abstract IEnumerable<double> Evaluate(TReality definition);
+
+        /// <summary>
+        /// Determines if a solution is allowed or not, according to real-world logic.
+        /// </summary>
+        /// <param name="definition">The definition of a object to evaluate</param>
+        /// <returns>True/false: Is/isn't legal</returns>
+        public abstract bool IsLegal(TReality definition);
 
         /// <summary>
         /// Helpful wrapper function for <see cref="Individual"/>.SetSolution()

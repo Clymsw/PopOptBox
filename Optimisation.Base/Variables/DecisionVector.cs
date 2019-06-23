@@ -74,8 +74,21 @@ namespace Optimisation.Base.Variables
 
         #endregion
 
+        #region Decision Space
+
+        /// <summary>
+        /// Gets the <see cref="DecisionSpace"/> of this decision vector.
+        /// </summary>
+        /// <returns>A <see cref="DecisionSpace"/>.</returns>
+        public DecisionSpace GetDecisionSpace()
+        {
+            return decisionSpace;
+        }
+
         // TODO: Extend this to retrieve the elements of each type, based on the decision space.
-        
+
+        #endregion
+
         #region Operators
 
         public static IEnumerable<double> operator -(DecisionVector v1, DecisionVector v2)
