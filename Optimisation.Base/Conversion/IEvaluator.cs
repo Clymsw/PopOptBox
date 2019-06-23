@@ -1,11 +1,11 @@
 using Optimisation.Base.Management;
+using System.Collections.Generic;
 
 namespace Optimisation.Base.Conversion
 {
     /// <summary>
     /// The Evaluator decides how good a particular Individual (solution) is
     /// </summary>
-    /// <typeparam name="TDecVec">Class of decision vector, e.g. int</typeparam>
     public interface IEvaluator
     {
         /// <summary>

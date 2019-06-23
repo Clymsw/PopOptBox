@@ -3,25 +3,30 @@ using Optimisation.Base.Management;
 namespace Optimisation.Base.Conversion
 {
     /// <inheritdoc />
-    public abstract class Model : IModel
+    /// <typeparam name="TReality">The type of the object representing reality.</typeparam>
+    public abstract class Model<TReality> : IModel
     {
         #region Constructor
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Constructs the model
+        /// </summary>
+        /// <param name="converter">The converter to/from Decision Vector and reality definition.</param>
+        /// <param name="definitionKey">The <see cref="Individual"/> property key for the reality definition.</param>
         protected Model(
-            IConverter converter,
-            string keyForEvaluator)
+            IConverter<TReality> converter,
+            string definitionKey)
         {
             conversionModel = converter;
-            evaluatorDefinitionKey = keyForEvaluator;
+            this.definitionKey = definitionKey;
         }
 
         #endregion
 
         #region Fields
 
-        private readonly IConverter conversionModel;
-        private readonly string evaluatorDefinitionKey;
+        private readonly IConverter<TReality> conversionModel;
+        private readonly string definitionKey;
 
         #endregion
 
@@ -43,7 +48,7 @@ namespace Optimisation.Base.Conversion
         /// <inheritdoc />
         public void PrepareForEvaluation(Individual ind)
         {
-            ind.SetProperty(evaluatorDefinitionKey,
+            ind.SetProperty(definitionKey,
                 conversionModel.ConvertToReality(ind.DecisionVector));
             ind.SendForEvaluation();
         }

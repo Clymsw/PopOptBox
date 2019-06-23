@@ -5,7 +5,6 @@ namespace Optimisation.Base.Conversion
     /// <summary>
     /// The Model manages conversion between optimiser and evaluator
     /// </summary>
-    /// <typeparam name="TDecVec">Class of decision vector array, e.g. int</typeparam>
     public interface IModel
     {
         /// <summary>

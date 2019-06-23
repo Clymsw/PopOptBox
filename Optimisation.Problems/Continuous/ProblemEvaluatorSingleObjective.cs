@@ -1,19 +1,16 @@
 ﻿using Optimisation.Base.Conversion;
-using Optimisation.Base.Management;
 using Optimisation.Base.Variables;
 using System;
-using System.Linq;
 
 namespace Optimisation.Problems.Continuous
 {
-    public abstract class ProblemEvaluatorSingleObjective : Evaluator, IProblemSpace
+    public abstract class ProblemEvaluatorSingleObjective : Evaluator<double[]>, IProblemEvaluator
     {
         private readonly string name;
         private readonly DecisionVector globalOptimum;
-        private readonly Model problemModel;
 
         protected ProblemEvaluatorSingleObjective(string name, DecisionVector globalOptimum) :
-            base(ContinuousProblemDefinitions.TheResult)
+            base(ContinuousProblemDefinitions.TheLocation, ContinuousProblemDefinitions.TheResult)
         {
             if (globalOptimum.Vector.Count < 1)
             {
@@ -24,7 +21,6 @@ namespace Optimisation.Problems.Continuous
             
             this.name = name;
             this.globalOptimum = globalOptimum;
-            problemModel = new ProblemModel();
         }
 
         #region ToString
@@ -35,25 +31,14 @@ namespace Optimisation.Problems.Continuous
         #endregion
 
         #region Evaluator
-        public override void Evaluate(Individual ind)
-        {
-            problemModel.PrepareForEvaluation(ind);
-            var dv = ind.GetProperty<double[]>(ContinuousProblemDefinitions.TheLocation);
-            var fitness = GetFitness(dv);
-            SetSingleObjectiveSolution(ind, fitness);
-        }
-
-        protected abstract double GetFitness(double[] location);
+        
         #endregion
 
         #region IProblemSpace
 
-        public Individual GetGlobalOptimum()
+        public DecisionVector GetGlobalOptimum()
         {
-            var ind = new Individual(globalOptimum);
-            problemModel.PrepareForEvaluation(ind);
-            Evaluate(ind);
-            return ind;
+            return globalOptimum;
         }
 
         #endregion

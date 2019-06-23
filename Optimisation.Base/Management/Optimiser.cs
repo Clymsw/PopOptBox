@@ -9,16 +9,20 @@ namespace Optimisation.Base.Management
     {
         #region Constructor
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Contruct the optimiser
+        /// </summary>
+        /// <param name="initialPopulation">An initial population (can be empty)</param>
+        /// /// <param name="solutionToScoreDelegate">Conversion function to change solution vector into score. <seealso cref="Individual.SetScore(Func{double[], double[]})"/></param>
+        /// <param name="scoreToFitDelegate">Conversion function to change score into fitness. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
+        /// <param name="penaltyDelegate">Function determining what penalty to assign for illegal individuals. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
         protected Optimiser(
             Population initialPopulation,
-            string solProp,
+            Func<double[], double[]> solutionToScoreDelegate,
             Func<double[], double> scoreToFitDelegate,
-            Func<double[], double> penaltyDelegate,
-            Func<double[], double[]> solutionToScoreDelegate)
+            Func<double[], double> penaltyDelegate)
         {
             Population = initialPopulation;
-            solutionProperty = solProp;
             scoreToFit = scoreToFitDelegate;
             solToScore = solutionToScoreDelegate;
             penalty = penaltyDelegate;
@@ -33,7 +37,6 @@ namespace Optimisation.Base.Management
         /// </summary>
         public Population Population { get; }
 
-        private readonly string solutionProperty;
         private readonly Func<double[], double[]> solToScore;
         private readonly Func<double[], double> scoreToFit;
         private readonly Func<double[], double> penalty;
@@ -117,8 +120,6 @@ namespace Optimisation.Base.Management
                 if (ind.State != IndividualStates.Evaluated)
                     throw new ArgumentException("Individual is not evaluated!");
                 
-                ind.SetSolution(solutionProperty);
-
                 //If the individual has been evaluated and is legal, 
                 // assign fitness and store in population.
                 //If the individual has been evaluated but is not legal, 

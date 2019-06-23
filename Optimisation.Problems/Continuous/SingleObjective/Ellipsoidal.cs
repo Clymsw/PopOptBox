@@ -1,5 +1,6 @@
 ﻿using Optimisation.Base.Variables;
 using System;
+using System.Collections.Generic;
 
 namespace Optimisation.Problems.Continuous.SingleObjective
 {
@@ -24,7 +25,7 @@ namespace Optimisation.Problems.Continuous.SingleObjective
 
         #region Implement abstract
 
-        protected override double GetFitness(double[] location)
+        public override IEnumerable<double> Evaluate(double[] location)
         {
             // http://profesores.elo.utfsm.cl/~tarredondo/info/soft-comp/functions/node3.html
 
@@ -33,7 +34,7 @@ namespace Optimisation.Problems.Continuous.SingleObjective
             {
                 result += (i + 1) * Math.Pow(location[i], 2);
             }
-            return result;
+            return new[] { result };
         }
 
         #endregion
