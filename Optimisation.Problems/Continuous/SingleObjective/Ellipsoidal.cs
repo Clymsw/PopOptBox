@@ -6,7 +6,7 @@ namespace Optimisation.Problems.Continuous.SingleObjective
 {
     public class Ellipsoidal : ProblemEvaluatorSingleObjective
     {
-        #region Contructor
+        #region Constructor
         /// <summary>
         /// Creates an evaluator for the Ellipsoidal Function.
         /// Constrained on [-10, 10]

@@ -4,17 +4,17 @@ using System.Collections.Generic;
 
 namespace Optimisation.Problems.Continuous.SingleObjective
 {
-    public class Rosenbrock : ProblemEvaluatorSingleObjective
+    public class Salomon : ProblemEvaluatorSingleObjective
     {
-        #region Contructor
+        #region Constructor
         /// <summary>
-        /// Creates an evaluator for the Rosenbrock Function.
-        /// Constrained on [-5, 10]
+        /// Creates an evaluator for Salomon's Function.
+        /// Assumes unconstrained, even though normally checked on a +/-100 basis
         /// Global optimum is at [0,0,0,...]
         /// </summary>
         /// <param name="numDims">Number of input dimensions</param>
-        public Rosenbrock(int numDims) : base(
-            "Rosenbrock Function", 
+        public Salomon(int numDims) : base(
+            "Salomon's Function",
             DecisionVector.CreateFromArray(
                 DecisionSpace.CreateForUniformDoubleArray(numDims, double.MinValue, double.MaxValue),
                 new double[numDims]))
@@ -27,16 +27,15 @@ namespace Optimisation.Problems.Continuous.SingleObjective
 
         public override IEnumerable<double> Evaluate(double[] location)
         {
-            // http://www.sfu.ca/~ssurjano/rosen.html
-            // http://benchmarkfcns.xyz/benchmarkfcns/rosenbrockfcn.html
+            // http://profesores.elo.utfsm.cl/~tarredondo/info/soft-comp/functions/node12.html
+            // http://benchmarkfcns.xyz/benchmarkfcns/salomonfcn.html
 
-            double result = 0;
+            double temp = 0;
             for (int i = 0; i < location.Length - 1; i++)
             {
-                result += 100 * Math.Pow(location[i + 1] - Math.Pow(location[i], 2), 2) +
-                    Math.Pow(1 - location[i], 2);
+                temp += Math.Pow(location[i], 2);
             }
-            return new[] { result };
+            return new[] { 1 - Math.Cos(2 * Math.PI * Math.Sqrt(temp)) + 0.1 * Math.Sqrt(temp) };
         }
 
         #endregion

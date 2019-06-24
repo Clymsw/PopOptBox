@@ -6,7 +6,7 @@ namespace Optimisation.Problems.Continuous.SingleObjective
 {
     public class Rastrigin : ProblemEvaluatorSingleObjective
     {
-        #region Contructor
+        #region Constructor
         /// <summary>
         /// Creates an evaluator for the Generalised Rastrigin Function.
         /// Assumes unconstrained, even though normally checked on a +/-5.12 basis
