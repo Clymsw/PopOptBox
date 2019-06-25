@@ -19,8 +19,11 @@ namespace Optimisation.Base.Conversion
         /// <inheritdoc />
         public virtual void Evaluate(Individual ind)
         {
+            if (ind.State != IndividualStates.Evaluating)
+                throw new System.InvalidOperationException("Individual is not ready for evaluation.");
+
             TReality definition = ind.GetProperty<TReality>(definitionKey);
-            if (!IsLegal(definition))
+            if (!GetLegality(definition))
             {
                 ind.SetLegality(false);
             }
@@ -44,7 +47,7 @@ namespace Optimisation.Base.Conversion
         /// </summary>
         /// <param name="definition">The definition of a object to evaluate</param>
         /// <returns>True/false: Is/isn't legal</returns>
-        public abstract bool IsLegal(TReality definition);
+        public abstract bool GetLegality(TReality definition);
 
         /// <summary>
         /// Helpful wrapper function for <see cref="Individual"/>.SetSolution()
