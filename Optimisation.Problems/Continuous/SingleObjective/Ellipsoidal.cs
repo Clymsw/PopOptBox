@@ -30,7 +30,7 @@ namespace Optimisation.Problems.Continuous.SingleObjective
             // http://profesores.elo.utfsm.cl/~tarredondo/info/soft-comp/functions/node3.html
 
             double result = 0;
-            for (int i = 0; i < location.Length - 1; i++)
+            for (int i = 0; i < location.Length; i++)
             {
                 result += (i + 1) * Math.Pow(location[i], 2);
             }

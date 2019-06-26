@@ -31,7 +31,7 @@ namespace Optimisation.Problems.Continuous.SingleObjective
             // http://benchmarkfcns.xyz/benchmarkfcns/salomonfcn.html
 
             double temp = 0;
-            for (int i = 0; i < location.Length - 1; i++)
+            for (int i = 0; i < location.Length; i++)
             {
                 temp += Math.Pow(location[i], 2);
             }

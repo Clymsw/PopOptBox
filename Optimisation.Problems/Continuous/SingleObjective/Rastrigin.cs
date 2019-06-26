@@ -1,6 +1,7 @@
 ﻿using Optimisation.Base.Variables;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Optimisation.Problems.Continuous.SingleObjective
 {
@@ -32,7 +33,7 @@ namespace Optimisation.Problems.Continuous.SingleObjective
             // http://www.sfu.ca/~ssurjano/rastr.html
 
             double result = 10 * location.Length;
-            for (int i = 0; i < location.Length - 1; i++)
+            for (int i = 0; i < location.Length; i++)
             {
                 result += Math.Pow(location[i], 2) - (10 * Math.Cos(2 * Math.PI * location[i]));
             }

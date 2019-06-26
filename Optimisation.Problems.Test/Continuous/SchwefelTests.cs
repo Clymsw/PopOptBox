@@ -1,14 +1,15 @@
+using System;
 using System.Linq;
 using Xunit;
 
 namespace Optimisation.Problems.Continuous.SingleObjective.Test
 {
-    public class EllipsoidalTests
+    public class SchwefelTests
     {
         [Fact]
         public void TwoDim_CorrectlyIdentifiesLegalSolution()
         {
-            var evaluator = new Ellipsoidal(2);
+            var evaluator = new Schwefel(2);
             var legal = evaluator.GetLegality(new[] { 1.0, 1.0 });
             Assert.True(legal);
         }
@@ -16,20 +17,22 @@ namespace Optimisation.Problems.Continuous.SingleObjective.Test
         [Fact]
         public void TwoDim_CorrectlyIdentifiesIllegalSolution()
         {
-            var evaluator = new Ellipsoidal(2);
-            var legal = evaluator.GetLegality(new[] { 11.0, -12.0 });
+            var evaluator = new Schwefel(2);
+            var legal = evaluator.GetLegality(new[] {-501.0, 210.0 });
             Assert.False(legal);
+            var legal2 = evaluator.GetLegality(new[] {-250.0, 620.0 });
+            Assert.False(legal2);
         }
 
         [Theory]
-        [InlineData(new[] { 0.0, 0.0, 0.0 })]
-        [InlineData(new[] { 1.0, 1.0, 3.0 })]
-        [InlineData(new[] { 1.0, -1.0, 3.0 })]
+        [InlineData(new[] { 420.9687, 420.9687, 0.0 })]
+        [InlineData(new[] { 0.0, 0.0, 837.9658 })]
+        [InlineData(new[] { 100, -100, 837.9658 })]
         public void TwoDim_EvaluatesCorrectValues(double[] values)
         {
-            var evaluator = new Ellipsoidal(2);
+            var evaluator = new Schwefel(2);
             var result = evaluator.Evaluate(new[] { values[0], values[1] });
-            Assert.Equal(values[2], result.ElementAt(0));
+            Assert.True(Math.Abs(values[2] - result.ElementAt(0)) < 0.001);
         }
     }
 }

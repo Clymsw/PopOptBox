@@ -31,11 +31,10 @@ namespace Optimisation.Problems.Continuous.SingleObjective
             // http://www.sfu.ca/~ssurjano/schwef.html
             // http://benchmarkfcns.xyz/benchmarkfcns/schwefelfcn.html
 
-            double result = 418.9829 * Convert.ToDouble(location.Length);
-            for (int i = 0; i < location.Length; i++)
+            var result = 418.9829 * location.Length;
+            foreach (var t in location)
             {
-                result -= location[i] *
-                    Math.Sin(Math.Sqrt(Math.Abs(location[i])));
+                result -= t * Math.Sin(Math.Sqrt(Math.Abs(t)));
             }
             return new[] { result };
         }

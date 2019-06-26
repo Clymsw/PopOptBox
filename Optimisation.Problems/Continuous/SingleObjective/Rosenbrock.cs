@@ -9,8 +9,8 @@ namespace Optimisation.Problems.Continuous.SingleObjective
         #region Contructor
         /// <summary>
         /// Creates an evaluator for the Rosenbrock Function.
-        /// Constrained on [-5, 10]
-        /// Global optimum is at [0,0,0,...]
+        /// Assumes unconstrained, even though normally checked on a [-5, 10] basis.
+        /// Global optimum is at [1,1,1,...]
         /// </summary>
         /// <param name="numDims">Number of input dimensions</param>
         public Rosenbrock(int numDims) : base(
@@ -33,8 +33,8 @@ namespace Optimisation.Problems.Continuous.SingleObjective
             double result = 0;
             for (int i = 0; i < location.Length - 1; i++)
             {
-                result += 100 * Math.Pow(location[i + 1] - Math.Pow(location[i], 2), 2) +
-                    Math.Pow(1 - location[i], 2);
+                result += 100 * Math.Pow(location[i + 1] - Math.Pow(location[i], 2), 2)
+                          + Math.Pow(1 - location[i], 2);
             }
             return new[] { result };
         }
