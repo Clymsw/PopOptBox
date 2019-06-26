@@ -49,7 +49,7 @@ namespace Optimisation.Base.Management
         ///     Optimiser-specific logic to implement, which works out what to try next
         /// </summary>
         /// <returns>The most useful next Decision Vector to evaluate</returns>
-        protected abstract DecisionVector GetNewIndividual();
+        protected abstract DecisionVector GetNewDecisionVector();
 
         /// <summary>
         ///     Logic to check if a new individual is legal, according to rules
@@ -67,7 +67,7 @@ namespace Optimisation.Base.Management
             var i = 0;
             while (listOfInds.Count < numDesired)
             {
-                var newDv = GetNewIndividual();
+                var newDv = GetNewDecisionVector();
                 var newInd = new Individual(newDv);
                 
                 if (CheckAcceptable(newInd))

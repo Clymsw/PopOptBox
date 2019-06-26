@@ -45,10 +45,6 @@ namespace Optimisation.Base.Management
         /// <summary>
         ///     The optimiser
         /// </summary>
-        /// <param name="decVecGenerator"></param>
-        /// <param name="solToFit"></param>
-        /// <param name="penaltyFcn"></param>
-        /// <param name="settings"></param>
         /// <returns></returns>
         public abstract Optimiser CreateOptimiser();
 
@@ -61,7 +57,6 @@ namespace Optimisation.Base.Management
         /// <summary>
         ///     The Decision Vector generator for population initialisation
         /// </summary>
-        /// <param name="model"></param>
         /// <returns></returns>
         protected Func<Individual> CreateDecisionVectorGenerator()
         {

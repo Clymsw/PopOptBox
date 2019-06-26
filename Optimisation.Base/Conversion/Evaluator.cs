@@ -22,7 +22,7 @@ namespace Optimisation.Base.Conversion
             if (ind.State != IndividualStates.Evaluating)
                 throw new System.InvalidOperationException("Individual is not ready for evaluation.");
 
-            TReality definition = ind.GetProperty<TReality>(definitionKey);
+            var definition = ind.GetProperty<TReality>(definitionKey);
             if (!GetLegality(definition))
             {
                 ind.SetLegality(false);
@@ -48,20 +48,6 @@ namespace Optimisation.Base.Conversion
         /// <param name="definition">The definition of a object to evaluate</param>
         /// <returns>True/false: Is/isn't legal</returns>
         public abstract bool GetLegality(TReality definition);
-
-        /// <summary>
-        /// Helpful wrapper function for <see cref="Individual"/>.SetSolution()
-        /// </summary>
-        /// <param name="ind">The individual to set the solution for</param>
-        /// <param name="solution">The value.</param>
-        //protected void SetSingleObjectiveSolution(Individual ind, double solution)
-        //{
-        //    var solVector = new[]
-        //    {
-        //        solution
-        //    };
-        //    SetSolution(ind, solVector);
-        //}
 
         private void SetSolution(Individual ind, IEnumerable<double> solVector)
         {
