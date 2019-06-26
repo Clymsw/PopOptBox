@@ -52,6 +52,7 @@ namespace Optimisation.Base.Conversion
         private void SetSolution(Individual ind, IEnumerable<double> solVector)
         {
             ind.SetProperty(solutionKey, solVector);
+            ind.SetSolution(solutionKey);
             ind.FinishEvaluating();
         }
     }

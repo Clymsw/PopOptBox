@@ -1,5 +1,4 @@
 using Optimisation.Base.Management;
-using System.Collections.Generic;
 
 namespace Optimisation.Base.Conversion
 {

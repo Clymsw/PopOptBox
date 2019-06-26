@@ -1,8 +1,6 @@
 using System.Linq;
 using Optimisation.Base.Management;
-using Moq;
 using Optimisation.Base.Test.Helpers;
-using Optimisation.Base.Variables;
 using Xunit;
 
 namespace Optimisation.Base.Conversion.Test
@@ -10,22 +8,15 @@ namespace Optimisation.Base.Conversion.Test
     public class ModelTests
     {
         private readonly IModel modelMock;
-        private readonly double[] decisionVector;
+        private readonly ObjectCreators.OptimiserBuilderMock builder;
 
         public ModelTests()
         {
-            decisionVector = new[] {1.2};
+            builder = new ObjectCreators.OptimiserBuilderMock();
             
-            var dv = DecisionVector.CreateFromArray(
-                DecisionSpace.CreateForUniformDoubleArray(this.decisionVector.Length, double.MinValue, double.MaxValue),
-                this.decisionVector);
-
-            var converterMock = new Mock<IConverter<double>>();
-            
-            converterMock.Setup(x => x.ConvertToReality(dv))
-                .Returns(decisionVector.ElementAt(0));
-            
-            modelMock = new ObjectCreators.ModelMock(dv, converterMock.Object);
+            modelMock = new ObjectCreators.ModelMock(
+                ObjectCreators.GetDecisionVector(builder.DecVec), 
+                builder.GetConverterMock());
         }
 
         [Fact]
@@ -35,7 +26,7 @@ namespace Optimisation.Base.Conversion.Test
             
             Assert.Equal(IndividualStates.New, ind.State);
             
-            Assert.Equal(decisionVector, 
+            Assert.Equal(builder.DecVec, 
                 ind.DecisionVector.Vector.Select(v => (double)v));
         }
         
@@ -45,7 +36,7 @@ namespace Optimisation.Base.Conversion.Test
             var ind = modelMock.GetNewIndividual();
             modelMock.PrepareForEvaluation(ind);
             Assert.Equal(IndividualStates.Evaluating, ind.State);
-            Assert.Equal(decisionVector.ElementAt(0), 
+            Assert.Equal(builder.DecVec.ElementAt(0), 
                 ind.GetProperty<double>(ObjectCreators.Definition_Key));
         }
     }

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Optimisation.Base.Management;
 
 namespace Optimisation.Base.Management
 {

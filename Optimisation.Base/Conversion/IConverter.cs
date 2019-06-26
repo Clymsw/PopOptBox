@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Optimisation.Base.Management;
 using Optimisation.Base.Variables;
 
 namespace Optimisation.Base.Conversion

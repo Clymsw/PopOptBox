@@ -1,8 +1,6 @@
-using System.Collections.Generic;
 using Xunit;
 using Optimisation.Base.Management;
 using Optimisation.Base.Test.Helpers;
-using Optimisation.Base.Variables;
 
 namespace Optimisation.Base.Conversion.Test
 {
@@ -19,9 +17,7 @@ namespace Optimisation.Base.Conversion.Test
         [Fact]
         public void EvaluatesCorrectly()
         {
-            var ind = new Individual(DecisionVector.CreateFromArray(
-                DecisionSpace.CreateForUniformDoubleArray(1,-1,2), 
-                new[] {1.2}));
+            var ind = ObjectCreators.GetIndividual(new[] {1.2});
             
             ind.SetProperty(ObjectCreators.Definition_Key, Test_Solution);
             ind.SendForEvaluation();
@@ -32,6 +28,7 @@ namespace Optimisation.Base.Conversion.Test
                 ind.GetProperty<double[]>(ObjectCreators.Solution_Key));
             Assert.Equal(IndividualStates.Evaluated, ind.State);
             Assert.True(ind.Legal);
+            Assert.Equal(new[]{Test_Solution}, ind.SolutionVector);
         }
     }
 }
