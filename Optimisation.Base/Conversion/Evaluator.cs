@@ -30,7 +30,7 @@ namespace Optimisation.Base.Conversion
             else
             {
                 var solution = Evaluate(definition);
-                SetSolution(ind, solution);
+                setSolution(ind, solution);
                 ind.SetLegality(true);
             }
         }
@@ -46,10 +46,10 @@ namespace Optimisation.Base.Conversion
         /// Determines if a solution is allowed or not, according to real-world logic.
         /// </summary>
         /// <param name="definition">The definition of a object to evaluate</param>
-        /// <returns>True/false: Is/isn't legal</returns>
+        /// <returns><see langword="true"/> if legal</returns>
         public abstract bool GetLegality(TReality definition);
 
-        private void SetSolution(Individual ind, IEnumerable<double> solVector)
+        private void setSolution(Individual ind, IEnumerable<double> solVector)
         {
             ind.SetProperty(solutionKey, solVector);
             ind.SetSolution(solutionKey);
