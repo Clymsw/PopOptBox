@@ -79,7 +79,7 @@ namespace Optimisation.Base.Management
         /// <returns>Individual</returns>
         public Individual this[int index] => members[index];
 
-        /*
+        
         /// <summary>
         /// Allows read-only access to the individuals
         /// </summary>
@@ -88,7 +88,7 @@ namespace Optimisation.Base.Management
         {
             return members;
         }
-        */
+        
         
         /// <summary>
         /// Gets the individual with the best (lowest) fitness.
@@ -144,7 +144,7 @@ namespace Optimisation.Base.Management
         /// <summary>
         /// Get the DVs of all individuals
         /// </summary>
-        /// <returns>List of TDecVec arrays: DV</returns>
+        /// <returns>List of object arrays: DV</returns>
         public IEnumerable<object[]> GetMemberDecisionVectors()
         {
             return members.Select(i => i.DecisionVector.Vector.ToArray());

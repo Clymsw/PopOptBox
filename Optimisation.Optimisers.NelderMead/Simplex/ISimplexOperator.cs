@@ -1,5 +1,5 @@
 ﻿using Optimisation.Base.Variables;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace Optimisation.Optimisers.NelderMead.Simplex
 {
@@ -14,6 +14,6 @@ namespace Optimisation.Optimisers.NelderMead.Simplex
         /// </summary>
         /// <param name="orderedVertices">A list of vertices comprising the simplex, in order of fitness (first is best).</param>
         /// <returns>A <see cref="DecisionVector"/> for the new vertex.</returns>
-        DecisionVector Operate(IOrderedEnumerable<DecisionVector> orderedVertices);
+        DecisionVector Operate(IEnumerable<DecisionVector> orderedVertices);
     }
 }
