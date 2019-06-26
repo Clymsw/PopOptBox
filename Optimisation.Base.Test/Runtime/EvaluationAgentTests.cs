@@ -25,7 +25,7 @@ namespace Optimisation.Base.Runtime.Test
             newInd.SendForEvaluation();
             
             agent.IndividualsForEvaluation.Post(newInd);
-            var test = agent.EvaluatedIndividuals.Receive();
+            agent.EvaluatedIndividuals.Receive(); // Won't happen without this line.
             
             Assert.Equal(Test_Solution, newInd.SolutionVector.ElementAt(0));
         }
