@@ -6,7 +6,7 @@ namespace Optimisation.Base.Management.Test
 {
     public class IndividualTests
     {
-        private const string CloningKey = "cloneTest";
+        private const string Cloning_Key = "cloneTest";
 
         private readonly double[] testVector;
 
@@ -62,14 +62,14 @@ namespace Optimisation.Base.Management.Test
 
             Assert.Equal(ind1, ind);
 
-            ind1.SetProperty(CloningKey, 1.2);
-            ind1.SetProperty(ObjectCreators.SolutionKey, new[]{0.2, 5.1, 55});
-            ind1.SetSolution(ObjectCreators.SolutionKey);
+            ind1.SetProperty(Cloning_Key, 1.2);
+            ind1.SetProperty(ObjectCreators.Solution_Key, new[]{0.2, 5.1, 55});
+            ind1.SetSolution(ObjectCreators.Solution_Key);
             ind1.SetScore(sol => sol);
             ind1.SetFitness(score => score[0]);
 
             Assert.Throws<System.ArgumentOutOfRangeException>(
-                () => ind.GetProperty<double>(CloningKey));
+                () => ind.GetProperty<double>(Cloning_Key));
             Assert.NotEqual(ind.SolutionVector, ind1.SolutionVector);
             Assert.NotEqual(ind.Score, ind1.Score);
             Assert.NotEqual(ind.Fitness, ind1.Fitness);
@@ -85,10 +85,10 @@ namespace Optimisation.Base.Management.Test
             
             var ind1 = ind.Clone();
             
-            ind1.SetProperty(ObjectCreators.SolutionKey, new[] { 2.6 });
-            ind1.SetSolution(ObjectCreators.SolutionKey);
-            ind2.SetProperty(ObjectCreators.SolutionKey, new[] { 2.6 });
-            ind2.SetSolution(ObjectCreators.SolutionKey);
+            ind1.SetProperty(ObjectCreators.Solution_Key, new[] { 2.6 });
+            ind1.SetSolution(ObjectCreators.Solution_Key);
+            ind2.SetProperty(ObjectCreators.Solution_Key, new[] { 2.6 });
+            ind2.SetSolution(ObjectCreators.Solution_Key);
             
             Assert.Equal(ind2, ind1);
         }
@@ -99,8 +99,8 @@ namespace Optimisation.Base.Management.Test
             var ind1 = ind.Clone();
 
             var solution = new[] {0.2, 5.1, 55};
-            ind1.SetProperty(ObjectCreators.SolutionKey, solution);
-            ind1.SetSolution(ObjectCreators.SolutionKey);
+            ind1.SetProperty(ObjectCreators.Solution_Key, solution);
+            ind1.SetSolution(ObjectCreators.Solution_Key);
 
             Assert.Equal(solution[0], ind1.SolutionVector.ElementAt(0));
             Assert.Equal(solution[1], ind1.SolutionVector.ElementAt(1));
@@ -113,8 +113,8 @@ namespace Optimisation.Base.Management.Test
             var ind1 = ind.Clone();
 
             var solution = new[] {0.2, 5.1, 55};
-            ind1.SetProperty(ObjectCreators.SolutionKey, solution);
-            ind1.SetSolution(ObjectCreators.SolutionKey);
+            ind1.SetProperty(ObjectCreators.Solution_Key, solution);
+            ind1.SetSolution(ObjectCreators.Solution_Key);
             ind1.SetScore(sol => sol.Select(s => s * 2).ToArray());
 
             Assert.Equal(solution[0] * 2, ind1.Score.ElementAt(0));
@@ -128,8 +128,8 @@ namespace Optimisation.Base.Management.Test
             var ind1 = ind.Clone();
 
             var solution = new[] {0.2, 5.1, 55};
-            ind1.SetProperty(ObjectCreators.SolutionKey, solution);
-            ind1.SetSolution(ObjectCreators.SolutionKey);
+            ind1.SetProperty(ObjectCreators.Solution_Key, solution);
+            ind1.SetSolution(ObjectCreators.Solution_Key);
             ind1.SetScore(sol => sol.Select(s => s * 2).ToArray());
             ind1.SetFitness(score => score[0]);
 

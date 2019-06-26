@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using Optimisation.Base.Test.Helpers;
 using Optimisation.Base.Variables;
 using Xunit;
 
@@ -18,7 +19,7 @@ namespace Optimisation.Base.Management.Test
                 DecisionSpace.CreateForUniformDoubleArray(this.decisionVector.Length, double.MinValue, double.MaxValue),
                 this.decisionVector);
             
-            optimiserMock = new OptimiserMock(dv,
+            optimiserMock = new ObjectCreators.OptimiserMock(dv,
                 new Population(),
                 v => v,
                 v => v.ElementAt(0),
@@ -85,30 +86,6 @@ namespace Optimisation.Base.Management.Test
             
             var reinsertionTime = newInd.GetProperty<DateTime>(OptimiserDefinitions.ReinsertionTime);
             Assert.True(reinsertionTime < DateTime.Now);
-        }
-    }
-
-    internal class OptimiserMock : Optimiser
-    {
-        private readonly DecisionVector decisionVector;
-        
-        public OptimiserMock(DecisionVector decisionVector,
-            Population initialPopulation, 
-            Func<double[], double[]> solutionToScoreDelegate, 
-            Func<double[], double> scoreToFitDelegate, 
-            Func<double[], double> penaltyDelegate) : base(initialPopulation, solutionToScoreDelegate, scoreToFitDelegate, penaltyDelegate)
-        {
-            this.decisionVector = decisionVector;
-        }
-
-        protected override DecisionVector GetNewDecisionVector()
-        {
-            return decisionVector;
-        }
-
-        protected override bool CheckAcceptable(Individual ind)
-        {
-            return true;
         }
     }
 }

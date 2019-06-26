@@ -1,6 +1,7 @@
 using System.Linq;
 using Optimisation.Base.Management;
 using Moq;
+using Optimisation.Base.Test.Helpers;
 using Optimisation.Base.Variables;
 using Xunit;
 
@@ -9,7 +10,6 @@ namespace Optimisation.Base.Conversion.Test
     public class ModelTests
     {
         private readonly IModel modelMock;
-        private const string Definition_Key = "TestDefinition";
         private readonly double[] decisionVector;
 
         public ModelTests()
@@ -25,7 +25,7 @@ namespace Optimisation.Base.Conversion.Test
             converterMock.Setup(x => x.ConvertToReality(dv))
                 .Returns(decisionVector.ElementAt(0));
             
-            modelMock = new ModelMock(dv, converterMock.Object, Definition_Key);
+            modelMock = new ObjectCreators.ModelMock(dv, converterMock.Object);
         }
 
         [Fact]
@@ -46,22 +46,7 @@ namespace Optimisation.Base.Conversion.Test
             modelMock.PrepareForEvaluation(ind);
             Assert.Equal(IndividualStates.Evaluating, ind.State);
             Assert.Equal(decisionVector.ElementAt(0), 
-                ind.GetProperty<double>(Definition_Key));
-        }
-    }
-
-    internal class ModelMock : Model<double>
-    {
-        private readonly DecisionVector decisionVector;
-        
-        public ModelMock(DecisionVector decisionVector, IConverter<double> converter, string definitionKey) : base(converter, definitionKey)
-        {
-            this.decisionVector = decisionVector;
-        }
-
-        protected override Individual CreateNewIndividual()
-        {
-            return new Individual(decisionVector);
+                ind.GetProperty<double>(ObjectCreators.Definition_Key));
         }
     }
 }
