@@ -19,7 +19,7 @@ namespace Optimisation.Optimisers.NelderMead.Simplices
         /// </summary>
         /// <param name="initialSimplex">Array of <see cref="DecisionVector"/>s representing the simplex vertices.</param>
         public Simplex(IEnumerable<DecisionVector> initialSimplex) :
-            base(initialSimplex.First().Vector.Count + 1, initialSimplex.Select(dv => new Individual(dv))
+            base(initialSimplex.First().Vector.Count + 1, initialSimplex.Select(dv => new Individual(dv)))
         {
             if (initialSimplex.Count() != initialSimplex.First().Vector.Count + 1)
                 throw new System.ArgumentOutOfRangeException(nameof(initialSimplex),
