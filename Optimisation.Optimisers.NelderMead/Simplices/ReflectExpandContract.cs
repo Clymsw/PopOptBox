@@ -2,10 +2,15 @@
 using System.Linq;
 using Optimisation.Base.Variables;
 
-namespace Optimisation.Optimisers.NelderMead.Simplex
+namespace Optimisation.Optimisers.NelderMead.Simplices
 {
+    /// <summary>
+    /// Simplex Operator which (depending on coefficient value) performs
+    /// Reflect, Expand, Contract In or Contract Out operations.
+    /// </summary>
     public class ReflectExpandContract : SimplexOperator
     {
+        /// <inheritdoc />
         public ReflectExpandContract(double coefficient) : base(coefficient)
         {
         }
@@ -15,10 +20,15 @@ namespace Optimisation.Optimisers.NelderMead.Simplex
             if (value > -1)
                 return true;
             else
-                throw new System.ArgumentOutOfRangeException(nameof(value), value,
-                    "Coefficient must be greater than -1");
+                return false;
         }
 
+        /// <summary>
+        /// Reflect, Contract and Expand moves the worst vertex along a line perpendicular
+        /// to the plane formed by the other vertices.
+        /// </summary>
+        /// <param name="orderedVertices">All vertices</param>
+        /// <returns>New vertex</returns>
         public override DecisionVector Operate(IEnumerable<DecisionVector> orderedVertices)
         {
             var worst = GetWorst(orderedVertices);

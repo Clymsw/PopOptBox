@@ -2,10 +2,14 @@
 using System.Linq;
 using Optimisation.Base.Variables;
 
-namespace Optimisation.Optimisers.NelderMead.Simplex
+namespace Optimisation.Optimisers.NelderMead.Simplices
 {
+    /// <summary>
+    /// Simplex Operator which performs Shrink operation (only along one dimension).
+    /// </summary>
     public class Shrink : SimplexOperator
     {
+        /// <inheritdoc />
         public Shrink(double coefficient) : base(coefficient)
         {
         }
@@ -15,8 +19,7 @@ namespace Optimisation.Optimisers.NelderMead.Simplex
             if (value > 0 & value < 1)
                 return true;
             else
-                throw new System.ArgumentOutOfRangeException(nameof(value), value,
-                    "Shrink coefficient must be between 0 and 1");
+                return false;
         }
 
         /// <summary>

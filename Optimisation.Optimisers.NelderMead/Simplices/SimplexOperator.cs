@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Optimisation.Base.Variables;
 
-namespace Optimisation.Optimisers.NelderMead.Simplex
+namespace Optimisation.Optimisers.NelderMead.Simplices
 {
     /// <inheritdoc />
     public abstract class SimplexOperator : ISimplexOperator

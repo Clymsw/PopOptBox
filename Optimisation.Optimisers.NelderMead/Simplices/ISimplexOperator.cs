@@ -1,7 +1,7 @@
 ﻿using Optimisation.Base.Variables;
 using System.Collections.Generic;
 
-namespace Optimisation.Optimisers.NelderMead.Simplex
+namespace Optimisation.Optimisers.NelderMead.Simplices
 {
     /// <summary>
     /// A simplex operator creates a new vertex based on an existing simplex,
