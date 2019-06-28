@@ -1,5 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
+using System.Xml.Schema;
 using Optimisation.Base.Variables;
 
 namespace Optimisation.Optimisers.NelderMead.Simplices
@@ -9,13 +11,14 @@ namespace Optimisation.Optimisers.NelderMead.Simplices
     {
         #region Fields
 
-        private double coefficient;
+        private double? coefficient;
+        private const double DefaultCoefficient = -999;
         /// <summary>
         /// Variable affecting the behaviour of <see cref="Operate(IEnumerable{DecisionVector})"/>.
         /// </summary>
         public double Coefficient
         {
-            get => coefficient;
+            get => coefficient.GetValueOrDefault(DefaultCoefficient);
             set
             {
                 if (CheckCoefficientAcceptable(value))
@@ -33,9 +36,12 @@ namespace Optimisation.Optimisers.NelderMead.Simplices
         /// Construct the simplex operator.
         /// </summary>
         /// <param name="coefficient">Value to set for the <see cref="Coefficient"/>.</param>
-        public SimplexOperator(double coefficient)
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when coefficient value fails legality check.</exception>
+        protected SimplexOperator(double coefficient)
         {
             Coefficient = coefficient;
+            if (Coefficient == DefaultCoefficient)
+                throw new ArgumentOutOfRangeException(nameof(coefficient),"Coefficient value is not acceptable.");
         }
 
         #endregion
@@ -47,15 +53,15 @@ namespace Optimisation.Optimisers.NelderMead.Simplices
 
         #endregion
 
-        protected DecisionVector GetWorst(IEnumerable<DecisionVector> orderedVertices)
+        protected static DecisionVector GetWorst(IEnumerable<DecisionVector> orderedVertices)
         {
             return orderedVertices.Last();
         }
-        protected DecisionVector GetBest(IEnumerable<DecisionVector> orderedVertices)
+        protected static DecisionVector GetBest(IEnumerable<DecisionVector> orderedVertices)
         {
             return orderedVertices.First();
         }
-        protected DecisionVector GetMean(IEnumerable<DecisionVector> orderedVertices)
+        protected static DecisionVector GetMean(IEnumerable<DecisionVector> orderedVertices)
         {
             // Average of all vertex locations except the worst.
             var allVertexVectorsExceptWorst = orderedVertices

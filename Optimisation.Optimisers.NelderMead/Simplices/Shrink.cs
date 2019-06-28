@@ -16,10 +16,7 @@ namespace Optimisation.Optimisers.NelderMead.Simplices
 
         protected override bool CheckCoefficientAcceptable(double value)
         {
-            if (value > 0 & value < 1)
-                return true;
-            else
-                return false;
+            return value > 0 & value < 1;
         }
 
         /// <summary>
