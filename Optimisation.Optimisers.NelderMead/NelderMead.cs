@@ -16,13 +16,15 @@ namespace Optimisation.Optimisers.NelderMead
         //Logic management
         public NelderMeadSimplexOperations CurrentOperation { get; private set; } 
             = NelderMeadSimplexOperations.R;
+        
+        private readonly List<NelderMeadSimplexOperations> tempProgress =
+            new List<NelderMeadSimplexOperations>();
+        
         private Individual tempReflect;
 
         //History management
         public NelderMeadSteps LastStep { get; private set; }
-        private readonly List<NelderMeadSimplexOperations> tempProgress =
-            new List<NelderMeadSimplexOperations>();
-
+        
         //Population management
         /// <summary>
         /// List of vertices from initial simplex which have not yet been reinserted
