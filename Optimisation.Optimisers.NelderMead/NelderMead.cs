@@ -9,7 +9,7 @@ namespace Optimisation.Optimisers.NelderMead
 {
     public class NelderMead : Optimiser
     {
-        protected NelderMeadSimplexOperationsManager VertexCreator;
+        protected NelderMeadSimplexOperationsManager OperationsManager;
 
         #region Simplex Management
 
@@ -27,8 +27,7 @@ namespace Optimisation.Optimisers.NelderMead
         /// <summary>
         /// List of vertices from initial simplex which have not yet been reinserted
         /// </summary>
-        protected readonly List<DecisionVector> InitialVerticesStillUnevaluated =
-            new List<DecisionVector>();
+        protected readonly List<DecisionVector> InitialVerticesStillUnevaluated;
         /// <summary>
         /// List (length 0-1) of vertices which have been sent out during optimisation
         /// </summary>
@@ -37,17 +36,29 @@ namespace Optimisation.Optimisers.NelderMead
 
         #endregion
 
+        /// <summary>
+        /// Constructs a new Nelder-Mead Simplex local search optimiser
+        /// </summary>
+        /// <param name="solutionToScore"><see cref="Optimiser"/></param>
+        /// <param name="solutionToFitness"><see cref="Optimiser"/></param>
+        /// <param name="penalty"><see cref="Optimiser"/></param>
+        /// <param name="initialLocation">Starting location for the search</param>
+        /// <param name="simplexCreationStepSize">Step size for creating the initial simplex</param>
+        /// <param name="reflectionCoefficient">Reflection coefficient (only change this if you know what you are doing!)</param>
+        /// <param name="expansionCoefficient">Expansion coefficient (only change this if you know what you are doing!)</param>
+        /// <param name="contractionCoefficient">Contraction coefficient (only change this if you know what you are doing!)</param>
+        /// <param name="shrinkageCoefficient">Shrinkage coefficient (only change this if you know what you are doing!)</param>
         public NelderMead(
-            Func<double[], double[]> solToScoreDelegate,
-            Func<double[], double> solToFitDelegate,
-            Func<double[], double> penaltyDelegate,
+            Func<double[], double[]> solutionToScore,
+            Func<double[], double> solutionToFitness,
+            Func<double[], double> penalty,
             DecisionVector initialLocation, double simplexCreationStepSize = 1,
             double reflectionCoefficient = 1, double expansionCoefficient = 2,
             double contractionCoefficient = 0.5, double shrinkageCoefficient = 0.5) :
-            base(new Simplex(initialLocation.Vector.Count), solToScoreDelegate, solToFitDelegate, penaltyDelegate)
+            base(new Simplex(initialLocation.Vector.Count), solutionToScore, solutionToFitness, penalty)
         {
             // Set up simplex operations
-            VertexCreator = new NelderMeadSimplexOperationsManager(reflectionCoefficient,
+            OperationsManager = new NelderMeadSimplexOperationsManager(reflectionCoefficient,
                 expansionCoefficient, contractionCoefficient, shrinkageCoefficient);
 
             //Set up simplex
@@ -61,8 +72,7 @@ namespace Optimisation.Optimisers.NelderMead
 
         public override string ToString()
         {
-            return "Nelder Mead, " +
-                VertexCreator.ToString();
+            return "Nelder Mead, " + OperationsManager;
         }
 
         protected override bool CheckAcceptable(Individual ind)
@@ -83,7 +93,7 @@ namespace Optimisation.Optimisers.NelderMead
                 if (VerticesNotEvaluated.Count == 0)
                 {
                     //Create new individual
-                    var newDv = VertexCreator.PerformOperation(
+                    var newDv = OperationsManager.PerformOperation(
                         Population.GetMemberList().Select(m => m.DecisionVector), 
                         CurrentOperation);
                     VerticesNotEvaluated.Add(newDv);
@@ -97,14 +107,14 @@ namespace Optimisation.Optimisers.NelderMead
             }
         }
 
-        protected override bool ReInsert(Individual ind)
+        protected override bool ReInsert(Individual individual)
         {
             if (InitialVerticesStillUnevaluated.Count > 0)
             {
-                if (InitialVerticesStillUnevaluated.Contains(ind.DecisionVector))
+                if (InitialVerticesStillUnevaluated.Contains(individual.DecisionVector))
                 {
-                    Population.AddIndividual(ind);
-                    InitialVerticesStillUnevaluated.Remove(ind.DecisionVector);
+                    Population.AddIndividual(individual);
+                    InitialVerticesStillUnevaluated.Remove(individual.DecisionVector);
                     return true;
                 }
                 else
@@ -115,13 +125,13 @@ namespace Optimisation.Optimisers.NelderMead
 
             if (VerticesNotEvaluated.Count == 0)
             {
-                throw new System.ArgumentOutOfRangeException("This vertex was not expected");
+                throw new System.ArgumentOutOfRangeException(nameof(individual), "This vertex was not expected");
             }
-            if (ind.DecisionVector != VerticesNotEvaluated.First())
+            if (!individual.DecisionVector.Equals(VerticesNotEvaluated.First()))
             {
-                throw new System.ArgumentOutOfRangeException("This vertex was not expected");
+                throw new System.ArgumentOutOfRangeException(nameof(individual), "This vertex was not expected");
             }
-            VerticesNotEvaluated.Remove(ind.DecisionVector);
+            VerticesNotEvaluated.Remove(individual.DecisionVector);
 
             //NM Logic
             var fitnesses = Population.GetMemberFitnesses();
@@ -129,7 +139,7 @@ namespace Optimisation.Optimisers.NelderMead
             var bestFitness = fitnesses.First();
             var worstFitness = fitnesses.Last();
             double nextToWorstFitness;
-            if (ind.DecisionVector.Vector.Count == 1)
+            if (individual.DecisionVector.Vector.Count == 1)
                 nextToWorstFitness = bestFitness;
             else
                 nextToWorstFitness = fitnesses.ElementAt(fitnesses.Count() - 2);
@@ -137,41 +147,41 @@ namespace Optimisation.Optimisers.NelderMead
             switch (CurrentOperation)
             {
                 case (NelderMeadSimplexOperations.R):
-                    if (ind.Fitness < nextToWorstFitness & ind.Fitness >= bestFitness)
+                    if (individual.Fitness < nextToWorstFitness & individual.Fitness >= bestFitness)
                     {
                         // Reflection vertex lies inside the population, accept it.
-                        Population.ReplaceWorst(ind);
+                        Population.ReplaceWorst(individual);
                         ChooseReflect();
                         Reset();
                         return true;
                     }
-                    else if (ind.Fitness < bestFitness)
+                    else if (individual.Fitness < bestFitness)
                     {
                         // Reflection vertex is better than the best, try expansion.
                         CurrentOperation = NelderMeadSimplexOperations.E;
                         TryExpand();
                     }
-                    else if (ind.Fitness < worstFitness & ind.Fitness >= nextToWorstFitness)
+                    else if (individual.Fitness < worstFitness & individual.Fitness >= nextToWorstFitness)
                     {
                         // Reflection vertex is strictly better than worst, 
                         //  but is worse than every other vertex, try contract out.
                         CurrentOperation = NelderMeadSimplexOperations.C;
                         TryContractOut();
                     }
-                    else if (ind.Fitness >= worstFitness)
+                    else if (individual.Fitness >= worstFitness)
                     {
                         // Reflection vertex is the worst we've found, try contract in.
                         CurrentOperation = NelderMeadSimplexOperations.K;
                         TryContractIn();
                     }
-                    tempReflect = ind;
+                    tempReflect = individual;
                     break;
 
                 case (NelderMeadSimplexOperations.E):
-                    if (ind.Fitness < bestFitness)
+                    if (individual.Fitness < bestFitness)
                     {
                         // Expansion vertex is better than reflection vertex, accept it.
-                        Population.ReplaceWorst(ind);
+                        Population.ReplaceWorst(individual);
                         ChooseExpand();
                     }
                     else
@@ -184,10 +194,10 @@ namespace Optimisation.Optimisers.NelderMead
                     return true;
 
                 case (NelderMeadSimplexOperations.C):
-                    if (ind.Fitness <= tempReflect.Fitness)
+                    if (individual.Fitness <= tempReflect.Fitness)
                     {
                         // Contract Outside vertex is better than reflection vertex, accept it.
-                        Population.ReplaceWorst(ind);
+                        Population.ReplaceWorst(individual);
                         ChooseContractOut();
                         Reset();
                         return true;
@@ -201,10 +211,10 @@ namespace Optimisation.Optimisers.NelderMead
                     break;
 
                 case (NelderMeadSimplexOperations.K):
-                    if (ind.Fitness < worstFitness)
+                    if (individual.Fitness < worstFitness)
                     {
                         //Contract Inside vertex is better than the worst, accept it.
-                        Population.ReplaceWorst(ind);
+                        Population.ReplaceWorst(individual);
                         ChooseContractIn();
                         Reset();
                         return true;
@@ -218,10 +228,13 @@ namespace Optimisation.Optimisers.NelderMead
                     break;
 
                 case (NelderMeadSimplexOperations.S):
-                    Population.ReplaceWorst(ind);
+                    Population.ReplaceWorst(individual);
                     ChooseShrink();
                     Reset();
                     return true;
+                
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(CurrentOperation), "This operation is not understood.");
             }
 
             return false;
@@ -260,10 +273,9 @@ namespace Optimisation.Optimisers.NelderMead
         #region Choose
         private void ChooseReflect()
         {
-            if (CurrentOperation == NelderMeadSimplexOperations.R)
-                LastStep = NelderMeadSteps.RR;
-            else
-                LastStep = NelderMeadSteps.ReR;
+            LastStep = CurrentOperation == NelderMeadSimplexOperations.R 
+                ? NelderMeadSteps.RR 
+                : NelderMeadSteps.ReR;
             tempProgress.Clear();
         }
         private void ChooseExpand()
@@ -283,10 +295,9 @@ namespace Optimisation.Optimisers.NelderMead
         }
         private void ChooseShrink()
         {
-            if (tempProgress[1] == NelderMeadSimplexOperations.C)
-                LastStep = NelderMeadSteps.RcsS;
-            else
-                LastStep = NelderMeadSteps.RksS;
+            LastStep = tempProgress[1] == NelderMeadSimplexOperations.C 
+                ? NelderMeadSteps.RcsS 
+                : NelderMeadSteps.RksS;
             tempProgress.Clear();
         }
 
