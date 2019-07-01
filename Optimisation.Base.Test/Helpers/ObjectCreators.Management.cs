@@ -47,16 +47,16 @@ namespace Optimisation.Base.Test.Helpers
         
             public OptimiserMock(DecisionVector decisionVector,
                 Population initialPopulation, 
-                Func<double[], double[]> solutionToScoreDelegate, 
-                Func<double[], double> scoreToFitDelegate, 
-                Func<double[], double> penaltyDelegate) : base(initialPopulation, solutionToScoreDelegate, scoreToFitDelegate, penaltyDelegate)
+                Func<double[], double[]> solutionToScore, 
+                Func<double[], double> scoreToFitness, 
+                Func<double[], double> penalty) : base(initialPopulation, solutionToScore, scoreToFitness, penalty)
             {
                 this.decisionVector = decisionVector;
             }
 
-            protected override bool ReInsert(Individual ind)
+            protected override bool ReInsert(Individual individual)
             {
-                return Population.Count < 100 && base.ReInsert(ind);
+                return Population.Count < 100 && base.ReInsert(individual);
             }
 
             protected override DecisionVector GetNewDecisionVector()

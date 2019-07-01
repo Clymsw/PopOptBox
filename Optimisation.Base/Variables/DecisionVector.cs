@@ -21,7 +21,7 @@ namespace Optimisation.Base.Variables
         #region Constructor
 
         private DecisionVector(DecisionSpace decisionSpace,
-            object[] values)
+            IEnumerable<object> values)
         {
             this.decisionSpace = decisionSpace;
 
@@ -85,7 +85,33 @@ namespace Optimisation.Base.Variables
             return decisionSpace;
         }
 
-        // TODO: Extend this to retrieve the elements of each type, based on the decision space.
+        /// <summary>
+        /// Get only those elements of the decision vector which are continuous
+        /// </summary>
+        /// <returns>New Decision Vector with only those elements</returns>
+        public DecisionVector GetContinuousElements()
+        {
+            return CreateFromArray(
+                new DecisionSpace(decisionSpace.Dimensions
+                    .Where(d => d.GetType() == typeof(VariableContinuous))),
+                Vector.Where(
+                        (v, i) => decisionSpace.Dimensions.ElementAt(i).GetType() == typeof(VariableContinuous))
+                    .Cast<double>());
+        }
+        
+        /// <summary>
+        /// Get only those elements of the decision vector which are discrete
+        /// </summary>
+        /// <returns>New Decision Vector with only those elements</returns>
+        public DecisionVector GetDiscreteElements()
+        {
+            return CreateFromArray(
+                new DecisionSpace(decisionSpace.Dimensions
+                        .Where(d => d.GetType() == typeof(VariableDiscrete))),
+                Vector.Where(
+                        (v, i) => decisionSpace.Dimensions.ElementAt(i).GetType() == typeof(VariableDiscrete))
+                    .Cast<int>());
+        }
 
         #endregion
 

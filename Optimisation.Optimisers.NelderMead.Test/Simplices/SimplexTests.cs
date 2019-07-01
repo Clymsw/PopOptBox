@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using Optimisation.Base.Management;
 using Optimisation.Base.Variables;
+using Optimisation.Optimisers.NelderMead.Test;
 using Xunit;
 
 namespace Optimisation.Optimisers.NelderMead.Simplices.Test
@@ -8,6 +11,7 @@ namespace Optimisation.Optimisers.NelderMead.Simplices.Test
     public class SimplexTests
     {
         [Theory]
+        [InlineData(1, 0.1)]
         [InlineData(2, 1)]
         [InlineData(4, 2.1)]
         public void CreateInitialVertices_CreatesCorrectly(int numDims, double stepSize)
@@ -31,6 +35,71 @@ namespace Optimisation.Optimisers.NelderMead.Simplices.Test
                                          .Select(a => Math.Pow(a,2))
                                          .Sum())
                                  == stepSize));
+        }
+
+        [Fact]
+        public void Construction_WithWrongLengthSimplex_Throws()
+        {
+            // Create a 2D problem with only one vertex.
+            var testInds = new List<Individual>
+            {
+                new Individual(
+                    DecisionVector.CreateFromArray(
+                        DecisionSpace.CreateForUniformDoubleArray(2,double.MinValue,double.MaxValue),
+                        new[]{2.0, 2.0}))
+            };
+            foreach (var ind in testInds)
+            {
+                Helpers.EvaluateIndividual(ind);
+            }
+            
+            Assert.Throws<ArgumentException>(() => new Simplex(testInds));
+        }
+        
+        [Fact]
+        public void Construction_WithInvalidVertexTypes_Throws()
+        {
+            // Create a 1D problem with two discrete vertices.
+            var testInds = new List<Individual>
+            {
+                new Individual(
+                    DecisionVector.CreateFromArray(
+                        DecisionSpace.CreateForUniformIntArray(1,int.MinValue,int.MaxValue),
+                        new[]{1})),
+                new Individual(
+                    DecisionVector.CreateFromArray(
+                        DecisionSpace.CreateForUniformIntArray(1,int.MinValue,int.MaxValue),
+                        new[]{2}))
+            };
+            foreach (var ind in testInds)
+            {
+                Helpers.EvaluateIndividual(ind);
+            }
+            
+            Assert.Throws<ArgumentException>(() => new Simplex(testInds));
+        }
+        
+        [Fact]
+        public void Construction_WithDifferentVertexDimensionality_Throws()
+        {
+            // Create a simplex with two continuous vertices, where one is 1D and the other 2D.
+            var testInds = new List<Individual>
+            {
+                new Individual(
+                    DecisionVector.CreateFromArray(
+                        DecisionSpace.CreateForUniformDoubleArray(1,double.MinValue,double.MaxValue),
+                        new[]{1.0})),
+                new Individual(
+                    DecisionVector.CreateFromArray(
+                        DecisionSpace.CreateForUniformDoubleArray(2,double.MinValue,double.MaxValue),
+                        new[]{1.0, 2.0}))
+            };
+            foreach (var ind in testInds)
+            {
+                Helpers.EvaluateIndividual(ind);
+            }
+            
+            Assert.Throws<ArgumentException>(() => new Simplex(testInds));
         }
     }
 }

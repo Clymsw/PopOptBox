@@ -1,4 +1,5 @@
-﻿using Optimisation.Base.Management;
+﻿using System;
+using Optimisation.Base.Management;
 using Optimisation.Base.Variables;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,19 +12,26 @@ namespace Optimisation.Optimisers.NelderMead.Simplices
     /// </summary>
     public class Simplex : Population
     {
-
         #region Constructors
 
         /// <summary>
         /// Creates a simplex with an initial set of locations
         /// </summary>
         /// <param name="initialSimplex">Array of <see cref="DecisionVector"/>s representing the simplex vertices.</param>
-        public Simplex(IEnumerable<DecisionVector> initialSimplex) :
-            base(initialSimplex.First().Vector.Count + 1, initialSimplex.Select(dv => new Individual(dv)))
+        /// <exception cref="ArgumentException">Thrown when the decision vector is not all continuous, or not the same number of dimensions</exception>
+        public Simplex(IEnumerable<Individual> initialSimplex) :
+            base(initialSimplex.First().DecisionVector.Vector.Count + 1, initialSimplex, constantLengthDv: true)
         {
-            if (initialSimplex.Count() != initialSimplex.First().Vector.Count + 1)
-                throw new System.ArgumentOutOfRangeException(nameof(initialSimplex),
-                    "The simplex must have D+1 elements");
+            if (initialSimplex.Any(vx => 
+                vx.DecisionVector.GetContinuousElements().Vector.Count < vx.DecisionVector.Vector.Count))
+                throw new ArgumentException("All elements of the decision vector must be continuous for the Nelder-Mead optimiser", nameof(initialSimplex)); 
+            
+            // All vertices in the simplex must have the same number of dimensions
+            // Checked by Population's check on DV length. 
+            
+            if (initialSimplex.Count() != initialSimplex.First().DecisionVector.Vector.Count + 1)
+                throw new ArgumentException("The simplex must have D+1 elements",
+                    nameof(initialSimplex));
         }
 
         /// <summary>
@@ -52,7 +60,7 @@ namespace Optimisation.Optimisers.NelderMead.Simplices
 
             var startDv = initialVertex.Vector.Select(d => (double)d).ToArray();
 
-            for (int i = 2; i <= startDv.Length + 1; i++)
+            for (var i = 2; i <= startDv.Length + 1; i++)
             {
                 // Create D+1 total vertices.
                 var newDv = new double[startDv.Length];

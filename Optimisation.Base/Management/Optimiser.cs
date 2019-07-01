@@ -13,19 +13,19 @@ namespace Optimisation.Base.Management
         /// Contruct the optimiser
         /// </summary>
         /// <param name="initialPopulation">An initial population (can be empty)</param>
-        /// /// <param name="solutionToScoreDelegate">Conversion function to change solution vector into score. <seealso cref="Individual.SetScore(Func{double[], double[]})"/></param>
-        /// <param name="scoreToFitDelegate">Conversion function to change score into fitness. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
-        /// <param name="penaltyDelegate">Function determining what penalty to assign for illegal individuals. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
+        /// /// <param name="solutionToScore">Conversion function to change solution vector into score. <seealso cref="Individual.SetScore(Func{double[], double[]})"/></param>
+        /// <param name="scoreToFitness">Conversion function to change score into fitness. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
+        /// <param name="penalty">Function determining what penalty to assign for illegal individuals. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
         protected Optimiser(
             Population initialPopulation,
-            Func<double[], double[]> solutionToScoreDelegate,
-            Func<double[], double> scoreToFitDelegate,
-            Func<double[], double> penaltyDelegate)
+            Func<double[], double[]> solutionToScore,
+            Func<double[], double> scoreToFitness,
+            Func<double[], double> penalty)
         {
             Population = initialPopulation;
-            scoreToFit = scoreToFitDelegate;
-            solToScore = solutionToScoreDelegate;
-            penalty = penaltyDelegate;
+            this.scoreToFitness = scoreToFitness;
+            this.solutionToScore = solutionToScore;
+            this.penalty = penalty;
         }
 
         #endregion
@@ -37,8 +37,8 @@ namespace Optimisation.Base.Management
         /// </summary>
         public Population Population { get; }
 
-        private readonly Func<double[], double[]> solToScore;
-        private readonly Func<double[], double> scoreToFit;
+        private readonly Func<double[], double[]> solutionToScore;
+        private readonly Func<double[], double> scoreToFitness;
         private readonly Func<double[], double> penalty;
 
         #endregion
@@ -96,15 +96,15 @@ namespace Optimisation.Base.Management
         ///     <see langword="true" /> if <see cref="ind" /> was actually inserted;
         ///     <see langword="false" /> if rejected.
         /// </returns>
-        protected virtual bool ReInsert(Individual ind)
+        protected virtual bool ReInsert(Individual individual)
         {
             try
             {
-                Population.AddIndividual(ind);
+                Population.AddIndividual(individual);
             }
             catch (Exception e)
             {
-                ind.SetProperty(OptimiserDefinitions.ReinsertionError, e);
+                individual.SetProperty(OptimiserDefinitions.ReinsertionError, e);
                 return false;
             }
 
@@ -124,8 +124,8 @@ namespace Optimisation.Base.Management
                 // assign fitness and store in population.
                 //If the individual has been evaluated but is not legal, 
                 // assign soft penalty and store in population.
-                ind.SetScore(ind.Legal ? solToScore : sol => sol);
-                ind.SetFitness(ind.Legal ? scoreToFit : penalty);
+                ind.SetScore(ind.Legal ? solutionToScore : sol => sol);
+                ind.SetFitness(ind.Legal ? scoreToFitness : penalty);
 
                 ind.SetProperty(
                     OptimiserDefinitions.ReinsertionTime,
