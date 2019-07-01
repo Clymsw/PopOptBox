@@ -13,7 +13,7 @@ namespace Optimisation.Base.Conversion
         /// </summary>
         /// <param name="realityDefinition">Object representing reality</param>
         /// <returns>A Decision Vector</returns>
-        DecisionVector ConvertToDV(TReality realityDefinition);
+        DecisionVector ConvertToDv(TReality realityDefinition);
 
         /// <summary>
         /// Converts a Decision Vector into a real-world representation of the solution 

@@ -7,7 +7,7 @@ namespace Optimisation.Problems.Continuous
 {
     internal class ProblemConverter : IConverter<double[]>
     {
-        public DecisionVector ConvertToDV(double[] realityDefinition)
+        public DecisionVector ConvertToDv(double[] realityDefinition)
         {
             throw new NotImplementedException();
         }

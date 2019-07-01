@@ -30,7 +30,7 @@ namespace Optimisation.Base.Conversion
             else
             {
                 var solution = Evaluate(definition);
-                setSolution(ind, solution);
+                SetSolution(ind, solution);
                 ind.SetLegality(true);
             }
         }
@@ -49,7 +49,7 @@ namespace Optimisation.Base.Conversion
         /// <returns><see langword="true"/> if legal</returns>
         public abstract bool GetLegality(TReality definition);
 
-        private void setSolution(Individual ind, IEnumerable<double> solVector)
+        private void SetSolution(Individual ind, IEnumerable<double> solVector)
         {
             ind.SetProperty(solutionKey, solVector);
             ind.SetSolution(solutionKey);

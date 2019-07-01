@@ -15,64 +15,56 @@ namespace Optimisation.Optimisers.NelderMead
         private double reflectionCoefficient;
         public double ReflectionCoefficient
         {
-            get { return reflectionCoefficient; }
-            set
-            {
-                parseCoefficientsAndBuild(
+            get => reflectionCoefficient;
+            set =>
+                ParseCoefficientsAndBuild(
                     value,
                     expansionCoefficient,
                     contractionCoefficient,
                     shrinkageCoefficient);
-            }
         }
 
         private double expansionCoefficient;
         public double ExpansionCoefficient
         {
-            get { return expansionCoefficient; }
-            set
-            {
-                parseCoefficientsAndBuild(
+            get => expansionCoefficient;
+            set =>
+                ParseCoefficientsAndBuild(
                     reflectionCoefficient,
                     value,
                     contractionCoefficient,
                     shrinkageCoefficient);
-            }
         }
 
         private double contractionCoefficient;
         public double ContractionCoefficient
         {
-            get { return contractionCoefficient; }
-            set
-            {
-                parseCoefficientsAndBuild(
+            get => contractionCoefficient;
+            set =>
+                ParseCoefficientsAndBuild(
                     reflectionCoefficient,
                     expansionCoefficient,
                     value,
                     shrinkageCoefficient);
-            }
         }
 
         private double shrinkageCoefficient;
         public double ShrinkageCoefficient
         {
-            get { return shrinkageCoefficient; }
-            set
-            {
-                parseCoefficientsAndBuild(
+            get => shrinkageCoefficient;
+            set =>
+                ParseCoefficientsAndBuild(
                     reflectionCoefficient,
                     expansionCoefficient,
                     contractionCoefficient,
                     value);
-            }
         }
         #endregion
 
         public override string ToString()
         {
             return "coefficients: " +
-                String.Join(", ",
+                string.Join(", ",
                 $"reflection {ReflectionCoefficient}",
                 $"expansion {ExpansionCoefficient}",
                 $"contraction {ContractionCoefficient}",
@@ -80,11 +72,12 @@ namespace Optimisation.Optimisers.NelderMead
         }
 
         #region Simplex Operators
-        protected ReflectExpandContract reflect;
-        protected ReflectExpandContract expand;
-        protected ReflectExpandContract contractOut;
-        protected ReflectExpandContract contractIn;
-        protected Shrink shrink;
+
+        private ReflectExpandContract reflect;
+        private ReflectExpandContract expand;
+        private ReflectExpandContract contractOut;
+        private ReflectExpandContract contractIn;
+        private Shrink shrink;
         #endregion
 
         /// <summary>
@@ -97,7 +90,7 @@ namespace Optimisation.Optimisers.NelderMead
         public NelderMeadSimplexOperationsManager(double reflectionCoefficient, double expansionCoefficient,
                 double contractionCoefficient, double shrinkageCoefficient)
         {
-            parseCoefficientsAndBuild(
+            ParseCoefficientsAndBuild(
                 reflectionCoefficient,
                 expansionCoefficient,
                 contractionCoefficient,
@@ -124,46 +117,52 @@ namespace Optimisation.Optimisers.NelderMead
                 case (NelderMeadSimplexOperations.S):
                     newVertex = shrink.Operate(currentSimplex);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(operation), operation, "This operation is not understood.");
             }
             return newVertex;
         }
 
-        private void parseCoefficientsAndBuild(double r, double e, double c, double s)
+        private void ParseCoefficientsAndBuild(
+            double reflectCoefficient, 
+            double expandCoefficient, 
+            double contractCoefficient, 
+            double shrinkCoefficient)
         {
-            if (r > 0)
-                reflectionCoefficient = r;
+            if (reflectCoefficient > 0)
+                reflectionCoefficient = reflectCoefficient;
             else
-                throw new ArgumentOutOfRangeException("reflectionCoefficient",
+                throw new ArgumentOutOfRangeException(nameof(reflectCoefficient),
                     "Reflection Coefficient must be greater than 0.");
 
-            if (e > 1)
+            if (expandCoefficient > 1)
             {
-                if (e > r)
-                    expansionCoefficient = e;
+                if (expandCoefficient > reflectCoefficient)
+                    expansionCoefficient = expandCoefficient;
                 else
-                    throw new ArgumentOutOfRangeException("expansionCoefficient",
+                    throw new ArgumentOutOfRangeException(nameof(expandCoefficient),
                         "Expansion Coefficient must be greater than Reflection Coefficient.");
             }
             else
-                throw new ArgumentOutOfRangeException("expansionCoefficient",
+                throw new ArgumentOutOfRangeException(nameof(expandCoefficient),
                     "Expansion Coefficient must be greater than 1.");
 
-            if (c > 0 & c < 1)
-                contractionCoefficient = c;
+            if (contractCoefficient > 0 & contractCoefficient < 1)
+                contractionCoefficient = contractCoefficient;
             else
-                throw new ArgumentOutOfRangeException("contractionCoefficient",
+                throw new ArgumentOutOfRangeException(nameof(contractCoefficient),
                     "Contraction Coefficient must be between 0 and 1.");
 
-            if (s > 0 & s < 1)
-                shrinkageCoefficient = s;
+            if (shrinkCoefficient > 0 & shrinkCoefficient < 1)
+                shrinkageCoefficient = shrinkCoefficient;
             else
-                throw new ArgumentOutOfRangeException("shrinkageCoefficient",
+                throw new ArgumentOutOfRangeException(nameof(shrinkCoefficient),
                     "Shrinkage Coefficient must be between 0 and 1.");
 
-            buildOperators();
+            BuildOperators();
         }
 
-        private void buildOperators()
+        private void BuildOperators()
         {
             reflect = new ReflectExpandContract(reflectionCoefficient);
             expand = new ReflectExpandContract(reflectionCoefficient * expansionCoefficient);

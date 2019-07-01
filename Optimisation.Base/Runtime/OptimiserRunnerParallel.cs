@@ -89,7 +89,7 @@ namespace Optimisation.Base.Runtime
                 timeOut = Math.Min(numDims * 20000, 2000000);
             }
 
-            setUpAgents(timeOut, reportingFrequency);
+            SetUpAgents(timeOut, reportingFrequency);
 
             reinsertionAgent.SaveAll = storeAll;
 
@@ -135,7 +135,7 @@ namespace Optimisation.Base.Runtime
         /// </summary>
         /// <param name="timeOut">The maximum number of reinsertions before optimisation completion</param>
         /// <param name="reportingFrequency">The number of reinsertions between reports on the current population</param>
-        private void setUpAgents(
+        private void SetUpAgents(
             int timeOut,
             int reportingFrequency)
         {
