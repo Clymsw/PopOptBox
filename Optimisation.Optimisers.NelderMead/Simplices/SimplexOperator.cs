@@ -12,13 +12,13 @@ namespace Optimisation.Optimisers.NelderMead.Simplices
         #region Fields
 
         private double? coefficient;
-        private const double DefaultCoefficient = -999;
+        private const double Default_Coefficient = -9999;
         /// <summary>
         /// Variable affecting the behaviour of <see cref="Operate(IEnumerable{DecisionVector})"/>.
         /// </summary>
         public double Coefficient
         {
-            get => coefficient.GetValueOrDefault(DefaultCoefficient);
+            get => coefficient.GetValueOrDefault(Default_Coefficient);
             set
             {
                 if (CheckCoefficientAcceptable(value))
@@ -40,7 +40,9 @@ namespace Optimisation.Optimisers.NelderMead.Simplices
         protected SimplexOperator(double coefficient)
         {
             Coefficient = coefficient;
-            if (Coefficient == DefaultCoefficient)
+            // This slightly contorted logic enables the user to change the coefficient value during an optimisation
+            // without having to create a new SimplexOperator.
+            if (Coefficient == Default_Coefficient)
                 throw new ArgumentOutOfRangeException(nameof(coefficient),"Coefficient value is not acceptable.");
         }
 

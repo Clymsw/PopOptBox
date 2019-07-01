@@ -87,6 +87,7 @@ namespace Optimisation.Optimisers.NelderMead
         /// <param name="expansionCoefficient">Coefficient for <see cref="ReflectExpandContract"/> simplex operator, resulting in a <see cref="NelderMeadSimplexOperations.E"/> action.</param>
         /// <param name="contractionCoefficient">Coefficient for <see cref="ReflectExpandContract"/> simplex operator, resulting in a <see cref="NelderMeadSimplexOperations.C"/> or <see cref="NelderMeadSimplexOperations.K"/> action.</param>
         /// <param name="shrinkageCoefficient">Coefficient for <see cref="Shrink"/> simplex operator, resulting in a <see cref="NelderMeadSimplexOperations.S"/> action.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when coefficients are not meaningful.</exception>
         public NelderMeadSimplexOperationsManager(double reflectionCoefficient, double expansionCoefficient,
                 double contractionCoefficient, double shrinkageCoefficient)
         {
