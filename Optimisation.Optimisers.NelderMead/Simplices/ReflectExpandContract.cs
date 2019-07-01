@@ -39,5 +39,25 @@ namespace Optimisation.Optimisers.NelderMead.Simplices
                 worst.GetDecisionSpace(),
                 newLocation);
         }
+        
+        #region Equals, GetHashCode
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is ReflectExpandContract other))
+                return false;
+
+            return Coefficient == other.Coefficient;
+        }
+
+        public override int GetHashCode()
+        {
+            return new
+            {
+                Coefficient
+            }.GetHashCode();
+        }
+
+        #endregion
     }
 }
