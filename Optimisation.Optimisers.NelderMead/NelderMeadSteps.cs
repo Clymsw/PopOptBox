@@ -12,12 +12,12 @@
     /// </summary>
     public enum NelderMeadSteps
     {
-        RR = 1,
-        ReR = 2,
-        ReE = 3,
-        RcC = 4,
-        RcsS = 5,
-        RkK = 6,
-        RksS = 7
+        rR = 1,
+        reR = 2,
+        reE = 3,
+        rcC = 4,
+        rcsS = 5,
+        rkK = 6,
+        rksS = 7
     }
 }

@@ -12,6 +12,7 @@ namespace Optimisation.Optimisers.NelderMead.Test
         private const int Number_Of_Dimensions = 2;
         private const double Step_Size = 1;
         private const double Initial_Fitness = 3.0;
+        private const double Fitness_Step = 0.1;
             
         public NelderMeadTests()
         {
@@ -57,56 +58,109 @@ namespace Optimisation.Optimisers.NelderMead.Test
         }
 
         [Fact]
-        public void Reinsertion_ExpectStartWithReflection_DoesReflection()
+        public void Reinsertion_StartsWithReflection()
         {
             PerformInitialSetup();
             Assert.True(optimiser.CurrentOperation == NelderMeadSimplexOperations.R);
         }
 
         [Fact]
-        public void Reinsertion_ReflectionIsBest_DoesExpansion()
+        public void Reinsertion_ReflectionIsBest_TriesExpansion()
         {
             var fitness = PerformInitialSetup();
             
+            // Reflection vertex
             var ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
             Helpers.EvaluateIndividual(ind, fitness - 0.1);
             optimiser.ReInsert(new[] {ind});
             
             Assert.True(optimiser.CurrentOperation == NelderMeadSimplexOperations.E);
         }
-        
+
+        [Fact]
+        public void Reinsertion_ReflectionIsEqualBest_TriesExpansion()
+        {
+            //TODO: Check this is expected behaviour
+            var fitness = PerformInitialSetup();
+
+            // Reflection vertex
+            var ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
+            Helpers.EvaluateIndividual(ind, fitness);
+            optimiser.ReInsert(new[] { ind });
+
+            Assert.True(optimiser.CurrentOperation == NelderMeadSimplexOperations.E);
+        }
+
         [Fact]
         public void Reinsertion_ReflectionIsBetterThanExpansion_ChoosesReflection()
         {
             var fitness = PerformInitialSetup();
             
+            // Reflection vertex
             var ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
-            Helpers.EvaluateIndividual(ind, fitness - 0.1);
+            Helpers.EvaluateIndividual(ind, fitness - Fitness_Step);
             optimiser.ReInsert(new[] {ind});
             
+            // Expansion vertex
             ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
-            Helpers.EvaluateIndividual(ind, fitness + 0.01);
+            Helpers.EvaluateIndividual(ind, fitness + Fitness_Step/10);
             optimiser.ReInsert(new[] {ind});
             
             Assert.True(optimiser.CurrentOperation == NelderMeadSimplexOperations.R);
-            Assert.True(optimiser.LastStep == NelderMeadSteps.ReR);
+            Assert.True(optimiser.LastStep == NelderMeadSteps.reR);
         }
-        
+
+        [Fact]
+        public void Reinsertion_ReflectionIsEqualToExpansion_ChoosesReflection()
+        {
+            // TODO - Check this is expected behaviour
+            var fitness = PerformInitialSetup();
+
+            // Reflection vertex
+            var ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
+            Helpers.EvaluateIndividual(ind, fitness - Fitness_Step);
+            optimiser.ReInsert(new[] { ind });
+
+            // Expansion vertex
+            ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
+            Helpers.EvaluateIndividual(ind, fitness - Fitness_Step);
+            optimiser.ReInsert(new[] { ind });
+
+            Assert.True(optimiser.CurrentOperation == NelderMeadSimplexOperations.R);
+            Assert.True(optimiser.LastStep == NelderMeadSteps.reE);
+        }
+
         [Fact]
         public void Reinsertion_ReflectionIsWorseThanExpansion_ChoosesExpansion()
         {
             var fitness = PerformInitialSetup();
             
+            // Reflection vertex
             var ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
-            Helpers.EvaluateIndividual(ind, fitness - 0.1);
+            Helpers.EvaluateIndividual(ind, fitness - Fitness_Step);
             optimiser.ReInsert(new[] {ind});
             
+            // Expansion vertex
             ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
-            Helpers.EvaluateIndividual(ind, fitness - 0.1);
+            Helpers.EvaluateIndividual(ind, fitness - (2 * Fitness_Step));
             optimiser.ReInsert(new[] {ind});
             
             Assert.True(optimiser.CurrentOperation == NelderMeadSimplexOperations.R);
-            Assert.True(optimiser.LastStep == NelderMeadSteps.ReE);
+            Assert.True(optimiser.LastStep == NelderMeadSteps.reE);
+        }
+
+        [Fact]
+        public void Reinsertion_ReflectionIsMiddling_ChoosesReflection()
+        {
+            var fitness = PerformInitialSetup();
+
+            // Reflection vertex
+            var ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
+            Helpers.EvaluateIndividual(ind, fitness + Fitness_Step/10);
+            optimiser.ReInsert(new[] { ind });
+
+            Assert.True(optimiser.CurrentOperation == NelderMeadSimplexOperations.R);
+            Assert.True(optimiser.LastStep == NelderMeadSteps.rR);
         }
 
         private double PerformInitialSetup()
@@ -116,7 +170,7 @@ namespace Optimisation.Optimisers.NelderMead.Test
             
             for (var i = 0; i <= Number_Of_Dimensions; i++)
             {
-                fitness -= 0.1;
+                fitness -= Fitness_Step;
                 var newInd = optimiser.GetNextToEvaluate(1).ElementAt(0);
                 Helpers.EvaluateIndividual(newInd, fitness);
                 optimiser.ReInsert(new[] {newInd});

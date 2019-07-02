@@ -276,30 +276,30 @@ namespace Optimisation.Optimisers.NelderMead
         private void ChooseReflect()
         {
             LastStep = CurrentOperation == NelderMeadSimplexOperations.R 
-                ? NelderMeadSteps.RR 
-                : NelderMeadSteps.ReR;
+                ? NelderMeadSteps.rR 
+                : NelderMeadSteps.reR;
             tempProgress.Clear();
         }
         private void ChooseExpand()
         {
-            LastStep = NelderMeadSteps.ReE;
+            LastStep = NelderMeadSteps.reE;
             tempProgress.Clear();
         }
         private void ChooseContractOut()
         {
-            LastStep = NelderMeadSteps.RcC;
+            LastStep = NelderMeadSteps.rcC;
             tempProgress.Clear();
         }
         private void ChooseContractIn()
         {
-            LastStep = NelderMeadSteps.RkK;
+            LastStep = NelderMeadSteps.rkK;
             tempProgress.Clear();
         }
         private void ChooseShrink()
         {
             LastStep = tempProgress[1] == NelderMeadSimplexOperations.C 
-                ? NelderMeadSteps.RcsS 
-                : NelderMeadSteps.RksS;
+                ? NelderMeadSteps.rcsS 
+                : NelderMeadSteps.rksS;
             tempProgress.Clear();
         }
 
