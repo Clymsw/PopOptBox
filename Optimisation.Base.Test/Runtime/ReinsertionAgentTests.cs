@@ -22,7 +22,7 @@ namespace Optimisation.Base.Runtime.Test
                     ObjectCreators.GetDecisionVector(builder.DecVec),
                     builder.GetConverterMock()),
                 new TimeOutManager(5, TimeSpan.MaxValue),
-                p => p.AbsoluteDecisionVectorConvergence(1),
+                p => p.AbsoluteDecisionVector(1),
                 1)
             {
                 SaveAll = true

@@ -111,7 +111,14 @@ namespace Optimisation.Base.Management
             return true;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Reinserts individuals, sets their fitness based on the functions provided in the constructor:
+        ///  - if legal, solution -> score -> fitness
+        ///  - if illegal, solution = score -> penalty
+        ///  <seealso cref="ReInsert(Individual)"/>
+        /// </summary>
+        /// <param name="individualList">List of <see cref="Individual"/>s to reinsert.</param>
+        /// <returns>The number of individuals successfully reinserted.</returns>
         public int ReInsert(IEnumerable<Individual> individualList)
         {
             var numInserted = 0;
