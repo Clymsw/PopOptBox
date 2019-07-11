@@ -3,6 +3,7 @@ using Optimisation.Base.Management;
 using Optimisation.Base.Variables;
 using System.Collections.Generic;
 using System.Linq;
+using Optimisation.Base.Helpers;
 
 namespace Optimisation.Optimisers.NelderMead.Simplices
 {
@@ -58,21 +59,8 @@ namespace Optimisation.Optimisers.NelderMead.Simplices
                 initialVertex
             };
 
-            var startDv = initialVertex.Vector.Select(d => (double)d).ToArray();
+            simplex.AddRange(PopulationCreators.CreateNearLocation(initialVertex, stepSize));
 
-            for (var i = 2; i <= startDv.Length + 1; i++)
-            {
-                // Create D+1 total vertices.
-                var newDv = new double[startDv.Length];
-                startDv.CopyTo(newDv, 0);
-
-                // Each vertex has one of its dimensions offset by an amount equal to stepsize.
-                newDv[i - 2] += stepSize;
-
-                simplex.Add(DecisionVector.CreateFromArray(
-                    initialVertex.GetDecisionSpace(),
-                    newDv));
-            }
             return simplex;
         }
     }

@@ -38,6 +38,15 @@ namespace Optimisation.Optimisers.NelderMead.Simplices.Test
         }
 
         [Fact]
+        public void CreateInitialVertices_WithStepSizeZero_Throws()
+        {
+            var initialVertex = DecisionVector.CreateFromArray(
+                DecisionSpace.CreateForUniformDoubleArray(3, double.MinValue, double.MaxValue),
+                Enumerable.Repeat(0.0, 3));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Simplex.CreateInitialVertices(initialVertex, 0));
+        }
+
+        [Fact]
         public void Construction_WithWrongLengthSimplex_Throws()
         {
             // Create a 2D problem with only one vertex.

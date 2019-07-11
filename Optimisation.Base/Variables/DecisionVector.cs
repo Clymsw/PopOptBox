@@ -47,6 +47,18 @@ namespace Optimisation.Base.Variables
         }
 
         /// <summary>
+        /// Static constructor which takes an array of objects.
+        /// </summary>
+        /// <param name="decisionSpace">The decision space definition</param>
+        /// <param name="values">The points inside that decision space defining this solution</param>
+        /// <returns>A new decision vector</returns>
+        public static DecisionVector CreateFromArray(DecisionSpace decisionSpace,
+            IEnumerable<object> values)
+        {
+            return new DecisionVector(decisionSpace, values.ToArray());
+        }
+
+        /// <summary>
         /// Static constructor which takes an array of integers.
         /// Useful when the decision space is homomorphic and discrete.
         /// </summary>
