@@ -5,7 +5,7 @@ using Optimisation.Base.Management;
 
 namespace Optimisation.Base.Helpers
 {
-    public static class ConvergenceCheck
+    public static class ConvergenceCheckers
     {
         /// <summary>
         ///     Checks to see if the fitness of the best and worst individuals in a population
@@ -14,7 +14,7 @@ namespace Optimisation.Base.Helpers
         /// <param name="pop">population</param>
         /// <param name="tolerance">the absolute tolerance in the units of the fitness</param>
         /// <returns><see langword="true" /> if converged</returns>
-        public static bool AbsoluteFitness(
+        public static bool AbsoluteFitnessConvergence(
             this Population pop,
             double tolerance = 1)
         {
@@ -28,7 +28,7 @@ namespace Optimisation.Base.Helpers
         /// <param name="pop">population</param>
         /// <param name="tolerance">relative amount</param>
         /// <returns><see langword="true" /> if converged</returns>
-        public static bool RelativeFitness(
+        public static bool RelativeFitnessConvergence(
             this Population pop,
             double tolerance = 0.001)
         {
@@ -46,7 +46,7 @@ namespace Optimisation.Base.Helpers
         /// <param name="tolerance">absolute tolerance, in the units of the decision vector</param>
         /// <returns><see langword="true" /> if converged</returns>
         /// <exception cref="ArgumentException">If the individuals do not have the same decision space.</exception>
-        public static bool AbsoluteDecisionVector(
+        public static bool AbsoluteDecisionVectorConvergence(
             this Population pop,
             double tolerance)
         {
@@ -65,7 +65,7 @@ namespace Optimisation.Base.Helpers
         /// </param>
         /// <returns><see langword="true" /> if converged</returns>
         /// <exception cref="ArgumentException">If the individuals do not have the same decision space, or if the tolerance does not have the right length.</exception>
-        public static bool AbsoluteDecisionVector(
+        public static bool AbsoluteDecisionVectorConvergence(
             this Population pop,
             double[] tolerance)
         {
@@ -87,7 +87,7 @@ namespace Optimisation.Base.Helpers
         /// <param name="tolerance">relative amount</param>
         /// <returns><see langword="true" /> if converged</returns>
         /// <exception cref="ArgumentException">If the individuals do not have the same decision space.</exception>
-        public static bool RelativeDecisionVector(
+        public static bool RelativeDecisionVectorDivergence(
             this Population pop,
             double tolerance = 0.001)
         {
@@ -110,7 +110,7 @@ namespace Optimisation.Base.Helpers
         /// </param>
         /// <returns><see langword="true" /> if converged</returns>
         /// <exception cref="ArgumentException">If the individuals do not have the same decision space, or if the tolerance does not have the right length.</exception>
-        public static bool RelativeDecisionVector(
+        public static bool RelativeDecisionVectorDivergence(
             this Population pop,
             double[] tolerance)
         {

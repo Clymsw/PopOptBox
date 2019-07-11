@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Optimisation.Base.Helpers.Test
 {
-    public class ConvergenceCheckTests
+    public class ConvergenceCheckersTests
     {
         private readonly Population pop;
         private readonly double[] bestDv;
@@ -14,7 +14,7 @@ namespace Optimisation.Base.Helpers.Test
         private const double FitnessDifference = 2;
         private const double DvDifference = 0.3;
 
-        public ConvergenceCheckTests()
+        public ConvergenceCheckersTests()
         {
             bestDv = new[] { 0.1, 0.5, 1.2 };
             worstDv = new[] { 0.1, bestDv[1] + DvDifference, 1.2 };
@@ -25,59 +25,59 @@ namespace Optimisation.Base.Helpers.Test
             pop = new Population(140, new[] { ind1, ind2 }, true);
         }
 
-        #region AbsoluteFitness
+        #region AbsoluteFitnessConvergence
         [Fact]
-        public void AbsoluteFitness_MeetsCriterion_IsTrue()
+        public void AbsoluteFitnessConvergence_MeetsCriterion_IsTrue()
         {
-            Assert.True(pop.AbsoluteFitness(FitnessDifference));
+            Assert.True(pop.AbsoluteFitnessConvergence(FitnessDifference));
         }
 
         [Fact]
-        public void AbsoluteFitness_FailsCriterion_IsFalse()
+        public void AbsoluteFitnessConvergence_FailsCriterion_IsFalse()
         {
-            Assert.False(pop.AbsoluteFitness(FitnessDifference / 2));
-        }
-        #endregion
-
-        #region RelativeFitness
-        [Fact]
-        public void RelativeFitness_MeetsCriterion_IsTrue()
-        {
-            Assert.True(pop.RelativeFitness(FitnessDifference / BestFitness));
-        }
-
-        [Fact]
-        public void RelativeFitness_FailsCriterion_IsFalse()
-        {
-            Assert.False(pop.RelativeFitness(FitnessDifference / BestFitness / 2));
+            Assert.False(pop.AbsoluteFitnessConvergence(FitnessDifference / 2));
         }
         #endregion
 
-        #region AbsoluteDecisionVector
+        #region RelativeFitnessConvergence
         [Fact]
-        public void AbsoluteDecisionVector_MeetsSingleCriterion_IsTrue()
+        public void RelativeFitnessConvergence_MeetsCriterion_IsTrue()
         {
-            Assert.True(pop.AbsoluteDecisionVector(DvDifference + 1E-9));
+            Assert.True(pop.RelativeFitnessConvergence(FitnessDifference / BestFitness));
         }
 
         [Fact]
-        public void AbsoluteDecisionVector_FailsSingleCriterion_IsFalse()
+        public void RelativeFitnessConvergence_FailsCriterion_IsFalse()
         {
-            Assert.False(pop.AbsoluteDecisionVector(DvDifference / 2));
+            Assert.False(pop.RelativeFitnessConvergence(FitnessDifference / BestFitness / 2));
+        }
+        #endregion
+
+        #region AbsoluteDecisionVectorConvergence
+        [Fact]
+        public void AbsoluteDecisionVectorConvergence_MeetsSingleCriterion_IsTrue()
+        {
+            Assert.True(pop.AbsoluteDecisionVectorConvergence(DvDifference + 1E-9));
         }
 
         [Fact]
-        public void AbsoluteDecisionVector_MeetsMultipleCriterion_IsTrue()
+        public void AbsoluteDecisionVectorConvergence_FailsSingleCriterion_IsFalse()
+        {
+            Assert.False(pop.AbsoluteDecisionVectorConvergence(DvDifference / 2));
+        }
+
+        [Fact]
+        public void AbsoluteDecisionVectorConvergence_MeetsMultipleCriterion_IsTrue()
         {
             var criteria = bestDv.Select(v => DvDifference + 1E-9).ToArray();
-            Assert.True(pop.AbsoluteDecisionVector(criteria));
+            Assert.True(pop.AbsoluteDecisionVectorConvergence(criteria));
         }
 
         [Fact]
-        public void AbsoluteDecisionVector_FailsMultipleCriteria_IsFalse()
+        public void AbsoluteDecisionVectorConvergence_FailsMultipleCriteria_IsFalse()
         {
             var criteria = bestDv.Select(v => DvDifference/2).ToArray();
-            Assert.False(pop.AbsoluteDecisionVector(criteria));
+            Assert.False(pop.AbsoluteDecisionVectorConvergence(criteria));
         }
         #endregion
 
@@ -85,27 +85,27 @@ namespace Optimisation.Base.Helpers.Test
         [Fact]
         public void RelativeDecisionVectorDivergence_MeetsSingleCriterion_IsTrue()
         {
-            Assert.True(pop.RelativeDecisionVector((DvDifference + 1E-9) / bestDv[1]));
+            Assert.True(pop.RelativeDecisionVectorDivergence((DvDifference + 1E-9) / bestDv[1]));
         }
 
         [Fact]
         public void RelativeDecisionVectorDivergence_FailsSingleCriterion_IsFalse()
         {
-            Assert.False(pop.RelativeDecisionVector(DvDifference / bestDv[1] / 2));
+            Assert.False(pop.RelativeDecisionVectorDivergence(DvDifference / bestDv[1] / 2));
         }
 
         [Fact]
         public void RelativeDecisionVectorDivergence_MeetsMultipleCriteria_IsTrue()
         {
             var criteria = bestDv.Select(v => (DvDifference + 1E-9) / v).ToArray();
-            Assert.True(pop.RelativeDecisionVector(criteria));
+            Assert.True(pop.RelativeDecisionVectorDivergence(criteria));
         }
 
         [Fact]
         public void RelativeDecisionVectorDivergence_FailsMultipleCriteria_IsFalse()
         {
             var criteria = bestDv.Select(v => (DvDifference + 1E-9) / v / 2).ToArray();
-            Assert.False(pop.RelativeDecisionVector(criteria));
+            Assert.False(pop.RelativeDecisionVectorDivergence(criteria));
         }
         #endregion
     }

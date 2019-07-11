@@ -14,7 +14,7 @@ namespace Optimisation.Base.Runtime.Test
             builder = new ObjectCreators.OptimiserBuilderMock();
             runner = new OptimiserRunnerParallel(builder, 
                 new ObjectCreators.EvaluatorMock(),
-                p => p.AbsoluteDecisionVector(1),
+                p => p.AbsoluteDecisionVectorConvergence(1),
                 p => { });
         }
         
