@@ -8,7 +8,7 @@ namespace Optimisation.Base.Runtime
     /// <summary>
     /// The Evaluation Agent receives un-evaluated individuals and outputs evaluated ones
     /// </summary>
-    public class EvaluationAgent
+    internal class EvaluationAgent
     {
         /// <summary>
         /// The block that handles incoming individuals and processes the evaluation

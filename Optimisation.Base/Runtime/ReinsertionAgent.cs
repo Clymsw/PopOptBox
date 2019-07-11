@@ -10,14 +10,13 @@ namespace Optimisation.Base.Runtime
     /// <summary>
     /// The Reinsertion Agent receives evaluated individuals and outputs new ones
     /// </summary>
-    public class ReinsertionAgent
+    internal class ReinsertionAgent
     {
         /// <summary>
         /// Cancellation after certain conditions are met. Also used in EvaluationAgent
         /// </summary>
         public readonly CancellationTokenSource CancellationSource;
-
-        public readonly int TimeOut;
+        private readonly TimeOutManager timeOutManager;
         private readonly Func<Population, bool> convergenceCheckers;
 
         /// <summary>
@@ -42,7 +41,6 @@ namespace Optimisation.Base.Runtime
         private readonly IModel model;
 
         public int NumberGenerated { get; private set; }
-        public int NumberProcessed { get; private set; }
         public int NumberReinserted { get; private set; }
 
         public bool SaveAll = false;
@@ -64,15 +62,14 @@ namespace Optimisation.Base.Runtime
         public ReinsertionAgent(
             Optimiser optimiser,
             IModel model,
-            int timeOut,
+            TimeOutManager timeOutManager,
             Func<Population, bool> convergenceCheckers,
             int reportingFrequency)
         {
             CancellationSource = new CancellationTokenSource();
-            TimeOut = timeOut;
+            this.timeOutManager = timeOutManager;
             this.convergenceCheckers = convergenceCheckers;
             NumberGenerated = 0;
-            NumberProcessed = 0;
             NumberReinserted = 0;
             AllEvaluated = new List<KeyValuePair<int, Individual>>();
 
@@ -109,7 +106,7 @@ namespace Optimisation.Base.Runtime
         /// <returns>new individual ready for evaluation</returns>
         private IReadOnlyList<Individual> Process(Individual returnedInd)
         {
-            NumberProcessed += 1;
+            timeOutManager.IncrementEvaluationsRun();
             var returnInds = new List<Individual>
             {
                 returnedInd
@@ -127,20 +124,20 @@ namespace Optimisation.Base.Runtime
             if (SaveAll)
             {
                 AllEvaluated.Add(new KeyValuePair<int, Individual>(
-                    NumberProcessed, returnedInd));
+                    timeOutManager.EvaluationsRun, returnedInd));
             }
 
             // Check for completion
-            var completed = NumberProcessed >= TimeOut ||
-                            optimiser.Population.IsTargetSizeReached
-                            && convergenceCheckers(optimiser.Population);
+            var completed = timeOutManager.HasPerformedTooManyEvaluations() 
+                || timeOutManager.HasRunOutOfTime() 
+                || optimiser.Population.IsTargetSizeReached && convergenceCheckers(optimiser.Population);
 
             //Reporting
-            if (NumberProcessed % ReportingFrequency == 0 || completed)
+            if (timeOutManager.EvaluationsRun % ReportingFrequency == 0 || completed)
             {
                 var pop = optimiser.Population.Clone();
                 Reports.Post(new KeyValuePair<int, Population>(
-                    NumberGenerated, pop));
+                    timeOutManager.EvaluationsRun, pop));
             }
 
             //New individual (or nothing!)

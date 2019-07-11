@@ -15,16 +15,18 @@ namespace Optimisation.Base.Runtime.Test
         public ReinsertionAgentTests()
         {
             var builder = new ObjectCreators.OptimiserBuilderMock();
-            
+
             agent = new ReinsertionAgent(
                 builder.CreateOptimiser(),
                 new ObjectCreators.ModelMock(
                     ObjectCreators.GetDecisionVector(builder.DecVec),
                     builder.GetConverterMock()),
-                5,
+                new TimeOutManager(5, TimeSpan.MaxValue),
                 p => p.AbsoluteDecisionVectorConvergence(1),
-                1);
-            agent.SaveAll = true;
+                1)
+            {
+                SaveAll = true
+            };
         }
 
         [Fact]

@@ -78,18 +78,27 @@ namespace Optimisation.Base.Runtime
         /// <param name="reportingFrequency">The number of reinsertions between reports on the current population</param>
         public override void Run(
             bool storeAll = true,
-            int timeOut = 0,
-            int reportingFrequency = 100)
+            int reportingFrequency = 100,
+            int timeOutEvaluations = 0,
+            TimeSpan? timeOutDuration = null)
         {
-            // Calculate a time out automatically if not provided
-            if (timeOut == 0)
+            // Calculate time outs automatically if not provided
+            if (timeOutEvaluations == 0)
             {
                 var numDims =
                     builder.CreateModel().GetNewIndividual().DecisionVector.Vector.Count;
-                timeOut = Math.Min(numDims * 20000, 2000000);
+                timeOutEvaluations = Math.Min(numDims * 20000, 2000000);
             }
 
-            SetUpAgents(timeOut, reportingFrequency);
+            var timeOutDurationNotNull = TimeSpan.MaxValue;
+            if (timeOutDuration != null)
+            {
+                timeOutDurationNotNull = timeOutDuration.Value;
+            }
+
+            var timeOutManager = new TimeOutManager(timeOutEvaluations, timeOutDurationNotNull);
+
+            SetUpAgents(timeOutManager, reportingFrequency);
 
             reinsertionAgent.SaveAll = storeAll;
 
@@ -133,16 +142,16 @@ namespace Optimisation.Base.Runtime
         /// <summary>
         /// Initialises all the buffers to be ready
         /// </summary>
-        /// <param name="timeOut">The maximum number of reinsertions before optimisation completion</param>
+        /// <param name="timeOutManager">The <see cref="TimeOutManager"/>.</param>
         /// <param name="reportingFrequency">The number of reinsertions between reports on the current population</param>
         private void SetUpAgents(
-            int timeOut,
+            TimeOutManager timeOutManager,
             int reportingFrequency)
         {
             reinsertionAgent = new ReinsertionAgent(
                 builder.CreateOptimiser(),
                 builder.CreateModel(),
-                timeOut, convergenceCheckers, reportingFrequency);
+                timeOutManager, convergenceCheckers, reportingFrequency);
 
             evaluationAgent = new EvaluationAgent(
                 evaluator, reinsertionAgent.CancellationSource.Token);
