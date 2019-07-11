@@ -1,3 +1,4 @@
+using MathNet.Numerics.Random;
 using System;
 
 namespace Optimisation.Base.Variables
@@ -39,6 +40,15 @@ namespace Optimisation.Base.Variables
         {
             var test = System.Convert.ToDouble(testValue);
             return test >= lowerBound && test < upperBound;
+        }
+
+        /// <summary>
+        /// Implements random number generation for this variable
+        /// </summary>
+        /// <returns>A legal object (double).</returns>
+        public object GetNextRandom(RandomSource rng)
+        {
+            return (rng.NextDouble() * (upperBound - lowerBound)) + lowerBound;
         }
 
         public override string ToString()
