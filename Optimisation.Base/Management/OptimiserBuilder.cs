@@ -67,13 +67,13 @@ namespace Optimisation.Base.Management
         ///     The score to fitness converter
         /// </summary>
         /// <returns></returns>
-        protected abstract Func<double[], double> CreateObjective();
+        protected abstract Func<double[], double> CreateScoreToFitness();
         
         /// <summary>
         ///     The solution vector to score converter
         /// </summary>
         /// <returns></returns>
-        protected abstract Func<double[], double[]> CreateMultiObjectiveScore();
+        protected abstract Func<double[], double[]> CreateSolutionToScore();
 
         /// <summary>
         ///     The solution vector to penalty converter for illegal individuals

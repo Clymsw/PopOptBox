@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Moq;
 using Optimisation.Base.Conversion;
+using Optimisation.Base.Helpers;
 using Optimisation.Base.Management;
 using Optimisation.Base.Variables;
 
@@ -86,8 +87,8 @@ namespace Optimisation.Base.Test.Helpers
                 return new OptimiserMock(
                     GetDecisionVector(DecVec),
                     GetEmptyPopulation(PopulationSize), 
-                    CreateMultiObjectiveScore(),
-                    CreateObjective(),
+                    CreateSolutionToScore(),
+                    CreateScoreToFitness(),
                     CreatePenalty());
             }
 
@@ -96,14 +97,14 @@ namespace Optimisation.Base.Test.Helpers
                 return new ModelMock(GetDecisionVector(DecVec), GetConverterMock());
             }
 
-            protected override Func<double[], double> CreateObjective()
+            protected override Func<double[], double> CreateScoreToFitness()
             {
-                return v => v.ElementAt(0);
+                return ScoreToFitness.SingleObjectiveMinimise;
             }
 
-            protected override Func<double[], double[]> CreateMultiObjectiveScore()
+            protected override Func<double[], double[]> CreateSolutionToScore()
             {
-                return v => v;
+                return SolutionToScore.SingleObjective;
             }
 
             protected override Func<double[], double> CreatePenalty()

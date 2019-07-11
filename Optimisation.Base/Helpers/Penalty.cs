@@ -6,7 +6,7 @@
         /// Applies a sudden "wall" to the optimisation when the DV is outside the legal range
         /// </summary>
         /// <param name="solVector">Solution vector is not used</param>
-        /// <returns>double.MaxValue</returns>
+        /// <returns><see cref="double.MaxValue"/></returns>
         public static double DeathPenalty(double[] solVector)
         {
             // Optimisers minimise, therefore this is the worst possible value.
