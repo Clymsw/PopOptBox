@@ -70,6 +70,18 @@ namespace Optimisation.Base.Variables.Test
         }
 
         [Fact]
+        public void CreatedWithArrayOfObjects_ConstructsOk()
+        {
+            var dv = DecisionVector.CreateFromArray(continuousSpace,
+                new object[] { exampleContinuousVector[0], exampleContinuousVector[1], exampleContinuousVector[2], exampleContinuousVector[3] });
+
+            for (var i = 0; i < continuousSpace.Dimensions.Count; i++)
+            {
+                Assert.Equal(dv.Vector.ElementAt(i), exampleContinuousVector[i]);
+            }
+        }
+
+        [Fact]
         public void CreatedWithParams_ConstructsOk()
         {
             var dv = DecisionVector.CreateFromItems(continuousSpace,
