@@ -28,6 +28,15 @@ namespace Optimisation.Base.Variables
         }
 
         /// <summary>
+        /// Returns an empty Decision Space.
+        /// </summary>
+        /// <returns>A <see cref="DecisionSpace"/> with no elements.</returns>
+        public static DecisionSpace CreateForEmpty()
+        {
+            return new DecisionSpace(new List<IVariable>());
+        }
+
+        /// <summary>
         /// Static constructor for a hypercube which will take discrete values.
         /// </summary>
         /// <param name="numDimensions">Number of dimensions</param>

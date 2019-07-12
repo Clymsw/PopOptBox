@@ -34,6 +34,15 @@ namespace Optimisation.Base.Variables
         }
 
         /// <summary>
+        /// Returns a new empty Decision Vector.
+        /// </summary>
+        /// <returns>A <see cref="DecisionVector"/> with no elements.</returns>
+        public static DecisionVector CreateForEmpty()
+        {
+            return new DecisionVector(DecisionSpace.CreateForEmpty(), new List<object>());
+        }
+        
+        /// <summary>
         /// Static constructor which takes a comma-separated list of values.
         /// Useful when the decision space is heteromorphic.
         /// </summary>

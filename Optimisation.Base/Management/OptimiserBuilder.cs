@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using MathNet.Numerics.Financial;
 using Optimisation.Base.Conversion;
 using Optimisation.Base.Variables;
 
@@ -10,29 +12,50 @@ namespace Optimisation.Base.Management
     /// </summary>
     public abstract class OptimiserBuilder
     {
-        private readonly Dictionary<IVariable, object> settings;
+        private DecisionVector hyperParameters;
 
         protected OptimiserBuilder()
         {
-            settings = new Dictionary<IVariable, object>();
-        }
-
-        public IEnumerable<IVariable> GetTunableSettings()
-        {
-            return settings.Keys;
+            hyperParameters = DecisionVector.CreateForEmpty();
         }
 
         /// <summary>
-        /// Allows setting an optimisation hyperparameter
+        /// All the hyperparameter definitions and values.
         /// </summary>
-        /// <param name="definition">Setting definition in form of a <see cref="IVariable"/></param>
+        public DecisionVector HyperParameters => hyperParameters;
+
+        /// <summary>
+        /// Returns the value of a particular hyperparameter.
+        /// </summary>
+        /// <param name="name">The <see cref="IVariable"/> Name defining the hyperparameter.</param>
+        /// <returns>An object value for the hyperparameter.</returns>
+        /// <exception cref="InvalidOperationException">Thrown when the setting is not known.</exception>
+        public object GetHyperParameterValue(string name)
+        {
+            return hyperParameters.Vector
+                .Where((v, i) => hyperParameters.GetDecisionSpace().Dimensions.ElementAt(i).Name == name)
+                .Single(); 
+        }
+
+        /// <summary>
+        /// Allows adding an optimisation hyperparameter.
+        /// </summary>
+        /// <param name="definition">Hyperparameter definition, in the form of an <see cref="IVariable"/>.</param>
         /// <param name="value">The value for the setting</param>
         /// <returns><see langword="true" /> if set ok</returns>
-        public bool SetSetting(IVariable definition, object value)
+        public bool AddHyperParameter(IVariable definition, object value)
         {
             try
             {
-                settings[definition] = value;
+                var decSpace = hyperParameters.GetDecisionSpace().Dimensions.ToList();
+                decSpace.Add(definition);
+                var values = hyperParameters.Vector.ToList();
+                values.Add(value);
+                
+                hyperParameters = DecisionVector.CreateFromArray(
+                    new DecisionSpace(decSpace),
+                    values);
+                
                 return true;
             }
             catch
