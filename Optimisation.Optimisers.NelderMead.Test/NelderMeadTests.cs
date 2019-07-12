@@ -12,11 +12,10 @@ namespace Optimisation.Optimisers.NelderMead.Test
         #region Non-test functions and fields
 
         private readonly NelderMead optimiser;
-        private const int Number_Of_Dimensions = 2;
+        private const int Number_Of_Dimensions = 4;
         private const double Step_Size = 1;
         private const double Worst_Fitness = 3.0;
         private const double Fitness_Step = 0.1;
-        private double nextToWorstFitness;
         private double bestFitness;
             
         public NelderMeadTests()
@@ -38,8 +37,6 @@ namespace Optimisation.Optimisers.NelderMead.Test
             {
                 var fitness = Worst_Fitness - (i * Step_Size);
                 
-                if (i == 1)
-                    nextToWorstFitness = fitness;
                 if (i == Number_Of_Dimensions)
                     bestFitness = fitness;
                 
@@ -123,7 +120,7 @@ namespace Optimisation.Optimisers.NelderMead.Test
         }
 
         [Fact]
-        public void Reinsertion_ReflectionIsBest_TriesExpansion()
+        public void Reinsertion_ReflectionIsBetterThanBest_TriesExpansion()
         {
             SetUp();
             
@@ -192,7 +189,192 @@ namespace Optimisation.Optimisers.NelderMead.Test
             Assert.True(optimiser.LastStep == NelderMeadSteps.reE);
         }
 
+        [Fact]
+        public void Reinsertion_ReflectionIsBetweenWorstAndNextWorst_TriesOutsideContraction()
+        {
+            SetUp();
+            
+            // Reflection vertex
+            var ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
+            Helpers.EvaluateIndividual(ind, Worst_Fitness - Fitness_Step/10);
+            optimiser.ReInsert(new[] {ind});
+            
+            Assert.True(optimiser.CurrentOperation == NelderMeadSimplexOperations.C);
+        }
         
+        [Fact]
+        public void Reinsertion_ReflectionIsEqualToNextWorst_TriesOutsideContraction()
+        {
+            SetUp();
+            
+            // Reflection vertex
+            var ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
+            Helpers.EvaluateIndividual(ind, Worst_Fitness - Fitness_Step);
+            optimiser.ReInsert(new[] {ind});
+            
+            Assert.True(optimiser.CurrentOperation == NelderMeadSimplexOperations.C);
+        }
+        
+        [Fact]
+        public void Reinsertion_OutsideContractionIsBetterThanReflection_ChoosesOutsideContraction()
+        {
+            SetUp();
+            
+            // Reflection vertex
+            var ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
+            Helpers.EvaluateIndividual(ind, Worst_Fitness - Fitness_Step/10);
+            optimiser.ReInsert(new[] {ind});
+            
+            // Outside contraction vertex
+            ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
+            Helpers.EvaluateIndividual(ind, bestFitness);
+            optimiser.ReInsert(new[] {ind});
+            
+            Assert.True(optimiser.CurrentOperation == NelderMeadSimplexOperations.R);
+            Assert.True(optimiser.LastStep == NelderMeadSteps.rcC);
+        }
+        
+        [Fact]
+        public void Reinsertion_OutsideContractionIsEqualToReflection_ChoosesOutsideContraction()
+        {
+            SetUp();
+            
+            // Reflection vertex
+            var ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
+            Helpers.EvaluateIndividual(ind, Worst_Fitness - Fitness_Step);
+            optimiser.ReInsert(new[] {ind});
+            
+            // Outside contraction vertex
+            ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
+            Helpers.EvaluateIndividual(ind, Worst_Fitness - Fitness_Step);
+            optimiser.ReInsert(new[] {ind});
+            
+            Assert.True(optimiser.CurrentOperation == NelderMeadSimplexOperations.R);
+            Assert.True(optimiser.LastStep == NelderMeadSteps.rcC);
+        }
+
+        [Fact]
+        public void Reinsertion_OutsideContractionIsWorseThanReflection_TriesAndChoosesShrink()
+        {
+            SetUp();
+            
+            // Reflection vertex
+            var ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
+            Helpers.EvaluateIndividual(ind, Worst_Fitness - Fitness_Step);
+            optimiser.ReInsert(new[] {ind});
+            
+            // Outside contraction vertex
+            ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
+            Helpers.EvaluateIndividual(ind, Worst_Fitness);
+            optimiser.ReInsert(new[] {ind});
+            
+            Assert.True(optimiser.CurrentOperation == NelderMeadSimplexOperations.S);
+            
+            // Shrink vertex
+            ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
+            Helpers.EvaluateIndividual(ind, bestFitness);
+            optimiser.ReInsert(new[] {ind});
+
+            Assert.True(optimiser.CurrentOperation == NelderMeadSimplexOperations.R);
+            Assert.True(optimiser.LastStep == NelderMeadSteps.rcsS);
+        }
+        
+        [Fact]
+        public void Reinsertion_ReflectionIsWorseThanWorst_TriesInsideContraction()
+        {
+            SetUp();
+            
+            // Reflection vertex
+            var ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
+            Helpers.EvaluateIndividual(ind, Worst_Fitness + Fitness_Step);
+            optimiser.ReInsert(new[] {ind});
+            
+            Assert.True(optimiser.CurrentOperation == NelderMeadSimplexOperations.K);
+        }
+        
+        [Fact]
+        public void Reinsertion_ReflectionIsEqualToWorst_TriesInsideContraction()
+        {
+            SetUp();
+            
+            // Reflection vertex
+            var ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
+            Helpers.EvaluateIndividual(ind, Worst_Fitness);
+            optimiser.ReInsert(new[] {ind});
+            
+            Assert.True(optimiser.CurrentOperation == NelderMeadSimplexOperations.K);
+        }
+        
+        [Fact]
+        public void Reinsertion_InsideContractionIsBetterThanWorst_ChoosesInsideContraction()
+        {
+            SetUp();
+            
+            // Reflection vertex
+            var ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
+            Helpers.EvaluateIndividual(ind, Worst_Fitness + Fitness_Step);
+            optimiser.ReInsert(new[] {ind});
+            
+            // Inside contraction vertex
+            ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
+            Helpers.EvaluateIndividual(ind, Worst_Fitness - Fitness_Step/10);
+            optimiser.ReInsert(new[] {ind});
+            
+            Assert.True(optimiser.CurrentOperation == NelderMeadSimplexOperations.R);
+            Assert.True(optimiser.LastStep == NelderMeadSteps.rkK);
+        }
+        
+        [Fact]
+        public void Reinsertion_InsideContractionIsEqualToWorst_TriesAndChoosesShrink()
+        {
+            SetUp();
+            
+            // Reflection vertex
+            var ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
+            Helpers.EvaluateIndividual(ind, Worst_Fitness + Fitness_Step);
+            optimiser.ReInsert(new[] {ind});
+            
+            // Inside contraction vertex
+            ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
+            Helpers.EvaluateIndividual(ind, Worst_Fitness);
+            optimiser.ReInsert(new[] {ind});
+            
+            Assert.True(optimiser.CurrentOperation == NelderMeadSimplexOperations.S);
+            
+            // Shrink vertex
+            ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
+            Helpers.EvaluateIndividual(ind, bestFitness);
+            optimiser.ReInsert(new[] {ind});
+
+            Assert.True(optimiser.CurrentOperation == NelderMeadSimplexOperations.R);
+            Assert.True(optimiser.LastStep == NelderMeadSteps.rksS);
+        }
+        
+        [Fact]
+        public void Reinsertion_InsideContractionIsWorseThanWorst_TriesAndChoosesShrink()
+        {
+            SetUp();
+            
+            // Reflection vertex
+            var ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
+            Helpers.EvaluateIndividual(ind, Worst_Fitness + Fitness_Step);
+            optimiser.ReInsert(new[] {ind});
+            
+            // Inside contraction vertex
+            ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
+            Helpers.EvaluateIndividual(ind, Worst_Fitness + Fitness_Step);
+            optimiser.ReInsert(new[] {ind});
+            
+            Assert.True(optimiser.CurrentOperation == NelderMeadSimplexOperations.S);
+            
+            // Shrink vertex
+            ind = optimiser.GetNextToEvaluate(1).ElementAt(0);
+            Helpers.EvaluateIndividual(ind, bestFitness);
+            optimiser.ReInsert(new[] {ind});
+
+            Assert.True(optimiser.CurrentOperation == NelderMeadSimplexOperations.R);
+            Assert.True(optimiser.LastStep == NelderMeadSteps.rksS);
+        }
 
         #endregion
     }
