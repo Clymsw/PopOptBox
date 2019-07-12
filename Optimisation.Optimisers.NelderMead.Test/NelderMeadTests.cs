@@ -76,7 +76,7 @@ namespace Optimisation.Optimisers.NelderMead.Test
             Assert.Equal(1, numReinserted);
             Assert.True(optimiser.Population.Count == 1);
             
-            var reinsertionTime = newInd.GetProperty<DateTime>(OptimiserDefinitions.ReinsertionTime);
+            var reinsertionTime = newInd.GetProperty<DateTime>(OptimiserPropertyNames.ReinsertionTime);
             Assert.True(reinsertionTime < DateTime.Now);
         }
 

@@ -1,6 +1,6 @@
 namespace Optimisation.Base.Management
 {
-    public static partial class OptimiserDefinitions
+    public static class OptimiserPropertyNames
     {
         /// <summary>
         /// An index to indicate how far through the optimisation process the individual was created.
@@ -29,5 +29,10 @@ namespace Optimisation.Base.Management
         /// If an error has been encountered on reinsertion, it is stored here.
         /// </summary>
         public const string ReinsertionError = "Reinsertion error";
+        
+        /// <summary>
+        /// If an error has been encountered on generation, it is stored here.
+        /// </summary>
+        public const string GenerationError = "Generation error";
     }
 }

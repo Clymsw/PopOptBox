@@ -10,7 +10,7 @@ namespace Optimisation.Base.Management
         #region Constructor
 
         /// <summary>
-        /// Contruct the optimiser
+        /// Construct the optimiser
         /// </summary>
         /// <param name="initialPopulation">An initial population (can be empty)</param>
         /// /// <param name="solutionToScore">Conversion function to change solution vector into score. <seealso cref="Individual.SetScore(Func{double[], double[]})"/></param>
@@ -73,7 +73,7 @@ namespace Optimisation.Base.Management
                 if (CheckAcceptable(newInd))
                 {
                     newInd.SetProperty(
-                        OptimiserDefinitions.CreationTime,
+                        OptimiserPropertyNames.CreationTime,
                         DateTime.Now);
                     listOfInds.Add(newInd);
                 }
@@ -104,7 +104,7 @@ namespace Optimisation.Base.Management
             }
             catch (Exception e)
             {
-                individual.SetProperty(OptimiserDefinitions.ReinsertionError, e);
+                individual.SetProperty(OptimiserPropertyNames.ReinsertionError, e);
                 return false;
             }
 
@@ -135,7 +135,7 @@ namespace Optimisation.Base.Management
                 ind.SetFitness(ind.Legal ? scoreToFitness : penalty);
 
                 ind.SetProperty(
-                    OptimiserDefinitions.ReinsertionTime,
+                    OptimiserPropertyNames.ReinsertionTime,
                     DateTime.Now);
 
                 var wasReInserted = ReInsert(ind);

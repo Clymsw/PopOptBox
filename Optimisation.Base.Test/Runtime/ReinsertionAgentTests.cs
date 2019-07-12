@@ -42,8 +42,8 @@ namespace Optimisation.Base.Runtime.Test
 
             var generatedInd = agent.NewIndividuals.Receive(); // Won't happen without this line.
             
-            Assert.True(generatedInd.GetProperty<DateTime>(OptimiserDefinitions.CreationTime) > 
-                        newInd.GetProperty<DateTime>(OptimiserDefinitions.CreationTime));
+            Assert.True(generatedInd.GetProperty<DateTime>(OptimiserPropertyNames.CreationTime) > 
+                        newInd.GetProperty<DateTime>(OptimiserPropertyNames.CreationTime));
             
             Assert.Equal(2, agent.NumberGenerated);
             Assert.True(agent.AllEvaluated.Count == 1);

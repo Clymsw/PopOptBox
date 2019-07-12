@@ -27,7 +27,7 @@ namespace Optimisation.Base.Management.Test
                 newInd.DecisionVector.Vector.Select(v => (double)v));
             Assert.Equal(IndividualStates.New, newInd.State);
 
-            var creationTime = newInd.GetProperty<DateTime>(OptimiserDefinitions.CreationTime);
+            var creationTime = newInd.GetProperty<DateTime>(OptimiserPropertyNames.CreationTime);
             Assert.True(creationTime < DateTime.Now);
         }
 
@@ -62,7 +62,7 @@ namespace Optimisation.Base.Management.Test
                 i => Assert.Equal(
                     builder.DecVec, i.DecisionVector.Vector.Select(d => (double)d)));
             
-            var reinsertionTime = newInd.GetProperty<DateTime>(OptimiserDefinitions.ReinsertionTime);
+            var reinsertionTime = newInd.GetProperty<DateTime>(OptimiserPropertyNames.ReinsertionTime);
             Assert.True(reinsertionTime < DateTime.Now);
         }
     }

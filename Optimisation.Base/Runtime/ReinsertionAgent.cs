@@ -117,7 +117,7 @@ namespace Optimisation.Base.Runtime
             {
                 NumberReinserted += numReInserted;
                 returnedInd.SetProperty(
-                    OptimiserDefinitions.ReinsertionIndex,
+                    OptimiserPropertyNames.ReinsertionIndex,
                     NumberReinserted);
             }
 
@@ -165,7 +165,7 @@ namespace Optimisation.Base.Runtime
                 model.PrepareForEvaluation(ind);
                 NumberGenerated++;
                 ind.SetProperty(
-                    OptimiserDefinitions.CreationIndex,
+                    OptimiserPropertyNames.CreationIndex,
                     NumberGenerated);
             }
             return nextInds;
