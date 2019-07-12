@@ -170,7 +170,6 @@ namespace Optimisation.Base.Management
         public IEnumerable<double> DecisionVectorRangeByFitness() => 
             (Worst().DecisionVector - Best().DecisionVector).Select(Math.Abs); 
         
-
         #endregion
 
         #region Management
@@ -215,8 +214,9 @@ namespace Optimisation.Base.Management
         {
             if (members.Count == 0)
                 throw new InvalidOperationException("Population has no members.");
-            
-            members[members.Count - 1] = ind;
+
+            members.Remove(Worst());
+            AddIndividual(ind);
         }
         
         #endregion
