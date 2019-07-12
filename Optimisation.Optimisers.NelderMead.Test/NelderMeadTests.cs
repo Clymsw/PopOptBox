@@ -8,6 +8,8 @@ namespace Optimisation.Optimisers.NelderMead.Test
 {
     public class NelderMeadTests
     {
+        #region Non-test functions and fields
+
         private readonly NelderMead optimiser;
         private const int Number_Of_Dimensions = 2;
         private const double Step_Size = 1;
@@ -25,6 +27,26 @@ namespace Optimisation.Optimisers.NelderMead.Test
                     Enumerable.Repeat(0.0, Number_Of_Dimensions)),
                 Step_Size);
         }
+
+        private double PerformInitialSetup()
+        {
+            // Evaluate initial simplex
+            var fitness = Initial_Fitness;
+
+            for (var i = 0; i <= Number_Of_Dimensions; i++)
+            {
+                fitness -= Fitness_Step;
+                var newInd = optimiser.GetNextToEvaluate(1).ElementAt(0);
+                Helpers.EvaluateIndividual(newInd, fitness);
+                optimiser.ReInsert(new[] { newInd });
+            }
+
+            return fitness;
+        }
+
+        #endregion
+
+        #region Optimiser
 
         [Fact]
         public void Reinsertion_UnexpectedIndividual_ThrowsError()
@@ -56,6 +78,10 @@ namespace Optimisation.Optimisers.NelderMead.Test
             var reinsertionTime = newInd.GetProperty<DateTime>(OptimiserDefinitions.ReinsertionTime);
             Assert.True(reinsertionTime < DateTime.Now);
         }
+
+        #endregion
+
+        #region Lagarias et al. expected simplex search behaviour
 
         [Fact]
         public void Reinsertion_StartsWithReflection()
@@ -163,20 +189,8 @@ namespace Optimisation.Optimisers.NelderMead.Test
             Assert.True(optimiser.LastStep == NelderMeadSteps.rR);
         }
 
-        private double PerformInitialSetup()
-        {
-            // Evaluate initial simplex
-            var fitness = Initial_Fitness;
-            
-            for (var i = 0; i <= Number_Of_Dimensions; i++)
-            {
-                fitness -= Fitness_Step;
-                var newInd = optimiser.GetNextToEvaluate(1).ElementAt(0);
-                Helpers.EvaluateIndividual(newInd, fitness);
-                optimiser.ReInsert(new[] {newInd});
-            }
+        #endregion
 
-            return fitness;
-        }
+        
     }
 }
