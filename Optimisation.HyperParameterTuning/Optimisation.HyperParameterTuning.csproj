@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp2.2</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Optimisation.Base\Optimisation.Base.csproj" />
+      <ProjectReference Include="..\Optimisation.Optimisers.NelderMead\Optimisation.Optimisers.NelderMead.csproj" />
+      <ProjectReference Include="..\Optimisation.Problems\Optimisation.Problems.csproj" />
+    </ItemGroup>
+
+</Project>

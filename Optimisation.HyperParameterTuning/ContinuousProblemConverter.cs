@@ -3,13 +3,20 @@ using Optimisation.Base.Variables;
 using System;
 using System.Linq;
 
-namespace Optimisation.Problems.Continuous
+namespace Optimisation.HyperParameterTuning
 {
-    internal class ProblemConverter : IConverter<double[]>
+    internal class ContinuousProblemConverter : IConverter<double[]>
     {
+        private readonly DecisionSpace space;
+        
+        public ContinuousProblemConverter(DecisionSpace space)
+        {
+            this.space = space;
+        }
+        
         public DecisionVector ConvertToDv(double[] realityDefinition)
         {
-            throw new NotImplementedException();
+            return DecisionVector.CreateFromArray(space, realityDefinition);
         }
 
         public double[] ConvertToReality(DecisionVector decisionVector)
