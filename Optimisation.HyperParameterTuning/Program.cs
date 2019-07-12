@@ -11,7 +11,7 @@ namespace Optimisation.HyperParameterTuning
 {
     class Program
     {
-        private const int Number_Of_Dimensions = 20;
+        private const int Number_Of_Dimensions = 4;
         private const double Simplex_Creation_Step_Size = 0.5;
         private const double Convergence_Tolerance = 0.00001;
         private const int Number_Of_Restarts = 100;
@@ -19,9 +19,9 @@ namespace Optimisation.HyperParameterTuning
         
         private static ProblemEvaluatorSingleObjective GetEvaluator()
         {
-            return new Ellipsoidal(Number_Of_Dimensions);
+//            return new Ellipsoidal(Number_Of_Dimensions);
 //            return new Schwefel(Number_Of_Dimensions);
-//            return new Rosenbrock(Number_Of_Dimensions);
+            return new Rosenbrock(Number_Of_Dimensions);
         }
         
         static void Main(string[] args)
@@ -48,8 +48,9 @@ namespace Optimisation.HyperParameterTuning
             var globalOptimumFitness = problem.Evaluate(globalOptimumLocation).ElementAt(0);
             Console.WriteLine($"Global optimum fitness: {globalOptimumFitness.ToString("F4", System.Globalization.CultureInfo.InvariantCulture)}");
             Console.WriteLine($"Best fitness found: {results.BestFitness.ToString("F4", System.Globalization.CultureInfo.InvariantCulture)}");
-            var pctNearOptimum = results.ProportionOfFitnessValuesWithin(Fitness_Tolerance) * 100;
-            Console.WriteLine($"Proportion of results below {Fitness_Tolerance - globalOptimumFitness}: {pctNearOptimum.ToString("F1", System.Globalization.CultureInfo.InvariantCulture)}%");
+            var pctNearOptimum = results.ProportionOfFitnessValuesBelow(globalOptimumFitness + Fitness_Tolerance) * 100;
+            Console.WriteLine($"Proportion of results below {(globalOptimumFitness + Fitness_Tolerance).ToString("F", System.Globalization.CultureInfo.InvariantCulture)}: " +
+                              $"{pctNearOptimum.ToString("F1", System.Globalization.CultureInfo.InvariantCulture)}%");
             Console.WriteLine($"Mean number of evaluations required to find best fitness: {results.MeanEvaluationsToFindBest.ToString("F1", System.Globalization.CultureInfo.InvariantCulture)}");
             Console.WriteLine($"Mean fitness found: {results.MeanFitness.ToString("F4", System.Globalization.CultureInfo.InvariantCulture)}");
             Console.WriteLine($"Mean number of evaluations required to converge: {results.MeanEvaluationsToConverge.ToString("F1", System.Globalization.CultureInfo.InvariantCulture)}");

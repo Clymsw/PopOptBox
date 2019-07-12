@@ -16,7 +16,9 @@ namespace Optimisation.Problems.Continuous.SingleObjective
         public Salomon(int numDims) : base(
             "Salomon's Function",
             DecisionVector.CreateFromArray(
-                DecisionSpace.CreateForUniformDoubleArray(numDims, double.MinValue, double.MaxValue),
+                DecisionSpace.CreateForUniformDoubleArray(numDims, 
+                    double.MinValue, double.MaxValue,
+                    -100, 100),
                 new double[numDims]))
         {
         }

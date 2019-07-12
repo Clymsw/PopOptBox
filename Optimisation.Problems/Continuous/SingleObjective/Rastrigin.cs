@@ -16,7 +16,9 @@ namespace Optimisation.Problems.Continuous.SingleObjective
         public Rastrigin(int numDims) : base(
             "Generalised Rastrigin Function", 
             DecisionVector.CreateFromArray(
-                DecisionSpace.CreateForUniformDoubleArray(numDims, double.MinValue, double.MaxValue),
+                DecisionSpace.CreateForUniformDoubleArray(numDims, 
+                    double.MinValue, double.MaxValue,
+                    -5.12, 5.12),
                 new double[numDims]))
         {
         }

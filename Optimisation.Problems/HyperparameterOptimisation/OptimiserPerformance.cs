@@ -43,12 +43,9 @@ namespace Optimisation.Problems.HyperparameterOptimisation
 
         public double BestFitness => fitnessResults.Min();
         
-        public double ProportionOfFitnessValuesWithin(double tolerance)
+        public double ProportionOfFitnessValuesBelow(double value)
         {
-            if (tolerance <= 0)
-                throw new ArgumentOutOfRangeException(nameof(tolerance), "Tolerance must be greater than zero.");
-            
-            return (double)fitnessResults.Count(f => f <= fitnessResults.Min() + tolerance)
+            return (double)fitnessResults.Count(f => f <= value)
                    / fitnessResults.Count;
         }
 

@@ -17,7 +17,9 @@ namespace Optimisation.Problems.Continuous.SingleObjective
         public Schwefel(int numDims) : base(
             "Schwefel Function",
             DecisionVector.CreateFromArray(
-                DecisionSpace.CreateForUniformDoubleArray(numDims, -500, 500),
+                DecisionSpace.CreateForUniformDoubleArray(numDims, 
+                    -500.0, 500.0,
+                    -250, 475),
                 Enumerable.Repeat(420.9687, numDims).ToArray()))
         {
         }

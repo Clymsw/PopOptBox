@@ -6,7 +6,7 @@ namespace Optimisation.Problems.Continuous.SingleObjective
 {
     public class Rosenbrock : ProblemEvaluatorSingleObjective
     {
-        #region Contructor
+        #region Constructor
         /// <summary>
         /// Creates an evaluator for the Rosenbrock Function.
         /// Assumes unconstrained, even though normally checked on a [-5, 10] basis.
@@ -16,7 +16,9 @@ namespace Optimisation.Problems.Continuous.SingleObjective
         public Rosenbrock(int numDims) : base(
             "Rosenbrock Function", 
             DecisionVector.CreateFromArray(
-                DecisionSpace.CreateForUniformDoubleArray(numDims, double.MinValue, double.MaxValue),
+                DecisionSpace.CreateForUniformDoubleArray(numDims,
+                    double.MinValue, double.MaxValue,
+                    -5.0, 10.0),
                 new double[numDims]))
         {
         }

@@ -17,7 +17,9 @@ namespace Optimisation.Problems.Continuous.SingleObjective
         public StyblinskiTang(int numDims) : base(
             "Styblinski-Tang Function",
             DecisionVector.CreateFromArray(
-                DecisionSpace.CreateForUniformDoubleArray(numDims, -5, 5),
+                DecisionSpace.CreateForUniformDoubleArray(numDims, 
+                    -5, 5,
+                    -4.5, 2.5),
                 Enumerable.Repeat(-2.903534, numDims).ToArray()))
         {
         }
