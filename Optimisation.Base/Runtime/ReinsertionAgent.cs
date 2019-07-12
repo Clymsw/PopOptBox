@@ -33,7 +33,7 @@ namespace Optimisation.Base.Runtime
         /// <summary>
         /// The block that keeps progress reports until they are used
         /// </summary>
-        public BroadcastBlock<KeyValuePair<int, Population>> Reports { get; }
+        public BroadcastBlock<(int, Population)> Reports { get; }
 
         public readonly int ReportingFrequency;
 
@@ -92,7 +92,7 @@ namespace Optimisation.Base.Runtime
                     CancellationToken = CancellationSource.Token
                 });
 
-            Reports = new BroadcastBlock<KeyValuePair<int, Population>>(i => i);
+            Reports = new BroadcastBlock<(int, Population)>(i => i);
 
             //Set up link so that new individuals created 
             // are pushed to the output buffer
@@ -136,8 +136,7 @@ namespace Optimisation.Base.Runtime
             if (timeOutManager.EvaluationsRun % ReportingFrequency == 0 || completed)
             {
                 var pop = optimiser.Population.Clone();
-                Reports.Post(new KeyValuePair<int, Population>(
-                    timeOutManager.EvaluationsRun, pop));
+                Reports.Post((timeOutManager.EvaluationsRun, pop));
             }
 
             //New individual (or nothing!)

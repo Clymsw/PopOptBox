@@ -10,7 +10,7 @@ namespace Optimisation.Base.Runtime
         private readonly OptimiserBuilder builder;
         private readonly IEvaluator evaluator;
         private readonly Func<Population, bool> convergenceCheckers;
-        private readonly Action<KeyValuePair<int, Population>> reporters;
+        private readonly Action<(int, Population)> reporters;
 
         private TimeOutManager timeOutManager;
         private volatile bool cancelDemanded;
@@ -19,7 +19,7 @@ namespace Optimisation.Base.Runtime
             OptimiserBuilder builder,
             IEvaluator evaluator,
             Func<Population, bool> convergenceCheckers,
-            Action<KeyValuePair<int, Population>> reporters)
+            Action<(int, Population)> reporters)
         {
             this.builder = builder;
             this.evaluator = evaluator;
@@ -119,13 +119,11 @@ namespace Optimisation.Base.Runtime
                 }
                 if (timeOutManager.EvaluationsRun % reportingFrequency == 0)
                 {
-                    reporters(new KeyValuePair<int, Population>(
-                        timeOutManager.EvaluationsRun, optimiser.Population));
+                    reporters((timeOutManager.EvaluationsRun, optimiser.Population));
                 }
             }
 
-            reporters(new KeyValuePair<int, Population>(
-                timeOutManager.EvaluationsRun, optimiser.Population));
+            reporters((timeOutManager.EvaluationsRun, optimiser.Population));
 
             //Finish off
             FinalPopulation = optimiser.Population;

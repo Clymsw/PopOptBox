@@ -1,7 +1,6 @@
 ﻿using Optimisation.Base.Variables;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Optimisation.Problems.Continuous.SingleObjective
 {

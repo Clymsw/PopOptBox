@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using MathNet.Numerics.LinearAlgebra.Solvers;
 using Optimisation.Base.Management;
 using Optimisation.Base.Variables;
 using Xunit;

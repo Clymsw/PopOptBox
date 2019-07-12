@@ -25,7 +25,7 @@ namespace Optimisation.Base.Runtime
         /// <summary>
         /// The block that handles pushing reports to the reporting delegates provided
         /// </summary>
-        private readonly ActionBlock<KeyValuePair<int, Population>> reportingAgent;
+        private readonly ActionBlock<(int, Population)> reportingAgent;
 
         private readonly OptimiserBuilder builder;
         private readonly IEvaluator evaluator;
@@ -51,13 +51,13 @@ namespace Optimisation.Base.Runtime
             OptimiserBuilder builder,
             IEvaluator evaluator,
             Func<Population, bool> convergenceCheckers,
-            Action<KeyValuePair<int, Population>> reporters)
+            Action<(int, Population)> reporters)
         {
             this.builder = builder;
             this.evaluator = evaluator;
             this.convergenceCheckers = convergenceCheckers;
 
-            reportingAgent = new ActionBlock<KeyValuePair<int, Population>>(
+            reportingAgent = new ActionBlock<(int, Population)>(
                 reporters);
 
             NumberOfIndividualsToStart = builder.CreateOptimiser().Population.TargetSize / 4;

@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using MathNet.Numerics.Financial;
 using Optimisation.Base.Conversion;
 using Optimisation.Base.Variables;
 
