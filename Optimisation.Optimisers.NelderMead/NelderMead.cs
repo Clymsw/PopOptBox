@@ -180,7 +180,7 @@ namespace Optimisation.Optimisers.NelderMead
                     break;
 
                 case (NelderMeadSimplexOperations.E):
-                    if (individual.Fitness < bestFitness)
+                    if (individual.Fitness < tempReflect.Fitness)
                     {
                         // Expansion vertex is better than reflection vertex, accept it.
                         Population.ReplaceWorst(individual);
