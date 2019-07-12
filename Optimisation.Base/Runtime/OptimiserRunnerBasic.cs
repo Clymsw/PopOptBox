@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Optimisation.Base.Management;
 using Optimisation.Base.Conversion;
+using Optimisation.Base.Variables;
 
 namespace Optimisation.Base.Runtime
 {
@@ -69,7 +70,7 @@ namespace Optimisation.Base.Runtime
             while (nextInd.DecisionVector.Vector.Count > 0)
             {
                 nextInd.SetProperty(
-                    OptimiserDefinitions.CreationIndex,
+                    OptimiserPropertyNames.CreationIndex,
                     timeOutManager.EvaluationsRun);
 
                 // Evaluate
@@ -84,7 +85,7 @@ namespace Optimisation.Base.Runtime
                 optimiser.ReInsert(returnInds);
 
                 nextInd.SetProperty(
-                    OptimiserDefinitions.ReinsertionIndex,
+                    OptimiserPropertyNames.ReinsertionIndex,
                     timeOutManager.EvaluationsRun);
 
                 // Store
@@ -101,8 +102,16 @@ namespace Optimisation.Base.Runtime
                 // Create individuals for next loop
                 timeOutManager.IncrementEvaluationsRun();
 
-                nextInds = optimiser.GetNextToEvaluate(1);
-                nextInd = nextInds[0];
+                try
+                {
+                    nextInds = optimiser.GetNextToEvaluate(1);
+                    nextInd = nextInds[0];
+                }
+                catch (Exception e)
+                {
+                    nextInd = new Individual(DecisionVector.CreateForEmpty());
+                    nextInd.SetProperty(OptimiserPropertyNames.GenerationError, e);
+                }
 
                 // Check for completion
                 if (timeOutManager.HasPerformedTooManyEvaluations() 

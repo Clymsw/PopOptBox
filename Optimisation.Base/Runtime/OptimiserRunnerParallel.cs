@@ -74,8 +74,9 @@ namespace Optimisation.Base.Runtime
         /// Do the optimiser by calling this!
         /// </summary>
         /// <param name="storeAll">Whether to store every individual evaluated or not</param>
-        /// <param name="timeOut">The maximum number of reinsertions before optimisation completion</param>
-        /// <param name="reportingFrequency">The number of reinsertions between reports on the current population</param>
+        /// <param name="reportingFrequency">The number of re-insertions between reports on the current population</param>
+        /// <param name="timeOutEvaluations">The maximum number of re-insertions before optimisation completion</param>
+        /// <param name="timeOutDuration">The maximum amount of time before optimisation completion</param>
         public override void Run(
             bool storeAll = true,
             int reportingFrequency = 100,
@@ -135,7 +136,7 @@ namespace Optimisation.Base.Runtime
             var best = FinalPopulation.Best();
 
             BestFound = new KeyValuePair<int, Individual>(
-                best.GetProperty<int>(OptimiserDefinitions.CreationIndex),
+                best.GetProperty<int>(OptimiserPropertyNames.CreationIndex),
                 best);
         }
 

@@ -10,27 +10,40 @@ namespace Optimisation.Base.Variables
     public class VariableDiscrete : IVariable
     {
         private readonly int lowerBound;
+        private readonly int lowerBoundForGeneration;
         private readonly int upperBound;
+        private readonly int upperBoundForGeneration;
         
         public string Name { get; }
-        
+
         /// <summary>
         /// Constructor specifies the dimension bounds
         /// </summary>
         /// <param name="lowerBound">Smallest allowed value</param>
         /// <param name="upperBound">Largest allowed value</param>
+        /// <param name="lowerBoundForGeneration">Inclusive lower bound for random number generation.</param>
+        /// <param name="upperBoundForGeneration">Exclusive upper bound for random number generation.</param>
+        /// <param name="name">A description for the variable, blank by default</param>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public VariableDiscrete(
             int lowerBound = 0, 
             int upperBound = int.MaxValue,
+            int lowerBoundForGeneration = 0,
+            int upperBoundForGeneration = 1000000,
             string name = "")
         {
             if (upperBound <= lowerBound)
                 throw new ArgumentOutOfRangeException(nameof(upperBound), 
                     "Variable range must be greater than zero.");
             
+            if (upperBoundForGeneration <= lowerBoundForGeneration)
+                throw new ArgumentOutOfRangeException(nameof(upperBoundForGeneration), 
+                    "Variable generation range must be greater than zero.");
+            
             this.lowerBound = lowerBound;
+            this.lowerBoundForGeneration = lowerBoundForGeneration;
             this.upperBound = upperBound;
+            this.upperBoundForGeneration = upperBoundForGeneration;
             Name = name;
         }
 
@@ -47,7 +60,7 @@ namespace Optimisation.Base.Variables
         /// <returns>A legal object (double).</returns>
         public object GetNextRandom(RandomSource rng)
         {
-            return rng.Next(lowerBound - 1, upperBound + 1);
+            return rng.Next(lowerBoundForGeneration, upperBoundForGeneration);
         }
 
         public override string ToString()

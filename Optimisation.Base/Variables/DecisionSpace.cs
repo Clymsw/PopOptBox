@@ -38,33 +38,47 @@ namespace Optimisation.Base.Variables
 
         /// <summary>
         /// Static constructor for a hypercube which will take discrete values.
+        /// <seealso cref="VariableDiscrete"/>.
         /// </summary>
         /// <param name="numDimensions">Number of dimensions</param>
         /// <param name="lowerBound">The lower bound for each dimension</param>
         /// <param name="upperBound">The upper bound for each dimension</param>
+        /// <param name="lowerBoundForGeneration">The lower bound of RNG for each dimension</param>
+        /// <param name="upperBoundForGeneration">The upper bound of RNG for each dimension</param>
         /// <returns>A new decision space</returns>
         public static DecisionSpace CreateForUniformIntArray(int numDimensions, 
-            int lowerBound, int upperBound)
+            int lowerBound, int upperBound, 
+            int lowerBoundForGeneration = -1000000, int upperBoundForGeneration = 1000000)
         {
             return new DecisionSpace(
                 Enumerable.Range(0, numDimensions)
-                    .Select(i => new VariableDiscrete(lowerBound, upperBound))
+                    .Select(i => new VariableDiscrete(
+                        lowerBound, upperBound, 
+                        lowerBoundForGeneration, upperBoundForGeneration,
+                        $"Dimension {i + 1}"))
                     .ToArray());
         }
-        
+
         /// <summary>
         /// Static constructor for a hypercube which will take continuous values.
+        /// <seealso cref="VariableContinuous"/>.
         /// </summary>
         /// <param name="numDimensions">Number of dimensions</param>
         /// <param name="lowerBound">The lower bound for each dimension</param>
         /// <param name="upperBound">The upper bound for each dimension</param>
+        /// <param name="lowerBoundForGeneration">The lower bound of RNG for each dimension</param>
+        /// <param name="upperBoundForGeneration">The upper bound of RNG for each dimension</param>
         /// <returns>A new decision space</returns>
         public static DecisionSpace CreateForUniformDoubleArray(int numDimensions, 
-            double lowerBound, double upperBound)
+            double lowerBound, double upperBound, 
+            double lowerBoundForGeneration = -1e6, double upperBoundForGeneration = 1e6)
         {
             return new DecisionSpace(
                 Enumerable.Range(0, numDimensions)
-                    .Select(i => new VariableContinuous(lowerBound, upperBound))
+                    .Select(i => new VariableContinuous(
+                        lowerBound, upperBound, 
+                        lowerBoundForGeneration, upperBoundForGeneration,
+                        $"Dimension {i + 1}"))
                     .ToArray());
         }
 

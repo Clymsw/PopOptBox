@@ -94,7 +94,7 @@ namespace Optimisation.Optimisers.NelderMead
                 //We're into the optimisation
                 if (VerticesNotEvaluated.Count == 0)
                 {
-                    //Create new individual
+                    //Create new individual - N.B. we can end up going 'out of bounds'.
                     var newDv = OperationsManager.PerformOperation(
                         Population.GetMemberList().Select(m => m.DecisionVector), 
                         CurrentOperation);

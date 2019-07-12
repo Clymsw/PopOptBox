@@ -9,7 +9,9 @@ namespace Optimisation.Base.Variables
     public class VariableContinuous : IVariable
     {
         private readonly double lowerBound;
+        private readonly double lowerBoundForGeneration;
         private readonly double upperBound;
+        private readonly double upperBoundForGeneration;
         
         /// <inheritdoc />
         public string Name { get; }
@@ -19,26 +21,36 @@ namespace Optimisation.Base.Variables
         /// </summary>
         /// <param name="lowerBound">Inclusive lower bound</param>
         /// <param name="upperBound">Exclusive upper bound</param>
+        /// <param name="lowerBoundForGeneration">Inclusive lower bound for random number generation.</param>
+        /// <param name="upperBoundForGeneration">Exclusive upper bound for random number generation.</param>
         /// <param name="name">A description for the variable, blank by default</param>
         /// <exception cref="ArgumentOutOfRangeException"></exception>
         public VariableContinuous(
             double lowerBound = double.MinValue, 
             double upperBound = double.MaxValue,
+            double lowerBoundForGeneration = -1e6,
+            double upperBoundForGeneration = 1e6,
             string name = "")
         {
             if (upperBound <= lowerBound)
                 throw new ArgumentOutOfRangeException(nameof(upperBound), 
                     "Variable range must be greater than zero.");
             
+            if (upperBoundForGeneration <= lowerBoundForGeneration)
+                throw new ArgumentOutOfRangeException(nameof(upperBoundForGeneration), 
+                    "Variable generation range must be greater than zero.");
+            
             this.lowerBound = lowerBound;
+            this.lowerBoundForGeneration = lowerBoundForGeneration;
             this.upperBound = upperBound;
+            this.upperBoundForGeneration = upperBoundForGeneration;
             Name = name;
         }
 
         /// <inheritdoc />
         public bool IsInBounds(object testValue)
         {
-            var test = System.Convert.ToDouble(testValue);
+            var test = Convert.ToDouble(testValue);
             return test >= lowerBound && test < upperBound;
         }
 
@@ -48,7 +60,9 @@ namespace Optimisation.Base.Variables
         /// <returns>A legal object (double).</returns>
         public object GetNextRandom(RandomSource rng)
         {
-            return (rng.NextDouble() * (upperBound - lowerBound)) + lowerBound;
+            return (rng.NextDouble() 
+                    * (upperBoundForGeneration - lowerBoundForGeneration))
+                   + lowerBoundForGeneration;
         }
 
         public override string ToString()

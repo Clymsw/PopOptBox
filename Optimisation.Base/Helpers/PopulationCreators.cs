@@ -1,4 +1,5 @@
-﻿using Optimisation.Base.Variables;
+﻿using System;
+using Optimisation.Base.Variables;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -31,9 +32,22 @@ namespace Optimisation.Base.Helpers
                 // Each vertex has one of its dimensions offset by an amount equal to stepsize.
                 newDv[i - 2] += stepSize;
 
-                newDVs.Add(DecisionVector.CreateFromArray(
-                    initialLocation.GetDecisionSpace(),
-                    newDv));
+                try
+                {
+                    newDVs.Add(DecisionVector.CreateFromArray(
+                        initialLocation.GetDecisionSpace(),
+                        newDv));
+                }
+                catch (ArgumentOutOfRangeException)
+                {
+                    // Can't go this way, as we are not in the acceptable region.
+                    // Try to go the other way...
+                    newDv[i - 2] -= 2 * stepSize;
+                    
+                    newDVs.Add(DecisionVector.CreateFromArray(
+                        initialLocation.GetDecisionSpace(),
+                        newDv));
+                }
             }
             return newDVs;
         }

@@ -16,7 +16,9 @@ namespace Optimisation.Problems.Continuous.SingleObjective
         public Ellipsoidal(int numDims) : base(
             "Ellipsoidal Function",
             DecisionVector.CreateFromArray(
-                DecisionSpace.CreateForUniformDoubleArray(numDims, -10, 10),
+                DecisionSpace.CreateForUniformDoubleArray(numDims, 
+                    -10, 10, 
+                    -5, 5),
                 new double[numDims]))
         {
         }
