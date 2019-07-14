@@ -123,7 +123,28 @@ namespace Optimisation.Base.Management.Test
             Assert.Equal(ind1, popConstLenDvInitInd.Best());
             Assert.Equal(ind, popConstLenDvInitInd.Worst());
         }
-        
+
+        [Fact]
+        public void ConstantLengthDvPop_ReplaceWorstIndividual_SortsCorrectly()
+        {
+            var bestInd = ObjectCreators.EvaluateIndividual(
+                ObjectCreators.GetIndividual(
+                    ind.DecisionVector.Vector.Select(i => (double)i + 1).ToArray()),
+                ind.Fitness - 1);
+
+            popConstLenDvInitInd.AddIndividual(bestInd);
+
+            var evenBetterInd = ObjectCreators.EvaluateIndividual(
+                ObjectCreators.GetIndividual(
+                    ind.DecisionVector.Vector.Select(i => (double)i + 1).ToArray()),
+                ind.Fitness - 2);
+
+            popConstLenDvInitInd.ReplaceWorst(evenBetterInd);
+
+            Assert.Equal(evenBetterInd, popConstLenDvInitInd.Best());
+            Assert.Equal(bestInd, popConstLenDvInitInd.Worst());
+        }
+
         [Fact]
         public void ConstantLengthDvPop_GetFitnesses_ReturnsSortedList()
         {

@@ -40,6 +40,7 @@ namespace Optimisation.Base.Runtime
             TimeSpan? timeOutDuration = null)
         {
             // Initialise
+            StartTime = DateTime.Now;
             var optimiser = builder.CreateOptimiser();
             var model = builder.CreateModel();
             cancelDemanded = false;
@@ -62,9 +63,9 @@ namespace Optimisation.Base.Runtime
 
             timeOutManager = new TimeOutManager(timeOutEvaluations, timeOutDurationNotNull);
 
-            AllEvaluated = new List<KeyValuePair<int, Individual>>();
+            AllEvaluated = new List<(int, Individual)>();
             FinalPopulation = null;
-            BestFound = new KeyValuePair<int, Individual>(0, nextInd);
+            BestFound = (0, nextInd);
 
             //Go!
             while (nextInd.DecisionVector.Vector.Count > 0)
@@ -91,13 +92,13 @@ namespace Optimisation.Base.Runtime
                 // Store
                 if (storeAll)
                 {
-                    AllEvaluated.Add(new KeyValuePair<int, Individual>(timeOutManager.EvaluationsRun, nextInd));
+                    AllEvaluated.Add((timeOutManager.EvaluationsRun, nextInd));
                 }
 
                 // Update best
                 var bestInd = optimiser.Population.Best();
-                if (bestInd != null && bestInd.Fitness < BestFound.Value.Fitness)
-                    BestFound = new KeyValuePair<int, Individual>(timeOutManager.EvaluationsRun, bestInd);
+                if (bestInd != null && bestInd.Fitness < BestFound.Item2.Fitness)
+                    BestFound = (timeOutManager.EvaluationsRun, bestInd);
 
                 // Create individuals for next loop
                 timeOutManager.IncrementEvaluationsRun();

@@ -44,7 +44,7 @@ namespace Optimisation.Base.Runtime
         public int NumberReinserted { get; private set; }
 
         public bool SaveAll = false;
-        public readonly List<KeyValuePair<int, Individual>> AllEvaluated;
+        public readonly List<(int, Individual)> AllEvaluated;
 
         public Population GetCurrentPopulation()
         {
@@ -71,7 +71,7 @@ namespace Optimisation.Base.Runtime
             this.convergenceCheckers = convergenceCheckers;
             NumberGenerated = 0;
             NumberReinserted = 0;
-            AllEvaluated = new List<KeyValuePair<int, Individual>>();
+            AllEvaluated = new List<(int, Individual)>();
 
             ReportingFrequency = reportingFrequency;
 
@@ -123,8 +123,7 @@ namespace Optimisation.Base.Runtime
 
             if (SaveAll)
             {
-                AllEvaluated.Add(new KeyValuePair<int, Individual>(
-                    timeOutManager.EvaluationsRun, returnedInd));
+                AllEvaluated.Add((timeOutManager.EvaluationsRun, returnedInd));
             }
 
             // Check for completion

@@ -83,6 +83,8 @@ namespace Optimisation.Base.Runtime
             int timeOutEvaluations = 0,
             TimeSpan? timeOutDuration = null)
         {
+            StartTime = DateTime.Now;
+
             // Calculate time outs automatically if not provided
             if (timeOutEvaluations == 0)
             {
@@ -135,9 +137,7 @@ namespace Optimisation.Base.Runtime
             
             var best = FinalPopulation.Best();
 
-            BestFound = new KeyValuePair<int, Individual>(
-                best.GetProperty<int>(OptimiserPropertyNames.CreationIndex),
-                best);
+            BestFound = (best.GetProperty<int>(OptimiserPropertyNames.CreationIndex), best);
         }
 
         /// <summary>
