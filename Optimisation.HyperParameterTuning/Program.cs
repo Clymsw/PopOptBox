@@ -11,17 +11,22 @@ namespace Optimisation.HyperParameterTuning
 {
     class Program
     {
-        private const int Number_Of_Dimensions = 4;
+        private const int Number_Of_Dimensions = 10;
         private const double Simplex_Creation_Step_Size = 0.5;
         private const double Convergence_Tolerance = 0.00001;
-        private const int Number_Of_Restarts = 100;
+        private const int Number_Of_Restarts = 1000;
         private const double Fitness_Tolerance = 0.01;
         
         private static ProblemEvaluatorSingleObjective GetEvaluator()
         {
-//            return new Ellipsoidal(Number_Of_Dimensions);
-//            return new Schwefel(Number_Of_Dimensions);
+            //return new Ellipsoidal(Number_Of_Dimensions);
+            //return new Schwefel(Number_Of_Dimensions);
+
             return new Rosenbrock(Number_Of_Dimensions);
+            //return new StyblinskiTang(Number_Of_Dimensions);
+
+            //return new Rastrigin(Number_Of_Dimensions);
+            //return new Salomon(Number_Of_Dimensions);
         }
         
         static void Main(string[] args)

@@ -1,6 +1,7 @@
 ﻿using Optimisation.Base.Variables;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Optimisation.Problems.Continuous.SingleObjective
 {
@@ -19,7 +20,7 @@ namespace Optimisation.Problems.Continuous.SingleObjective
                 DecisionSpace.CreateForUniformDoubleArray(numDims,
                     double.MinValue, double.MaxValue,
                     -5.0, 10.0),
-                new double[numDims]))
+                Enumerable.Repeat(1.0, numDims).ToArray()))
         {
         }
 
