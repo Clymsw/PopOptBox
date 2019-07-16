@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Optimisation.Problems.Continuous.SingleObjective
 {
-    public class Ellipsoidal : ProblemEvaluatorSingleObjective
+    public class Ellipsoidal : ProblemEvaluatorContinuousSingleObjective
     {
         #region Constructor
         /// <summary>

@@ -5,12 +5,12 @@ using System.Linq;
 
 namespace Optimisation.Problems.Continuous
 {
-    public abstract class ProblemEvaluatorSingleObjective : Evaluator<double[]>, IProblemEvaluator
+    public abstract class ProblemEvaluatorContinuousSingleObjective : Evaluator<double[]>, IProblemEvaluator
     {
         private readonly string name;
         private readonly DecisionVector globalOptimum;
 
-        protected ProblemEvaluatorSingleObjective(string name, DecisionVector globalOptimum) :
+        protected ProblemEvaluatorContinuousSingleObjective(string name, DecisionVector globalOptimum) :
             base(ContinuousProblemDefinitions.TheLocation, ContinuousProblemDefinitions.TheResult)
         {
             if (globalOptimum.Vector.Count < 1)

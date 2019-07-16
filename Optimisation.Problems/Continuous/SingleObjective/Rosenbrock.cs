@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Optimisation.Problems.Continuous.SingleObjective
 {
-    public class Rosenbrock : ProblemEvaluatorSingleObjective
+    public class Rosenbrock : ProblemEvaluatorContinuousSingleObjective
     {
         #region Constructor
         /// <summary>

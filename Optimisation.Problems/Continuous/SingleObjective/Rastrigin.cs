@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Optimisation.Problems.Continuous.SingleObjective
 {
-    public class Rastrigin : ProblemEvaluatorSingleObjective
+    public class Rastrigin : ProblemEvaluatorContinuousSingleObjective
     {
         #region Constructor
         /// <summary>

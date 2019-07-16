@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Optimisation.Problems.Continuous.SingleObjective
 {
-    public class Salomon : ProblemEvaluatorSingleObjective
+    public class Salomon : ProblemEvaluatorContinuousSingleObjective
     {
         #region Constructor
         /// <summary>

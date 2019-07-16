@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Optimisation.Problems.Continuous.SingleObjective
 {
-    public class StyblinskiTang : ProblemEvaluatorSingleObjective
+    public class StyblinskiTang : ProblemEvaluatorContinuousSingleObjective
     {
         #region Constructor
         /// <summary>
