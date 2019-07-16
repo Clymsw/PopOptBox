@@ -63,6 +63,18 @@ namespace Optimisation.Base.Variables
             return rng.Next(lowerBoundForGeneration, upperBoundForGeneration);
         }
 
+        /// <summary>
+        /// Returns a string representation of a value for this variable.
+        /// </summary>
+        /// <param name="value">The value to be formatted (should be parsable as an integer)</param>
+        /// <returns>A string</returns>
+        /// <exception cref="System.FormatException">Thrown when object is of the wrong type.</exception>
+        public string FormatAsString(object value)
+        {
+            var converted = System.Convert.ToInt32(value);
+            return converted.ToString("D", System.Globalization.NumberFormatInfo.InvariantInfo);
+        }
+
         public override string ToString()
         {
             return $"{Name} [{lowerBound} - {upperBound}]";

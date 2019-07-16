@@ -65,6 +65,18 @@ namespace Optimisation.Base.Variables
                    + lowerBoundForGeneration;
         }
 
+        /// <summary>
+        /// Returns a string representation of a value for this variable.
+        /// </summary>
+        /// <param name="value">The value to be formatted (should be a double)</param>
+        /// <returns>A string</returns>
+        /// <exception cref="System.FormatException">Thrown when object is of the wrong type.</exception>
+        public string FormatAsString(object value)
+        {
+            var converted = Convert.ToDouble(value);
+            return converted.ToString("G3", System.Globalization.NumberFormatInfo.InvariantInfo);
+        }
+
         public override string ToString()
         {
             return $"{Name} [{lowerBound} - {upperBound}]";

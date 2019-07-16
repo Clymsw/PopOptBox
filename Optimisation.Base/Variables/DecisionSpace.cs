@@ -109,6 +109,11 @@ namespace Optimisation.Base.Variables
             return acceptable;
         }
 
+        public string FormatAsString(IEnumerable<object> vector)
+        {
+            return string.Join(" - ", vector.Select((d, i) => Dimensions.ElementAt(i).FormatAsString(d)));
+        }
+
         #region Equals, GetHashCode
         
         public override bool Equals(object obj)

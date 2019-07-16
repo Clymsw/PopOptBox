@@ -167,9 +167,18 @@ namespace Optimisation.Base.Variables
         }
 
         #endregion
-        
+
+        #region ToString
+
+        public override string ToString()
+        {
+            return decisionSpace.FormatAsString(Vector);
+        }
+
+        #endregion
+
         #region Equals, GetHashCode
-        
+
         public override bool Equals(object obj)
         {
             if (!(obj is DecisionVector other))
