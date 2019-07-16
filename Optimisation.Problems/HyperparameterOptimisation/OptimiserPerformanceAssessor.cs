@@ -24,7 +24,7 @@ namespace Optimisation.Problems.HyperparameterOptimisation
         }
 
         public OptimiserPerformance RunAssessment(int numberOfRestarts, 
-            Action<(int, Population)> reporters, Action<int> iterationReporter,
+            Action<Population> reporters, Action<int> iterationReporter,
             int timeOutEvaluations = 0, TimeSpan? timeOutDuration = null)
         { 
             var fitnessValues = new List<double>();
@@ -42,8 +42,8 @@ namespace Optimisation.Problems.HyperparameterOptimisation
                     timeOutEvaluations: timeOutEvaluations, 
                     timeOutDuration: timeOutDuration);
                 
-                fitnessValues.Add(optimiserRunner.BestFound.Value.Fitness);
-                evaluationsToFindBest.Add(optimiserRunner.BestFound.Key);
+                fitnessValues.Add(optimiserRunner.BestFound.Fitness);
+                evaluationsToFindBest.Add(optimiserRunner.BestFound.GetProperty<int>(OptimiserPropertyNames.CreationIndex));
                 evaluationsToComplete.Add(optimiserRunner.AllEvaluated.Count);
                 timeToComplete.Add(
                     optimiserRunner.FinalPopulation

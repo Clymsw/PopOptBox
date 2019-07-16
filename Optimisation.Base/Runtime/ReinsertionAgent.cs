@@ -33,7 +33,7 @@ namespace Optimisation.Base.Runtime
         /// <summary>
         /// The block that keeps progress reports until they are used
         /// </summary>
-        public BroadcastBlock<(int, Population)> Reports { get; }
+        public BroadcastBlock<Population> Reports { get; }
 
         public readonly int ReportingFrequency;
 
@@ -44,7 +44,7 @@ namespace Optimisation.Base.Runtime
         public int NumberReinserted { get; private set; }
 
         public bool SaveAll = false;
-        public readonly List<(int, Individual)> AllEvaluated;
+        public readonly List<Individual> AllEvaluated;
 
         public Population GetCurrentPopulation()
         {
@@ -71,7 +71,7 @@ namespace Optimisation.Base.Runtime
             this.convergenceCheckers = convergenceCheckers;
             NumberGenerated = 0;
             NumberReinserted = 0;
-            AllEvaluated = new List<(int, Individual)>();
+            AllEvaluated = new List<Individual>();
 
             ReportingFrequency = reportingFrequency;
 
@@ -92,7 +92,7 @@ namespace Optimisation.Base.Runtime
                     CancellationToken = CancellationSource.Token
                 });
 
-            Reports = new BroadcastBlock<(int, Population)>(i => i);
+            Reports = new BroadcastBlock<Population>(i => i);
 
             //Set up link so that new individuals created 
             // are pushed to the output buffer
@@ -123,7 +123,7 @@ namespace Optimisation.Base.Runtime
 
             if (SaveAll)
             {
-                AllEvaluated.Add((timeOutManager.EvaluationsRun, returnedInd));
+                AllEvaluated.Add(returnedInd);
             }
 
             // Check for completion
@@ -135,7 +135,7 @@ namespace Optimisation.Base.Runtime
             if (timeOutManager.EvaluationsRun % ReportingFrequency == 0 || completed)
             {
                 var pop = optimiser.Population.Clone();
-                Reports.Post((timeOutManager.EvaluationsRun, pop));
+                Reports.Post(pop);
             }
 
             //New individual (or nothing!)

@@ -95,7 +95,7 @@ namespace Optimisation.Base.Management
         /// <returns>string version of DV</returns>
         public override string ToString()
         {
-            return $"{Fitness} [{string.Join(", ", DecisionVector.Vector)}]";
+            return $"{Fitness} [{string.Join(" - ", DecisionVector.Vector)}]";
         }
 
         /// <summary>

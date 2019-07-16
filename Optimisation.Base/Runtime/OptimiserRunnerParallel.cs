@@ -25,7 +25,7 @@ namespace Optimisation.Base.Runtime
         /// <summary>
         /// The block that handles pushing reports to the reporting delegates provided
         /// </summary>
-        private readonly ActionBlock<(int, Population)> reportingAgent;
+        private readonly ActionBlock<Population> reportingAgent;
 
         private readonly OptimiserBuilder builder;
         private readonly IEvaluator evaluator;
@@ -51,13 +51,13 @@ namespace Optimisation.Base.Runtime
             OptimiserBuilder builder,
             IEvaluator evaluator,
             Func<Population, bool> convergenceCheckers,
-            Action<(int, Population)> reporters)
+            Action<Population> reporters)
         {
             this.builder = builder;
             this.evaluator = evaluator;
             this.convergenceCheckers = convergenceCheckers;
 
-            reportingAgent = new ActionBlock<(int, Population)>(
+            reportingAgent = new ActionBlock<Population>(
                 reporters);
 
             NumberOfIndividualsToStart = builder.CreateOptimiser().Population.TargetSize / 4;
@@ -137,7 +137,7 @@ namespace Optimisation.Base.Runtime
             
             var best = FinalPopulation.Best();
 
-            BestFound = (best.GetProperty<int>(OptimiserPropertyNames.CreationIndex), best);
+            BestFound = best;
         }
 
         /// <summary>

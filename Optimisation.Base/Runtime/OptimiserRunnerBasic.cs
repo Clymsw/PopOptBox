@@ -11,7 +11,7 @@ namespace Optimisation.Base.Runtime
         private readonly OptimiserBuilder builder;
         private readonly IEvaluator evaluator;
         private readonly Func<Population, bool> convergenceCheckers;
-        private readonly Action<(int, Population)> reporters;
+        private readonly Action<Population> reporters;
 
         private TimeOutManager timeOutManager;
         private volatile bool cancelDemanded;
@@ -20,7 +20,7 @@ namespace Optimisation.Base.Runtime
             OptimiserBuilder builder,
             IEvaluator evaluator,
             Func<Population, bool> convergenceCheckers,
-            Action<(int, Population)> reporters)
+            Action<Population> reporters)
         {
             this.builder = builder;
             this.evaluator = evaluator;
@@ -63,9 +63,9 @@ namespace Optimisation.Base.Runtime
 
             timeOutManager = new TimeOutManager(timeOutEvaluations, timeOutDurationNotNull);
 
-            AllEvaluated = new List<(int, Individual)>();
+            AllEvaluated = new List<Individual>();
             FinalPopulation = null;
-            BestFound = (0, nextInd);
+            BestFound = nextInd;
 
             //Go!
             while (nextInd.DecisionVector.Vector.Count > 0)
@@ -92,13 +92,13 @@ namespace Optimisation.Base.Runtime
                 // Store
                 if (storeAll)
                 {
-                    AllEvaluated.Add((timeOutManager.EvaluationsRun, nextInd));
+                    AllEvaluated.Add(nextInd);
                 }
 
                 // Update best
                 var bestInd = optimiser.Population.Best();
-                if (bestInd != null && bestInd.Fitness < BestFound.Item2.Fitness)
-                    BestFound = (timeOutManager.EvaluationsRun, bestInd);
+                if (bestInd != null && bestInd.Fitness < BestFound.Fitness)
+                    BestFound = bestInd;
 
                 // Create individuals for next loop
                 timeOutManager.IncrementEvaluationsRun();
@@ -129,11 +129,11 @@ namespace Optimisation.Base.Runtime
                 }
                 if (timeOutManager.EvaluationsRun % reportingFrequency == 0)
                 {
-                    reporters((timeOutManager.EvaluationsRun, optimiser.Population));
+                    reporters(optimiser.Population);
                 }
             }
 
-            reporters((timeOutManager.EvaluationsRun, optimiser.Population));
+            reporters(optimiser.Population);
 
             //Finish off
             FinalPopulation = optimiser.Population;
