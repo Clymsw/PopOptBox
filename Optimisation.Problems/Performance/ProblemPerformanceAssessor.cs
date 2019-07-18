@@ -2,18 +2,19 @@ using System;
 using System.Collections.Generic;
 using Optimisation.Base.Management;
 using Optimisation.Base.Runtime;
+using Optimisation.Problems.SingleObjective;
 
 namespace Optimisation.Problems.HyperparameterOptimisation
 {
-    public class ProblemPerformanceAssessor
+    public class ProblemPerformanceAssessor<T>
     {
         private readonly OptimiserBuilder builder;
-        private readonly IProblemEvaluator evaluator;
+        private readonly ProblemSingleObjective evaluator;
         private readonly Func<Population, bool> convergenceCheckers;
         
         public ProblemPerformanceAssessor(
-            OptimiserBuilder builder, 
-            IProblemEvaluator evaluator,
+            OptimiserBuilder builder,
+            ProblemSingleObjective evaluator,
             Func<Population, bool> convergenceCheckers)
         {
             this.builder = builder;
@@ -21,14 +22,14 @@ namespace Optimisation.Problems.HyperparameterOptimisation
             this.convergenceCheckers = convergenceCheckers;
         }
 
-        public List<ProblemPerformance> RunAssessment(
+        public List<ProblemPerformanceSingleObjective> RunAssessment(
             int numberOfRestarts, 
             Action<Population> reporters, 
             Action<int> iterationReporter,
             int timeOutEvaluations = 0, 
             TimeSpan? timeOutDuration = null)
         { 
-            var results = new List<ProblemPerformance>();
+            var results = new List<ProblemPerformanceSingleObjective>();
 
             for (var i = 1; i <= numberOfRestarts; i++)
             {
@@ -42,7 +43,7 @@ namespace Optimisation.Problems.HyperparameterOptimisation
                     timeOutDuration: timeOutDuration);
 
                 results.Add(
-                    new ProblemPerformance(
+                    new ProblemPerformanceSingleObjective(
                         builder.CreateOptimiser().ToString(),
                         builder.HyperParameters,
                         evaluator,

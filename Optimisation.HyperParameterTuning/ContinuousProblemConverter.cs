@@ -1,11 +1,9 @@
 ﻿using Optimisation.Base.Conversion;
 using Optimisation.Base.Variables;
-using System;
-using System.Linq;
 
 namespace Optimisation.HyperParameterTuning
 {
-    internal class ContinuousProblemConverter : IConverter<double[]>
+    internal class ContinuousProblemConverter : IConverter<DecisionVector>
     {
         private readonly DecisionSpace space;
         
@@ -14,14 +12,14 @@ namespace Optimisation.HyperParameterTuning
             this.space = space;
         }
         
-        public DecisionVector ConvertToDv(double[] realityDefinition)
+        public DecisionVector ConvertToDv(DecisionVector realityDefinition)
         {
-            return DecisionVector.CreateFromArray(space, realityDefinition);
+            return realityDefinition;
         }
 
-        public double[] ConvertToReality(DecisionVector decisionVector)
+        public DecisionVector ConvertToReality(DecisionVector decisionVector)
         {
-            return decisionVector.Vector.Select(Convert.ToDouble).ToArray();
+            return decisionVector;
         }
     }
 }

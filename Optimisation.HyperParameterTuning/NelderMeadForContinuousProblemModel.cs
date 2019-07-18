@@ -3,17 +3,17 @@ using MathNet.Numerics.Random;
 using Optimisation.Base.Conversion;
 using Optimisation.Base.Management;
 using Optimisation.Base.Variables;
-using Optimisation.Problems.Continuous;
+using Optimisation.Problems.SingleObjective.Continuous;
 
 namespace Optimisation.HyperParameterTuning
 {
-    public class NelderMeadForContinuousProblemModel : Model<double[]>
+    public class NelderMeadForContinuousProblemModel : Model<DecisionVector>
     {
         private RandomSource rng;
         private DecisionSpace decisionSpace;
         
         public NelderMeadForContinuousProblemModel(DecisionSpace decisionSpace) 
-            : base(new ContinuousProblemConverter(decisionSpace), ContinuousProblemDefinitions.TheLocation)
+            : base(new ContinuousProblemConverter(decisionSpace), ContinuousProblemPropertyNames.TheLocation)
         {
             rng = new MersenneTwister();
             this.decisionSpace = decisionSpace;
