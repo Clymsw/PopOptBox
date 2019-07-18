@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using Xunit;
 
-namespace Optimisation.Problems.Continuous.SingleObjective.Test
+namespace Optimisation.Problems.SingleObjective.Continuous.Test
 {
     public class SchwefelTests
     {

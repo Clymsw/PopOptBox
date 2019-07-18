@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace Optimisation.Problems.Continuous.SingleObjective
+namespace Optimisation.Problems.SingleObjective.Continuous
 {
-    public class Ellipsoidal : ProblemEvaluatorContinuousSingleObjective
+    public class Ellipsoidal : ProblemSingleObjectiveContinuous
     {
         #region Constructor
         /// <summary>
@@ -27,14 +27,14 @@ namespace Optimisation.Problems.Continuous.SingleObjective
 
         #region Implement abstract
 
-        public override IEnumerable<double> Evaluate(double[] location)
+        public override IEnumerable<double> Evaluate(DecisionVector location)
         {
             // http://profesores.elo.utfsm.cl/~tarredondo/info/soft-comp/functions/node3.html
 
             double result = 0;
-            for (int i = 0; i < location.Length; i++)
+            for (int i = 0; i < location.Vector.Count; i++)
             {
-                result += (i + 1) * Math.Pow(location[i], 2);
+                result += (i + 1) * Math.Pow(Convert.ToDouble(location.Vector[i]), 2);
             }
             return new[] { result };
         }

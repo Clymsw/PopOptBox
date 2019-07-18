@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace Optimisation.Problems.Continuous.SingleObjective
+namespace Optimisation.Problems.SingleObjective.Continuous
 {
-    public class Salomon : ProblemEvaluatorContinuousSingleObjective
+    public class Salomon : ProblemSingleObjectiveContinuous
     {
         #region Constructor
         /// <summary>
@@ -27,15 +27,15 @@ namespace Optimisation.Problems.Continuous.SingleObjective
 
         #region Implement abstract
 
-        public override IEnumerable<double> Evaluate(double[] location)
+        public override IEnumerable<double> Evaluate(DecisionVector location)
         {
             // http://profesores.elo.utfsm.cl/~tarredondo/info/soft-comp/functions/node12.html
             // http://benchmarkfcns.xyz/benchmarkfcns/salomonfcn.html
 
             double temp = 0;
-            for (int i = 0; i < location.Length; i++)
+            for (int i = 0; i < location.Vector.Count; i++)
             {
-                temp += Math.Pow(location[i], 2);
+                temp += Math.Pow(Convert.ToDouble(location.Vector[i]), 2);
             }
             return new[] { 1 - Math.Cos(2 * Math.PI * Math.Sqrt(temp)) + 0.1 * Math.Sqrt(temp) };
         }

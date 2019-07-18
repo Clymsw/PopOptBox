@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 
-namespace Optimisation.Problems.Continuous.SingleObjective
+namespace Optimisation.Problems.SingleObjective.Continuous
 {
-    public class Rastrigin : ProblemEvaluatorContinuousSingleObjective
+    public class Rastrigin : ProblemSingleObjectiveContinuous
     {
         #region Constructor
         /// <summary>
@@ -27,16 +27,16 @@ namespace Optimisation.Problems.Continuous.SingleObjective
 
         #region Implement abstract
 
-        public override IEnumerable<double> Evaluate(double[] location)
+        public override IEnumerable<double> Evaluate(DecisionVector location)
         {
             // http://profesores.elo.utfsm.cl/~tarredondo/info/soft-comp/functions/node6.html
             // http://benchmarkfcns.xyz/benchmarkfcns/rastriginfcn.html
             // http://www.sfu.ca/~ssurjano/rastr.html
 
-            double result = 10 * location.Length;
-            for (int i = 0; i < location.Length; i++)
+            double result = 10 * location.Vector.Count;
+            for (int i = 0; i < location.Vector.Count; i++)
             {
-                result += Math.Pow(location[i], 2) - (10 * Math.Cos(2 * Math.PI * location[i]));
+                result += Math.Pow(Convert.ToDouble(location.Vector[i]), 2) - (10 * Math.Cos(2 * Math.PI * Convert.ToDouble(location.Vector[i])));
             }
             return new[] { result };
         }

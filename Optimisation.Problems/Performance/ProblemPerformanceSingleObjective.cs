@@ -5,6 +5,7 @@ using System.Linq;
 using Optimisation.Base.Management;
 using Optimisation.Base.Runtime;
 using Optimisation.Base.Variables;
+using Optimisation.Problems.SingleObjective;
 
 namespace Optimisation.Problems.HyperparameterOptimisation
 {
@@ -12,12 +13,12 @@ namespace Optimisation.Problems.HyperparameterOptimisation
     /// Captures information on the performance of an optimisation algorithm on a given test problem.
     /// Immutable by design.
     /// </summary>
-    public sealed class ProblemPerformance
+    public sealed class ProblemPerformanceSingleObjective
     {
         // Definitions
         private readonly string optimiserDescription; 
         private readonly DecisionVector hyperParameters;
-        private readonly IProblemEvaluator problem;
+        private readonly ProblemSingleObjective problem;
 
         private double[] globalOptimumSolution;
 
@@ -35,10 +36,10 @@ namespace Optimisation.Problems.HyperparameterOptimisation
         /// <param name="hyperParameters">The hyperparameters used for the optimiser.</param>
         /// <param name="problem">The problem description.</param>
         /// <param name="results">The completed optimisation runner.</param>
-        public ProblemPerformance(
+        public ProblemPerformanceSingleObjective(
             string optimiserDescription, 
             DecisionVector hyperParameters,
-            IProblemEvaluator problem,
+            ProblemSingleObjective problem,
             OptimiserRunner results)
         {
             this.optimiserDescription = optimiserDescription;
@@ -93,7 +94,7 @@ namespace Optimisation.Problems.HyperparameterOptimisation
         {
             if (globalOptimumSolution == null)
             {
-                globalOptimumSolution = problem.Evaluate(GlobalOptimumLocation.Vector.Select(d => (double)d).ToArray());
+                globalOptimumSolution = problem.Evaluate(problem.GetGlobalOptimum()).ToArray();
             }
             return globalOptimumSolution;
         }

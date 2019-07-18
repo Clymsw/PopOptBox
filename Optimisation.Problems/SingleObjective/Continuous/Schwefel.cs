@@ -3,9 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Optimisation.Problems.Continuous.SingleObjective
+namespace Optimisation.Problems.SingleObjective.Continuous
 {
-    public class Schwefel : ProblemEvaluatorContinuousSingleObjective
+    public class Schwefel : ProblemSingleObjectiveContinuous
     {
         #region Constructor
         /// <summary>
@@ -28,14 +28,15 @@ namespace Optimisation.Problems.Continuous.SingleObjective
 
         #region Implement abstract
 
-        public override IEnumerable<double> Evaluate(double[] location)
+        public override IEnumerable<double> Evaluate(DecisionVector location)
         {
             // http://www.sfu.ca/~ssurjano/schwef.html
             // http://benchmarkfcns.xyz/benchmarkfcns/schwefelfcn.html
 
-            var result = 418.9829 * location.Length;
-            foreach (var t in location)
+            var result = 418.9829 * location.Vector.Count;
+            foreach (var d in location.Vector)
             {
+                var t = Convert.ToDouble(d);
                 result -= t * Math.Sin(Math.Sqrt(Math.Abs(t)));
             }
             return new[] { result };

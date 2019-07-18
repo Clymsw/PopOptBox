@@ -5,8 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Discrete\" />
-    <Folder Include="Helpers\" />
+    <Compile Remove="Discrete\**" />
+    <Compile Remove="Helpers\**" />
+    <EmbeddedResource Remove="Discrete\**" />
+    <EmbeddedResource Remove="Helpers\**" />
+    <None Remove="Discrete\**" />
+    <None Remove="Helpers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="SingleObjective\Discrete\" />
   </ItemGroup>
 
   <ItemGroup>
