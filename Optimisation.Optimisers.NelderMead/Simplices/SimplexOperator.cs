@@ -72,9 +72,10 @@ namespace Optimisation.Optimisers.NelderMead.Simplices
             var centroid = allVertexVectorsExceptWorst.Aggregate(
                 (a,b) => a.Select((x,i) => x + b.ElementAt(i)));
 
+            var numDims = allVertexVectorsExceptWorst.Count();
             return DecisionVector.CreateFromArray(
                 orderedVertices.First().GetDecisionSpace(),
-                centroid.Select(x => x / allVertexVectorsExceptWorst.Count()));
+                centroid.Select(x => x / numDims));
         }
     }
 }
