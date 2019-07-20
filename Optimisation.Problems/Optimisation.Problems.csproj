@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <Folder Include="MultipleObjective\" />
-    <Folder Include="SingleObjective\Discrete\" />
   </ItemGroup>
 
   <ItemGroup>
