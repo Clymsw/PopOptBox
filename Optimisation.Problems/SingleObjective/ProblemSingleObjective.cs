@@ -23,8 +23,6 @@ namespace Optimisation.Problems.SingleObjective
             this.globalOptimum = globalOptimum;
         }
 
-        #region Evaluator
-
         /// <summary>
         /// Gets the information about the location of the global optimum.
         /// </summary>
@@ -34,17 +32,14 @@ namespace Optimisation.Problems.SingleObjective
             return globalOptimum;
         }
 
-        /// <summary>
-        /// Gets the legality of a proposed Decision Vector
-        /// </summary>
-        /// <param name="definition">The <see cref="DecisionVector"/>.</param>
-        /// <returns><see langword="true"/> if legal.</returns>
+        #region Evaluator
+
         public override bool GetLegality(DecisionVector definition)
         {
-            var requiredDecisionSpace = globalOptimum.GetDecisionSpace();
-
-            return requiredDecisionSpace == definition.GetDecisionSpace() &&
-                requiredDecisionSpace.IsAcceptableDecisionVector(definition.Vector);
+            // By definition, if we can construct a decision vector in the same decision space, it is legal
+            return definition.GetDecisionSpace() == globalOptimum.GetDecisionSpace()
+                ? true
+                : false;
         }
 
         #endregion
