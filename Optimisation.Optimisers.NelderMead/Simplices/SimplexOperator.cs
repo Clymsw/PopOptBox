@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using Optimisation.Base.Variables;
+using MathNet.Numerics.LinearAlgebra;
 
 namespace Optimisation.Optimisers.NelderMead.Simplices
 {
@@ -64,18 +65,19 @@ namespace Optimisation.Optimisers.NelderMead.Simplices
         }
         protected static DecisionVector GetMean(IEnumerable<DecisionVector> orderedVertices)
         {
+            var numDims = orderedVertices.Count();
+
             // Average of all vertex locations except the worst.
             var allVertexVectorsExceptWorst = orderedVertices
-                .Take(orderedVertices.Count() - 1)
-                .Select(v => v.Vector.Select(d => (double)d));
+                .Take(numDims - 1)
+                .Select(v => v.Vector.Select(d => (double)d))
+                .Select(v => CreateVector.DenseOfArray(v.ToArray()));
 
-            var centroid = allVertexVectorsExceptWorst.Aggregate(
-                (a,b) => a.Select((x,i) => x + b.ElementAt(i)));
+            var centroid = allVertexVectorsExceptWorst.Aggregate((a, b) => a + b) / (numDims - 1);
 
-            var numDims = allVertexVectorsExceptWorst.Count();
             return DecisionVector.CreateFromArray(
                 orderedVertices.First().GetDecisionSpace(),
-                centroid.Select(x => x / numDims));
+                centroid.AsArray());
         }
     }
 }
