@@ -41,7 +41,7 @@ namespace Optimisation.Base.Variables
         {
             return new DecisionVector(DecisionSpace.CreateForEmpty(), new List<object>());
         }
-        
+
         /// <summary>
         /// Static constructor which takes a comma-separated list of values.
         /// Useful when the decision space is heteromorphic.
@@ -49,6 +49,7 @@ namespace Optimisation.Base.Variables
         /// <param name="decisionSpace">The decision space definition</param>
         /// <param name="values">The points inside that decision space defining this solution</param>
         /// <returns>A new decision vector</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="values"/> are not valid.</exception>
         public static DecisionVector CreateFromItems(DecisionSpace decisionSpace,
             params object[] values)
         {
@@ -61,6 +62,7 @@ namespace Optimisation.Base.Variables
         /// <param name="decisionSpace">The decision space definition</param>
         /// <param name="values">The points inside that decision space defining this solution</param>
         /// <returns>A new decision vector</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="values"/> are not valid.</exception>
         public static DecisionVector CreateFromArray(DecisionSpace decisionSpace,
             IEnumerable<object> values)
         {
@@ -74,6 +76,7 @@ namespace Optimisation.Base.Variables
         /// <param name="decisionSpace">The decision space definition</param>
         /// <param name="values">The points inside that decision space defining this solution</param>
         /// <returns>A new decision vector</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="values"/> are not valid.</exception>
         public static DecisionVector CreateFromArray(DecisionSpace decisionSpace,
             IEnumerable<int> values)
         {
@@ -87,6 +90,7 @@ namespace Optimisation.Base.Variables
         /// <param name="decisionSpace">The decision space definition</param>
         /// <param name="values">The points inside that decision space defining this solution</param>
         /// <returns>A new decision vector</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="values"/> are not valid.</exception>
         public static DecisionVector CreateFromArray(DecisionSpace decisionSpace,
             IEnumerable<double> values)
         {

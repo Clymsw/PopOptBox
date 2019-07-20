@@ -48,7 +48,10 @@ namespace Optimisation.Base.Management
         /// <summary>
         ///     Optimiser-specific logic to implement, which works out what to try next
         /// </summary>
-        /// <returns>The most useful next Decision Vector to evaluate</returns>
+        /// <returns>
+        ///     The most useful next Decision Vector to evaluate. 
+        ///     Return <see cref="DecisionVector.CreateForEmpty"/> to terminate the optimisation.
+        /// </returns>
         protected abstract DecisionVector GetNewDecisionVector();
 
         /// <inheritdoc />
