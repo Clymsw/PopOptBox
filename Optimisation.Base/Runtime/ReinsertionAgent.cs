@@ -159,14 +159,20 @@ namespace Optimisation.Base.Runtime
         public IReadOnlyList<Individual> CreateNewIndividuals(int numberToCreate)
         {
             var nextInds = optimiser.GetNextToEvaluate(numberToCreate);
+
             foreach (var ind in nextInds)
             {
+                if (ind.DecisionVector.Vector.Count == 0)
+                {
+                    // Optimiser.GetNextDecisionVector() has generated a cancellation condition
+                    CancellationSource.Cancel();
+                }
+
                 model.PrepareForEvaluation(ind);
                 NumberGenerated++;
-                ind.SetProperty(
-                    OptimiserPropertyNames.CreationIndex,
-                    NumberGenerated);
+                ind.SetProperty(OptimiserPropertyNames.CreationIndex, NumberGenerated);
             }
+
             return nextInds;
         }
     }

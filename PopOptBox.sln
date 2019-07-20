@@ -11,8 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{58EFF880-2
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Optimisers", "Optimisers", "{88BA456F-FD82-44B0-AC52-100171ED34F9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{02C8C512-18C0-4A24-8403-F7399EA0EB85}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optimisation.Base.Test", "Optimisation.Base.Test\Optimisation.Base.Test.csproj", "{C76A14AE-21B9-4432-81A4-6B5A80A21B19}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optimisation.Base", "Optimisation.Base\Optimisation.Base.csproj", "{D333C2CF-E87B-4313-8AA7-E75143A97693}"
@@ -23,9 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optimisation.Problems.Test"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optimisation.Optimisers.NelderMead", "Optimisation.Optimisers.NelderMead\Optimisation.Optimisers.NelderMead.csproj", "{900DD840-B5ED-4302-B7CE-3E562BE24027}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optimisation.Optimisers.NelderMead.Test", "Optimisation.Optimisers.NelderMead.Test\Optimisation.Optimisers.NelderMead.Test.csproj", "{7AFDD4FC-15C4-4910-B131-C7E4C2996A4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optimisation.Optimisers.NelderMead.Test", "Optimisation.Optimisers.NelderMead.Test\Optimisation.Optimisers.NelderMead.Test.csproj", "{7AFDD4FC-15C4-4910-B131-C7E4C2996A4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optimisation.HyperParameterTuning", "Optimisation.HyperParameterTuning\Optimisation.HyperParameterTuning.csproj", "{0C20CA89-F3AA-44AE-A59F-87A37A94F3A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optimisation.HyperParameterTuning", "Optimisation.HyperParameterTuning\Optimisation.HyperParameterTuning.csproj", "{0C20CA89-F3AA-44AE-A59F-87A37A94F3A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

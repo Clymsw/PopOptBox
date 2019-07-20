@@ -50,7 +50,7 @@ namespace Optimisation.Base.Management
         /// </summary>
         /// <returns>
         ///     The most useful next Decision Vector to evaluate. 
-        ///     Return <see cref="DecisionVector.CreateForEmpty"/> to terminate the optimisation.
+        ///     Return <see cref="DecisionVector.CreateForEmpty"/> to terminate <see cref="Runtime.OptimiserRunnerBasic"/>.
         /// </returns>
         protected abstract DecisionVector GetNewDecisionVector();
 
