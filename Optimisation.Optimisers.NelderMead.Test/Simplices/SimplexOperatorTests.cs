@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Optimisation.Base.Variables;
+using Optimisation.Optimisers.NelderMead.Test;
 using Xunit;
 
 namespace Optimisation.Optimisers.NelderMead.Simplices.Test
@@ -18,12 +19,11 @@ namespace Optimisation.Optimisers.NelderMead.Simplices.Test
         [InlineData(new[] { 0.5, 0.5 }, new[] { 0.0, 1 }, new[] { 1.0, 0 }, new[] { 0.0, 0 })]
         public void GetMean_TwoDim_ReturnsCorrectValue(double[] expectedAnswer, params double[][] testValues)
         {
-            var ds = DecisionSpace.CreateForUniformDoubleArray(2, double.MinValue, double.MaxValue);
-
-            var dvs = testValues.Select(v => DecisionVector.CreateFromArray(ds, v)).ToList();
+            var inds = Helpers.CreateEvaluatedIndividualsFromArray(testValues);
+            var simplex = new Simplex(inds);
             
             // Operate() is set up to call GetMean() function.
-            var meanLocation = operatorMock.Operate(dvs);
+            var meanLocation = operatorMock.Operate(simplex);
 
             Assert.True(meanLocation.Vector.Count == expectedAnswer.Length);
             Assert.Equal(expectedAnswer, meanLocation.Vector.Select(d => (double)d).ToArray());
@@ -35,9 +35,9 @@ namespace Optimisation.Optimisers.NelderMead.Simplices.Test
             {
             }
 
-            public override DecisionVector Operate(IEnumerable<DecisionVector> orderedVertices)
+            public override DecisionVector Operate(Simplex simplex)
             {
-                return GetMean(orderedVertices);
+                return GetMean(simplex);
             }
 
             protected override bool CheckCoefficientAcceptable(double value)

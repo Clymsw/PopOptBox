@@ -24,12 +24,12 @@ namespace Optimisation.Optimisers.NelderMead.Simplices
         /// Reflect, Contract and Expand moves the worst vertex along a line perpendicular
         /// to the plane formed by the other vertices.
         /// </summary>
-        /// <param name="orderedVertices">All vertices</param>
+        /// <param name="simplex">The simplex</param>
         /// <returns>New vertex</returns>
-        public override DecisionVector Operate(IEnumerable<DecisionVector> orderedVertices)
+        public override DecisionVector Operate(Simplex simplex)
         {
-            var worst = GetWorst(orderedVertices);
-            var mean = GetMean(orderedVertices);
+            var mean = GetMean(simplex);
+            var worst = simplex.Worst().DecisionVector;
 
             var newLocation = mean.Vector.Select(
                 (d, i) => (1 + Coefficient) * (double)d -

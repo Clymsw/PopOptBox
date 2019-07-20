@@ -12,8 +12,8 @@ namespace Optimisation.Optimisers.NelderMead.Simplices
         /// <summary>
         /// Returns a new vertex location based on an existing vertex.
         /// </summary>
-        /// <param name="orderedVertices">A list of vertices comprising the simplex, in order of fitness (first is best).</param>
+        /// <param name="simplex">The simplex.</param>
         /// <returns>A <see cref="DecisionVector"/> for the new vertex.</returns>
-        DecisionVector Operate(IEnumerable<DecisionVector> orderedVertices);
+        DecisionVector Operate(Simplex simplex);
     }
 }

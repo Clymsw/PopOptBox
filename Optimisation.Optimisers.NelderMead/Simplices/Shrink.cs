@@ -22,12 +22,12 @@ namespace Optimisation.Optimisers.NelderMead.Simplices
         /// <summary>
         /// Shrink operation moves the worst vertex a fraction along the line to the best vertex
         /// </summary>
-        /// <param name="orderedVertices">All vertices</param>
+        /// <param name="simplex">The simplex.</param>
         /// <returns>New vertex</returns>
-        public override DecisionVector Operate(IEnumerable<DecisionVector> orderedVertices)
+        public override DecisionVector Operate(Simplex simplex)
         {
-            var worst = GetWorst(orderedVertices);
-            var best = GetBest(orderedVertices);
+            var worst = simplex.Worst().DecisionVector;
+            var best = simplex.Best().DecisionVector;
 
             var newLocation = best.Vector.Select(
                 (d,i) => (1 - Coefficient) * (double)d + 

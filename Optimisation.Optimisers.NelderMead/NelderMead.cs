@@ -92,13 +92,11 @@ namespace Optimisation.Optimisers.NelderMead
                     try
                     {
                         //Create new individual
-                        var newDv = OperationsManager.PerformOperation(
-                            Population.GetMemberList().Select(m => m.DecisionVector),
-                            CurrentOperation);
+                        var newDv = OperationsManager.PerformOperation((Simplex)Population, CurrentOperation);
                         VerticesNotEvaluated.Add(newDv);
                         return newDv;
                     }
-                    catch
+                    catch (ArgumentOutOfRangeException)
                     {
                         // We have gone 'out of bounds' - this is it for this optimisation.
                         return DecisionVector.CreateForEmpty();

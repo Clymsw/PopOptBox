@@ -6,7 +6,10 @@ using MathNet.Numerics.LinearAlgebra;
 
 namespace Optimisation.Optimisers.NelderMead.Simplices
 {
-    /// <inheritdoc />
+    /// <summary>
+    /// A simplex operator creates a new vertex based on an existing simplex,
+    /// using deterministic logic.
+    /// </summary>
     public abstract class SimplexOperator : ISimplexOperator
     {
         #region Fields
@@ -50,33 +53,29 @@ namespace Optimisation.Optimisers.NelderMead.Simplices
 
         #region Implement Interface
 
-        /// <inheritdoc />
-        public abstract DecisionVector Operate(IEnumerable<DecisionVector> orderedVertices);
+        /// <summary>
+        /// Returns a new vertex location based on an existing vertex.
+        /// </summary>
+        /// <param name="simplex">The simplex.</param>
+        /// <returns>A <see cref="DecisionVector"/> for the new vertex.</returns>
+        public abstract DecisionVector Operate(Simplex simplex);
 
         #endregion
 
-        protected static DecisionVector GetWorst(IEnumerable<DecisionVector> orderedVertices)
+        protected static DecisionVector GetMean(Simplex simplex)
         {
-            return orderedVertices.Last();
-        }
-        protected static DecisionVector GetBest(IEnumerable<DecisionVector> orderedVertices)
-        {
-            return orderedVertices.First();
-        }
-        protected static DecisionVector GetMean(IEnumerable<DecisionVector> orderedVertices)
-        {
-            var numDims = orderedVertices.Count();
+            var numDims = simplex.Count;
 
             // Average of all vertex locations except the worst.
-            var allVertexVectorsExceptWorst = orderedVertices
+            var allVertexVectorsExceptWorst = simplex.GetMemberDecisionVectors()
                 .Take(numDims - 1)
-                .Select(v => v.Vector.Select(d => (double)d))
+                .Select(v => v.Select(d => (double)d))
                 .Select(v => CreateVector.DenseOfArray(v.ToArray()));
 
             var centroid = allVertexVectorsExceptWorst.Aggregate((a, b) => a + b) / (numDims - 1);
 
             return DecisionVector.CreateFromArray(
-                orderedVertices.First().GetDecisionSpace(),
+                simplex.Best().DecisionVector.GetDecisionSpace(),
                 centroid.AsArray());
         }
     }

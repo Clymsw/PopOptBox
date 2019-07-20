@@ -98,30 +98,31 @@ namespace Optimisation.Optimisers.NelderMead
                 shrinkageCoefficient);
         }
 
-        public DecisionVector PerformOperation(IEnumerable<DecisionVector> currentSimplex, NelderMeadSimplexOperations operation)
+        /// <summary>
+        /// Performs a particular simplex manipulation function
+        /// </summary>
+        /// <param name="currentSimplex">The simplex to operate on.</param>
+        /// <param name="operation">A choice of operation from <see cref="NelderMeadSimplexOperations"/>.</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="operation"/> is not known.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the new location is not valid.</exception>
+        public DecisionVector PerformOperation(Simplex currentSimplex, NelderMeadSimplexOperations operation)
         {
-            var newVertex = DecisionVector.CreateFromArray(DecisionSpace.CreateForUniformDoubleArray(0, 0, 0), new double[0]);
             switch (operation)
             {
                 case (NelderMeadSimplexOperations.R):
-                    newVertex = reflect.Operate(currentSimplex);
-                    break;
+                    return reflect.Operate(currentSimplex);
                 case (NelderMeadSimplexOperations.E):
-                    newVertex = expand.Operate(currentSimplex);
-                    break;
+                    return expand.Operate(currentSimplex);
                 case (NelderMeadSimplexOperations.C):
-                    newVertex = contractOut.Operate(currentSimplex);
-                    break;
+                    return contractOut.Operate(currentSimplex);
                 case (NelderMeadSimplexOperations.K):
-                    newVertex = contractIn.Operate(currentSimplex);
-                    break;
+                    return contractIn.Operate(currentSimplex);
                 case (NelderMeadSimplexOperations.S):
-                    newVertex = shrink.Operate(currentSimplex);
-                    break;
+                    return shrink.Operate(currentSimplex);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(operation), operation, "This operation is not understood.");
             }
-            return newVertex;
         }
 
         private void ParseCoefficientsAndBuild(

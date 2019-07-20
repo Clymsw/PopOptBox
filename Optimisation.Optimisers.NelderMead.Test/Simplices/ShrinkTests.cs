@@ -1,4 +1,5 @@
 using Optimisation.Base.Variables;
+using Optimisation.Optimisers.NelderMead.Test;
 using System;
 using System.Linq;
 using Xunit;
@@ -26,10 +27,10 @@ namespace Optimisation.Optimisers.NelderMead.Simplices.Test
         {
             var theOperator = new Shrink(0.5);
 
-            var ds = DecisionSpace.CreateForUniformDoubleArray(expectedAnswer.Length, double.MinValue, double.MaxValue);
-            var dvs = testValues.Select(v => DecisionVector.CreateFromArray(ds, v)).ToList();
+            var inds = Helpers.CreateEvaluatedIndividualsFromArray(testValues);
+            var simplex = new Simplex(inds);
 
-            var newLocation = theOperator.Operate(dvs);
+            var newLocation = theOperator.Operate(simplex);
 
             Assert.Equal(expectedAnswer, newLocation.Vector.Select(d => (double)d));
         }
