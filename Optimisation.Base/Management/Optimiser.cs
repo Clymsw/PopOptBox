@@ -51,14 +51,6 @@ namespace Optimisation.Base.Management
         /// <returns>The most useful next Decision Vector to evaluate</returns>
         protected abstract DecisionVector GetNewDecisionVector();
 
-        /// <summary>
-        ///     Logic to check if a new individual is legal, according to rules
-        ///     based on its Decision Vector
-        /// </summary>
-        /// <param name="ind">Individual to check</param>
-        /// <returns>True/False</returns>
-        protected abstract bool CheckAcceptable(Individual ind);
-
         /// <inheritdoc />
         /// <exception cref="TimeoutException">Thrown if not enough individuals can be created.</exception>
         public IReadOnlyList<Individual> GetNextToEvaluate(int numDesired)
@@ -67,16 +59,14 @@ namespace Optimisation.Base.Management
             var i = 0;
             while (listOfInds.Count < numDesired)
             {
-                var newDv = GetNewDecisionVector();
-                var newInd = new Individual(newDv);
-                
-                if (CheckAcceptable(newInd))
+                try
                 {
-                    newInd.SetProperty(
-                        OptimiserPropertyNames.CreationTime,
-                        DateTime.Now);
+                    var newDv = GetNewDecisionVector();
+                    var newInd = new Individual(newDv);
+                    newInd.SetProperty(OptimiserPropertyNames.CreationTime, DateTime.Now);
                     listOfInds.Add(newInd);
                 }
+                catch { }
 
                 i++;
 

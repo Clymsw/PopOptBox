@@ -103,17 +103,9 @@ namespace Optimisation.Base.Runtime
                 // Create individuals for next loop
                 timeOutManager.IncrementEvaluationsRun();
 
-                try
-                {
-                    nextInds = optimiser.GetNextToEvaluate(1);
-                    nextInd = nextInds[0];
-                }
-                catch (Exception e)
-                {
-                    nextInd = new Individual(DecisionVector.CreateForEmpty());
-                    nextInd.SetProperty(OptimiserPropertyNames.GenerationError, e);
-                }
-
+                nextInds = optimiser.GetNextToEvaluate(1);
+                nextInd = nextInds[0];
+                
                 // Check for completion
                 if (timeOutManager.HasPerformedTooManyEvaluations() 
                     || timeOutManager.HasRunOutOfTime() 

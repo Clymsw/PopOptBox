@@ -64,11 +64,6 @@ namespace Optimisation.Base.Test.Helpers
             {
                 return decisionVector;
             }
-
-            protected override bool CheckAcceptable(Individual ind)
-            {
-                return true;
-            }
         }
 
         internal class OptimiserBuilderMock : OptimiserBuilder

@@ -77,11 +77,6 @@ namespace Optimisation.Optimisers.NelderMead
             return "Nelder Mead, " + OperationsManager;
         }
 
-        protected override bool CheckAcceptable(Individual ind)
-        {
-            return true;
-        }
-
         protected override DecisionVector GetNewDecisionVector()
         {
             if (InitialVerticesStillUnevaluated.Count > 0)
@@ -94,12 +89,20 @@ namespace Optimisation.Optimisers.NelderMead
                 //We're into the optimisation
                 if (VerticesNotEvaluated.Count == 0)
                 {
-                    //Create new individual - N.B. we can end up going 'out of bounds'.
-                    var newDv = OperationsManager.PerformOperation(
-                        Population.GetMemberList().Select(m => m.DecisionVector), 
-                        CurrentOperation);
-                    VerticesNotEvaluated.Add(newDv);
-                    return newDv;
+                    try
+                    {
+                        //Create new individual
+                        var newDv = OperationsManager.PerformOperation(
+                            Population.GetMemberList().Select(m => m.DecisionVector),
+                            CurrentOperation);
+                        VerticesNotEvaluated.Add(newDv);
+                        return newDv;
+                    }
+                    catch
+                    {
+                        // We have gone 'out of bounds' - this is it for this optimisation.
+                        return DecisionVector.CreateForEmpty();
+                    }
                 }
                 else
                 {
