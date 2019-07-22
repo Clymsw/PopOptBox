@@ -56,7 +56,7 @@ namespace Optimisation.Optimisers.NelderMead.Test
                 DecisionVector.CreateFromArray(
                     DecisionSpace.CreateForUniformIntArray(Number_Of_Dimensions + 1, 
                         0, int.MaxValue),
-                    Enumerable.Repeat<int>(5, Number_Of_Dimensions)));
+                    Enumerable.Repeat(5, Number_Of_Dimensions + 1)));
             Helpers.EvaluateIndividual(wrongIndividual);
 
             // Should it throw an error?

@@ -27,7 +27,7 @@ namespace Optimisation.Problems.SingleObjective.Discrete
                 setup.Locations,
                 DecisionVector.CreateFromArray(
                     DecisionSpace.CreateForUniformIntArray(
-                        numDims, 0, setup.Locations.First().Count() - 1),
+                        numDims + 1, 0, setup.Locations.Count - 1),
                     setup.OptimumRoute));
         }
 

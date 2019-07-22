@@ -1,6 +1,7 @@
 ﻿using Optimisation.Base.Variables;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Xunit;
 
@@ -38,6 +39,17 @@ namespace Optimisation.Problems.SingleObjective.Discrete.Test
             Assert.Throws<ArgumentOutOfRangeException>(() => tsp.Evaluate(
                 DecisionVector.CreateFromArray(correctDs,
                 new[] { 0, 2, 0 })));
+        }
+
+        [Fact]
+        public void ConstructedFromFile_LoadsCorrectly()
+        {
+            var problemFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+                "SingleObjective", "Discrete", "Resources", "ulysses16.tsp");
+
+            var tsp = TravellingSalesman.CreateFromFile(problemFilePath);
+
+            Assert.Equal(17, tsp.GetGlobalOptimum().Vector.Count);
         }
     }
 }
