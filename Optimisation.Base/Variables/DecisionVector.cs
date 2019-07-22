@@ -111,7 +111,7 @@ namespace Optimisation.Base.Variables
         }
 
         /// <summary>
-        /// Get only those elements of the decision vector which are continuous
+        /// Get only those elements of the decision vector which are continuous.
         /// </summary>
         /// <returns>New Decision Vector with only those elements</returns>
         public DecisionVector GetContinuousElements()
@@ -125,7 +125,7 @@ namespace Optimisation.Base.Variables
         }
         
         /// <summary>
-        /// Get only those elements of the decision vector which are discrete
+        /// Get only those elements of the decision vector which are discrete.
         /// </summary>
         /// <returns>New Decision Vector with only those elements</returns>
         public DecisionVector GetDiscreteElements()
@@ -142,6 +142,12 @@ namespace Optimisation.Base.Variables
 
         #region Operators
 
+        /// <summary>
+        /// Gets the point-wise difference between two decision vectors.
+        /// </summary>
+        /// <param name="v1">A <see cref="DecisionVector"/>.</param>
+        /// <param name="v2">Another <see cref="DecisionVector"/> to subtract.</param>
+        /// <returns>An array of values representing the difference.</returns>
         public static IEnumerable<double> operator -(DecisionVector v1, DecisionVector v2)
         {
             if (!v1.decisionSpace.Equals(v2.decisionSpace))
@@ -155,7 +161,13 @@ namespace Optimisation.Base.Variables
 
             return difference;
         }
-        
+
+        /// <summary>
+        /// Gets the point-wise sum of two decision vectors.
+        /// </summary>
+        /// <param name="v1">A <see cref="DecisionVector"/>.</param>
+        /// <param name="v2">Another <see cref="DecisionVector"/> to add.</param>
+        /// <returns>An array of values representing the sum.</returns>
         public static IEnumerable<double> operator +(DecisionVector v1, DecisionVector v2)
         {
             if (!v1.decisionSpace.Equals(v2.decisionSpace))

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using Optimisation.Base.Variables;
 
@@ -39,6 +38,5 @@ namespace Optimisation.Problems.SingleObjective.Discrete
 
             return new[] { CalculateTotalTravelDistance(definition.Vector.Select(l => (int)l)) };
         }
-
     }
 }

@@ -33,7 +33,7 @@ namespace Optimisation.Base.Runtime.Test
         public void IndividualInserted_GetsProcessed()
         {
             var newInd = agent.CreateNewIndividuals(1).ElementAt(0);
-            Assert.Equal(IndividualStates.Evaluating, newInd.State);
+            Assert.Equal(IndividualState.Evaluating, newInd.State);
 
             var evaluator = new ObjectCreators.EvaluatorMock();
             evaluator.Evaluate(newInd);

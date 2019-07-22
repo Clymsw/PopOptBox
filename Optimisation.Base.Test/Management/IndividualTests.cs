@@ -22,7 +22,7 @@ namespace Optimisation.Base.Management.Test
         [Fact]
         public void NewIndividual_StateIsNew()
         {
-            Assert.Equal(IndividualStates.New, ind.State);
+            Assert.Equal(IndividualState.New, ind.State);
         }
 
         [Fact]

@@ -26,7 +26,7 @@ namespace Optimisation.Base.Conversion.Test
             
             Assert.Equal(new[]{Test_Solution}, 
                 ind.GetProperty<double[]>(ObjectCreators.Solution_Key));
-            Assert.Equal(IndividualStates.Evaluated, ind.State);
+            Assert.Equal(IndividualState.Evaluated, ind.State);
             Assert.True(ind.Legal);
             Assert.Equal(new[]{Test_Solution}, ind.SolutionVector);
         }

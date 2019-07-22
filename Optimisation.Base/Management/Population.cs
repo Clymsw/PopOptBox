@@ -14,16 +14,19 @@ namespace Optimisation.Base.Management
         #region Fields
 
         private readonly List<Individual> members;
-        
+
         /// <summary>
-        /// Whether or not one should expect every individual to have the same length of Decision Space. 
+        /// Whether or not one should expect every individual to have the same length of <see cref="Variables.DecisionSpace"/>. 
         /// </summary>
         public readonly bool ConstantLengthDecisionVector;
         
+        /// <summary>
+        /// The targeted maximum number of <see cref="Individual"/>s in the population.
+        /// </summary>
         public readonly int TargetSize;
 
         /// <summary>
-        /// Whether we have exceeded our desired size of population.
+        /// Whether we have met or exceeded our desired size of population.
         /// </summary>
         public bool IsTargetSizeReached => members.Count >= TargetSize;
 
@@ -43,11 +46,11 @@ namespace Optimisation.Base.Management
             bool constantLengthDv = true)
         {
             if (initialSize > 0)
-                this.TargetSize = initialSize;
+                TargetSize = initialSize;
 
             ConstantLengthDecisionVector = constantLengthDv;
 
-            members = new List<Individual>(this.TargetSize);
+            members = new List<Individual>(TargetSize);
 
             if (initialPopulation == null)
                 return;
@@ -56,8 +59,7 @@ namespace Optimisation.Base.Management
         }
 
         /// <summary>
-        /// Returns a shallow copy of the Population
-        /// (member list is copied)
+        /// Returns a shallow copy of the Population.
         /// </summary>
         public virtual Population Clone()
         {
@@ -73,13 +75,12 @@ namespace Optimisation.Base.Management
 
         /// <summary>
         /// An indexer to allow direct indexation to the Population 
-        /// class, which will return the individual of interest 
+        /// class, which will return the individual of interest.
         /// </summary>
-        /// <param name="index">Integer index into population</param>
+        /// <param name="index">Integer index into population.</param>
         /// <returns>Individual</returns>
         public Individual this[int index] => members[index];
 
-        
         /// <summary>
         /// Allows read-only access to the individuals
         /// </summary>
@@ -88,7 +89,6 @@ namespace Optimisation.Base.Management
         {
             return members;
         }
-        
         
         /// <summary>
         /// Gets the individual with the best (lowest) fitness.
@@ -112,6 +112,16 @@ namespace Optimisation.Base.Management
             return members.Count > 0
                 ? members[members.Count - 1]
                 : throw new InvalidOperationException("Population has no members.");
+        }
+
+        /// <summary>
+        /// Gets the individuals on the Pareto front.
+        /// </summary>
+        /// <returns>A (read-only) list of <see cref="Individual"/>s.</returns>
+        public IReadOnlyList<Individual> ParetoFront()
+        {
+            // TODO
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -175,12 +185,14 @@ namespace Optimisation.Base.Management
         #region Management
 
         /// <summary>
-        /// Adds an <see cref="Individual"/> to the population
+        /// Adds an <see cref="Individual"/> to the population.
         /// </summary>
         /// <param name="ind">The individual to add.</param>
-        /// <exception cref="ArgumentException">Thrown if: 
+        /// <exception cref="ArgumentException">
+        /// Thrown if: 
         /// 1) we are expecting individuals to have the same length Decision Vector and it is not true; 
-        /// 2) The Individual is not yet evaluated.</exception>
+        /// 2) The Individual is not yet evaluated.
+        /// </exception>
         public void AddIndividual(Individual ind)
         {
             if (ConstantLengthDecisionVector && members.Count > 0)
@@ -188,7 +200,7 @@ namespace Optimisation.Base.Management
                     throw new ArgumentException(
                         "Decision Vector is not the right length!");
             
-            if (ind.State != IndividualStates.Evaluated)
+            if (ind.State != IndividualState.Evaluated)
                 throw new ArgumentException("Individual is not yet evaluated.");
             
             // Add to population
@@ -206,9 +218,9 @@ namespace Optimisation.Base.Management
         }
         
         /// <summary>
-        /// Replaces worst individual with a new one
+        /// Replaces worst individual with a new one.
         /// </summary>
-        /// <param name="ind">New individual to insert</param>
+        /// <param name="ind">New individual to insert.</param>
         /// <exception cref="System.InvalidOperationException">Thrown when the population is empty.</exception>
         public void ReplaceWorst(Individual ind)
         {
@@ -223,13 +235,11 @@ namespace Optimisation.Base.Management
 
         #region Implementation of IEnumerable
 
-        /// <inheritdoc />
         public IEnumerator<Individual> GetEnumerator()
         {
             return members.GetEnumerator();
         }
 
-        /// <inheritdoc />
         IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable) members).GetEnumerator();
@@ -239,7 +249,6 @@ namespace Optimisation.Base.Management
 
         #region Implementation of IReadOnlyCollection<out Individual<TDecVec>>
 
-        /// <inheritdoc />
         public int Count => members.Count;
 
         #endregion

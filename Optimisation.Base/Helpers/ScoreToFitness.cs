@@ -1,9 +1,12 @@
 ﻿namespace Optimisation.Base.Helpers
 {
+    /// <summary>
+    /// Helper functions for Score to Fitness delegates, <see cref="Management.Optimiser"/>.
+    /// </summary>
     public static class ScoreToFitness
     {
         /// <summary>
-        /// Standard function for single objective minimisation
+        /// Standard function for single objective minimisation.
         /// </summary>
         /// <param name="score">The score vector.</param>
         /// <returns>The fitness.</returns>
@@ -14,7 +17,7 @@
         }
 
         /// <summary>
-        /// Standard function for single objective maximisation
+        /// Standard function for single objective maximisation.
         /// </summary>
         /// <param name="score">The score vector.</param>
         /// <returns>The fitness.</returns>

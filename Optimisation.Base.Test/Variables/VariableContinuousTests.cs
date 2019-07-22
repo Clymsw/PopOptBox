@@ -19,6 +19,14 @@ namespace Optimisation.Base.Variables.Test
         }
 
         [Fact]
+        public void BoundsCheck_WithInvalidType_ThrowsError()
+        {
+            var vbl = new VariableContinuous(-1.2, 4.2);
+            Assert.Throws<System.FormatException>(
+                () => vbl.IsInBounds("bf"));
+        }
+
+        [Fact]
         public void BoundsOk_CreatesOk()
         {
             var min = -1.4;

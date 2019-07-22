@@ -1,5 +1,8 @@
 ﻿namespace Optimisation.Base.Helpers
 {
+    /// <summary>
+    /// Helper functions for penalty delegates, <see cref="Management.Optimiser"/>.
+    /// </summary>
     public static class Penalty
     {
         /// <summary>

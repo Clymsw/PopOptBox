@@ -8,7 +8,7 @@ using Optimisation.Base.Management;
 namespace Optimisation.Base.Runtime
 {
     /// <summary>
-    /// Manages running an optimisation with parallel evaluations
+    /// Implementation of <see cref="OptimiserRunner"/> which creates and evaluates <see cref="Individual"/>s asynchronously, using TPL.
     /// </summary>
     public sealed class OptimiserRunnerParallel : OptimiserRunner
     {
@@ -39,13 +39,12 @@ namespace Optimisation.Base.Runtime
         public readonly int NumberOfIndividualsToStart;
 
         /// <summary>
-        /// Constructor
+        /// Constructor.
         /// </summary>
-        /// <param name="builder">optimiser builder</param>
-        /// <param name="evaluator">evaluator</param>
-        /// <param name="convergenceCheckers">checks for early completion</param>
-        /// <param name="reporters">action that reports progress.
-        /// The integer represents the number of processed individuals (population generation)</param>
+        /// <param name="builder">The builder for the optimisation elements.</param>
+        /// <param name="evaluator">The evaluator.</param>
+        /// <param name="convergenceCheckers">Checks for early completion.</param>
+        /// <param name="reporters">The action that reports progress.</param>
         public OptimiserRunnerParallel(
             OptimiserBuilder builder,
             IEvaluator evaluator,
@@ -64,18 +63,21 @@ namespace Optimisation.Base.Runtime
                 NumberOfIndividualsToStart = 4;
         }
 
+        /// <summary>
+        /// Cancels the optimisation (it will need to clear out the individuals being processed first).
+        /// </summary>
         public override void Cancel()
         {
             reinsertionAgent.CancellationSource.Cancel();
         }
 
         /// <summary>
-        /// Do the optimiser by calling this!
+        /// Runs the optimisation.
         /// </summary>
-        /// <param name="storeAll">Whether to store every individual evaluated or not</param>
-        /// <param name="reportingFrequency">The number of re-insertions between reports on the current population</param>
-        /// <param name="timeOutEvaluations">The maximum number of re-insertions before optimisation completion</param>
-        /// <param name="timeOutDuration">The maximum amount of time before optimisation completion</param>
+        /// <param name="storeAll"><see langword="true"/> to store all individuals evaluated (memory required).</param>
+        /// <param name="reportingFrequency">The number of evaluations between reporting progress.</param>
+        /// <param name="timeOutEvaluations">The maximum number of evaluations before terminating the optimisation.</param>
+        /// <param name="timeOutDuration">The maximum time allowed before terminating the optimisation.</param>
         public override void Run(
             bool storeAll = true,
             int reportingFrequency = 100,
@@ -140,7 +142,7 @@ namespace Optimisation.Base.Runtime
         }
 
         /// <summary>
-        /// Initialises all the buffers to be ready
+        /// Initialises all the buffers to be ready.
         /// </summary>
         /// <param name="timeOutManager">The <see cref="TimeOutManager"/>.</param>
         /// <param name="reportingFrequency">The number of reinsertions between reports on the current population</param>

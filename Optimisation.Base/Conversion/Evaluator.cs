@@ -3,23 +3,33 @@ using Optimisation.Base.Management;
 
 namespace Optimisation.Base.Conversion
 {
-    /// <inheritdoc />
+    /// <summary>
+    /// The Evaluator decides how good a particular Individual (solution) is
+    /// </summary>
     public abstract class Evaluator<TReality> : IEvaluator
     {
         private readonly string definitionKey;
         private readonly string solutionKey;
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Constructs the evaluator.
+        /// </summary>
+        /// <param name="definitionKey">The <see cref="Individual"/> property name for the reality definition.</param>
+        /// <param name="solutionKey">The <see cref="Individual"/> property name for the evaluated solution.</param>
         public Evaluator(string definitionKey, string solutionKey)
         {
             this.solutionKey = solutionKey;
             this.definitionKey = definitionKey;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Calls evaluation logic on the information placed in the individual by the Model
+        /// </summary>
+        /// <param name="ind">The individual to evaluate.</param>
+        /// <exception cref="System.InvalidOperationException">Thrown when the individual is not in the correct <see cref="IndividualState"/>.</exception>
         public virtual void Evaluate(Individual ind)
         {
-            if (ind.State != IndividualStates.Evaluating)
+            if (ind.State != IndividualState.Evaluating)
                 throw new System.InvalidOperationException("Individual is not ready for evaluation.");
 
             var definition = ind.GetProperty<TReality>(definitionKey);

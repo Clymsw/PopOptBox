@@ -112,6 +112,12 @@ namespace Optimisation.Base.Variables
             return acceptable;
         }
 
+        /// <summary>
+        /// Gets the string representation of a particular vector, according to the <see cref="IVariable"/> definitions of the decision space.
+        /// </summary>
+        /// <param name="vector">The array of values to format.</param>
+        /// <returns>A string.</returns>
+        /// <exception cref="System.ArgumentOutOfRangeException">Thrown if the vector is the wrong length. Use <seealso cref="IsAcceptableDecisionVector(IEnumerable{object})"/> first.</exception>
         public string FormatAsString(IEnumerable<object> vector)
         {
             return string.Join(" - ", vector.Select((d, i) => Dimensions.ElementAt(i).FormatAsString(d)));

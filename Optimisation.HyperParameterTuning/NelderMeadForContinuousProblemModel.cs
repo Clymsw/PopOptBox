@@ -19,10 +19,10 @@ namespace Optimisation.HyperParameterTuning
             this.decisionSpace = decisionSpace;
         }
 
-        protected override Individual CreateNewIndividual()
+        protected override DecisionVector CreateNewIndividual()
         {
             var newVector = decisionSpace.Dimensions.Select(d => (double) d.GetNextRandom(rng));
-            return new Individual(DecisionVector.CreateFromArray(decisionSpace, newVector));
+            return DecisionVector.CreateFromArray(decisionSpace, newVector);
         }
     }
 }

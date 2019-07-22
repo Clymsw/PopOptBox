@@ -24,7 +24,7 @@ namespace Optimisation.Base.Conversion.Test
         {
             var ind = modelMock.GetNewIndividual();
             
-            Assert.Equal(IndividualStates.New, ind.State);
+            Assert.Equal(IndividualState.New, ind.State);
             
             Assert.Equal(builder.DecVec, 
                 ind.DecisionVector.Vector.Select(v => (double)v));
@@ -35,7 +35,7 @@ namespace Optimisation.Base.Conversion.Test
         {
             var ind = modelMock.GetNewIndividual();
             modelMock.PrepareForEvaluation(ind);
-            Assert.Equal(IndividualStates.Evaluating, ind.State);
+            Assert.Equal(IndividualState.Evaluating, ind.State);
             Assert.Equal(builder.DecVec.ElementAt(0), 
                 ind.GetProperty<double>(ObjectCreators.Definition_Key));
         }

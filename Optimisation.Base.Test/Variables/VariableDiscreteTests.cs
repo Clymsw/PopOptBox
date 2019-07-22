@@ -19,6 +19,14 @@ namespace Optimisation.Base.Variables.Test
         }
 
         [Fact]
+        public void BoundsCheck_WithInvalidType_ThrowsError()
+        {
+            var vbl = new VariableDiscrete(1, 3);
+            Assert.Throws<System.FormatException>(
+                () => vbl.IsInBounds("a"));
+        }
+
+        [Fact]
         public void BoundsOk_CreatesOk()
         {
             var min = -5;

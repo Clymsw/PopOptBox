@@ -26,12 +26,12 @@ namespace Optimisation.Base.Management
             new Dictionary<string, object>();
 
         /// <summary>
-        /// The solution(s) currently relevant for the optimisation
+        /// The solution(s) currently relevant for the optimisation.
         /// </summary>
         public double[] SolutionVector { get; private set; }
 
         /// <summary>
-        /// Score for multi-objective optimisation with domination
+        /// Score for multi-objective optimisation with domination.
         /// </summary>
         public double[] Score { get; private set; }
 
@@ -42,14 +42,14 @@ namespace Optimisation.Base.Management
         public double Fitness { get; private set; }
 
         /// <summary>
-        /// If the individual is legal or not
+        /// If the individual is legal or not.
         /// </summary>
         public bool Legal { get; private set; }
 
         /// <summary>
-        /// Current state of the individual
+        /// Current state of the individual.
         /// </summary>
-        public IndividualStates State = IndividualStates.New;
+        public IndividualState State = IndividualState.New;
 
         #endregion
 
@@ -90,18 +90,18 @@ namespace Optimisation.Base.Management
         #region Utility
 
         /// <summary>
-        /// Returns the decision vector as a string
+        /// Returns the decision vector as a string.
         /// </summary>
-        /// <returns>string version of DV</returns>
+        /// <returns>A string version of <see cref="DecisionVector"/>.</returns>
         public override string ToString()
         {
             return $"{Fitness} [{string.Join(" - ", DecisionVector.Vector)}]";
         }
 
         /// <summary>
-        /// Obtain all the keys currently stored in the properties
+        /// Gets all the keys currently stored in the properties.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A list of property names.</returns>
         public IEnumerable<string> GetPropertyNames()
         {
             var keynames = properties.Keys;
@@ -114,45 +114,42 @@ namespace Optimisation.Base.Management
 
         /// <summary>
         /// Call when sending for evaluation.
-        /// Managed automatically by <see cref="Optimisation.Base.Conversion.Model"/>.
         /// </summary>
-        /// <exception cref="InvalidOperationException">Individual is not new</exception>
+        /// <remarks>Managed automatically by <see cref="Conversion.Model"/>.</remarks>
+        /// <exception cref="InvalidOperationException">Individual is not new.</exception>
         internal void SendForEvaluation()
         {
-            if (State == IndividualStates.New)
-                State = IndividualStates.Evaluating;
+            if (State == IndividualState.New)
+                State = IndividualState.Evaluating;
             else
                 throw new InvalidOperationException("Individual is not new!");
         }
 
         /// <summary>
         /// Call when finished evaluating.
-        /// Managed automatically by <see cref="Optimisation.Base.Conversion.Evaluator"/>.
         /// </summary>
-        /// <exception cref="InvalidOperationException">Individual is not evaluating</exception>
+        /// <remarks>Managed automatically by <see cref="Conversion.Evaluator"/>.</remarks>
+        /// <exception cref="InvalidOperationException">Individual is not evaluating.</exception>
         internal void FinishEvaluating()
         {
-            if (State == IndividualStates.Evaluating)
-                State = IndividualStates.Evaluated;
+            if (State == IndividualState.Evaluating)
+                State = IndividualState.Evaluated;
             else
                 throw new InvalidOperationException("Individual is not evaluating!");
         }
 
         /// <summary>
         /// Stores a Key-Value pair in the individual's properties.
-        /// If key already exists, value is over-written with a warning.
-        /// Use <see cref="GetPropertyNames"/> to find existing strings.
+        /// If key already exists, value is over-written.
+        /// Use <seealso cref="GetPropertyNames"/> to find existing property names.
         /// </summary>
-        /// <param name="key">String acting as key for the property</param>
-        /// <param name="value">Value of the property</param>
+        /// <param name="key">Property name.</param>
+        /// <param name="value">Property value.</param>
         public void SetProperty(string key, object value)
         {
             if (properties.ContainsKey(key))
             {
-                // TODO: Use logger
-                Console.WriteLine("Warning: Over-writing property '" + key + "'");
-                var oldValue = properties[key];
-                Console.WriteLine("Old value: " + oldValue);
+                // TODO: Use logger to send warning.
                 properties[key] = value;
             }
             else
@@ -166,8 +163,8 @@ namespace Optimisation.Base.Management
         /// Otherwise returns a zero element double array and a warning.
         /// </summary>
         /// <param name="key">String acting as key for the property</param>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when key is not present.</exception>
         /// <returns>Property value</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when key is not present.</exception>
         public T GetProperty<T>(string key)
         {
             if (!properties.TryGetValue(key, out var value))
@@ -176,9 +173,10 @@ namespace Optimisation.Base.Management
         }
 
         /// <summary>
-        /// Assigns Solution Vector based on a given Property key value
+        /// Assigns Solution Vector based on a given Property name
         /// </summary>
         /// <param name="keyName">Name of property key</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when property name does not exist.</exception>
         public void SetSolution(string keyName)
         {
             var solutionValue = GetProperty<double[]>(keyName);
@@ -189,33 +187,29 @@ namespace Optimisation.Base.Management
 
         /// <summary>
         /// Assigns Score based on a function which must be passed
-        /// in as a delegate that converts a double array into a single value
+        /// in as a delegate that converts a double array into another double array.
         /// </summary>
         /// <param name="solToScore">Delegate converting solution to score</param>
         public void SetScore(Func<double[], double[]> solToScore)
         {
-            var scoreValue = solToScore(SolutionVector);
-            Score = scoreValue;
+            Score = solToScore(SolutionVector);
         }
 
         /// <summary>
         /// Assigns Fitness based on a function which must be passed
-        /// in as a delegate that converts a double array into a single value
+        /// in as a delegate that converts a double array into a single value.
         /// </summary>
-        /// <remarks>Will bypass multi-objective and convert Solution Vector to Fitness if <see cref="SetScore"/> is not used.</remarks>
         /// <param name="scoreToFit">Delegate converting Score to Fitness.</param>
+        /// <exception cref="InvalidOperationException">Thrown when Score is null. <seealso cref="SetScore(Func{double[], double[]})"/>.</exception>
         public void SetFitness(Func<double[], double> scoreToFit)
         {
-            var fitnessValue = Score == null
-                ? scoreToFit(SolutionVector)
-                : scoreToFit(Score);
-            Fitness = fitnessValue;
+            Fitness = scoreToFit(Score);
         }
 
         /// <summary>
         /// Sets the legality of the individual.
         /// </summary>
-        /// <param name="legal">True/false: is/isn't legal</param>
+        /// <param name="legal">Set <see langword="true"/> when the individual is legal.</param>
         public void SetLegality(bool legal)
         {
             Legal = legal;

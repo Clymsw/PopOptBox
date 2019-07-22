@@ -5,15 +5,20 @@ using System.Linq;
 
 namespace Optimisation.Base.Helpers
 {
+    /// <summary>
+    /// Helper functions for creating initial populations, <see cref="Management.Population"/>.
+    /// </summary>
     public static class PopulationCreators
     {
         /// <summary>
         /// Creates a set of Decision Vectors, based on a starting location, incrementing each dimension by a fixed amount.
         /// </summary>
         /// <param name="initialLocation">The <see cref="DecisionVector"/> representing the starting location.</param>
-        /// <param name="stepSize">The distance from the starting location at which each further location will be created 
-        /// (same in all dimensions).</param>
-        /// <returns>List of new locations, the same length as the number of dimensions.</returns>
+        /// <param name="stepSize">
+        /// The distance from the starting location at which each further location will be created 
+        /// (same in all dimensions).
+        /// </param>
+        /// <returns>List of <see cref="DecisionVector"/>s, the same length as the number of dimensions.</returns>
         public static List<DecisionVector> CreateNearLocation(DecisionVector initialLocation, double stepSize)
         {
             if (stepSize == 0)
@@ -57,7 +62,7 @@ namespace Optimisation.Base.Helpers
         /// </summary>
         /// <param name="space">The <see cref="DecisionSpace"/> defining what is legal.</param>
         /// <param name="numberToCreate">The number of new Decision Vectors desired.</param>
-        /// <returns>A list of <see cref="DecisionVector"/>s.</returns>
+        /// <returns>A list of randomly located <see cref="DecisionVector"/>s.</returns>
         public static List<DecisionVector> CreateRandom(DecisionSpace space, int numberToCreate)
         {
             var newDVs = new List<DecisionVector>();
@@ -77,5 +82,16 @@ namespace Optimisation.Base.Helpers
             return newDVs;
         }
 
+        /// <summary>
+        /// Creates a set of Decision Vectors, which are generated evenly across the decision space.
+        /// </summary>
+        /// <param name="space">The <see cref="DecisionSpace"/> defining what is legal.</param>
+        /// <param name="numberToCreate">The number of new Decision Vectors desired.</param>
+        /// <returns>A list of evenly-spaced <see cref="DecisionVector"/>s.</returns>
+        public static List<DecisionVector> CreateLatinHypercube(DecisionSpace space, int numberToCreate)
+        {
+            // TODO!
+            throw new NotImplementedException();
+        }
     }
 }

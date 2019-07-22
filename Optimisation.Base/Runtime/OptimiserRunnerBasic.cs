@@ -6,6 +6,9 @@ using Optimisation.Base.Variables;
 
 namespace Optimisation.Base.Runtime
 {
+    /// <summary>
+    /// Implementation of <see cref="OptimiserRunner"/> which creates and evaluates <see cref="Individual"/>s synchronously.
+    /// </summary>
     public sealed class OptimiserRunnerBasic : OptimiserRunner
     {
         private readonly OptimiserBuilder builder;
@@ -16,6 +19,13 @@ namespace Optimisation.Base.Runtime
         private TimeOutManager timeOutManager;
         private volatile bool cancelDemanded;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="builder">The builder for the optimisation elements.</param>
+        /// <param name="evaluator">The evaluator.</param>
+        /// <param name="convergenceCheckers">Checks for early completion.</param>
+        /// <param name="reporters">The action that reports progress.</param>
         public OptimiserRunnerBasic(
             OptimiserBuilder builder,
             IEvaluator evaluator,
@@ -28,11 +38,21 @@ namespace Optimisation.Base.Runtime
             this.reporters = reporters;
         }
 
+        /// <summary>
+        /// Stops the optimisation.
+        /// </summary>
         public override void Cancel()
         {
             cancelDemanded = true;
         }
 
+        /// <summary>
+        /// Runs the optimisation.
+        /// </summary>
+        /// <param name="storeAll"><see langword="true"/> to store all individuals evaluated (memory required).</param>
+        /// <param name="reportingFrequency">The number of evaluations between reporting progress.</param>
+        /// <param name="timeOutEvaluations">The maximum number of evaluations before terminating the optimisation.</param>
+        /// <param name="timeOutDuration">The maximum time allowed before terminating the optimisation.</param>
         public override void Run(
             bool storeAll = true, 
             int reportingFrequency = 100, 

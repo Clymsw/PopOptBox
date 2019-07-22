@@ -1,18 +1,21 @@
 using Optimisation.Base.Management;
+using Optimisation.Base.Variables;
 
 namespace Optimisation.Base.Conversion
 {
-    /// <inheritdoc />
+    /// <summary>
+    /// The Model manages conversion between optimiser and evaluator
+    /// </summary>
     /// <typeparam name="TReality">The type of the object representing reality.</typeparam>
     public abstract class Model<TReality> : IModel
     {
         #region Constructor
 
         /// <summary>
-        /// Constructs the model
+        /// Constructs the model.
         /// </summary>
-        /// <param name="converter">The converter to/from Decision Vector and reality definition.</param>
-        /// <param name="definitionKey">The <see cref="Individual"/> property key for the reality definition.</param>
+        /// <param name="converter">The converter to/from Decision Vector and reality definitions.</param>
+        /// <param name="definitionKey">The <see cref="Individual"/> property name for the reality definition.</param>
         protected Model(
             IConverter<TReality> converter,
             string definitionKey)
@@ -32,20 +35,26 @@ namespace Optimisation.Base.Conversion
 
         #region Activity
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Returns a new suggested individual based on some real-world logic.
+        /// </summary>
+        /// <returns>An <see cref="Individual"/>.</returns>
         public Individual GetNewIndividual()
         {
-            return CreateNewIndividual();
+            return new Individual(CreateNewIndividual());
         }
 
         /// <summary>
-        /// Creates a new individual using some real-world logic
+        /// Creates a new individual using some real-world logic.
         /// Called by <see cref="GetNewIndividual" />
         /// </summary>
         /// <returns>A new Individual.</returns>
-        protected abstract Individual CreateNewIndividual();
+        protected abstract DecisionVector CreateNewIndividual();
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Looks at an <see cref="Individual"/> and inserts any real world information required for evaluation.
+        /// </summary>
+        /// <param name="ind">The Individual to operate on.</param>
         public void PrepareForEvaluation(Individual ind)
         {
             ind.SetProperty(definitionKey,

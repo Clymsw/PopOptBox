@@ -1,5 +1,8 @@
 namespace Optimisation.Base.Management
 {
+    /// <summary>
+    /// The list of names for properties which are automatically created in an <see cref="Individual"/>.
+    /// </summary>
     public static class OptimiserPropertyNames
     {
         /// <summary>
@@ -29,10 +32,5 @@ namespace Optimisation.Base.Management
         /// If an error has been encountered on reinsertion, it is stored here.
         /// </summary>
         public const string ReinsertionError = "Reinsertion error";
-        
-        /// <summary>
-        /// If an error has been encountered on generation, it is stored here.
-        /// </summary>
-        public const string GenerationError = "Generation error";
     }
 }

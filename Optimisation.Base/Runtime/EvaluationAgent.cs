@@ -6,30 +6,34 @@ using Optimisation.Base.Management;
 namespace Optimisation.Base.Runtime
 {
     /// <summary>
-    /// The Evaluation Agent receives un-evaluated individuals and outputs evaluated ones
+    /// The Evaluation Agent receives un-evaluated individuals and outputs evaluated ones.
     /// </summary>
     internal class EvaluationAgent
     {
         /// <summary>
-        /// The block that handles incoming individuals and processes the evaluation
+        /// The block that handles incoming individuals and processes the evaluation.
         /// </summary>
         public TransformBlock<Individual, Individual> IndividualsForEvaluation { get; }
 
         /// <summary>
-        /// The block that buffers evaluated individuals until they are ready for reinsertion
+        /// The block that buffers evaluated individuals until they are ready for reinsertion.
         /// </summary>
         public BufferBlock<Individual> EvaluatedIndividuals { get; }
 
         private readonly IEvaluator evaluator;
 
         private int numberEvaluated;
+
+        /// <summary>
+        /// The number of <see cref="Individual"/>s evaluated so far.
+        /// </summary>
         public int NumberEvaluated => numberEvaluated;
 
         /// <summary>
-        /// Constructor
+        /// Constructor.
         /// </summary>
-        /// <param name="evaluator">Evaluator</param>
-        /// <param name="cancelToken">Token (from ReinsertionAgent) for cancellation</param>
+        /// <param name="evaluator">The evaluator.</param>
+        /// <param name="cancelToken">Token (from <see cref="ReinsertionAgent"/>) for cancellation.</param>
         public EvaluationAgent(IEvaluator evaluator,
             CancellationToken cancelToken)
         {
@@ -56,10 +60,10 @@ namespace Optimisation.Base.Runtime
         }
 
         /// <summary>
-        /// Does the evaluation
+        /// Performs the evaluation.
         /// </summary>
-        /// <param name="ind">unevaluated individual</param>
-        /// <returns>same individual (after evaluation)</returns>
+        /// <param name="ind">Unevaluated individual.</param>
+        /// <returns>Same individual (after evaluation).</returns>
         private Individual Process(Individual ind)
         {
             evaluator.Evaluate(ind);

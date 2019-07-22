@@ -19,9 +19,9 @@ namespace Optimisation.Base.Test.Helpers
                 this.decisionVector = decisionVector;
             }
 
-            protected override Individual CreateNewIndividual()
+            protected override DecisionVector CreateNewIndividual()
             {
-                return new Individual(decisionVector);
+                return decisionVector;
             }
         }
         

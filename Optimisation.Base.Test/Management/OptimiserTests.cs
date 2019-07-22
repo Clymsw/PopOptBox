@@ -25,7 +25,7 @@ namespace Optimisation.Base.Management.Test
             var newInd = newInds.ElementAt(0);
             Assert.Equal(builder.DecVec, 
                 newInd.DecisionVector.Vector.Select(v => (double)v));
-            Assert.Equal(IndividualStates.New, newInd.State);
+            Assert.Equal(IndividualState.New, newInd.State);
 
             var creationTime = newInd.GetProperty<DateTime>(OptimiserPropertyNames.CreationTime);
             Assert.True(creationTime < DateTime.Now);

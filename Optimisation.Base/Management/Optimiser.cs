@@ -4,15 +4,18 @@ using Optimisation.Base.Variables;
 
 namespace Optimisation.Base.Management
 {
-    /// <inheritdoc />
+    /// <summary>
+    /// The Optimiser handles the logic for deciding which individuals to try.
+    /// As a metaheuristic, it only knows about the Decision Vector and the Fitness of each Individual.
+    /// </summary>
     public abstract class Optimiser : IOptimiser
     {
         #region Constructor
 
         /// <summary>
-        /// Construct the optimiser
+        /// Constructs the optimiser.
         /// </summary>
-        /// <param name="initialPopulation">An initial population (can be empty)</param>
+        /// <param name="initialPopulation">An initial population (can be empty).</param>
         /// /// <param name="solutionToScore">Conversion function to change solution vector into score. <seealso cref="Individual.SetScore(Func{double[], double[]})"/></param>
         /// <param name="scoreToFitness">Conversion function to change score into fitness. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
         /// <param name="penalty">Function determining what penalty to assign for illegal individuals. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
@@ -46,7 +49,7 @@ namespace Optimisation.Base.Management
         #region Activity
 
         /// <summary>
-        ///     Optimiser-specific logic to implement, which works out what to try next
+        ///     Optimiser-specific logic to implement, which works out what to try next.
         /// </summary>
         /// <returns>
         ///     The most useful next Decision Vector to evaluate. 
@@ -54,7 +57,11 @@ namespace Optimisation.Base.Management
         /// </returns>
         protected abstract DecisionVector GetNewDecisionVector();
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Gets (up to) a certain number of individuals for evaluation.
+        /// </summary>
+        /// <param name="numDesired">Number of individuals wished for.</param>
+        /// <returns>List of <see cref="Individual"/> objects.</returns>
         /// <exception cref="TimeoutException">Thrown if not enough individuals can be created.</exception>
         public IReadOnlyList<Individual> GetNextToEvaluate(int numDesired)
         {
@@ -82,12 +89,12 @@ namespace Optimisation.Base.Management
         }
 
         /// <summary>
-        ///     Try to reinsert Individual back into the Population.
-        ///     Return value indicates if it actually got inserted, or rejected.
+        /// Try to reinsert Individual back into the Population.
         /// </summary>
+        /// <param name="individual">The individual to try to reinsert.</param>
         /// <returns>
-        ///     <see langword="true" /> if <see cref="ind" /> was actually inserted;
-        ///     <see langword="false" /> if rejected.
+        /// <see langword="true" /> if the individual was actually inserted;
+        /// <see langword="false" /> if rejected. A <seealso cref="OptimiserPropertyNames.ReinsertionError"/> property is added to the <see cref="Individual"/>.
         /// </returns>
         protected virtual bool ReInsert(Individual individual)
         {
@@ -117,7 +124,7 @@ namespace Optimisation.Base.Management
             var numInserted = 0;
             foreach (var ind in individualList)
             {
-                if (ind.State != IndividualStates.Evaluated)
+                if (ind.State != IndividualState.Evaluated)
                     throw new ArgumentException("Individual is not evaluated!");
                 
                 //If the individual has been evaluated and is legal, 

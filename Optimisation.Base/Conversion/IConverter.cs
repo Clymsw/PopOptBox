@@ -9,17 +9,17 @@ namespace Optimisation.Base.Conversion
     public interface IConverter<TReality>
     {
         /// <summary>
-        /// Converts real-world representation of a solution into a Decision Vector
+        /// Converts real-world representation of a solution into a Decision Vector.
         /// </summary>
         /// <param name="realityDefinition">Object representing reality</param>
-        /// <returns>A Decision Vector</returns>
+        /// <returns>A <see cref="DecisionVector"/>.</returns>
         DecisionVector ConvertToDv(TReality realityDefinition);
 
         /// <summary>
-        /// Converts a Decision Vector into a real-world representation of the solution 
+        /// Converts a Decision Vector into a real-world representation of the solution.
         /// </summary>
-        /// <param name="decisionVector">Decision Vector</param>
-        /// <returns>An object of the correct type</returns>
+        /// <param name="decisionVector">The <see cref="DecisionVector"/> of the <see cref="Optimisation.Base.Management.Individual"/>.</param>
+        /// <returns>An object of the correct type, representing reality.</returns>
         TReality ConvertToReality(DecisionVector decisionVector);
     }
 }

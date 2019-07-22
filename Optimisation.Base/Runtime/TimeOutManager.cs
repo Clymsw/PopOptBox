@@ -3,8 +3,8 @@
 namespace Optimisation.Base.Runtime
 {
     /// <summary>
-    /// The TimeOutManager collects all different ways in which an optimisation can be terminated early 
-    /// (except by direct request).
+    /// The TimeOutManager collects all different ways in which an optimisation can be terminated early (except by direct request).
+    /// Used by <seealso cref="OptimiserRunnerBasic"/> and <seealso cref="OptimiserRunnerParallel"/>.
     /// </summary>
     internal class TimeOutManager
     {

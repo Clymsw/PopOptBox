@@ -8,11 +8,16 @@ namespace Optimisation.Base.Variables
     public interface IVariable
     {
         /// <summary>
+        /// A string which describes the variable.
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
         /// Determines if a value is supported by this variable.
         /// </summary>
-        /// <param name="testValue">The value to test</param>
-        /// <returns>True/false (whether the value is supported)</returns>
-        /// <exception cref="System.FormatException">Thrown when object is of the wrong type.</exception>
+        /// <param name="testValue">The value to test.</param>
+        /// <returns><see langword="true"/> when the value is supported.</returns>
+        /// <exception cref="System.InvalidCastException">Thrown when object is of the wrong type.</exception>
         bool IsInBounds(object testValue);
 
         /// <summary>
@@ -20,11 +25,6 @@ namespace Optimisation.Base.Variables
         /// </summary>
         /// <returns>A legal object</returns>
         object GetNextRandom(RandomSource rng);
-
-        /// <summary>
-        /// A string which describes the variable
-        /// </summary>
-        string Name { get; }
 
         /// <summary>
         /// Returns a string representation of a value for this variable.

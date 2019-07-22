@@ -13,18 +13,23 @@ namespace Optimisation.Base.Variables
         private readonly int lowerBoundForGeneration;
         private readonly int upperBound;
         private readonly int upperBoundForGeneration;
-        
+
+        /// <summary>
+        /// A string which describes the variable.
+        /// </summary>
         public string Name { get; }
 
         /// <summary>
-        /// Constructor specifies the dimension bounds
+        /// Constructor.
         /// </summary>
-        /// <param name="lowerBound">Smallest allowed value</param>
-        /// <param name="upperBound">Largest allowed value</param>
+        /// <param name="lowerBound">Smallest allowed value.</param>
+        /// <param name="upperBound">Largest allowed value.</param>
         /// <param name="lowerBoundForGeneration">Inclusive lower bound for random number generation.</param>
         /// <param name="upperBoundForGeneration">Exclusive upper bound for random number generation.</param>
-        /// <param name="name">A description for the variable, blank by default</param>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// <param name="name">A description for the variable, blank by default.</param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown when the the bounds for the variable or the generation range indicate a zero or negative range.
+        /// </exception>
         public VariableDiscrete(
             int lowerBound = 0, 
             int upperBound = int.MaxValue,
@@ -47,17 +52,22 @@ namespace Optimisation.Base.Variables
             Name = name;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Determines if a value is supported by this variable.
+        /// </summary>
+        /// <param name="testValue">The value to test.</param>
+        /// <returns><see langword="true"/> when the value is supported.</returns>
+        /// <exception cref="System.FormatException">Thrown when object is of the wrong type or cannot be converted.</exception>
         public bool IsInBounds(object testValue)
         {
-            var test = System.Convert.ToInt32(testValue);
+            var test = Convert.ToInt32(testValue);
             return test >= lowerBound && test <= upperBound;
         }
 
         /// <summary>
-        /// Implements random number generation for this variable
+        /// Implements random number generation for this variable.
         /// </summary>
-        /// <returns>A legal object (double).</returns>
+        /// <returns>A legal object (int).</returns>
         public object GetNextRandom(RandomSource rng)
         {
             return rng.Next(lowerBoundForGeneration, upperBoundForGeneration);
@@ -68,10 +78,10 @@ namespace Optimisation.Base.Variables
         /// </summary>
         /// <param name="value">The value to be formatted (should be parsable as an integer)</param>
         /// <returns>A string</returns>
-        /// <exception cref="System.FormatException">Thrown when object is of the wrong type.</exception>
+        /// <exception cref="System.FormatException">Thrown when object is of the wrong type or cannot be converted.</exception>
         public string FormatAsString(object value)
         {
-            var converted = System.Convert.ToInt32(value);
+            var converted = Convert.ToInt32(value);
             return converted.ToString("D", System.Globalization.NumberFormatInfo.InvariantInfo);
         }
 

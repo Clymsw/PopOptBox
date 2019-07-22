@@ -12,19 +12,23 @@ namespace Optimisation.Base.Variables
         private readonly double lowerBoundForGeneration;
         private readonly double upperBound;
         private readonly double upperBoundForGeneration;
-        
-        /// <inheritdoc />
+
+        /// <summary>
+        /// A string which describes the variable.
+        /// </summary>
         public string Name { get; }
 
         /// <summary>
-        /// Constructor specifies the dimension bounds
+        /// Constructor.
         /// </summary>
-        /// <param name="lowerBound">Inclusive lower bound</param>
-        /// <param name="upperBound">Exclusive upper bound</param>
+        /// <param name="lowerBound">Inclusive lower bound.</param>
+        /// <param name="upperBound">Exclusive upper bound.</param>
         /// <param name="lowerBoundForGeneration">Inclusive lower bound for random number generation.</param>
         /// <param name="upperBoundForGeneration">Exclusive upper bound for random number generation.</param>
-        /// <param name="name">A description for the variable, blank by default</param>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// <param name="name">A description for the variable, blank by default.</param>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown when the the bounds for the variable or the generation range indicate a zero or negative range.
+        /// </exception>
         public VariableContinuous(
             double lowerBound = double.MinValue, 
             double upperBound = double.MaxValue,
@@ -47,7 +51,12 @@ namespace Optimisation.Base.Variables
             Name = name;
         }
 
-        /// <inheritdoc />
+        /// <summary>
+        /// Determines if a value is supported by this variable.
+        /// </summary>
+        /// <param name="testValue">The value to test.</param>
+        /// <returns><see langword="true"/> when the value is supported.</returns>
+        /// <exception cref="System.FormatException">Thrown when object is of the wrong type or cannot be converted.</exception>
         public bool IsInBounds(object testValue)
         {
             var test = Convert.ToDouble(testValue);
@@ -70,7 +79,7 @@ namespace Optimisation.Base.Variables
         /// </summary>
         /// <param name="value">The value to be formatted (should be a double)</param>
         /// <returns>A string</returns>
-        /// <exception cref="System.FormatException">Thrown when object is of the wrong type.</exception>
+        /// <exception cref="System.FormatException">Thrown when object is of the wrong type or cannot be converted.</exception>
         public string FormatAsString(object value)
         {
             var converted = Convert.ToDouble(value);

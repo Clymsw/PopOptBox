@@ -5,11 +5,15 @@ using Optimisation.Base.Management;
 
 namespace Optimisation.Base.Helpers
 {
+    /// <summary>
+    /// Helper functions to see (in different ways) if an optimisation has converged,
+    /// <see cref="Runtime.OptimiserRunnerBasic"/> and <see cref="Runtime.OptimiserRunnerParallel"/>.
+    /// </summary>
     public static class ConvergenceCheckers
     {
         /// <summary>
         ///     Checks to see if the fitness of the best and worst individuals in a population
-        ///     are closer than a specified amount
+        ///     are closer than a specified amount.
         /// </summary>
         /// <param name="pop">population</param>
         /// <param name="tolerance">the absolute tolerance in the units of the fitness</param>
@@ -23,7 +27,7 @@ namespace Optimisation.Base.Helpers
 
         /// <summary>
         ///     Checks to see if the fitness of the best and worst individuals in a population
-        ///     differ by less than a specified amount, as a fraction of the average
+        ///     differ by less than a specified amount, as a fraction of the average.
         /// </summary>
         /// <param name="pop">population</param>
         /// <param name="tolerance">relative amount</param>
@@ -40,7 +44,7 @@ namespace Optimisation.Base.Helpers
 
         /// <summary>
         ///     Checks to see if each element of the decision vectors of the best and worst
-        ///     individuals in a population differ by less than a specified amount
+        ///     individuals in a population differ by less than a specified amount.
         /// </summary>
         /// <param name="pop">population</param>
         /// <param name="tolerance">absolute tolerance, in the units of the decision vector</param>
@@ -56,12 +60,12 @@ namespace Optimisation.Base.Helpers
 
         /// <summary>
         ///     Checks to see if each element of the decision vectors of the best and worst
-        ///     individuals in a population differ by less than an amount, specified for each element
+        ///     individuals in a population differ by less than an amount, specified for each element.
         /// </summary>
         /// <param name="pop">population</param>
         /// <param name="tolerance">
         ///     a vector of tolerances, the same length as the decision vector.
-        ///     Any elements with 0 tolerance are ignored
+        ///     Any elements with 0 tolerance are ignored.
         /// </param>
         /// <returns><see langword="true" /> if converged</returns>
         /// <exception cref="ArgumentException">If the individuals do not have the same decision space, or if the tolerance does not have the right length.</exception>
@@ -81,7 +85,7 @@ namespace Optimisation.Base.Helpers
         /// <summary>
         ///     Checks to see if each element of the decision vectors of the best and worst
         ///     individuals in a population differ by less than a specified amount,
-        ///     as a proportion of the best individual's DV
+        ///     as a proportion of the best individual's DV.
         /// </summary>
         /// <param name="pop">population</param>
         /// <param name="tolerance">relative amount</param>
@@ -101,7 +105,7 @@ namespace Optimisation.Base.Helpers
         /// <summary>
         ///     Checks to see if each element of the decision vectors of the best and worst
         ///     individuals in a population differ by less than an amount,
-        ///     specified as a proportion of the best individual's DV, for each element
+        ///     specified as a proportion of the best individual's DV, for each element.
         /// </summary>
         /// <param name="pop">population</param>
         /// <param name="tolerance">
