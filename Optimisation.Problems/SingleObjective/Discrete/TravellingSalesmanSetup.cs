@@ -4,12 +4,13 @@ using System.IO;
 
 namespace Optimisation.Problems.SingleObjective.Discrete
 {
-    internal class TravellingSalesmanSetup
+    public class TravellingSalesmanSetup
     {
         #region Constructor
 
         public TravellingSalesmanSetup(string problemFilePath)
         {
+            Locations = new List<double[]>();
             ParseProblemFile(problemFilePath);
 
             string solutionFilePath = problemFilePath.Replace(".tsp", ".opt.tour");
@@ -56,8 +57,7 @@ namespace Optimisation.Problems.SingleObjective.Discrete
                     if (testForData[0] == "EOF")
                         break;
 
-                    int cityIndex;
-                    int.TryParse(testForData[0], out cityIndex);
+                    int.TryParse(testForData[0], out int cityIndex);
 
                     if (testForData.Length == 3)
                     {
@@ -85,8 +85,7 @@ namespace Optimisation.Problems.SingleObjective.Discrete
                     if (test[0] == "EOF")
                         break;
 
-                    int cityIndex;
-                    int.TryParse(test[0], out cityIndex);
+                    int.TryParse(test[0], out int cityIndex);
 
                     if (cityIndex > 0)
                     {

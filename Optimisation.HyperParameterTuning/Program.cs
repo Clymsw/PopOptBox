@@ -45,7 +45,7 @@ namespace Optimisation.HyperParameterTuning
                     Console.WriteLine($"Optimisation {i}/{Number_Of_Restarts} complete.");
                     Console.WriteLine(); 
                 },
-                timeOutEvaluations: 10000);
+                timeOutEvaluations: (int)Math.Pow(Number_Of_Dimensions, 3.0) * 10);
             
             Console.WriteLine();
 

@@ -21,4 +21,67 @@
     <ProjectReference Include="..\Optimisation.Base\Optimisation.Base.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="SingleObjective\Discrete\Resources\att48.opt.tour">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SingleObjective\Discrete\Resources\att48.tsp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SingleObjective\Discrete\Resources\ch130.opt.tour">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SingleObjective\Discrete\Resources\ch130.tsp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SingleObjective\Discrete\Resources\ch150.opt.tour">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SingleObjective\Discrete\Resources\ch150.tsp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SingleObjective\Discrete\Resources\eil51.opt.tour">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SingleObjective\Discrete\Resources\eil51.tsp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SingleObjective\Discrete\Resources\eil76.opt.tour">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SingleObjective\Discrete\Resources\eil76.tsp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SingleObjective\Discrete\Resources\gr202.opt.tour">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SingleObjective\Discrete\Resources\gr202.tsp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SingleObjective\Discrete\Resources\gr96.opt.tour">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SingleObjective\Discrete\Resources\gr96.tsp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SingleObjective\Discrete\Resources\st70.opt.tour">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SingleObjective\Discrete\Resources\st70.tsp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SingleObjective\Discrete\Resources\ulysses16.opt.tour">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SingleObjective\Discrete\Resources\ulysses16.tsp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SingleObjective\Discrete\Resources\ulysses22.opt.tour">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="SingleObjective\Discrete\Resources\ulysses22.tsp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

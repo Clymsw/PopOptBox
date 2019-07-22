@@ -33,6 +33,10 @@ namespace Optimisation.Problems.SingleObjective.Discrete
 
         public override IEnumerable<double> Evaluate(DecisionVector definition)
         {
+            if (definition.Vector.Count != globalOptimum.Vector.Count)
+                throw new System.ArgumentOutOfRangeException(nameof(definition),
+                    $"Route should be a complete tour of {globalOptimum.Vector.Count} stops.");
+
             return new[] { CalculateTotalTravelDistance(definition.Vector.Select(l => (int)l)) };
         }
 
