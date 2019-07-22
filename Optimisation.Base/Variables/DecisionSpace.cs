@@ -92,6 +92,9 @@ namespace Optimisation.Base.Variables
         /// <returns>True (acceptable) or false (not acceptable).</returns>
         public bool IsAcceptableDecisionVector(IEnumerable<object> vector)
         {
+            if (vector.Count() != Dimensions.Count)
+                return false;
+
             var acceptable = true;
             for (var i = 0; i < vector.Count(); i++)
             {
