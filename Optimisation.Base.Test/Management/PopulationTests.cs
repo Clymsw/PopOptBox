@@ -146,6 +146,27 @@ namespace Optimisation.Base.Management.Test
         }
 
         [Fact]
+        public void ConstantLengthDvPop_ReplaceParticularIndividual_PerformsCorrectly()
+        {
+            var bestInd = ObjectCreators.EvaluateIndividual(
+                ObjectCreators.GetIndividual(
+                    ind.DecisionVector.Vector.Select(i => (double)i + 1).ToArray()),
+                ind.Fitness - 1);
+
+            popConstLenDvInitInd.AddIndividual(bestInd);
+
+            var evenBetterInd = ObjectCreators.EvaluateIndividual(
+                ObjectCreators.GetIndividual(
+                    ind.DecisionVector.Vector.Select(i => (double)i + 1).ToArray()),
+                ind.Fitness - 2);
+
+            popConstLenDvInitInd.ReplaceIndividual(bestInd, evenBetterInd);
+
+            Assert.Equal(evenBetterInd, popConstLenDvInitInd.Best());
+            Assert.True(popConstLenDvInitInd.Count == 2);
+        }
+
+        [Fact]
         public void ConstantLengthDvPop_GetFitnesses_ReturnsSortedList()
         {
             var ind1 = ObjectCreators.EvaluateIndividual(

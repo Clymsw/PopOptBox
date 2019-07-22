@@ -230,7 +230,25 @@ namespace Optimisation.Base.Management
             members.Remove(Worst());
             AddIndividual(ind);
         }
-        
+
+        /// <summary>
+        /// Replaces a particular individual with another one.
+        /// </summary>
+        /// <param name="oldInd">Old individual to remove.</param>
+        /// <param name="newInd">New individual to replace it with.</param>
+        /// <exception cref="System.InvalidOperationException">Thrown when the population is empty, or old individual is not present.</exception>
+        public void ReplaceIndividual(Individual oldInd, Individual newInd)
+        {
+            if (members.Count == 0)
+                throw new InvalidOperationException("Population has no members.");
+
+            var removedOk = members.Remove(oldInd);
+            if (!removedOk)
+                throw new InvalidOperationException("Old individual was not found in population.");
+
+            AddIndividual(newInd);
+        }
+
         #endregion
 
         #region Implementation of IEnumerable
