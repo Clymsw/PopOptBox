@@ -9,9 +9,9 @@ using System.Linq;
 namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
 {
     /// <summary>
-    /// A mutation operator for <see cref="VariableContinuous"/> <see cref="DecisionVector"/> elements, which adds a random number drawn from a Normal distribution.
+    /// A mutation operator for <see cref="VariableContinuous"/> <see cref="DecisionVector"/> elements, which can add a random number drawn from a Normal distribution.
     /// </summary>
-    public class MutationAddRandomNumber : MutationOperator
+    public class MutationAddRandomNumber : Operator, IMutationOperator
     {
         private readonly RandomMutationManager rngManager;
         private readonly double normalStandardDeviation;
@@ -81,7 +81,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
 
                 for (var j = 0; j < numTimesToMutate; j++)
                 {
-                    var randomValue = Normal.Sample(0, normalStandardDeviation);
+                    var randomValue = Normal.Sample(rngManager.rng, 0, normalStandardDeviation);
                     newDv[i] = (double)newDv[i] + randomValue;
                 }
             }

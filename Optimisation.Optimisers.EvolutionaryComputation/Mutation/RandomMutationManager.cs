@@ -7,7 +7,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
 {
     public class RandomMutationManager
     {
-        private readonly RandomSource rng;
+        public readonly RandomSource rng;
 
         public RandomMutationManager(RandomSource rng = null)
         {

@@ -2,16 +2,14 @@
 
 namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
 {
-    public abstract class MutationOperator : IMutationOperator
+    public abstract class Operator
     {
         private readonly string name;
         
-        public MutationOperator(string name)
+        public Operator(string name)
         {
             this.name = name;
         }
-
-        public abstract DecisionVector Operate(DecisionVector decisionVector);
 
         public override string ToString()
         {
