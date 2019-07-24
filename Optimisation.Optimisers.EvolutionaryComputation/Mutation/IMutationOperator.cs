@@ -8,7 +8,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
     public interface IMutationOperator
     {
         /// <summary>
-        /// Mutates a decision vector
+        /// Mutates a decision vector.
         /// </summary>
         /// <param name="decisionVector">Current decision vector.</param>
         /// <returns>Mutated <see cref="DecisionVector"/>.</returns>

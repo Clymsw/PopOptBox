@@ -52,7 +52,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
         /// <returns>A new decision vector.</returns>
         /// <exception cref="ArgumentException">Thrown when decision vector is zero length or has no <seealso cref="VariableContinuous"/> elements.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when mutated values are not valid in the <see cref="DecisionSpace"/>.</exception>
-        public override DecisionVector Operate(DecisionVector decisionVector)
+        public DecisionVector Operate(DecisionVector decisionVector)
         {
             var oldVector = decisionVector.GetContinuousElements();
 

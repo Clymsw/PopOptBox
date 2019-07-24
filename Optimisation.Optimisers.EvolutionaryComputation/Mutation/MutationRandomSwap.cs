@@ -35,7 +35,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
         /// <param name="decisionVector">The existing decision vector.</param>
         /// <returns>A new decision vector.</returns>
         /// <exception cref="ArgumentException">Thrown when the decision vector has less than 2 elements.</exception>
-        public override DecisionVector Operate(DecisionVector decisionVector)
+        public DecisionVector Operate(DecisionVector decisionVector)
         {
             if (decisionVector.Vector.Count < 2)
                 throw new ArgumentException("Decision Vector must more than one element.",
