@@ -49,32 +49,33 @@ namespace Optimisation.HyperParameterTuning
             
             Console.WriteLine();
 
-            Console.WriteLine($"Global optimum location: {results.First().GlobalOptimumLocation}");
-            Console.WriteLine($"Global optimum solution: " + 
+            Console.WriteLine("Global optimum location: " +
+                $"{results.First().GlobalOptimumLocation}");
+            Console.WriteLine("Global optimum solution: " + 
                 $"{results.First().GlobalOptimumSolution.ElementAt(0).ToString("F4", System.Globalization.CultureInfo.InvariantCulture)}");
 
-            Console.WriteLine($"Best location found: " +
+            Console.WriteLine("Best location found: " +
                 $"{results.OrderBy(r => r.BestFitness).First().BestLocation}");
-            Console.WriteLine($"Best solution found: " + 
+            Console.WriteLine("Best solution found: " + 
                 $"{results.OrderBy(r => r.BestFitness).First().BestSolution.ElementAt(0).ToString("F4", System.Globalization.CultureInfo.InvariantCulture)}");
 
-            Console.WriteLine($"Mean number of evaluations required to find best solution: " +
+            Console.WriteLine("Mean number of evaluations required to find best solution: " +
                 $"{results.Average(r => r.EvaluationsToFindBest).ToString("F1", System.Globalization.CultureInfo.InvariantCulture)}");
 
-            Console.WriteLine($"Mean solution found: " +
+            Console.WriteLine("Mean solution found: " +
                 $"{results.Average(r => r.BestSolution.ElementAt(0)).ToString("F4", System.Globalization.CultureInfo.InvariantCulture)}");
 
             var threshold = results.ElementAt(0).GlobalOptimumSolution.ElementAt(0) + Fitness_Tolerance;
             var pctNearOptimum = (double)results
                 .Count(r => r.BestSolution.ElementAt(0) <= threshold) 
                 / results.Count * 100;
-            Console.WriteLine($"Proportion of solutions below " + 
+            Console.WriteLine("Proportion of solutions below " + 
                 $"{threshold.ToString("F", System.Globalization.CultureInfo.InvariantCulture)}: " +
                 $"{pctNearOptimum.ToString("F1", System.Globalization.CultureInfo.InvariantCulture)}%");
             
-            Console.WriteLine($"Mean number of evaluations required to converge: " +
+            Console.WriteLine("Mean number of evaluations required to converge: " +
                 $"{results.Average(r => r.EvaluationsToConverge).ToString("F1", System.Globalization.CultureInfo.InvariantCulture)}");
-            Console.WriteLine($"Mean time required to converge: " +
+            Console.WriteLine("Mean time required to converge: " +
                 $"{results.Average(r => r.TimeToConverge.TotalSeconds).ToString("F2", System.Globalization.CultureInfo.InvariantCulture)} seconds");
         }
 
