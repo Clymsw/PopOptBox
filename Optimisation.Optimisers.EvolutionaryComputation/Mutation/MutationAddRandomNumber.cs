@@ -50,11 +50,16 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
         /// </summary>
         /// <param name="decisionVector">The existing decision vector.</param>
         /// <returns>A new decision vector.</returns>
+        /// <exception cref="ArgumentException">Thrown when decision vector is zero length or has no <seealso cref="VariableContinuous"/> elements.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when mutated values are not valid in the <see cref="DecisionSpace"/>.</exception>
         public override DecisionVector Operate(DecisionVector decisionVector)
         {
             var oldVector = decisionVector.GetContinuousElements();
 
+            if (oldVector.Vector.Count == 0)
+                throw new ArgumentException("Decision Vector must have continuous elements",
+                    nameof(decisionVector)); 
+            
             var locationsToMutate = rngManager.GetMutationLocations(oldVector, maximumNumberOfMutations, true, mutationProbability);
 
             var newDv = new object[decisionVector.Vector.Count];
