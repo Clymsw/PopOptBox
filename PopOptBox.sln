@@ -27,6 +27,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optimisation.HyperParameter
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optimisation.Optimisers.EvolutionaryComputation", "Optimisation.Optimisers.EvolutionaryComputation\Optimisation.Optimisers.EvolutionaryComputation.csproj", "{2AA55C8F-53A5-477C-B5BB-06AD6127F9E5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optimisation.Optimisers.EvolutionaryComputation.Test", "Optimisation.Optimisers.EvolutionaryComputation.Test\Optimisation.Optimisers.EvolutionaryComputation.Test.csproj", "{79FD00F1-4BF3-4C23-8B68-10A7EA5A9F90}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,6 +67,10 @@ Global
 		{2AA55C8F-53A5-477C-B5BB-06AD6127F9E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2AA55C8F-53A5-477C-B5BB-06AD6127F9E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2AA55C8F-53A5-477C-B5BB-06AD6127F9E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79FD00F1-4BF3-4C23-8B68-10A7EA5A9F90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79FD00F1-4BF3-4C23-8B68-10A7EA5A9F90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79FD00F1-4BF3-4C23-8B68-10A7EA5A9F90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79FD00F1-4BF3-4C23-8B68-10A7EA5A9F90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -78,6 +84,7 @@ Global
 		{7AFDD4FC-15C4-4910-B131-C7E4C2996A4F} = {D3284B56-FCA5-48B7-9FCA-3BD44A9828FC}
 		{0C20CA89-F3AA-44AE-A59F-87A37A94F3A4} = {09D5D835-DD29-499F-9E81-206EF906A0F7}
 		{2AA55C8F-53A5-477C-B5BB-06AD6127F9E5} = {88BA456F-FD82-44B0-AC52-100171ED34F9}
+		{79FD00F1-4BF3-4C23-8B68-10A7EA5A9F90} = {D3284B56-FCA5-48B7-9FCA-3BD44A9828FC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F522A748-0D82-472C-B47E-97D3B74655A8}

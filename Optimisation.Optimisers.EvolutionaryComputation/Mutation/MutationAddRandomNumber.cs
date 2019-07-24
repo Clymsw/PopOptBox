@@ -57,30 +57,30 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
 
             var locationsToMutate = rngManager.GetMutationLocations(oldVector, maximumNumberOfMutations, true, mutationProbability);
 
-            var newDV = new object[decisionVector.Vector.Count];
-            var newDS = decisionVector.GetDecisionSpace();
-            int offset = 0;
-            for (int i = 0; i < decisionVector.Vector.Count; i++)
+            var newDv = new object[decisionVector.Vector.Count];
+            var newDs = decisionVector.GetDecisionSpace();
+            var offset = 0;
+            for (var i = 0; i < decisionVector.Vector.Count; i++)
             {
-                newDV[i] = decisionVector.Vector.ElementAt(i);
+                newDv[i] = decisionVector.Vector.ElementAt(i);
 
                 // If variable is not continuous, just copy
-                if (newDS.Dimensions.ElementAt(i).GetType() != typeof(VariableContinuous))
+                if (newDs.Dimensions.ElementAt(i).GetType() != typeof(VariableContinuous))
                 {
                     offset++;
                     continue;
                 }
 
                 // Variable is continuous - it may be mutated multiple times.
-                int numTimesToMutate = locationsToMutate.Count(l => l == (i + offset));
+                var numTimesToMutate = locationsToMutate.Count(l => l == (i + offset));
 
-                for (int j = 0; i < numTimesToMutate; j++)
+                for (var j = 0; j < numTimesToMutate; j++)
                 {
                     var randomValue = Normal.Sample(0, normalStandardDeviation);
-                    newDV[i] = (double)newDV[i] + randomValue;
+                    newDv[i] = (double)newDv[i] + randomValue;
                 }
             }
-            return DecisionVector.CreateFromArray(newDS, newDV);
+            return DecisionVector.CreateFromArray(newDs, newDv);
         }
     }
 }
