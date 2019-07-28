@@ -8,7 +8,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation.Test
 {
     public class RandomMutationManagerTests
     {
-        private readonly RandomMutationManager rngManager;
+        private readonly RandomNumberManager rngManager;
 
         private readonly DecisionVector testDv;
         
@@ -18,7 +18,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation.Test
                 DecisionSpace.CreateForUniformIntArray(8, 0, 7),
                 new int[8] {7, 6, 5, 4, 3, 2, 1, 0});
 
-            rngManager = new RandomMutationManager(new MersenneTwister(123456789)); 
+            rngManager = new RandomNumberManager(new MersenneTwister(123456789)); 
         }
         
         [Fact]

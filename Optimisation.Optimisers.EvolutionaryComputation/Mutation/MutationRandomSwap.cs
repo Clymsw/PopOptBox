@@ -12,7 +12,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
     public class MutationRandomSwap : Operator, IMutationOperator
     {
         private readonly double mutationProbability;
-        private readonly RandomMutationManager rngManager;
+        private readonly RandomNumberManager rngManager;
 
         /// <summary>
         /// Constructs a mutation operator that does nothing or swaps two elements in the <see cref="DecisionVector"/>.
@@ -26,7 +26,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
                 throw new ArgumentOutOfRangeException(nameof(mutationProbability), "Mutation probability must be a value between 0 and 1.");
             this.mutationProbability = mutationProbability;
 
-            rngManager = new RandomMutationManager();
+            rngManager = new RandomNumberManager();
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
                 throw new ArgumentException("Decision Vector must more than one element.",
                     nameof(decisionVector));
 
-            if (rngManager.rng.NextDouble() >= mutationProbability)
+            if (rngManager.Rng.NextDouble() >= mutationProbability)
                 return decisionVector;
 
             var locationsToSwap = rngManager.GetMutationLocations(decisionVector, 2, false, 1);

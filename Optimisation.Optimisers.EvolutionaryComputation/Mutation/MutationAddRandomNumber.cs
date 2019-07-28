@@ -13,7 +13,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
     /// </summary>
     public class MutationAddRandomNumber : Operator, IMutationOperator
     {
-        private readonly RandomMutationManager rngManager;
+        private readonly RandomNumberManager rngManager;
         private readonly double normalStandardDeviation;
         private readonly double mutationProbability;
         private readonly int maximumNumberOfMutations;
@@ -42,7 +42,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
                 throw new ArgumentOutOfRangeException(nameof(maximumNumberOfMutations), "Maximum number of mutations must be greater than 0.");
             this.maximumNumberOfMutations = maximumNumberOfMutations;
 
-            rngManager = new RandomMutationManager();
+            rngManager = new RandomNumberManager();
         }
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
 
                 for (var j = 0; j < numTimesToMutate; j++)
                 {
-                    var randomValue = Normal.Sample(rngManager.rng, 0, normalStandardDeviation);
+                    var randomValue = Normal.Sample(rngManager.Rng, 0, normalStandardDeviation);
                     newDv[i] = (double)newDv[i] + randomValue;
                 }
             }

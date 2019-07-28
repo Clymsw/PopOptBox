@@ -1,6 +1,6 @@
 ﻿using Optimisation.Base.Variables;
 
-namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
+namespace Optimisation.Optimisers.EvolutionaryComputation
 {
     /// <summary>
     /// Abstract for all operators, should be inherited together with e.g. <seealso cref="IMutationOperator"/>.

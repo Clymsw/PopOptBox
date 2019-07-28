@@ -3,15 +3,15 @@ using MathNet.Numerics.Random;
 using Optimisation.Base.Variables;
 using System.Collections.Generic;
 
-namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
+namespace Optimisation.Optimisers.EvolutionaryComputation
 {
-    public class RandomMutationManager
+    public class RandomNumberManager
     {
-        public readonly RandomSource rng;
+        public readonly RandomSource Rng;
 
-        public RandomMutationManager(RandomSource rng = null)
+        public RandomNumberManager(RandomSource rng = null)
         {
-            this.rng = rng ?? new MersenneTwister(threadSafe: true);
+            this.Rng = rng ?? new MersenneTwister(threadSafe: true);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
             while (i < maximumNumberOfMutations)
             {
                 // See if we will perform a mutation
-                var mutate = rng.NextDouble() <= lambda;
+                var mutate = Rng.NextDouble() <= lambda;
 
                 if (mutate)
                 {
@@ -54,7 +54,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
                         : locations.Count;
 
                     // Generate a value 
-                    var location = rng.Next(0, vector.Vector.Count - offset);
+                    var location = Rng.Next(0, vector.Vector.Count - offset);
 
                     if (mutationWithReplacement)
                     {
