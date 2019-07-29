@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 
 namespace Optimisation.Base.Variables.Test
 {
@@ -61,6 +62,45 @@ namespace Optimisation.Base.Variables.Test
             var vbl2 = new VariableContinuous(min, max);
 
             Assert.Equal(vbl1, vbl2);
+        }
+        
+        [Theory]
+        [InlineData(1.4, 2.4, 3.8)]
+        [InlineData(2.6, 3.2, 2.4)]
+        [InlineData(3.0, 6.0, 2.2)]
+        [InlineData(4.2, -1.7, 2.5)]
+        [InlineData(1.8, -2.6, 2.6)]
+        public void AddOrWrap_PositiveBounds_CorrectValuesReturned(double val1, double val2, double expectedResult)
+        {
+            var vbl = new VariableContinuous(1.2, 4.6);
+            var result = vbl.AddOrWrap(val1, val2);
+            Assert.True(Math.Abs(expectedResult - result) < 1e-6);
+        }
+        
+        [Theory]
+        [InlineData(-1.0, 0.8, -0.2)]
+        [InlineData(-1.5, 2.2, -2.8)]
+        [InlineData(-1.2, 8.0, -0.2)]
+        [InlineData(-1.2, -1.7, -2.9)]
+        [InlineData(-3.5, -3.2, -3.2)]
+        public void AddOrWrap_NegativeBounds_CorrectValuesReturned(double val1, double val2, double expectedResult)
+        {
+            var vbl = new VariableContinuous(-3.7, -0.2);
+            var result = vbl.AddOrWrap(val1, val2);
+            Assert.True(Math.Abs(expectedResult - result) < 1e-6);
+        }
+        
+        [Theory]
+        [InlineData(-1.0, 2.0, 1.0)]
+        [InlineData(0.5, 2.6, -0.9)]
+        [InlineData(-0.1, 7.2, -0.9)]
+        [InlineData(0.9, -2.1, -1.2)]
+        [InlineData(-1.8, -6.2, 0.0)]
+        public void AddOrWrap_MixedBounds_CorrectValuesReturned(double val1, double val2, double expectedResult)
+        {
+            var vbl = new VariableContinuous(-2.0, 2.0);
+            var result = vbl.AddOrWrap(val1, val2);
+            Assert.True(Math.Abs(expectedResult - result) < 1e-6);
         }
     }
 }

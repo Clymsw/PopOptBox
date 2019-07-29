@@ -14,13 +14,15 @@ namespace Optimisation.Base.Variables
         /// </summary>
         public readonly IReadOnlyList<IVariable> Dimensions;
 
-        #region Constructor
+        #region Constructors
         
         /// <summary>
         /// The constructor can be used for mixed arrays.
-        /// For uniform arrays, it is easier to use static constructors:
-        /// <see cref="CreateForUniformDoubleArray"/> and <see cref="CreateForUniformIntArray"/>
         /// </summary>
+        /// <remarks>
+        /// For uniform arrays, it is easier to use static constructors:
+        /// <see cref="CreateForUniformDoubleArray"/> or <see cref="CreateForUniformIntArray"/>
+        /// </remarks>
         /// <param name="decisionSpace">The array of <see cref="IVariable"/>s.</param>
         public DecisionSpace(IEnumerable<IVariable> decisionSpace)
         {

@@ -74,6 +74,23 @@ namespace Optimisation.Base.Variables
         }
 
         /// <summary>
+        /// Wrapped addition (or subtraction) operator for this variable.
+        /// </summary>
+        /// <param name="value1">A valid integer for this variable.</param>
+        /// <param name="value2">An integer to add (can be negative and invalid).</param>
+        /// <returns>A new integer, valid for this variable.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when <see cref="value1"/> is not in bounds.</exception>
+        public int AddOrWrap(int value1, int value2)
+        {
+            if (!IsInBounds(value1))
+                throw new ArgumentOutOfRangeException(nameof(value1), "Value must be legal for this variable.");
+            
+            // Get remainder in the range [1, r+1]
+            var remainder = (value1 + value2 - lowerBound + 1) % (upperBound - lowerBound + 1);
+            return remainder <= 0 ? upperBound + remainder : lowerBound + remainder - 1;
+        }
+        
+        /// <summary>
         /// Returns a string representation of a value for this variable.
         /// </summary>
         /// <param name="value">The value to be formatted (should be parsable as an integer)</param>
