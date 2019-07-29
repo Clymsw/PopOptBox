@@ -25,12 +25,12 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Test
         public void GetLocations_InvalidNumberOfLocations_Throws()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => 
-                rngManager.GetLocations(testDv,
+                rngManager.GetLocations(testDv.Vector.Count,
                 maximumNumberOfLocations: testDv.Vector.Count + 1,
                 selectionWithReplacement: false));
             
             Assert.Throws<ArgumentOutOfRangeException>(() => 
-                rngManager.GetLocations(testDv,
+                rngManager.GetLocations(testDv.Vector.Count,
                     maximumNumberOfLocations: 0,
                     selectionWithReplacement: false));
         }
@@ -39,18 +39,18 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Test
         public void GetLocations_InvalidProbabilityOfSelection_Throws()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => 
-                rngManager.GetLocations(testDv,
+                rngManager.GetLocations(testDv.Vector.Count,
                     lambda: -0.01));
             
             Assert.Throws<ArgumentOutOfRangeException>(() => 
-                rngManager.GetLocations(testDv,
+                rngManager.GetLocations(testDv.Vector.Count,
                     lambda: 1.01));
         }
         
         [Fact]
         public void GetLocations_OneLocationRequested_ZeroProbability_ReturnsEmptyList()
         {
-            var locations = rngManager.GetLocations(testDv, 
+            var locations = rngManager.GetLocations(testDv.Vector.Count, 
                 maximumNumberOfLocations: 1,
                 lambda: 0);
             
@@ -63,7 +63,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Test
             for (var i = 0; i < 10; i++)
             {
                 // Try this a few times to try to cause a mistake.
-                var locations = rngManager.GetLocations(testDv,
+                var locations = rngManager.GetLocations(testDv.Vector.Count,
                     maximumNumberOfLocations: 1,
                     selectionWithReplacement: false,
                     lambda: 1);
@@ -79,7 +79,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Test
             for (var i = 0; i < 10; i++)
             {
                 // Try this a few times to try to cause a mistake.
-                var locations = rngManager.GetLocations(testDv,
+                var locations = rngManager.GetLocations(testDv.Vector.Count,
                     maximumNumberOfLocations: 5,
                     selectionWithReplacement: true,
                     lambda: 1);
@@ -95,7 +95,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Test
             for (var i = 0; i < 10; i++)
             {
                 // Try this a few times to try to cause a mistake.
-                var locations = rngManager.GetLocations(testDv,
+                var locations = rngManager.GetLocations(testDv.Vector.Count,
                     maximumNumberOfLocations: testDv.Vector.Count,
                     selectionWithReplacement: false,
                     lambda: 1);

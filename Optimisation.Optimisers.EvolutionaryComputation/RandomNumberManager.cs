@@ -16,14 +16,15 @@ namespace Optimisation.Optimisers.EvolutionaryComputation
         }
         
         /// <summary>
-        /// Gets a list of locations in a <see cref="DecisionVector"/>, depending on various settings
+        /// Gets a list of locations in a <see cref="DecisionVector"/>, depending on various settings.
         /// </summary>
-        /// <param name="vector">The <see cref="DecisionVector"/> (which will be mutated by a <seealso cref="IMutationOperator"/>).</param>
+        /// <param name="decisionVectorLength">The <see cref="DecisionVector"/> length, indexes to which will be returned.</param>
         /// <param name="maximumNumberOfLocations">The maximum number of locations to select.</param>
         /// <param name="selectionWithReplacement"><see langword="true"/> if the same location can be returned twice.</param>
         /// <param name="lambda">The probability of choosing a location at all.</param>
         /// <returns>A list of locations in the original decision vector.</returns>
-        public IEnumerable<int> GetLocations(DecisionVector vector,
+        public IEnumerable<int> GetLocations(
+            int decisionVectorLength,
             int maximumNumberOfLocations = 1,
             bool selectionWithReplacement = false,
             double lambda = 0.1)
@@ -32,7 +33,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation
                 throw new ArgumentOutOfRangeException(nameof(maximumNumberOfLocations),
                     "Maximum number of locations must be greater than 0.");
             
-            if (!selectionWithReplacement && maximumNumberOfLocations > vector.Vector.Count)
+            if (!selectionWithReplacement && maximumNumberOfLocations > decisionVectorLength)
                 throw new ArgumentOutOfRangeException(nameof(maximumNumberOfLocations),
                     "If sampling without replacement, cannot ask for more locations than are available.");
             
@@ -55,7 +56,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation
                         : locations.Count;
 
                     // Generate a value 
-                    var location = Rng.Next(0, vector.Vector.Count - offset);
+                    var location = Rng.Next(0, decisionVectorLength - offset);
 
                     if (selectionWithReplacement)
                     {
