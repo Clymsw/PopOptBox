@@ -2,7 +2,6 @@
 using MathNet.Numerics.Random;
 using Optimisation.Base.Variables;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 
 namespace Optimisation.Optimisers.EvolutionaryComputation
 {

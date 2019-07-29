@@ -1,5 +1,4 @@
-﻿using MathNet.Numerics.Random;
-using Optimisation.Base.Variables;
+﻿using Optimisation.Base.Variables;
 using System;
 using System.Globalization;
 using System.Linq;

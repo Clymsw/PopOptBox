@@ -1,5 +1,4 @@
 ﻿using Optimisation.Base.Variables;
-using System.Text;
 
 namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
 {

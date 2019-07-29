@@ -1,7 +1,6 @@
 using System.Linq;
 using MathNet.Numerics.Random;
 using Optimisation.Base.Conversion;
-using Optimisation.Base.Management;
 using Optimisation.Base.Variables;
 using Optimisation.Problems.SingleObjective.Continuous;
 

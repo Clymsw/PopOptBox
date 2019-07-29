@@ -1,8 +1,6 @@
 ﻿using MathNet.Numerics.Distributions;
-using MathNet.Numerics.Random;
 using Optimisation.Base.Variables;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Optimisation.Base.Variables;
 
 namespace Optimisation.Optimisers.NelderMead.Simplices

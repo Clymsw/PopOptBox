@@ -1,4 +1,3 @@
-using Optimisation.Base.Variables;
 using Optimisation.Optimisers.NelderMead.Test;
 using System;
 using System.Linq;

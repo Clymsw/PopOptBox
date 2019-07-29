@@ -1,7 +1,6 @@
 ﻿using Optimisation.Base.Variables;
 using Optimisation.Optimisers.NelderMead.Simplices;
 using System;
-using System.Collections.Generic;
 
 namespace Optimisation.Optimisers.NelderMead
 {
