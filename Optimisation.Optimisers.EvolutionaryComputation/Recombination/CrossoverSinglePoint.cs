@@ -17,7 +17,8 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
         /// <summary>
         /// Constructs a crossover operator to perform single-point two-parent crossover.
         /// </summary>
-        public CrossoverSinglePoint() : base("Swap vector elements around a randomly-chosen single point")
+        public CrossoverSinglePoint() 
+            : base("Swap vector elements around a randomly-chosen single point")
         {
             rngManager = new RandomNumberManager();
         }
