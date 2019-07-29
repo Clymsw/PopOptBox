@@ -45,9 +45,9 @@ namespace Optimisation.Base.Variables
                     "Variable generation range must be greater than zero.");
             
             this.lowerBound = lowerBound;
-            this.lowerBoundForGeneration = lowerBoundForGeneration;
+            this.lowerBoundForGeneration = Math.Max(lowerBound, lowerBoundForGeneration);
             this.upperBound = upperBound;
-            this.upperBoundForGeneration = upperBoundForGeneration;
+            this.upperBoundForGeneration = Math.Min(upperBound, upperBoundForGeneration);
             Name = name;
         }
 
