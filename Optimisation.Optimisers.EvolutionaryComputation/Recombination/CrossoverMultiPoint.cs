@@ -1,26 +1,29 @@
 ﻿using Optimisation.Base.Variables;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using MathNet.Numerics.Random;
 
 namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
 {
     /// <summary>
-    /// Performs the single-point crossover: takes two parent <see cref="DecisionVector"/>s and creates a new one,
-    /// by selecting the beginning section from one and the end section from the other.
-    /// See Jorge Magalhães-Mendes (2013) and Goldberg (1989)
+    /// Performs the multi-point crossover: takes two parent <see cref="DecisionVector"/>s and creates a new one,
+    /// by selecting alternating sections from each parent.
+    /// See Jorge Magalhães-Mendes (2013), Goldberg (1989) and de Jong (1992)
     /// </summary>
-    public class CrossoverSinglePoint : Operator, ITwoParentCrossoverOperator
+    public class CrossoverMultiPoint : Operator, ITwoParentCrossoverOperator
     {
         private readonly RandomNumberManager rngManager;
+        private readonly int numberOfCrossoverLocations; 
 
         /// <summary>
         /// Constructs a crossover operator to perform single-point two-parent crossover.
         /// </summary>
-        public CrossoverSinglePoint() 
-            : base("Swap vector elements around a randomly-chosen single point")
+        public CrossoverMultiPoint(int numberOfCrossoverLocations = 1) 
+            : base($"{numberOfCrossoverLocations}-point (not permutation-safe)")
         {
             rngManager = new RandomNumberManager();
+            this.numberOfCrossoverLocations = numberOfCrossoverLocations;
         }
 
         /// <summary>
@@ -40,31 +43,41 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
         public DecisionVector Operate(DecisionVector firstParent, DecisionVector secondParent)
         {
             // Choose one or other parent as first, at random.
-            DecisionVector item1, item2;
-            if (rngManager.Rng.NextBoolean())
-            {
-                item1 = secondParent;
-                item2 = firstParent;
-            }
-            else
-            {
-                item2 = secondParent;
-                item1 = firstParent;
-            }
+            var parents = rngManager.Rng.NextBoolean() 
+                ? new[] {secondParent, firstParent} 
+                : new[] {firstParent, secondParent};
 
             // Select a crossover location
             // The vectors might be different lengths, so select the shortest one.
-            var crossoverPoint = rngManager.Rng.Next(0, 
-                Math.Min(item1.Vector.Count, item2.Vector.Count));
-            
-            // Create the new Decision Vector
-            var newVector = item1.Vector.Take(crossoverPoint).ToList();
-            newVector.AddRange(item2.Vector.Skip(crossoverPoint));
+            var crossoverPoints = rngManager.GetLocations(
+                firstParent.Vector.Count > secondParent.Vector.Count
+                    ? secondParent
+                    : firstParent,
+                numberOfCrossoverLocations, 
+                false, 
+                1).ToList();
+            crossoverPoints.Add(0);
+            crossoverPoints.Sort();
+
+            var newVector = new List<object>();
+            var parentIdx = 0; 
+            for (var i = 1; i < crossoverPoints.Count; i++)
+            {
+                // Add elements to the new Decision Vector
+                newVector.AddRange(parents.ElementAt(parentIdx).Vector
+                    .Skip(crossoverPoints.ElementAt(i - 1))
+                    .Take(crossoverPoints.ElementAt(i)));
+                
+                // Flip parent
+                parentIdx++;
+                if (parentIdx > 1)
+                    parentIdx = 0;
+            }
 
             return DecisionVector.CreateFromArray(
-                item1.Vector.Count == newVector.Count 
-                    ? item1.GetDecisionSpace()
-                    : item2.GetDecisionSpace(), 
+                firstParent.Vector.Count == newVector.Count 
+                    ? firstParent.GetDecisionSpace()
+                    : secondParent.GetDecisionSpace(), 
                 newVector);
         }
     }

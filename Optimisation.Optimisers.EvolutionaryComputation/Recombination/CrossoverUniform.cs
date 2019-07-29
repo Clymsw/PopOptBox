@@ -21,7 +21,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
         /// <param name="crossoverBias">The bias towards the first parent, by default 0.5 (unbiased).</param>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the <see cref="crossoverBias"/> is not a legal probability.</exception>
         public CrossoverUniform(double crossoverBias = 0.5) 
-            : base($"Choose value from first parent with probability {crossoverBias}")
+            : base($"Uniform (first parent chosen with probability {crossoverBias})")
         {
             if (crossoverBias < 0.0 || crossoverBias > 1.0)
                 throw new ArgumentOutOfRangeException(nameof(crossoverBias),
