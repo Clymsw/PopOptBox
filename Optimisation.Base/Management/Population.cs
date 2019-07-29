@@ -220,33 +220,53 @@ namespace Optimisation.Base.Management
         /// <summary>
         /// Replaces worst individual with a new one.
         /// </summary>
-        /// <param name="ind">New individual to insert.</param>
+        /// <param name="individualToInsert">New individual to insert.</param>
         /// <exception cref="System.InvalidOperationException">Thrown when the population is empty.</exception>
-        public void ReplaceWorst(Individual ind)
+        public void ReplaceWorst(Individual individualToInsert)
         {
             if (members.Count == 0)
                 throw new InvalidOperationException("Population has no members.");
 
             members.Remove(Worst());
-            AddIndividual(ind);
+            AddIndividual(individualToInsert);
         }
 
         /// <summary>
-        /// Replaces a particular individual with another one.
+        /// Replaces individual with a particular index with a new one.
         /// </summary>
-        /// <param name="oldInd">Old individual to remove.</param>
-        /// <param name="newInd">New individual to replace it with.</param>
-        /// <exception cref="System.InvalidOperationException">Thrown when the population is empty, or old individual is not present.</exception>
-        public void ReplaceIndividual(Individual oldInd, Individual newInd)
+        /// <param name="index">The index of the individual to remove.</param>
+        /// <param name="individualToInsert">New individual to insert.</param>
+        /// <exception cref="InvalidOperationException">Thrown when the population is empty.</exception>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the index is not valid.</exception>
+        public void ReplaceIndividualAt(int index, Individual individualToInsert)
+        {
+            if (members.Count == 0)
+                throw new InvalidOperationException("Population has no members.");
+            
+            if (index < 0 || index >= members.Count)
+                throw new ArgumentOutOfRangeException(nameof(index), $"{index} is not a valid index into the population.");
+            
+            members.RemoveAt(index);
+            
+            AddIndividual(individualToInsert);
+        }
+
+        /// <summary>
+        /// Replaces a particular individual with a new one.
+        /// </summary>
+        /// <param name="individualToRemove">Old individual to remove.</param>
+        /// <param name="individualToInsert">New individual to insert.</param>
+        /// <exception cref="InvalidOperationException">Thrown when the population is empty, or old individual is not present.</exception>
+        public void ReplaceIndividual(Individual individualToRemove, Individual individualToInsert)
         {
             if (members.Count == 0)
                 throw new InvalidOperationException("Population has no members.");
 
-            var removedOk = members.Remove(oldInd);
+            var removedOk = members.Remove(individualToRemove);
             if (!removedOk)
                 throw new InvalidOperationException("Old individual was not found in population.");
 
-            AddIndividual(newInd);
+            AddIndividual(individualToInsert);
         }
 
         #endregion
