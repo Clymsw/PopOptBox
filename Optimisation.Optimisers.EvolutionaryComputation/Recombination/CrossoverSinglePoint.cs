@@ -1,6 +1,7 @@
 ﻿using Optimisation.Base.Variables;
 using System;
 using System.Linq;
+using MathNet.Numerics.Random;
 
 namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
 {
@@ -38,7 +39,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
         {
             // Choose one or other parent as first, at random.
             DecisionVector item1, item2;
-            if (rngManager.Rng.NextDouble() < 0.5)
+            if (rngManager.Rng.NextBoolean())
             {
                 item1 = secondParent;
                 item2 = firstParent;

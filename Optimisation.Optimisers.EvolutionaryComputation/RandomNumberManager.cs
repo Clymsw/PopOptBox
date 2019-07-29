@@ -2,6 +2,7 @@
 using MathNet.Numerics.Random;
 using Optimisation.Base.Variables;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 
 namespace Optimisation.Optimisers.EvolutionaryComputation
 {
@@ -13,52 +14,52 @@ namespace Optimisation.Optimisers.EvolutionaryComputation
         {
             this.Rng = rng ?? new MersenneTwister(threadSafe: true);
         }
-
+        
         /// <summary>
-        /// Gets a list of locations for mutation, depending on various settings
+        /// Gets a list of locations in a <see cref="DecisionVector"/>, depending on various settings
         /// </summary>
-        /// <param name="vector">The <see cref="DecisionVector"/> which will be mutated by a <seealso cref="IMutationOperator"/>.</param>
-        /// <param name="maximumNumberOfMutations">The maximum number of mutations to perform.</param>
-        /// <param name="mutationWithReplacement"><see langword="true"/> if the same location can be returned twice.</param>
-        /// <param name="lambda">The probability of performing a mutation at all.</param>
+        /// <param name="vector">The <see cref="DecisionVector"/> (which will be mutated by a <seealso cref="IMutationOperator"/>).</param>
+        /// <param name="maximumNumberOfLocations">The maximum number of locations to select.</param>
+        /// <param name="selectionWithReplacement"><see langword="true"/> if the same location can be returned twice.</param>
+        /// <param name="lambda">The probability of choosing a location at all.</param>
         /// <returns>A list of locations in the original decision vector.</returns>
-        public IEnumerable<int> GetMutationLocations(DecisionVector vector,
-            int maximumNumberOfMutations = 1,
-            bool mutationWithReplacement = false,
+        public IEnumerable<int> GetLocations(DecisionVector vector,
+            int maximumNumberOfLocations = 1,
+            bool selectionWithReplacement = false,
             double lambda = 0.1)
         {
-            if (maximumNumberOfMutations <= 0)
-                throw new ArgumentOutOfRangeException(nameof(maximumNumberOfMutations),
-                    "Maximum number of mutations must be greater than 0.");
+            if (maximumNumberOfLocations <= 0)
+                throw new ArgumentOutOfRangeException(nameof(maximumNumberOfLocations),
+                    "Maximum number of locations must be greater than 0.");
             
-            if (!mutationWithReplacement && maximumNumberOfMutations > vector.Vector.Count)
-                throw new ArgumentOutOfRangeException(nameof(maximumNumberOfMutations),
-                    "If sampling without replacement, cannot ask for more mutation locations than are available.");
+            if (!selectionWithReplacement && maximumNumberOfLocations > vector.Vector.Count)
+                throw new ArgumentOutOfRangeException(nameof(maximumNumberOfLocations),
+                    "If sampling without replacement, cannot ask for more locations than are available.");
             
             if (lambda < 0 || lambda > 1)
                 throw  new ArgumentOutOfRangeException(nameof(lambda),
-                    "The probability of a mutation must be between 0 and 1.");
+                    "The probability of selecting a location must be between 0 and 1.");
             
             var locations = new List<int>();
             var i = 0;
-            while (i < maximumNumberOfMutations)
+            while (i < maximumNumberOfLocations)
             {
-                // See if we will perform a mutation
-                var mutate = Rng.NextDouble() <= lambda;
+                // See if we will make a selection
+                var mutate = Rng.NextDouble() < lambda;
 
                 if (mutate)
                 {
                     // See if we need to reduce the randomisation space
-                    var offset = mutationWithReplacement
+                    var offset = selectionWithReplacement
                         ? 0
                         : locations.Count;
 
                     // Generate a value 
                     var location = Rng.Next(0, vector.Vector.Count - offset);
 
-                    if (mutationWithReplacement)
+                    if (selectionWithReplacement)
                     {
-                        // We are generating mutations with replacement - just add to list.
+                        // We are generating with replacement - just add to list.
                         locations.Add(location);
                     }
                     else

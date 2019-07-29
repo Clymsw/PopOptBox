@@ -4,15 +4,15 @@ using MathNet.Numerics.Random;
 using Xunit;
 using Optimisation.Base.Variables;
 
-namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation.Test
+namespace Optimisation.Optimisers.EvolutionaryComputation.Test
 {
-    public class RandomMutationManagerTests
+    public class RandomNumberManagerTests
     {
         private readonly RandomNumberManager rngManager;
 
         private readonly DecisionVector testDv;
         
-        public RandomMutationManagerTests()
+        public RandomNumberManagerTests()
         {
             testDv = DecisionVector.CreateFromArray(
                 DecisionSpace.CreateForUniformIntArray(8, 0, 7),
@@ -22,50 +22,50 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation.Test
         }
         
         [Fact]
-        public void GetMutationLocations_InvalidNumberOfMutations_Throws()
+        public void GetLocations_InvalidNumberOfLocations_Throws()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => 
-                rngManager.GetMutationLocations(testDv,
-                maximumNumberOfMutations: testDv.Vector.Count + 1,
-                mutationWithReplacement: false));
+                rngManager.GetLocations(testDv,
+                maximumNumberOfLocations: testDv.Vector.Count + 1,
+                selectionWithReplacement: false));
             
             Assert.Throws<ArgumentOutOfRangeException>(() => 
-                rngManager.GetMutationLocations(testDv,
-                    maximumNumberOfMutations: 0,
-                    mutationWithReplacement: false));
+                rngManager.GetLocations(testDv,
+                    maximumNumberOfLocations: 0,
+                    selectionWithReplacement: false));
         }
         
         [Fact]
-        public void GetMutationLocations_InvalidProbabilityOfMutation_Throws()
+        public void GetLocations_InvalidProbabilityOfSelection_Throws()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => 
-                rngManager.GetMutationLocations(testDv,
+                rngManager.GetLocations(testDv,
                     lambda: -0.01));
             
             Assert.Throws<ArgumentOutOfRangeException>(() => 
-                rngManager.GetMutationLocations(testDv,
+                rngManager.GetLocations(testDv,
                     lambda: 1.01));
         }
         
         [Fact]
-        public void GetMutationLocations_OneMutationRequested_ZeroProbabilityOfMutation_ReturnsEmptyList()
+        public void GetLocations_OneLocationRequested_ZeroProbability_ReturnsEmptyList()
         {
-            var locations = rngManager.GetMutationLocations(testDv, 
-                maximumNumberOfMutations: 1,
+            var locations = rngManager.GetLocations(testDv, 
+                maximumNumberOfLocations: 1,
                 lambda: 0);
             
             Assert.True(!locations.Any());
         }
         
         [Fact]
-        public void GetMutationLocations_OneMutationRequested_OneMutationOccurs_ReturnsOneValidLocation()
+        public void GetLocations_OneLocationRequested_CertainProbability_ReturnsOneValidLocation()
         {
             for (var i = 0; i < 10; i++)
             {
                 // Try this a few times to try to cause a mistake.
-                var locations = rngManager.GetMutationLocations(testDv,
-                    maximumNumberOfMutations: 1,
-                    mutationWithReplacement: false,
+                var locations = rngManager.GetLocations(testDv,
+                    maximumNumberOfLocations: 1,
+                    selectionWithReplacement: false,
                     lambda: 1);
                 
                 Assert.True(locations.Count() == 1);
@@ -74,14 +74,14 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation.Test
         }
         
         [Fact]
-        public void GetMutationLocations_FiveMutationsRequestedWithReplacement_FiveMutationsOccur_ReturnsFiveValidLocations()
+        public void GetLocations_FiveLocationsRequestedWithReplacement_CertainProbability_ReturnsFiveValidLocations()
         {
             for (var i = 0; i < 10; i++)
             {
                 // Try this a few times to try to cause a mistake.
-                var locations = rngManager.GetMutationLocations(testDv,
-                    maximumNumberOfMutations: 5,
-                    mutationWithReplacement: true,
+                var locations = rngManager.GetLocations(testDv,
+                    maximumNumberOfLocations: 5,
+                    selectionWithReplacement: true,
                     lambda: 1);
                 
                 Assert.True(locations.Count() == 5);
@@ -90,14 +90,14 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation.Test
         }
         
         [Fact]
-        public void GetMutationLocations_AllMutationsRequestedWithoutReplacement_ReturnsAllUniqueValidLocations()
+        public void GetLocations_SameNumberAsLength_NoReplacement_ReturnsAllUniqueValidLocations()
         {
             for (var i = 0; i < 10; i++)
             {
                 // Try this a few times to try to cause a mistake.
-                var locations = rngManager.GetMutationLocations(testDv,
-                    maximumNumberOfMutations: testDv.Vector.Count,
-                    mutationWithReplacement: false,
+                var locations = rngManager.GetLocations(testDv,
+                    maximumNumberOfLocations: testDv.Vector.Count,
+                    selectionWithReplacement: false,
                     lambda: 1);
 
                 Assert.True(locations.Count() == testDv.Vector.Count);
