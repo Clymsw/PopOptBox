@@ -74,7 +74,7 @@ namespace Optimisation.Base.Variables.Test
         {
             var vbl = new VariableContinuous(1.2, 4.6);
             var result = vbl.AddOrWrap(val1, val2);
-            Assert.True(Math.Abs(expectedResult - result) < 1e-6);
+            Assert.True(Math.Abs(expectedResult - (double)result) < 1e-6);
         }
         
         [Theory]
@@ -87,7 +87,7 @@ namespace Optimisation.Base.Variables.Test
         {
             var vbl = new VariableContinuous(-3.7, -0.2);
             var result = vbl.AddOrWrap(val1, val2);
-            Assert.True(Math.Abs(expectedResult - result) < 1e-6);
+            Assert.True(Math.Abs(expectedResult - (double)result) < 1e-6);
         }
         
         [Theory]
@@ -100,7 +100,7 @@ namespace Optimisation.Base.Variables.Test
         {
             var vbl = new VariableContinuous(-2.0, 2.0);
             var result = vbl.AddOrWrap(val1, val2);
-            Assert.True(Math.Abs(expectedResult - result) < 1e-6);
+            Assert.True(Math.Abs(expectedResult - (double)result) < 1e-6);
         }
     }
 }

@@ -31,15 +31,18 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
                   $"with chance {mutationProbability.ToString("F2", CultureInfo.InvariantCulture)}")
         {
             if (normalStandardDeviation <= 0)
-                throw new ArgumentOutOfRangeException(nameof(normalStandardDeviation), "Mutation variance must be greater than 0.");
+                throw new ArgumentOutOfRangeException(nameof(normalStandardDeviation), 
+                    "Mutation variance must be greater than 0.");
             this.normalStandardDeviation = normalStandardDeviation;
 
             if (mutationProbability < 0 || mutationProbability > 1)
-                throw new ArgumentOutOfRangeException(nameof(mutationProbability), "Mutation probability must be a value between 0 and 1.");
+                throw new ArgumentOutOfRangeException(nameof(mutationProbability), 
+                    "Mutation probability must be a value between 0 and 1.");
             this.mutationProbability = mutationProbability;
 
             if (maximumNumberOfMutations <= 0)
-                throw new ArgumentOutOfRangeException(nameof(maximumNumberOfMutations), "Maximum number of mutations must be greater than 0.");
+                throw new ArgumentOutOfRangeException(nameof(maximumNumberOfMutations), 
+                    "Maximum number of mutations must be greater than 0.");
             this.maximumNumberOfMutations = maximumNumberOfMutations;
 
             rngManager = new RandomNumberManager();
@@ -47,20 +50,20 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
 
         /// <summary>
         /// Gets a new decision vector with continuous elements have potentially been mutated.
+        /// Uses <see cref="IVariable"/> to wrap the added number, ensuring a valid decision vector is always created.
         /// </summary>
         /// <param name="decisionVector">The existing decision vector.</param>
         /// <returns>A new decision vector.</returns>
         /// <exception cref="ArgumentException">Thrown when decision vector is zero length or has no <seealso cref="VariableContinuous"/> elements.</exception>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when mutated values are not valid in the <see cref="DecisionSpace"/>.</exception>
         public DecisionVector Operate(DecisionVector decisionVector)
         {
-            var oldVector = decisionVector.GetContinuousElements();
+            var oldVectorContinuousElements = decisionVector.GetContinuousElements();
 
-            if (oldVector.Vector.Count == 0)
+            if (oldVectorContinuousElements.Vector.Count == 0)
                 throw new ArgumentException("Decision Vector must have continuous elements",
                     nameof(decisionVector)); 
             
-            var locationsToMutate = rngManager.GetLocations(oldVector, maximumNumberOfMutations, true, mutationProbability);
+            var locationsToMutate = rngManager.GetLocations(oldVectorContinuousElements, maximumNumberOfMutations, true, mutationProbability);
 
             var newDv = new object[decisionVector.Vector.Count];
             var newDs = decisionVector.GetDecisionSpace();
@@ -77,12 +80,12 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
                 }
 
                 // Variable is continuous - it may be mutated multiple times.
-                var numTimesToMutate = locationsToMutate.Count(l => l == (i + offset));
+                var numTimesToMutate = locationsToMutate.Count(l => l == (i - offset));
 
                 for (var j = 0; j < numTimesToMutate; j++)
                 {
                     var randomValue = Normal.Sample(rngManager.Rng, 0, normalStandardDeviation);
-                    newDv[i] = (double)newDv[i] + randomValue;
+                    newDv[i] = newDs.Dimensions.ElementAt(i).AddOrWrap(newDv[i], randomValue);
                 }
             }
             return DecisionVector.CreateFromArray(newDs, newDv);
