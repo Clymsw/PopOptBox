@@ -33,5 +33,13 @@ namespace Optimisation.Base.Variables
         /// <returns>A string</returns>
         /// <exception cref="System.FormatException">Thrown when object is of the wrong type.</exception>
         string FormatAsString(object value);
+
+        /// <summary>
+        /// Addition (or subtraction) operator that returns a new object within bounds. 
+        /// </summary>
+        /// <param name="value1">A valid value for this variable.</param>
+        /// <param name="value2">An value to add (can be negative and invalid).</param>
+        /// <returns>A valid value.</returns>
+        object AddOrWrap(object value1, object value2);
     }
 }

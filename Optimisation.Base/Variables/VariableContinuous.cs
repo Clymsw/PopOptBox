@@ -81,13 +81,13 @@ namespace Optimisation.Base.Variables
         /// <param name="value2">An double to add (can be negative and invalid).</param>
         /// <returns>A new double, valid for this variable.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <see cref="value1"/> is not in bounds.</exception>
-        public double AddOrWrap(double value1, double value2)
+        public object AddOrWrap(object value1, object value2)
         {
             if (!IsInBounds(value1))
                 throw new ArgumentOutOfRangeException(nameof(value1), "Value must be legal for this variable.");
             
             // Get remainder in the range [0, r]
-            var remainder = (value1 + value2 - lowerBound) % (upperBound - lowerBound);
+            var remainder = ((double)value1 + (double)value2 - lowerBound) % (upperBound - lowerBound);
             return remainder <= 0 ? upperBound + remainder : lowerBound + remainder;
         }
 
