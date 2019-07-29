@@ -17,7 +17,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
         private readonly int numberOfCrossoverLocations; 
 
         /// <summary>
-        /// Constructs a crossover operator to perform single-point two-parent crossover.
+        /// Constructs a crossover operator to perform multi-point two-parent crossover.
         /// </summary>
         public CrossoverMultiPoint(int numberOfCrossoverLocations = 1) 
             : base($"{numberOfCrossoverLocations}-point (not permutation-safe)")
@@ -34,7 +34,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
         /// </summary>
         /// <remarks>
         /// All outcomes are equally likely, including that one or the other parent is returned complete.
-        /// The parents can have different length decision vectors; the longer parent's <see cref="DecisionSpace"/> is used.
+        /// The parents can have different length decision vectors; the parent with the correct length <see cref="DecisionSpace"/> is used.
         /// </remarks>
         /// <param name="firstParent">One <see cref="DecisionVector"/> to use as a parent.</param>
         /// <param name="secondParent">Another <see cref="DecisionVector"/> to use as a parent.</param>

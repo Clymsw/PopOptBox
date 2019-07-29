@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Optimisation.Base.Variables;
 
@@ -14,14 +15,14 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
     {
         private readonly RandomNumberManager rngManager;
         private readonly double crossoverBias;
-        
+
         /// <summary>
         /// Constructs a crossover operator to perform uniform two-parent crossover.
         /// </summary>
         /// <param name="crossoverBias">The bias towards the first parent, by default 0.5 (unbiased).</param>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the <see cref="crossoverBias"/> is not a legal probability.</exception>
-        public CrossoverUniform(double crossoverBias = 0.5) 
-            : base($"Uniform (first parent chosen with probability {crossoverBias})")
+        public CrossoverUniform(double crossoverBias = 0.5)
+            : base($"Uniform (first parent chosen with probability {crossoverBias.ToString("F2", CultureInfo.InvariantCulture)})")
         {
             if (crossoverBias < 0.0 || crossoverBias > 1.0)
                 throw new ArgumentOutOfRangeException(nameof(crossoverBias),

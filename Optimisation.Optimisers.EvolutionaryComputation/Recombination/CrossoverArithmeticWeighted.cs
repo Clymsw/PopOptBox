@@ -25,7 +25,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
         public CrossoverArithmeticWeighted(bool allRandomWeights = false, double fixedWeight = 0.5) 
             : base(allRandomWeights 
                 ? $"Arithmetic (random weights)" 
-                : $"Arithmetic (weight = {fixedWeight.ToString("F2", NumberFormatInfo.InvariantInfo)})")
+                : $"Arithmetic (weight = {fixedWeight.ToString("F2", CultureInfo.InvariantCulture)})")
         {
             if (!allRandomWeights && (fixedWeight < 0 || fixedWeight > 1))
                 throw new ArgumentOutOfRangeException(nameof(fixedWeight), "Weight must be between 0 and 1");
