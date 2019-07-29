@@ -48,11 +48,12 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
                 : new[] {firstParent, secondParent};
 
             // Select a crossover location
+            // This lies in between vector elements, hence Count + 1
             // The vectors might be different lengths, so select the shortest one.
             var crossoverPoints = rngManager.GetLocations(
                 firstParent.Vector.Count > secondParent.Vector.Count
-                    ? secondParent
-                    : firstParent,
+                    ? secondParent.Vector.Count + 1
+                    : firstParent.Vector.Count + 1,
                 numberOfCrossoverLocations, 
                 false, 
                 1).ToList();
@@ -63,16 +64,20 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
             var parentIdx = 0; 
             for (var i = 1; i < crossoverPoints.Count; i++)
             {
+                var numPointsToTake = crossoverPoints.ElementAt(i) - crossoverPoints.ElementAt(i - 1);
                 // Add elements to the new Decision Vector
                 newVector.AddRange(parents.ElementAt(parentIdx).Vector
                     .Skip(crossoverPoints.ElementAt(i - 1))
-                    .Take(crossoverPoints.ElementAt(i)));
+                    .Take(numPointsToTake));
                 
                 // Flip parent
                 parentIdx++;
                 if (parentIdx > 1)
                     parentIdx = 0;
             }
+
+            newVector.AddRange(parents.ElementAt(parentIdx).Vector
+                .Skip(crossoverPoints.Last()));
 
             return DecisionVector.CreateFromArray(
                 firstParent.Vector.Count == newVector.Count 

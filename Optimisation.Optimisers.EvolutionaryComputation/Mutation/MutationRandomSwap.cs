@@ -44,7 +44,8 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
             if (rngManager.Rng.NextDouble() >= mutationProbability)
                 return decisionVector;
 
-            var locationsToSwap = rngManager.GetLocations(decisionVector, 2, false, 1);
+            var locationsToSwap = rngManager.GetLocations(
+                decisionVector.Vector.Count, 2, false, 1);
 
             // New vector - swap elements
             var vector = decisionVector.Vector.ToList();

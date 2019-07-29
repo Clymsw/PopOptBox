@@ -63,7 +63,9 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
                 throw new ArgumentException("Decision Vector must have continuous elements",
                     nameof(decisionVector)); 
             
-            var locationsToMutate = rngManager.GetLocations(oldVectorContinuousElements, maximumNumberOfMutations, true, mutationProbability);
+            var locationsToMutate = rngManager.GetLocations(
+                oldVectorContinuousElements.Vector.Count, maximumNumberOfMutations,
+                true, mutationProbability);
 
             var newDv = new object[decisionVector.Vector.Count];
             var newDs = decisionVector.GetDecisionSpace();

@@ -22,10 +22,11 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination.Test
             
             var heteroSpace = decisionSpaceUniform.Dimensions.ToList();
             heteroSpace.Add(new VariableDiscrete(-4, -1));
+            heteroSpace.Add(new VariableDiscrete(-4, -1));
             var decisionSpaceHetero = new DecisionSpace(heteroSpace);
             
             parent3Longer = DecisionVector.CreateFromArray(
-                decisionSpaceHetero, new[] {1, 2, 3, 0, -3});
+                decisionSpaceHetero, new[] {1, 2, 3, 0, -1, -2});
         }
 
         [Fact]
