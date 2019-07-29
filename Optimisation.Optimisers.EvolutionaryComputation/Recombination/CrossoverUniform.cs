@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Optimisation.Base.Variables;
 
@@ -35,18 +36,34 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
         /// This selection can be biased towards the first parent (if <see cref="crossoverBias"/> is greater than 0.5)
         /// or towards the second parent (if <see cref="crossoverBias"/> is less than 0.5). 
         /// </summary>
+        /// <remarks>
+        /// The two decision vectors can be different lengths.
+        /// If so, for each element that only exists in the longer parent, if the shorter parent is selected,
+        /// that element is removed. 
+        /// </remarks>
         /// <param name="firstParent">One <see cref="DecisionVector"/> to use as a parent.</param>
         /// <param name="secondParent">Another <see cref="DecisionVector"/> to use as a parent.</param>
         /// <returns>A new <see cref="DecisionVector"/>.</returns>
         public DecisionVector Operate(DecisionVector firstParent, DecisionVector secondParent)
         {
-            var newVector = firstParent.Vector.Select(
-                (v,i) => rngManager.Rng.NextDouble() < crossoverBias
-                         ? v
-                         : secondParent.Vector.ElementAt(i)); 
+            var numDims = Math.Max(firstParent.Vector.Count, secondParent.Vector.Count);
+
+            var dims = new List<IVariable>();
+            var newVector = new List<object>();
+            for (var d = 0; d < numDims; d++)
+            {
+                var parentToUse = rngManager.Rng.NextDouble() < crossoverBias
+                    ? firstParent
+                    : secondParent;
+
+                if (parentToUse.Vector.Count < (d + 1)) 
+                    continue;
+                
+                dims.Add(parentToUse.GetDecisionSpace().Dimensions.ElementAt(d));
+                newVector.Add(parentToUse.Vector.ElementAt(d));
+            }
             
-            return DecisionVector.CreateFromArray(firstParent.GetDecisionSpace(),
-                newVector);
+            return DecisionVector.CreateFromArray(new DecisionSpace(dims), newVector);
         }
     }
 }

@@ -24,13 +24,14 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
         }
 
         /// <summary>
-        /// Gets a new decision vector, based on selected a point at random 
+        /// Gets a new decision vector, based on selecting a point at random 
         /// and copying values from one parent's decision vector before that point,
         /// then the values from the other parent's decision vector after that point.
-        /// The order the parents are provided does not matter, they are re-ordered at random to ensure uniform probability distribution over outcomes.
+        /// The order the parents are provided does not matter, they are selected at random to ensure uniform probability distribution over outcomes.
         /// </summary>
         /// <remarks>
         /// All outcomes are equally likely, including that one or the other parent is returned complete.
+        /// The parents can have different length decision vectors; the longer parent's <see cref="DecisionSpace"/> is used.
         /// </remarks>
         /// <param name="firstParent">One <see cref="DecisionVector"/> to use as a parent.</param>
         /// <param name="secondParent">Another <see cref="DecisionVector"/> to use as a parent.</param>
@@ -52,14 +53,18 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
             }
 
             // Select a crossover location
-            var crossoverPoint = rngManager.Rng.Next(0, firstParent.Vector.Count);
-
+            // The vectors might be different lengths, so select the shortest one.
+            var crossoverPoint = rngManager.Rng.Next(0, 
+                Math.Min(item1.Vector.Count, item2.Vector.Count));
+            
             // Create the new Decision Vector
             var newVector = item1.Vector.Take(crossoverPoint).ToList();
             newVector.AddRange(item2.Vector.Skip(crossoverPoint));
 
             return DecisionVector.CreateFromArray(
-                firstParent.GetDecisionSpace(),
+                item1.Vector.Count == newVector.Count 
+                    ? item1.GetDecisionSpace()
+                    : item2.GetDecisionSpace(), 
                 newVector);
         }
     }
