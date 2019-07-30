@@ -10,6 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCulture("")]
 [assembly: InternalsVisibleTo("Optimisation.Base.Test")]
 [assembly: InternalsVisibleTo("Optimisation.Optimisers.NelderMead.Test")]
+[assembly: InternalsVisibleTo("Optimisation.Optimisers.EvolutionaryComputation.Test")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

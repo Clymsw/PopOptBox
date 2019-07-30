@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp2.2</TargetFramework>
+        <TargetFramework>netcoreapp2.1</TargetFramework>
 
         <IsPackable>false</IsPackable>
     </PropertyGroup>
@@ -15,6 +15,10 @@
     <ItemGroup>
       <ProjectReference Include="..\Optimisation.Base\Optimisation.Base.csproj" />
       <ProjectReference Include="..\Optimisation.Optimisers.EvolutionaryComputation\Optimisation.Optimisers.EvolutionaryComputation.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Recombination\" />
     </ItemGroup>
 
 </Project>

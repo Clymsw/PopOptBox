@@ -36,12 +36,16 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.ParentSelection
         }
 
         /// <summary>
-        /// 
+        /// Gets a subset of the population which wins a tournament.
         /// </summary>
-        /// <param name="population"></param>
-        /// <param name="numberToSelect"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentOutOfRangeException"></exception>
+        /// <param name="population">The <see cref="Population"/> to be selected from.</param>
+        /// <param name="numberToSelect">The number of individuals to parents to select.</param>
+        /// <returns>A list of <see cref="Individual"/>s selected.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// Thrown when:
+        /// 1) the number of parents to select is greater than the tournament size;
+        /// 2) The population is smaller than the tournament size.
+        /// </exception>
         public IEnumerable<Individual> Select(Population population, int numberToSelect)
         {
             if (numberToSelect > population.Count || numberToSelect > tournamentSize)
@@ -70,8 +74,10 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.ParentSelection
 
         private Individual runTournament(IEnumerable<Individual> entrants)
         {
-            return entrants.First();
-            //TODO!
+            // Will throw an error if tournament size is greater than entrants.Count()
+            var ballotWinners = rngManager.GetLocations(entrants.Count(), tournamentSize, false, 1);
+            // Return highest index, since the population is always sorted
+            return entrants.ElementAt(ballotWinners.Min());
         }
     }
 }
