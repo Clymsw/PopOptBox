@@ -7,30 +7,30 @@ using Optimisation.Base.Management;
 namespace Optimisation.Optimisers.EvolutionaryComputation.ParentSelection
 {
     /// <summary>
-    /// A parent selection operator that selects two or more parents for recombination using a tournament.
+    /// A parent selection operator that selects two or more parents for recombination using tournaments.
     /// </summary>
     public class ParentSelectionTournament : Operator, IParentSelectionOperator
     {
         private readonly RandomNumberManager rngManager;
-        private readonly bool alwaysUseBest;
+        private readonly bool alwaysReturnBest;
         private readonly int tournamentSize;
         
         /// <summary>
         /// Creates a tournament parent selection operator.
         /// </summary>
         /// <param name="tournamentSize">The number of potential parents which are entered into the tournament.</param>
-        /// <param name="alwaysUseBest"><see langword="true"/> if the best individual is always entered into the tournament.</param>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown if the tournament size is not greater than zero.</exception>
-        public ParentSelectionTournament(int tournamentSize = 40, bool alwaysUseBest = false)
+        /// <param name="alwaysReturnBest"><see langword="true"/> if the best individual is always entered into the tournament.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the tournament size is less than 1.</exception>
+        public ParentSelectionTournament(int tournamentSize = 40, bool alwaysReturnBest = false)
             : base($"Tournament (size {tournamentSize}" 
-                   + (alwaysUseBest ? ", keeping best)" : ")"))
+                   + (alwaysReturnBest ? ", keeping best)" : ")"))
         {
             if (tournamentSize <= 0)
                 throw new ArgumentOutOfRangeException(nameof(tournamentSize),
                     "The tournament size must be greater than zero.");
             this.tournamentSize = tournamentSize;
 
-            this.alwaysUseBest = alwaysUseBest;
+            this.alwaysReturnBest = alwaysReturnBest;
             
             rngManager = new RandomNumberManager();
         }
@@ -56,7 +56,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.ParentSelection
             
             var remainingEntrants = population.GetMemberList().ToList();
 
-            if (alwaysUseBest)
+            if (alwaysReturnBest)
             {
                 parents.Add(population.Best());
                 remainingEntrants.Remove(population.Best());

@@ -1,3 +1,4 @@
+using Optimisation.Base.Helpers;
 using Optimisation.Base.Management;
 using Optimisation.Base.Variables;
 using System.Collections.Generic;

@@ -12,8 +12,8 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation.Test
         public MutationReplaceWithRandomNumberTests()
         {
             testDv = DecisionVector.CreateFromArray(
-                DecisionSpace.CreateForUniformIntArray(8, 0, 10),
-                new int[8] {7, 6, 5, 4, 3, 2, 1, 0});
+                DecisionSpace.CreateForUniformDoubleArray(8, 0, 10),
+                new double[8] {7, 6, 5, 4, 3, 2, 1, 0});
         }
         
         [Fact]
@@ -55,6 +55,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation.Test
 
             var newDv = mutator.Operate(testDv);
             
+            // TODO: This can fail if it generates the same value it already had!
             Assert.NotEqual(testDv, newDv);
             Assert.Equal(testDv.Vector.Count, newDv.Vector.Count);
             Assert.Equal(testDv.Vector.Count - 1,
