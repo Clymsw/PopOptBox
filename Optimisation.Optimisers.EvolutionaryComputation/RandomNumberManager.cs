@@ -7,23 +7,28 @@ using MathNet.Numerics;
 
 namespace Optimisation.Optimisers.EvolutionaryComputation
 {
-    public class RandomNumberManager
+    internal class RandomNumberManager
     {
         public readonly RandomSource Rng;
 
+        /// <summary>
+        /// Constructs the random number manager.
+        /// Tries to ensure thread-safe RNG.
+        /// </summary>
+        /// <param name="rng">A random number generator.</param>
         public RandomNumberManager(RandomSource rng = null)
         {
             this.Rng = rng ?? new MersenneTwister(threadSafe: true);
         }
         
         /// <summary>
-        /// Gets a list of locations in a <see cref="DecisionVector"/>, depending on various settings.
+        /// Gets a list of random indices into an array, depending on various settings.
         /// </summary>
-        /// <param name="numberOfLocationsToChooseFrom">The <see cref="DecisionVector"/> length, indexes to which will be returned.</param>
+        /// <param name="numberOfLocationsToChooseFrom">The array length, indexes to which will be returned.</param>
         /// <param name="maximumNumberOfLocations">The maximum number of locations to select.</param>
-        /// <param name="selectionWithReplacement"><see langword="true"/> if the same location can be returned twice.</param>
+        /// <param name="selectionWithReplacement"><see langword="true"/> if the same location can be returned more than once.</param>
         /// <param name="lambda">The probability of choosing a location at all.</param>
-        /// <returns>A list of locations in the original decision vector.</returns>
+        /// <returns>A list of locations in the original array.</returns>
         public IEnumerable<int> GetLocations(
             int numberOfLocationsToChooseFrom,
             int maximumNumberOfLocations = 1,

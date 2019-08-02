@@ -3,14 +3,15 @@
 namespace Optimisation.Optimisers.EvolutionaryComputation.Reinsertion
 {
     /// <summary>
-    /// A re-insertion operator which replaces the worst current individual in the population if the candidate individual is better.
+    /// A re-insertion operator which replaces the worst current individual in the population 
+    /// if the candidate individual is better.
     /// </summary>
-    public class ReInsertionReplaceWorst : Operator, IReInsertionOperator
+    public class ReinsertionReplaceWorst : Operator, IReinsertionOperator
     {
         /// <summary>
         /// Creates a replace-worst re-insertion operator.
         /// </summary>
-        public ReInsertionReplaceWorst() : base("Replace worst if better")
+        public ReinsertionReplaceWorst() : base("Replace worst if better")
         {
         }
 

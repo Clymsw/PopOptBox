@@ -1,14 +1,11 @@
 ﻿using Optimisation.Base.Management;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Optimisation.Optimisers.EvolutionaryComputation.Reinsertion
 {
     /// <summary>
     /// Interface for all re-insertion operators, that will be used to override <see cref="Optimiser.ReInsert(Individual)"/>.
     /// </summary>
-    interface IReInsertionOperator
+    interface IReinsertionOperator
     {
         /// <summary>
         /// Perform the re-insertion.

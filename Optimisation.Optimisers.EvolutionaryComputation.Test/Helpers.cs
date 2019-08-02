@@ -22,10 +22,10 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Test
             return inds;
         }
 
-        public static void EvaluateIndividual(this Individual ind, double value = 1.0)
+        public static void EvaluateIndividual(this Individual ind, double fitness = 1.0)
         {
             ind.SendForEvaluation();
-            ind.SetProperty("solution", new[] { value });
+            ind.SetProperty("solution", new[] { fitness });
             ind.SetSolution("solution");
             ind.SetLegality(true);
             ind.FinishEvaluating();
