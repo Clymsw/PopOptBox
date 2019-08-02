@@ -9,7 +9,7 @@ using System.Linq;
 namespace Optimisation.Optimisers.EvolutionaryComputation
 {
     /// <summary>
-    /// An Evoluationary Algorithm performs guided random search on real-valued search spaces, based on the locations of groups of parents.
+    /// An Evolutionary Algorithm performs guided random search on real-valued search spaces, based on recombining groups of parents.
     /// </summary>
     class EvolutionaryAlgorithm : Optimiser
     {
@@ -60,7 +60,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation
         {
             // Select two parents
             var parents = parentSelector.Select(Population, numberOfParents);
-            // Cross-over their decision vectors
+            // Recombine their decision vectors
             return recombinationOperator.Operate(parents.Select(p => p.DecisionVector));
         }
 

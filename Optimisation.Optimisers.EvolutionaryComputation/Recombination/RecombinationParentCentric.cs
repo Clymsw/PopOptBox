@@ -29,11 +29,11 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
                   $"sigma_zeta = {sigmaZeta.ToString("F2", System.Globalization.NumberFormatInfo.InvariantInfo)})")
         {
             if (sigmaEta <= 0)
-                throw new ArgumentOutOfRangeException(nameof(sigmaEta), "Sigma_eta is a variance and so must be greater than zero.");
+                throw new ArgumentOutOfRangeException(nameof(sigmaEta), "Sigma_eta must be greater than zero.");
             this.sigmaEta = sigmaEta;
 
             if (sigmaZeta <= 0)
-                throw new ArgumentOutOfRangeException(nameof(sigmaZeta), "Sigma_eta is a variance and so must be greater than zero.");
+                throw new ArgumentOutOfRangeException(nameof(sigmaZeta), "Sigma_eta must be greater than zero.");
             this.sigmaZeta = sigmaZeta;
 
             rngManager = new RandomNumberManager();
