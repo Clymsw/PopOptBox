@@ -102,7 +102,10 @@ namespace Optimisation.Base.Variables
         {
             if (!IsInBounds(value1))
                 throw new ArgumentOutOfRangeException(nameof(value1), "Value must be legal for this variable.");
-            
+
+            if (lowerBound == double.MinValue || upperBound == double.MaxValue)
+                return (double)value1 + (double)value2;
+
             // Get remainder in the range [0, r]
             var remainder = ((double)value1 + (double)value2 - lowerBound) % (upperBound - lowerBound);
             return remainder <= 0 ? upperBound + remainder : lowerBound + remainder;
