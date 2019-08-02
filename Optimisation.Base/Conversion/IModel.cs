@@ -1,22 +1,23 @@
 using Optimisation.Base.Management;
+using Optimisation.Base.Variables;
 
 namespace Optimisation.Base.Conversion
 {
     /// <summary>
-    /// The Model manages conversion between optimiser and evaluator
+    /// The Model manages conversion between optimiser and evaluator.
     /// </summary>
     public interface IModel
     {
         /// <summary>
-        /// Returns a new suggested individual based on some real-world logic
+        /// Returns a new suggested decision vector, based on some real-world logic.
         /// </summary>
-        /// <returns>An individual</returns>
-        Individual GetNewIndividual();
+        /// <returns>A decision vector.</returns>
+        DecisionVector GetNewDecisionVector();
         
         /// <summary>
-        /// Looks at an individual and inserts any real world information required for evaluation
+        /// Looks at an individual and inserts any real world information required for evaluation.
         /// </summary>
-        /// <param name="ind">The Individual to operate on</param>
+        /// <param name="ind">The Individual to operate on.</param>
         void PrepareForEvaluation(Individual ind);
     }
 }

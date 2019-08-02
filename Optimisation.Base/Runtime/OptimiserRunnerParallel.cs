@@ -90,7 +90,7 @@ namespace Optimisation.Base.Runtime
             if (timeOutEvaluations == 0)
             {
                 var numDims =
-                    builder.CreateModel().GetNewIndividual().DecisionVector.Vector.Count;
+                    builder.CreateModel().GetNewDecisionVector().Vector.Count;
                 timeOutEvaluations = Math.Min(numDims * 20000, 2000000);
             }
 

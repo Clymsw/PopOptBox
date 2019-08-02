@@ -36,20 +36,10 @@ namespace Optimisation.Base.Conversion
         #region Activity
 
         /// <summary>
-        /// Returns a new suggested individual based on some real-world logic.
+        /// Creates a new suggested decision vector based on some real-world logic.
         /// </summary>
-        /// <returns>An <see cref="Individual"/>.</returns>
-        public Individual GetNewIndividual()
-        {
-            return new Individual(CreateNewIndividual());
-        }
-
-        /// <summary>
-        /// Creates a new individual using some real-world logic.
-        /// Called by <see cref="GetNewIndividual" />
-        /// </summary>
-        /// <returns>A new Individual.</returns>
-        protected abstract DecisionVector CreateNewIndividual();
+        /// <returns>A new decision vector.</returns>
+        public abstract DecisionVector GetNewDecisionVector();
 
         /// <summary>
         /// Looks at an <see cref="Individual"/> and inserts any real world information required for evaluation.

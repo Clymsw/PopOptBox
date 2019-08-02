@@ -78,10 +78,10 @@ namespace Optimisation.Base.Management
         ///     The Decision Vector generator for population initialisation
         /// </summary>
         /// <returns></returns>
-        protected Func<Individual> CreateDecisionVectorGenerator()
+        protected Func<DecisionVector> CreateDecisionVectorGenerator()
         {
             var model = CreateModel();
-            return model.GetNewIndividual;
+            return model.GetNewDecisionVector;
         }
 
         /// <summary>

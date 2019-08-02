@@ -22,7 +22,7 @@ namespace Optimisation.Base.Conversion.Test
         [Fact]
         public void NewIndividualCreation_CallsMethodCorrectly()
         {
-            var ind = modelMock.GetNewIndividual();
+            var ind = new Individual(modelMock.GetNewDecisionVector());
             
             Assert.Equal(IndividualState.New, ind.State);
             
@@ -33,7 +33,7 @@ namespace Optimisation.Base.Conversion.Test
         [Fact]
         public void IndividualPreparedForEvaluation_HasCorrectState()
         {
-            var ind = modelMock.GetNewIndividual();
+            var ind = new Individual(modelMock.GetNewDecisionVector());
             modelMock.PrepareForEvaluation(ind);
             Assert.Equal(IndividualState.Evaluating, ind.State);
             Assert.Equal(builder.DecVec.ElementAt(0), 
