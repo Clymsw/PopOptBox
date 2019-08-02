@@ -35,7 +35,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
         {
             var parentArray = parents as DecisionVector[] ?? parents.ToArray();
             
-            if (parentArray.Count() < 2)
+            if (parentArray.Length < 2)
                 throw new ArgumentOutOfRangeException(nameof(parents), 
                     "There must be at least two parents.");
             
