@@ -1,9 +1,6 @@
 ﻿using Optimisation.Base.Management;
 using Optimisation.Optimisers.EvolutionaryComputation.Reinsertion;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Xunit;
 
 namespace Optimisation.Optimisers.EvolutionaryComputation.Test.Reinsertion
@@ -63,6 +60,5 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Test.Reinsertion
 
             Assert.Contains(newInd, testPop);
         }
-
     }
 }

@@ -1,5 +1,7 @@
 using MathNet.Numerics.Random;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Optimisation.Base.Variables
 {
@@ -89,6 +91,17 @@ namespace Optimisation.Base.Variables
             // Get remainder in the range [0, r]
             var remainder = ((double)value1 + (double)value2 - lowerBound) % (upperBound - lowerBound);
             return remainder <= 0 ? upperBound + remainder : lowerBound + remainder;
+        }
+
+        /// <summary>
+        /// Gets an array of evenly-spaced values across the dimension (starting at the boundaries).
+        /// </summary>
+        /// <param name="numberOfLocations">The number of locations to return.</param>
+        /// <returns>A list of doubles.</returns>
+        public IEnumerable<object> GetSpacedArray(int numberOfLocations)
+        {
+            return Enumerable.Range(0, numberOfLocations)
+                .Select(i => (object)(lowerBound + (i * (upperBound - lowerBound) / (numberOfLocations - 1))));
         }
 
         /// <summary>

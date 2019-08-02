@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Xunit;
 
 namespace Optimisation.Base.Variables.Test
@@ -101,6 +102,31 @@ namespace Optimisation.Base.Variables.Test
             var vbl = new VariableContinuous(-2.0, 2.0);
             var result = vbl.AddOrWrap(val1, val2);
             Assert.True(Math.Abs(expectedResult - (double)result) < 1e-6);
+        }
+
+        [Fact]
+        public void GetSpacedArray_WithTwoPoints_ReturnsBounds()
+        {
+            var min = 4.0;
+            var max = 8.0;
+            var vbl1 = new VariableContinuous(min, max);
+            var points = vbl1.GetSpacedArray(2);
+
+            Assert.Equal(min, points.First());
+            Assert.Equal(max, points.Last());
+        }
+
+        [Fact]
+        public void GetSpacedArray_WithThreePoints_ReturnsEvenSpacedArray()
+        {
+            var min = 4.0;
+            var max = 8.0;
+            var vbl1 = new VariableContinuous(min, max);
+            var points = vbl1.GetSpacedArray(3);
+
+            Assert.Equal(min, points.First());
+            Assert.Equal(6.0, points.ElementAt(1));
+            Assert.Equal(max, points.Last());
         }
     }
 }

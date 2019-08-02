@@ -1,5 +1,7 @@
 using MathNet.Numerics.Random;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Optimisation.Base.Variables
 {
@@ -71,6 +73,23 @@ namespace Optimisation.Base.Variables
         public object GetNextRandom(RandomSource rng)
         {
             return rng.Next(lowerBoundForGeneration, upperBoundForGeneration);
+        }
+
+        /// <summary>
+        /// Gets an array of evenly-spaced values across the dimension (starting at the boundaries).
+        /// </summary>
+        /// <param name="numberOfLocations">The number of locations to return.</param>
+        /// <returns>A list of integers.</returns>
+        public IEnumerable<object> GetSpacedArray(int numberOfLocations)
+        {
+            if (numberOfLocations > (upperBound - lowerBound + 1))
+                throw new ArgumentOutOfRangeException(nameof(numberOfLocations),
+                    $"Cannot ask for more locations than there are valid locations in the dimension ({upperBound - lowerBound + 1}).");
+
+            var increment = (double)(upperBound - lowerBound) / (numberOfLocations - 1);
+
+            return Enumerable.Range(0, numberOfLocations)
+                .Select(i => (object)(lowerBound + (int)Math.Round(i * increment)));
         }
 
         /// <summary>

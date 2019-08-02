@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System.Linq;
+using Xunit;
 
 namespace Optimisation.Base.Variables.Test
 {
@@ -88,6 +89,41 @@ namespace Optimisation.Base.Variables.Test
         {
             var vbl = new VariableDiscrete(-2, 4);
             Assert.Equal(expectedResult, vbl.AddOrWrap(val1, val2));
+        }
+
+        [Fact]
+        public void GetSpacedArray_WithTooManyPoints_Throws()
+        {
+            var min = 4;
+            var max = 5;
+            var vbl1 = new VariableDiscrete(min, max);
+
+            Assert.Throws<System.ArgumentOutOfRangeException>(() => vbl1.GetSpacedArray(3));
+        }
+
+        [Fact]
+        public void GetSpacedArray_WithTwoPoints_ReturnsBounds()
+        {
+            var min = 4;
+            var max = 8;
+            var vbl1 = new VariableDiscrete(min, max);
+            var points = vbl1.GetSpacedArray(2);
+
+            Assert.Equal(min, points.First());
+            Assert.Equal(max, points.Last());
+        }
+
+        [Fact]
+        public void GetSpacedArray_WithThreePoints_ReturnsEvenSpacedArray()
+        {
+            var min = 4;
+            var max = 8;
+            var vbl1 = new VariableDiscrete(min, max);
+            var points = vbl1.GetSpacedArray(3);
+
+            Assert.Equal(min, points.First());
+            Assert.Equal(6, points.ElementAt(1));
+            Assert.Equal(max, points.Last());
         }
     }
 }

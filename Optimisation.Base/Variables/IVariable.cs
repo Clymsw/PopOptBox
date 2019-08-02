@@ -1,4 +1,5 @@
 using MathNet.Numerics.Random;
+using System.Collections.Generic;
 
 namespace Optimisation.Base.Variables
 {
@@ -41,5 +42,12 @@ namespace Optimisation.Base.Variables
         /// <param name="value2">An value to add (can be negative and invalid).</param>
         /// <returns>A valid value.</returns>
         object AddOrWrap(object value1, object value2);
+
+        /// <summary>
+        /// Gets an array spaced evenly over the dimension (starting at the boundaries).
+        /// </summary>
+        /// <param name="numberOfLocations">The number of locations to return.</param>
+        /// <returns>An array of objects.</returns>
+        IEnumerable<object> GetSpacedArray(int numberOfLocations);
     }
 }
