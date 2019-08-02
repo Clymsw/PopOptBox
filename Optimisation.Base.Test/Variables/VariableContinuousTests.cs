@@ -64,7 +64,43 @@ namespace Optimisation.Base.Variables.Test
 
             Assert.Equal(vbl1, vbl2);
         }
-        
+
+        [Fact]
+        public void GetNearestLegalLocation_InputLocationIsLegal_ReturnsOriginal()
+        {
+            var min = -1.4;
+            var max = 2.5;
+            var vbl = new VariableContinuous(min, max);
+
+            var testValue = -0.2;
+
+            Assert.Equal(testValue, vbl.GetNearestLegalLocation(testValue));
+        }
+
+        [Fact]
+        public void GetNearestLegalLocation_InputLocationIsHigh_ReturnsUpperBound()
+        {
+            var min = -1.4;
+            var max = 2.5;
+            var vbl = new VariableContinuous(min, max);
+
+            var testValue = 3.1;
+
+            Assert.Equal(max, vbl.GetNearestLegalLocation(testValue));
+        }
+
+        [Fact]
+        public void GetNearestLegalLocation_InputLocationIsLow_ReturnsLowerBound()
+        {
+            var min = -1.4;
+            var max = 2.5;
+            var vbl = new VariableContinuous(min, max);
+
+            var testValue = -5.8;
+
+            Assert.Equal(min, vbl.GetNearestLegalLocation(testValue));
+        }
+
         [Theory]
         [InlineData(1.4, 2.4, 3.8)]
         [InlineData(2.6, 3.2, 2.4)]

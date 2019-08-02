@@ -42,6 +42,42 @@ namespace Optimisation.Base.Variables.Test
         }
 
         [Fact]
+        public void GetNearestLegalLocation_InputLocationIsLegal_ReturnsOriginal()
+        {
+            var min = -5;
+            var max = 3;
+            var vbl = new VariableDiscrete(min, max);
+
+            var testValue = -1;
+            
+            Assert.Equal(testValue, vbl.GetNearestLegalLocation(testValue));
+        }
+
+        [Fact]
+        public void GetNearestLegalLocation_InputLocationIsHigh_ReturnsUpperBound()
+        {
+            var min = -5;
+            var max = 3;
+            var vbl = new VariableDiscrete(min, max);
+
+            var testValue = 6;
+
+            Assert.Equal(max, vbl.GetNearestLegalLocation(testValue));
+        }
+
+        [Fact]
+        public void GetNearestLegalLocation_InputLocationIsLow_ReturnsLowerBound()
+        {
+            var min = -5;
+            var max = 3;
+            var vbl = new VariableDiscrete(min, max);
+
+            var testValue = -12;
+
+            Assert.Equal(min, vbl.GetNearestLegalLocation(testValue));
+        }
+
+        [Fact]
         public void TwoVariablesSame_AreEqual()
         {
             var min = -3;
@@ -96,9 +132,9 @@ namespace Optimisation.Base.Variables.Test
         {
             var min = 4;
             var max = 5;
-            var vbl1 = new VariableDiscrete(min, max);
+            var vbl = new VariableDiscrete(min, max);
 
-            Assert.Throws<System.ArgumentOutOfRangeException>(() => vbl1.GetSpacedArray(3));
+            Assert.Throws<System.ArgumentOutOfRangeException>(() => vbl.GetSpacedArray(3));
         }
 
         [Fact]
@@ -106,8 +142,8 @@ namespace Optimisation.Base.Variables.Test
         {
             var min = 4;
             var max = 8;
-            var vbl1 = new VariableDiscrete(min, max);
-            var points = vbl1.GetSpacedArray(2);
+            var vbl = new VariableDiscrete(min, max);
+            var points = vbl.GetSpacedArray(2);
 
             Assert.Equal(min, points.First());
             Assert.Equal(max, points.Last());
@@ -118,8 +154,8 @@ namespace Optimisation.Base.Variables.Test
         {
             var min = 4;
             var max = 8;
-            var vbl1 = new VariableDiscrete(min, max);
-            var points = vbl1.GetSpacedArray(3);
+            var vbl = new VariableDiscrete(min, max);
+            var points = vbl.GetSpacedArray(3);
 
             Assert.Equal(min, points.First());
             Assert.Equal(6, points.ElementAt(1));

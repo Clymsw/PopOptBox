@@ -66,9 +66,24 @@ namespace Optimisation.Base.Variables
         }
 
         /// <summary>
+        /// Gets the legal value which is nearest to the provided value.
+        /// </summary>
+        /// <param name="testValue">The value to look near.</param>
+        /// <returns>A legal value (double).</returns>
+        public object GetNearestLegalLocation(object testValue)
+        {
+            if (IsInBounds(testValue))
+                return testValue;
+
+            return Convert.ToDouble(testValue) > upperBound
+                ? upperBound
+                : lowerBound;
+        }
+
+        /// <summary>
         /// Implements random number generation for this variable
         /// </summary>
-        /// <returns>A legal object (double).</returns>
+        /// <returns>A legal value (double).</returns>
         public object GetNextRandom(RandomSource rng)
         {
             return (rng.NextDouble() 
