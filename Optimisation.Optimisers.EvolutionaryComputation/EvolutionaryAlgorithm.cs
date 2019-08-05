@@ -23,8 +23,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation
         /// Creates an Evolutionary Algorithm. See Deb et al. 2002
         /// </summary>
         /// <param name="initialPopulation">The initial population (can be empty).</param>
-        /// <param name="solutionToScore">The conversion of solution to score.</param>
-        /// <param name="scoreToFitness">The conversion of score to fitness.</param>
+        /// <param name="solutionToFitness">The conversion of solution to fitness.</param>
         /// <param name="penalty">The conversion of solution to penalty if individual is illegal.</param>
         /// <param name="initialIndividualGenerator">Creates new decision vectors to build the first population. <seealso cref="Base.Conversion.IModel"/></param>
         /// <param name="parentSelector">The <see cref="IParentSelectionOperator"/> to use.</param>
@@ -32,15 +31,14 @@ namespace Optimisation.Optimisers.EvolutionaryComputation
         /// <param name="reinsertionOperator">The <see cref="IReinsertionOperator"/> to use.</param>
         public EvolutionaryAlgorithm(
             Population initialPopulation, 
-            Func<double[], double[]> solutionToScore, 
-            Func<double[], double> scoreToFitness, 
+            Func<double[], double> solutionToFitness, 
             Func<double[], double> penalty,
             Func<DecisionVector> initialIndividualGenerator,
             IParentSelectionOperator parentSelector,
             IMultiParentRecombinationOperator recombinationOperator,
             IReinsertionOperator reinsertionOperator,
             int numberOfParents = 5) 
-            : base(initialPopulation, solutionToScore, scoreToFitness, penalty)
+            : base(initialPopulation, solutionToFitness, penalty)
         {
             this.initialIndividualGenerator = initialIndividualGenerator;
             this.parentSelector = parentSelector;

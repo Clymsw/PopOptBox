@@ -65,13 +65,11 @@ namespace Optimisation.Base.Management.Test
             ind1.SetProperty(Cloning_Key, 1.2);
             ind1.SetProperty(ObjectCreators.Solution_Key, new[]{0.2, 5.1, 55});
             ind1.SetSolution(ObjectCreators.Solution_Key);
-            ind1.SetScore(sol => sol);
-            ind1.SetFitness(score => score[0]);
+            ind1.SetFitness(s => s[0]);
 
             Assert.Throws<System.ArgumentOutOfRangeException>(
                 () => ind.GetProperty<double>(Cloning_Key));
             Assert.NotEqual(ind.SolutionVector, ind1.SolutionVector);
-            Assert.NotEqual(ind.Score, ind1.Score);
             Assert.NotEqual(ind.Fitness, ind1.Fitness);
         }
 
@@ -108,21 +106,6 @@ namespace Optimisation.Base.Management.Test
         }
         
         [Fact]
-        public void Individual_ScoreSettingWorks()
-        {
-            var ind1 = ind.Clone();
-
-            var solution = new[] {0.2, 5.1, 55};
-            ind1.SetProperty(ObjectCreators.Solution_Key, solution);
-            ind1.SetSolution(ObjectCreators.Solution_Key);
-            ind1.SetScore(sol => sol.Select(s => s * 2).ToArray());
-
-            Assert.Equal(solution[0] * 2, ind1.Score.ElementAt(0));
-            Assert.Equal(solution[1] * 2, ind1.Score.ElementAt(1));
-            Assert.Equal(solution[2] * 2, ind1.Score.ElementAt(2));
-        }
-        
-        [Fact]
         public void Individual_FitnessSettingWorks()
         {
             var ind1 = ind.Clone();
@@ -130,8 +113,7 @@ namespace Optimisation.Base.Management.Test
             var solution = new[] {0.2, 5.1, 55};
             ind1.SetProperty(ObjectCreators.Solution_Key, solution);
             ind1.SetSolution(ObjectCreators.Solution_Key);
-            ind1.SetScore(sol => sol.Select(s => s * 2).ToArray());
-            ind1.SetFitness(score => score[0]);
+            ind1.SetFitness(s => s[0] * 2);
 
             Assert.Equal(solution[0] * 2, ind1.Fitness);
         }

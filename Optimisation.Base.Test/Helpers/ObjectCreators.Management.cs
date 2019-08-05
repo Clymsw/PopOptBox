@@ -30,8 +30,7 @@ namespace Optimisation.Base.Test.Helpers
             ind.SendForEvaluation();
             ind.SetProperty(Solution_Key, new[] {fitness});
             ind.SetSolution(Solution_Key);
-            ind.SetScore(sol => sol);
-            ind.SetFitness(score => score[0]);
+            ind.SetFitness(s => s[0]);
             ind.FinishEvaluating();
 
             return ind;
@@ -48,9 +47,8 @@ namespace Optimisation.Base.Test.Helpers
         
             public OptimiserMock(DecisionVector decisionVector,
                 Population initialPopulation, 
-                Func<double[], double[]> solutionToScore, 
-                Func<double[], double> scoreToFitness, 
-                Func<double[], double> penalty) : base(initialPopulation, solutionToScore, scoreToFitness, penalty)
+                Func<double[], double> solutionToFitness, 
+                Func<double[], double> penalty) : base(initialPopulation, solutionToFitness, penalty)
             {
                 this.decisionVector = decisionVector;
             }
@@ -82,8 +80,7 @@ namespace Optimisation.Base.Test.Helpers
                 return new OptimiserMock(
                     GetDecisionVector(DecVec),
                     GetEmptyPopulation(PopulationSize), 
-                    CreateSolutionToScore(),
-                    CreateScoreToFitness(),
+                    CreateSolutionToFitness(),
                     CreatePenalty());
             }
 
@@ -92,14 +89,9 @@ namespace Optimisation.Base.Test.Helpers
                 return new ModelMock(GetDecisionVector(DecVec), GetConverterMock());
             }
 
-            protected override Func<double[], double> CreateScoreToFitness()
+            protected override Func<double[], double> CreateSolutionToFitness()
             {
-                return ScoreToFitness.SingleObjectiveMinimise;
-            }
-
-            protected override Func<double[], double[]> CreateSolutionToScore()
-            {
-                return SolutionToScore.SingleObjective;
+                return SolutionToFitness.SingleObjectiveMinimise;
             }
 
             protected override Func<double[], double> CreatePenalty()

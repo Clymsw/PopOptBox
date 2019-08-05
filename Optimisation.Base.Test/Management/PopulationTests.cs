@@ -203,21 +203,6 @@ namespace Optimisation.Base.Management.Test
         }
         
         [Fact]
-        public void ConstantLengthDvPop_GetScores_ReturnsSortedList()
-        {
-            var ind1 = ObjectCreators.EvaluateIndividual(
-                ObjectCreators.GetIndividual(
-                    ind.DecisionVector.Vector.Select(i => (double)i+1).ToArray()),
-                ind.Fitness - 1);
-            
-            popConstLenDvInitInd.AddIndividual(ind1);
-
-            var scores = popConstLenDvInitInd.GetMemberScores();
-            Assert.True(scores.Count() == 2);
-            Assert.Equal(ind1.Score, scores.ElementAt(0));
-        }
-        
-        [Fact]
         public void ConstantLengthDvPop_GetSolutionVectors_ReturnsSortedList()
         {
             var ind1 = ObjectCreators.EvaluateIndividual(

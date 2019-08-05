@@ -31,11 +31,6 @@ namespace Optimisation.Base.Management
         public double[] SolutionVector { get; private set; }
 
         /// <summary>
-        /// Score for multi-objective optimisation with domination.
-        /// </summary>
-        public double[] Score { get; private set; }
-
-        /// <summary>
         /// The fitness, used to rank individuals and ultimately determine optimality.
         /// Lower is better.
         /// </summary>
@@ -77,7 +72,6 @@ namespace Optimisation.Base.Management
             return new Individual(DecisionVector)
             {
                 SolutionVector = (double[])SolutionVector?.Clone(),
-                Score = (double[])Score?.Clone(),
                 Fitness = Fitness,
                 properties = propCopy,
                 Legal = Legal,
@@ -186,24 +180,14 @@ namespace Optimisation.Base.Management
         }
 
         /// <summary>
-        /// Assigns Score based on a function which must be passed
-        /// in as a delegate that converts a double array into another double array.
-        /// </summary>
-        /// <param name="solToScore">Delegate converting solution to score</param>
-        public void SetScore(Func<double[], double[]> solToScore)
-        {
-            Score = solToScore(SolutionVector);
-        }
-
-        /// <summary>
         /// Assigns Fitness based on a function which must be passed
         /// in as a delegate that converts a double array into a single value.
         /// </summary>
-        /// <param name="scoreToFit">Delegate converting Score to Fitness.</param>
-        /// <exception cref="InvalidOperationException">Thrown when Score is null. <seealso cref="SetScore(Func{double[], double[]})"/>.</exception>
-        public void SetFitness(Func<double[], double> scoreToFit)
+        /// <param name="solutionToFitness">Delegate converting Solution vector to Fitness.</param>
+        /// <exception cref="InvalidOperationException">Thrown when Solution vector is null. <seealso cref="SetSolution(string)"/>.</exception>
+        public void SetFitness(Func<double[], double> solutionToFitness)
         {
-            Fitness = scoreToFit(Score);
+            Fitness = solutionToFitness(SolutionVector);
         }
 
         /// <summary>

@@ -30,8 +30,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Test
             ind.SetLegality(true);
             ind.FinishEvaluating();
 
-            ind.SetScore(SolutionToScore.SingleObjective);
-            ind.SetFitness(ScoreToFitness.SingleObjectiveMinimise);
+            ind.SetFitness(SolutionToFitness.SingleObjectiveMinimise);
         }
     }
 }

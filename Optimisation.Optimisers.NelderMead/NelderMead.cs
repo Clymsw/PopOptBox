@@ -41,7 +41,6 @@ namespace Optimisation.Optimisers.NelderMead
         /// <summary>
         /// Constructs a new Nelder-Mead Simplex local search optimiser
         /// </summary>
-        /// <param name="solutionToScore"><see cref="Optimiser"/></param>
         /// <param name="solutionToFitness"><see cref="Optimiser"/></param>
         /// <param name="penalty"><see cref="Optimiser"/></param>
         /// <param name="initialLocation">Starting location for the search</param>
@@ -51,13 +50,12 @@ namespace Optimisation.Optimisers.NelderMead
         /// <param name="contractionCoefficient">Contraction coefficient (only change this if you know what you are doing!)</param>
         /// <param name="shrinkageCoefficient">Shrinkage coefficient (only change this if you know what you are doing!)</param>
         public NelderMead(
-            Func<double[], double[]> solutionToScore,
             Func<double[], double> solutionToFitness,
             Func<double[], double> penalty,
             DecisionVector initialLocation, double simplexCreationStepSize = 1,
             double reflectionCoefficient = 1, double expansionCoefficient = 2,
             double contractionCoefficient = 0.5, double shrinkageCoefficient = 0.5) :
-            base(new Simplex(initialLocation.Vector.Count), solutionToScore, solutionToFitness, penalty)
+            base(new Simplex(initialLocation.Vector.Count), solutionToFitness, penalty)
         {
             // Set up simplex operations
             OperationsManager = new NelderMeadSimplexOperationsManager(reflectionCoefficient,

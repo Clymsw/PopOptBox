@@ -134,15 +134,6 @@ namespace Optimisation.Base.Management
         }
 
         /// <summary>
-        /// Get the Scores of all individuals
-        /// </summary>
-        /// <returns>List of double arrays: Score</returns>
-        public IEnumerable<double[]> GetMemberScores()
-        {
-            return members.Select(i => i.Score);
-        }
-
-        /// <summary>
         /// Get the Solution Vectors of all individuals
         /// </summary>
         /// <returns>List of double arrays: Solution Vector</returns>
@@ -154,7 +145,7 @@ namespace Optimisation.Base.Management
         /// <summary>
         /// Get the DVs of all individuals
         /// </summary>
-        /// <returns>List of object arrays: DV</returns>
+        /// <returns>List of object arrays: Decision Vector</returns>
         public IEnumerable<object[]> GetMemberDecisionVectors()
         {
             return members.Select(i => i.DecisionVector.Vector.ToArray());

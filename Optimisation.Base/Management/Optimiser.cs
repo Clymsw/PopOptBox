@@ -16,18 +16,15 @@ namespace Optimisation.Base.Management
         /// Constructs the optimiser.
         /// </summary>
         /// <param name="initialPopulation">An initial population (can be empty).</param>
-        /// /// <param name="solutionToScore">Conversion function to change solution vector into score. <seealso cref="Individual.SetScore(Func{double[], double[]})"/></param>
-        /// <param name="scoreToFitness">Conversion function to change score into fitness. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
+        /// <param name="solutionToFitness">Conversion function to change solution vector into fitness. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
         /// <param name="penalty">Function determining what penalty to assign for illegal individuals. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
         protected Optimiser(
             Population initialPopulation,
-            Func<double[], double[]> solutionToScore,
-            Func<double[], double> scoreToFitness,
+            Func<double[], double> solutionToFitness,
             Func<double[], double> penalty)
         {
             Population = initialPopulation;
-            this.scoreToFitness = scoreToFitness;
-            this.solutionToScore = solutionToScore;
+            this.solutionToFitness = solutionToFitness;
             this.penalty = penalty;
         }
 
@@ -40,8 +37,7 @@ namespace Optimisation.Base.Management
         /// </summary>
         public Population Population { get; }
 
-        private readonly Func<double[], double[]> solutionToScore;
-        private readonly Func<double[], double> scoreToFitness;
+        private readonly Func<double[], double> solutionToFitness;
         private readonly Func<double[], double> penalty;
 
         #endregion
@@ -113,8 +109,8 @@ namespace Optimisation.Base.Management
 
         /// <summary>
         /// Reinserts individuals, sets their fitness based on the functions provided in the constructor:
-        ///  - if legal, solution -> score -> fitness
-        ///  - if illegal, solution = score -> penalty
+        ///  - if legal, solution -> fitness
+        ///  - if illegal, solution -> penalty
         ///  <seealso cref="ReInsert(Individual)"/>
         /// </summary>
         /// <param name="individualList">List of <see cref="Individual"/>s to reinsert.</param>
@@ -131,8 +127,7 @@ namespace Optimisation.Base.Management
                 // assign fitness and store in population.
                 //If the individual has been evaluated but is not legal, 
                 // assign soft penalty and store in population.
-                ind.SetScore(ind.Legal ? solutionToScore : sol => sol);
-                ind.SetFitness(ind.Legal ? scoreToFitness : penalty);
+                ind.SetFitness(ind.Legal ? solutionToFitness : penalty);
 
                 ind.SetProperty(
                     OptimiserPropertyNames.ReinsertionTime,

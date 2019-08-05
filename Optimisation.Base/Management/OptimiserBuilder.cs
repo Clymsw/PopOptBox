@@ -85,16 +85,10 @@ namespace Optimisation.Base.Management
         }
 
         /// <summary>
-        ///     The score to fitness converter
+        ///     The solution to fitness converter
         /// </summary>
         /// <returns></returns>
-        protected abstract Func<double[], double> CreateScoreToFitness();
-        
-        /// <summary>
-        ///     The solution vector to score converter
-        /// </summary>
-        /// <returns></returns>
-        protected abstract Func<double[], double[]> CreateSolutionToScore();
+        protected abstract Func<double[], double> CreateSolutionToFitness();
 
         /// <summary>
         ///     The solution vector to penalty converter for illegal individuals
