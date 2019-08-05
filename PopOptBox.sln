@@ -25,9 +25,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optimisation.Optimisers.Nel
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optimisation.HyperParameterTuning", "Optimisation.HyperParameterTuning\Optimisation.HyperParameterTuning.csproj", "{0C20CA89-F3AA-44AE-A59F-87A37A94F3A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optimisation.Optimisers.EvolutionaryComputation", "Optimisation.Optimisers.EvolutionaryComputation\Optimisation.Optimisers.EvolutionaryComputation.csproj", "{2AA55C8F-53A5-477C-B5BB-06AD6127F9E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optimisation.Optimisers.EvolutionaryComputation", "Optimisation.Optimisers.EvolutionaryComputation\Optimisation.Optimisers.EvolutionaryComputation.csproj", "{2AA55C8F-53A5-477C-B5BB-06AD6127F9E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Optimisation.Optimisers.EvolutionaryComputation.Test", "Optimisation.Optimisers.EvolutionaryComputation.Test\Optimisation.Optimisers.EvolutionaryComputation.Test.csproj", "{79FD00F1-4BF3-4C23-8B68-10A7EA5A9F90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optimisation.Optimisers.EvolutionaryComputation.Test", "Optimisation.Optimisers.EvolutionaryComputation.Test\Optimisation.Optimisers.EvolutionaryComputation.Test.csproj", "{79FD00F1-4BF3-4C23-8B68-10A7EA5A9F90}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
