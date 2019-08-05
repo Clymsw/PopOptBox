@@ -18,7 +18,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.ParentSelection
         }
 
         /// <summary>
-        /// Gets a subset of the population with the best fitness.
+        /// Gets a subset of the population with the best Fitness.
         /// </summary>
         /// <param name="population">The <see cref="Population"/> to be selected from.</param>
         /// <param name="numberToSelect">The number of individuals to parents to select.</param>

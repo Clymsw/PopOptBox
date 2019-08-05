@@ -20,7 +20,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
         /// Constructs a crossover operator to perform weighted arithmetic (flat) two-parent crossover.
         /// </summary>
         /// <param name="allRandomWeights"><see langword="false"/> if weights are fixed to one value, specified by <see cref="fixedWeight"/>.</param>
-        /// <param name="fixedWeight">The value to weight the first parent's decision vector elements by when summing them.</param>
+        /// <param name="fixedWeight">The value to weight the first parent's Decision Vector elements by when summing them.</param>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the fixed weight is not between 0 and 1.</exception>
         public CrossoverArithmeticWeighted(bool allRandomWeights = false, double fixedWeight = 0.5) 
             : base(allRandomWeights 
@@ -36,7 +36,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
         }
 
         /// <summary>
-        /// Gets a new decision vector, based on a weighted average of the matching elements from each parent.
+        /// Gets a new Decision Vector, based on a weighted average of the matching elements from each parent.
         /// This sum can be biased towards the first parent (if <see cref="fixedWeight"/> is greater than 0.5)
         /// or towards the second parent (if <see cref="fixedWeight"/> is less than 0.5). 
         /// </summary>

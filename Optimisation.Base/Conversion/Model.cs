@@ -36,9 +36,9 @@ namespace Optimisation.Base.Conversion
         #region Activity
 
         /// <summary>
-        /// Creates a new suggested decision vector based on some real-world logic.
+        /// Creates a new suggested Decision Vector based on some real-world logic.
         /// </summary>
-        /// <returns>A new decision vector.</returns>
+        /// <returns>A new Decision Vector.</returns>
         public abstract DecisionVector GetNewDecisionVector();
 
         /// <summary>

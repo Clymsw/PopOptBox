@@ -9,9 +9,9 @@ namespace Optimisation.Base.Conversion
     public interface IModel
     {
         /// <summary>
-        /// Returns a new suggested decision vector, based on some real-world logic.
+        /// Returns a new suggested Decision Vector, based on some real-world logic.
         /// </summary>
-        /// <returns>A decision vector.</returns>
+        /// <returns>A Decision Vector.</returns>
         DecisionVector GetNewDecisionVector();
         
         /// <summary>

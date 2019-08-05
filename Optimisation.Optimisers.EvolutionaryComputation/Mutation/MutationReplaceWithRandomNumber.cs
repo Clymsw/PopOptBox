@@ -39,12 +39,12 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
         }
 
         /// <summary>
-        /// Gets a new decision vector where elements have potentially been mutated.
+        /// Gets a new Decision Vector where elements have potentially been mutated.
         /// Uses <see cref="IVariable"/> to implement the random number generation, so only valid individuals can be created.
         /// </summary>
-        /// <param name="decisionVector">The existing decision vector.</param>
+        /// <param name="decisionVector">The existing Decision Vector.</param>
         /// <returns>A new <see cref="DecisionVector"/>.</returns>
-        /// <exception cref="ArgumentException">Thrown when decision vector is zero length.</exception>
+        /// <exception cref="ArgumentException">Thrown when Decision Vector is zero length.</exception>
         public DecisionVector Operate(DecisionVector decisionVector)
         {
             if (decisionVector.Vector.Count == 0)

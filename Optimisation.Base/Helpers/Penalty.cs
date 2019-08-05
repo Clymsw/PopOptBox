@@ -1,14 +1,14 @@
 ﻿namespace Optimisation.Base.Helpers
 {
     /// <summary>
-    /// Helper functions for penalty delegates, <see cref="Management.Optimiser"/>.
+    /// Delegate functions for penalties, <see cref="Management.Optimiser"/>.
     /// </summary>
     public static class Penalty
     {
         /// <summary>
         /// Applies a sudden "wall" to the optimisation when the DV is outside the legal range
         /// </summary>
-        /// <param name="solVector">Solution vector is not used</param>
+        /// <param name="solVector">Solution Vector is not used</param>
         /// <returns><see cref="double.MaxValue"/></returns>
         public static double DeathPenalty(double[] solVector)
         {

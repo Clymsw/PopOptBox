@@ -10,13 +10,16 @@ namespace Optimisation.Base.Management
     /// </summary>
     public abstract class Optimiser : IOptimiser
     {
+        private readonly Func<double[], double> solutionToFitness;
+        private readonly Func<double[], double> penalty;
+
         #region Constructor
 
         /// <summary>
         /// Constructs the optimiser.
         /// </summary>
         /// <param name="initialPopulation">An initial population (can be empty).</param>
-        /// <param name="solutionToFitness">Conversion function to change solution vector into fitness. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
+        /// <param name="solutionToFitness">Conversion function to change Solution Vector into Fitness. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
         /// <param name="penalty">Function determining what penalty to assign for illegal individuals. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
         protected Optimiser(
             Population initialPopulation,
@@ -36,9 +39,6 @@ namespace Optimisation.Base.Management
         /// The current population in the optimiser
         /// </summary>
         public Population Population { get; }
-
-        private readonly Func<double[], double> solutionToFitness;
-        private readonly Func<double[], double> penalty;
 
         #endregion
 
@@ -103,7 +103,6 @@ namespace Optimisation.Base.Management
                 individual.SetProperty(OptimiserPropertyNames.ReinsertionError, e);
                 return false;
             }
-
             return true;
         }
 
@@ -138,7 +137,6 @@ namespace Optimisation.Base.Management
                 if (wasReInserted)
                     numInserted += 1;
             }
-
             return numInserted;
         }
 

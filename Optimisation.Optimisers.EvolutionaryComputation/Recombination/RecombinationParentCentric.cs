@@ -40,7 +40,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
         }
 
         /// <summary>
-        /// Gets a new decision vector, based on the PCX logic.
+        /// Gets a new Decision Vector, based on the PCX logic.
         /// </summary>
         /// <param name="parents">A list of parent <see cref="DecisionVector"/>s.</param>
         /// <returns>A new <see cref="DecisionVector"/>.</returns>
@@ -48,7 +48,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
         /// Thrown if:
         /// - there are less than two parents; or
         /// - the parents have different length or zero length decision vectors; or
-        /// - any of the parents have non-continuous decision vector elements.
+        /// - any of the parents have non-continuous Decision Vector elements.
         /// </exception>
         public DecisionVector Operate(IEnumerable<DecisionVector> parents)
         {

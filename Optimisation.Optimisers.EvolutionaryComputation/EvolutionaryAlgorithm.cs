@@ -23,7 +23,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation
         /// Creates an Evolutionary Algorithm. See Deb et al. 2002
         /// </summary>
         /// <param name="initialPopulation">The initial population (can be empty).</param>
-        /// <param name="solutionToFitness">The conversion of solution to fitness.</param>
+        /// <param name="solutionToFitness">The conversion of solution to Fitness.</param>
         /// <param name="penalty">The conversion of solution to penalty if individual is illegal.</param>
         /// <param name="initialIndividualGenerator">Creates new decision vectors to build the first population. <seealso cref="Base.Conversion.IModel"/></param>
         /// <param name="parentSelector">The <see cref="IParentSelectionOperator"/> to use.</param>

@@ -19,13 +19,13 @@ namespace Optimisation.Optimisers.NelderMead.Simplices
         /// Creates a simplex with an initial set of locations
         /// </summary>
         /// <param name="initialSimplex">Array of <see cref="DecisionVector"/>s representing the simplex vertices.</param>
-        /// <exception cref="ArgumentException">Thrown when the decision vector is not all continuous, or not the same number of dimensions</exception>
+        /// <exception cref="ArgumentException">Thrown when the Decision Vector is not all continuous, or not the same number of dimensions</exception>
         public Simplex(IEnumerable<Individual> initialSimplex) :
             base(initialSimplex.First().DecisionVector.Vector.Count + 1, initialSimplex, constantLengthDv: true)
         {
             if (initialSimplex.Any(vx => 
                 vx.DecisionVector.GetContinuousElements().Vector.Count < vx.DecisionVector.Vector.Count))
-                throw new ArgumentException("All elements of the decision vector must be continuous for the Nelder-Mead optimiser", nameof(initialSimplex)); 
+                throw new ArgumentException("All elements of the Decision Vector must be continuous for the Nelder-Mead optimiser", nameof(initialSimplex)); 
             
             // All vertices in the simplex must have the same number of dimensions
             // Checked by Population's check on DV length. 

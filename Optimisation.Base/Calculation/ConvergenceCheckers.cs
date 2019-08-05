@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Optimisation.Base.Management;
 
-namespace Optimisation.Base.Helpers
+namespace Optimisation.Base.Calculation
 {
     /// <summary>
     /// Helper functions to see (in different ways) if an optimisation has converged,
@@ -12,11 +12,11 @@ namespace Optimisation.Base.Helpers
     public static class ConvergenceCheckers
     {
         /// <summary>
-        ///     Checks to see if the fitness of the best and worst individuals in a population
+        ///     Checks to see if the Fitness of the best and worst individuals in a population
         ///     are closer than a specified amount.
         /// </summary>
         /// <param name="pop">population</param>
-        /// <param name="tolerance">the absolute tolerance in the units of the fitness</param>
+        /// <param name="tolerance">the absolute tolerance in the units of the Fitness</param>
         /// <returns><see langword="true" /> if converged</returns>
         public static bool AbsoluteFitnessConvergence(
             this Population pop,
@@ -26,7 +26,7 @@ namespace Optimisation.Base.Helpers
         }
 
         /// <summary>
-        ///     Checks to see if the fitness of the best and worst individuals in a population
+        ///     Checks to see if the Fitness of the best and worst individuals in a population
         ///     differ by less than a specified amount, as a fraction of the average.
         /// </summary>
         /// <param name="pop">population</param>
@@ -47,7 +47,7 @@ namespace Optimisation.Base.Helpers
         ///     individuals in a population differ by less than a specified amount.
         /// </summary>
         /// <param name="pop">population</param>
-        /// <param name="tolerance">absolute tolerance, in the units of the decision vector</param>
+        /// <param name="tolerance">absolute tolerance, in the units of the Decision Vector</param>
         /// <returns><see langword="true" /> if converged</returns>
         /// <exception cref="ArgumentException">If the individuals do not have the same decision space.</exception>
         public static bool AbsoluteDecisionVectorConvergence(
@@ -64,7 +64,7 @@ namespace Optimisation.Base.Helpers
         /// </summary>
         /// <param name="pop">population</param>
         /// <param name="tolerance">
-        ///     a vector of tolerances, the same length as the decision vector.
+        ///     a vector of tolerances, the same length as the Decision Vector.
         ///     Any elements with 0 tolerance are ignored.
         /// </param>
         /// <returns><see langword="true" /> if converged</returns>
@@ -76,7 +76,7 @@ namespace Optimisation.Base.Helpers
             var dvRange = pop.DecisionVectorRangeByFitness();
 
             if (dvRange.Count() != tolerance.Length)
-                throw new ArgumentException("Tolerance must have same length as decision vector",
+                throw new ArgumentException("Tolerance must have same length as Decision Vector",
                     nameof(tolerance));
 
             return AllWithinTolerances(dvRange, tolerance);
@@ -109,7 +109,7 @@ namespace Optimisation.Base.Helpers
         /// </summary>
         /// <param name="pop">population</param>
         /// <param name="tolerance">
-        ///     a vector of tolerances, the same length as the decision vector.
+        ///     a vector of tolerances, the same length as the Decision Vector.
         ///     Any elements with 0 tolerance are ignored
         /// </param>
         /// <returns><see langword="true" /> if converged</returns>
@@ -121,7 +121,7 @@ namespace Optimisation.Base.Helpers
             var dvRange = pop.DecisionVectorRangeByFitness();
 
             if (dvRange.Count() != tolerance.Length)
-                throw new ArgumentException("Tolerance must have same length as decision vector",
+                throw new ArgumentException("Tolerance must have same length as Decision Vector",
                     nameof(tolerance));
             
             var relativeDifferences = pop.Best().DecisionVector.Vector

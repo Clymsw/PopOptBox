@@ -36,7 +36,7 @@ namespace Optimisation.Problems.SingleObjective
 
         public override bool GetLegality(DecisionVector definition)
         {
-            // By definition, if we can construct a decision vector in the same decision space, it is legal
+            // By definition, if we can construct a Decision Vector in the same decision space, it is legal
             return definition.GetDecisionSpace() == globalOptimum.GetDecisionSpace()
                 ? true
                 : false;

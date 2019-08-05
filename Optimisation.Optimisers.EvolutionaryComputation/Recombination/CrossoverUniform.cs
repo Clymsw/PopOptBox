@@ -33,7 +33,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
         }
 
         /// <summary>
-        /// Gets a new decision vector, based on selecting each element from one parent or the other.
+        /// Gets a new Decision Vector, based on selecting each element from one parent or the other.
         /// This selection can be biased towards the first parent (if <see cref="crossoverBias"/> is greater than 0.5)
         /// or towards the second parent (if <see cref="crossoverBias"/> is less than 0.5). 
         /// </summary>

@@ -30,7 +30,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
         }
 
         /// <summary>
-        /// Gets a new decision vector, based on simulating the operation of a single-point binary crossover.
+        /// Gets a new Decision Vector, based on simulating the operation of a single-point binary crossover.
         /// </summary>
         /// <param name="firstParent">One <see cref="DecisionVector"/> to use as a parent.</param>
         /// <param name="secondParent">Another <see cref="DecisionVector"/> to use as a parent.</param>
@@ -39,11 +39,11 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
         {
             if (firstParent.GetContinuousElements().Vector.Count == 0)
                 throw new ArgumentOutOfRangeException(nameof(firstParent),
-                    "Parents must have non-zero length continuous decision vector.");
+                    "Parents must have non-zero length continuous Decision Vector.");
 
             if (secondParent.GetContinuousElements().Vector.Count == 0)
                 throw new ArgumentOutOfRangeException(nameof(secondParent),
-                    "Parents must have non-zero length continuous decision vector.");
+                    "Parents must have non-zero length continuous Decision Vector.");
 
             // Multiply by -1 randomly to ensure either possibility is equally possible.
             var multiplier = rngManager.Rng.NextBoolean() ? -1 : 1;

@@ -5,7 +5,7 @@ using System.Linq;
 namespace Optimisation.Base.Variables
 {
     /// <summary>
-    /// A decision vector is a particular point inside a decision space.
+    /// A Decision Vector is a particular point inside a decision space.
     /// In other words, a particular solution to an optimisation problem.
     /// </summary>
     public class DecisionVector
@@ -48,7 +48,7 @@ namespace Optimisation.Base.Variables
         /// </summary>
         /// <param name="decisionSpace">The decision space definition</param>
         /// <param name="values">The points inside that decision space defining this solution</param>
-        /// <returns>A new decision vector</returns>
+        /// <returns>A new Decision Vector</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="values"/> are not valid.</exception>
         public static DecisionVector CreateFromItems(DecisionSpace decisionSpace,
             params object[] values)
@@ -61,7 +61,7 @@ namespace Optimisation.Base.Variables
         /// </summary>
         /// <param name="decisionSpace">The decision space definition</param>
         /// <param name="values">The points inside that decision space defining this solution</param>
-        /// <returns>A new decision vector</returns>
+        /// <returns>A new Decision Vector</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="values"/> are not valid.</exception>
         public static DecisionVector CreateFromArray(DecisionSpace decisionSpace,
             IEnumerable<object> values)
@@ -75,7 +75,7 @@ namespace Optimisation.Base.Variables
         /// </summary>
         /// <param name="decisionSpace">The decision space definition</param>
         /// <param name="values">The points inside that decision space defining this solution</param>
-        /// <returns>A new decision vector</returns>
+        /// <returns>A new Decision Vector</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="values"/> are not valid.</exception>
         public static DecisionVector CreateFromArray(DecisionSpace decisionSpace,
             IEnumerable<int> values)
@@ -89,7 +89,7 @@ namespace Optimisation.Base.Variables
         /// </summary>
         /// <param name="decisionSpace">The decision space definition</param>
         /// <param name="values">The points inside that decision space defining this solution</param>
-        /// <returns>A new decision vector</returns>
+        /// <returns>A new Decision Vector</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="values"/> are not valid.</exception>
         public static DecisionVector CreateFromArray(DecisionSpace decisionSpace,
             IEnumerable<double> values)
@@ -102,7 +102,7 @@ namespace Optimisation.Base.Variables
         #region Decision Space
 
         /// <summary>
-        /// Gets the <see cref="DecisionSpace"/> of this decision vector.
+        /// Gets the <see cref="DecisionSpace"/> of this Decision Vector.
         /// </summary>
         /// <returns>A <see cref="DecisionSpace"/>.</returns>
         public DecisionSpace GetDecisionSpace()
@@ -111,7 +111,7 @@ namespace Optimisation.Base.Variables
         }
 
         /// <summary>
-        /// Get only those elements of the decision vector which are continuous.
+        /// Get only those elements of the Decision Vector which are continuous.
         /// </summary>
         /// <returns>New Decision Vector with only those elements</returns>
         public DecisionVector GetContinuousElements()
@@ -125,7 +125,7 @@ namespace Optimisation.Base.Variables
         }
         
         /// <summary>
-        /// Get only those elements of the decision vector which are discrete.
+        /// Get only those elements of the Decision Vector which are discrete.
         /// </summary>
         /// <returns>New Decision Vector with only those elements</returns>
         public DecisionVector GetDiscreteElements()

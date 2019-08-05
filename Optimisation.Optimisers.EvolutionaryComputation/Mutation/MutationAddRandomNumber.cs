@@ -47,12 +47,12 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
         }
 
         /// <summary>
-        /// Gets a new decision vector with continuous elements have potentially been mutated.
-        /// Uses <see cref="IVariable"/> to wrap the added number, ensuring a valid decision vector is always created.
+        /// Gets a new Decision Vector with continuous elements have potentially been mutated.
+        /// Uses <see cref="IVariable"/> to wrap the added number, ensuring a valid Decision Vector is always created.
         /// </summary>
-        /// <param name="decisionVector">The existing decision vector.</param>
-        /// <returns>A new decision vector.</returns>
-        /// <exception cref="ArgumentException">Thrown when decision vector is zero length or has no <seealso cref="VariableContinuous"/> elements.</exception>
+        /// <param name="decisionVector">The existing Decision Vector.</param>
+        /// <returns>A new Decision Vector.</returns>
+        /// <exception cref="ArgumentException">Thrown when Decision Vector is zero length or has no <seealso cref="VariableContinuous"/> elements.</exception>
         public DecisionVector Operate(DecisionVector decisionVector)
         {
             var oldVectorContinuousElements = decisionVector.GetContinuousElements();

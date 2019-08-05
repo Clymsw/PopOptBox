@@ -27,9 +27,9 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Recombination
         }
 
         /// <summary>
-        /// Gets a new decision vector, based on selecting a point at random 
-        /// and copying values from one parent's decision vector before that point,
-        /// then the values from the other parent's decision vector after that point.
+        /// Gets a new Decision Vector, based on selecting a point at random 
+        /// and copying values from one parent's Decision Vector before that point,
+        /// then the values from the other parent's Decision Vector after that point.
         /// The order the parents are provided does not matter, they are selected at random to ensure uniform probability distribution over outcomes.
         /// </summary>
         /// <remarks>

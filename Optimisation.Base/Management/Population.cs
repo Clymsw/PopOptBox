@@ -39,7 +39,7 @@ namespace Optimisation.Base.Management
         /// </summary>
         /// <param name="initialPopulation">An array of individuals</param>
         /// <param name="initialSize">Expected max size of population</param>
-        /// <param name="constantLengthDv">Whether the decision vector should be expected to be constant</param>
+        /// <param name="constantLengthDv">Whether the Decision Vector should be expected to be constant</param>
         public Population(
             int initialSize = 100,
             IEnumerable<Individual> initialPopulation = null,
@@ -74,8 +74,7 @@ namespace Optimisation.Base.Management
         #region Information Extraction
 
         /// <summary>
-        /// An indexer to allow direct indexation to the Population 
-        /// class, which will return the individual of interest.
+        /// An indexer to allow direct indexation to the Population class, which will return the individual of interest.
         /// </summary>
         /// <param name="index">Integer index into population.</param>
         /// <returns>Individual</returns>
@@ -91,9 +90,9 @@ namespace Optimisation.Base.Management
         }
         
         /// <summary>
-        /// Gets the individual with the best (lowest) fitness.
+        /// Gets the individual with the best (lowest) Fitness.
         /// </summary>
-        /// <returns>An evaluated <see cref="Individual"/> with the best fitness.</returns>
+        /// <returns>An evaluated <see cref="Individual"/> with the best Fitness.</returns>
         /// <exception cref="System.InvalidOperationException">Thrown when the population is empty.</exception>
         public Individual Best()
         {
@@ -103,9 +102,9 @@ namespace Optimisation.Base.Management
         }
 
         /// <summary>
-        /// Gets the individual with the worst (highest) fitness.
+        /// Gets the individual with the worst (highest) Fitness.
         /// </summary>
-        /// <returns>An evaluated <see cref="Individual"/> with the worst fitness.</returns>
+        /// <returns>An evaluated <see cref="Individual"/> with the worst Fitness.</returns>
         /// <exception cref="System.InvalidOperationException">Thrown when the population is empty.</exception>
         public Individual Worst()
         {
@@ -115,10 +114,10 @@ namespace Optimisation.Base.Management
         }
 
         /// <summary>
-        /// Gets the individuals on the Pareto front.
+        /// Gets the individuals on the first Pareto Front.
         /// </summary>
         /// <returns>A (read-only) list of <see cref="Individual"/>s.</returns>
-        public IReadOnlyList<Individual> ParetoFront()
+        public IReadOnlyList<Individual> GetParetoFront()
         {
             // TODO
             throw new NotImplementedException();
@@ -152,19 +151,19 @@ namespace Optimisation.Base.Management
         }
         
         /// <summary>
-        /// Calculates the difference in fitness between the best and worst individuals in the population.
+        /// Calculates the difference in Fitness between the best and worst individuals in the population.
         /// </summary>
-        /// <returns>The fitness range for the population</returns>
+        /// <returns>The Fitness range for the population</returns>
         public double FitnessRange() => Worst().Fitness - Best().Fitness;
         
         /// <summary>
-        /// Calculates the difference in fitness between the best and worst individuals in the population.
+        /// Calculates the difference in Fitness between the best and worst individuals in the population.
         /// </summary>
-        /// <returns>The fitness range for the population</returns>
+        /// <returns>The Fitness range for the population</returns>
         public double FitnessAverage() => GetMemberFitnesses().Average();
 
         /// <summary>
-        /// Calculates the absolute differences in decision vector values between the best and worst individuals in the population.
+        /// Calculates the absolute differences in Decision Vector values between the best and worst individuals in the population.
         /// </summary>
         /// <returns>The range of each variable in the decision space</returns>
         /// <exception cref="ArgumentException">If the individuals do not have the same decision space.</exception>
@@ -201,7 +200,7 @@ namespace Optimisation.Base.Management
         }
 
         /// <summary>
-        /// Sorts array by fitness, best (lowest!) at top.
+        /// Sorts array by Fitness, best (lowest!) at top.
         /// </summary>
         private void Sort()
         {

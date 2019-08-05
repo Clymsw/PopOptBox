@@ -29,11 +29,11 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.Mutation
         }
 
         /// <summary>
-        /// Gets a new decision vector whose elements have potentially been mutated.
+        /// Gets a new Decision Vector whose elements have potentially been mutated.
         /// </summary>
-        /// <param name="decisionVector">The existing decision vector.</param>
-        /// <returns>A new decision vector.</returns>
-        /// <exception cref="ArgumentException">Thrown when the decision vector has less than 2 elements.</exception>
+        /// <param name="decisionVector">The existing Decision Vector.</param>
+        /// <returns>A new Decision Vector.</returns>
+        /// <exception cref="ArgumentException">Thrown when the Decision Vector has less than 2 elements.</exception>
         public DecisionVector Operate(DecisionVector decisionVector)
         {
             if (decisionVector.Vector.Count < 2)

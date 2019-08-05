@@ -26,7 +26,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.ParentSelection
 
         /// <summary>
         /// Gets a subset of the population which is selected based on spins of a roulette wheel,
-        /// where the size of the selection probability for each individual is proportional to its fitness.
+        /// where the size of the selection probability for each individual is proportional to its Fitness.
         /// </summary>
         /// <remarks>
         /// The selection operator is corrected from the standard one to work with negative fitnesses and minimisation.
@@ -75,7 +75,7 @@ namespace Optimisation.Optimisers.EvolutionaryComputation.ParentSelection
         }
 
         /// <summary>
-        /// Fix because we are dealing with minimisation of fitness:
+        /// Fix because we are dealing with minimisation of Fitness:
         /// subtract a big enough value such that all values are strictly negative
         /// </summary>
         private static List<double> getCorrectedFitnesses(Population population)

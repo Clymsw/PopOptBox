@@ -2,11 +2,12 @@
 using Optimisation.Base.Variables;
 using System.Collections.Generic;
 using System.Linq;
+using MathNet.Numerics;
 
-namespace Optimisation.Base.Helpers
+namespace Optimisation.Base.Calculation
 {
     /// <summary>
-    /// Helper functions for creating initial populations, <see cref="Management.Population"/>.
+    /// Helper functions for creating initial <see cref="Management.Population"/>s.
     /// </summary>
     public static class PopulationCreators
     {
@@ -90,6 +91,8 @@ namespace Optimisation.Base.Helpers
         /// <returns>A list of evenly-spaced <see cref="DecisionVector"/>s.</returns>
         public static List<DecisionVector> CreateLatinHypercube(DecisionSpace space, int numberToCreate)
         {
+            var orderedLocations = space.Dimensions.Select(d => d.GetSpacedArray(numberToCreate));
+
             // TODO!
             throw new NotImplementedException();
         }
