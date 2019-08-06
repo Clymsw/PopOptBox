@@ -20,7 +20,6 @@ namespace Optimisation.Optimisers.NelderMead.Test
         public NelderMeadTests()
         {
             optimiser = new NelderMead(
-                v => v,
                 v => v.ElementAt(0),
                 v => 1000.0,
                 DecisionVector.CreateFromArray(

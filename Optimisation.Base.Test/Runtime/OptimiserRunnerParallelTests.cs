@@ -1,3 +1,4 @@
+using Optimisation.Base.Calculation;
 using Optimisation.Base.Helpers;
 using Optimisation.Base.Test.Helpers;
 using Xunit;

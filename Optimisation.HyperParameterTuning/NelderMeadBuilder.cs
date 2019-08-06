@@ -18,8 +18,10 @@ namespace Optimisation.HyperParameterTuning
         
         public override Optimiser CreateOptimiser()
         {
-            return new NelderMead(CreateSolutionToScore(),CreateScoreToFitness(),CreatePenalty(),
-                CreateModel().GetNewIndividual().DecisionVector,
+            return new NelderMead(
+                CreateSolutionToFitness(),
+                CreatePenalty(),
+                CreateModel().GetNewDecisionVector(),
                 (double)GetHyperParameterValue(HyperParameterNames.SimplexStepCreationSize));
         }
 
@@ -28,14 +30,9 @@ namespace Optimisation.HyperParameterTuning
             return new NelderMeadForContinuousProblemModel(decisionSpace);
         }
 
-        protected override Func<double[], double> CreateScoreToFitness()
+        protected override Func<double[], double> CreateSolutionToFitness()
         {
-            return ScoreToFitness.SingleObjectiveMinimise;
-        }
-
-        protected override Func<double[], double[]> CreateSolutionToScore()
-        {
-            return SolutionToScore.SingleObjective;
+            return SolutionToFitness.SingleObjectiveMinimise;
         }
 
         protected override Func<double[], double> CreatePenalty()

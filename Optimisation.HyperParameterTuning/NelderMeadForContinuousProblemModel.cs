@@ -18,7 +18,7 @@ namespace Optimisation.HyperParameterTuning
             this.decisionSpace = decisionSpace;
         }
 
-        protected override DecisionVector CreateNewIndividual()
+        public override DecisionVector GetNewDecisionVector()
         {
             var newVector = decisionSpace.Dimensions.Select(d => (double) d.GetNextRandom(rng));
             return DecisionVector.CreateFromArray(decisionSpace, newVector);
