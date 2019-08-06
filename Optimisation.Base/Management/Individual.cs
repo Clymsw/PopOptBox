@@ -69,9 +69,10 @@ namespace Optimisation.Base.Management
             {
                 propCopy.Add(key, properties[key]);
             }
+
             return new Individual(DecisionVector)
             {
-                SolutionVector = (double[])SolutionVector?.Clone(),
+                SolutionVector = (double[]) SolutionVector?.Clone(),
                 Fitness = Fitness,
                 properties = propCopy,
                 Legal = Legal,
@@ -175,7 +176,7 @@ namespace Optimisation.Base.Management
         {
             var solutionValue = GetProperty<double[]>(keyName);
             SolutionVector = solutionValue ??
-                             throw new ArgumentOutOfRangeException(nameof(keyName), 
+                             throw new ArgumentOutOfRangeException(nameof(keyName),
                                  "Invalid key to set solution!");
         }
 
@@ -197,6 +198,36 @@ namespace Optimisation.Base.Management
         public void SetLegality(bool legal)
         {
             Legal = legal;
+        }
+
+        /// <summary>
+        /// Gets whether another Individual strictly dominates this one.
+        /// </summary>
+        /// <param name="other">The other Individual to compare.</param>
+        /// <returns><see langword="true"/> if this individual is dominated.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the two Solution Vectors have different lengths.</exception>
+        public bool IsDominatedBy(Individual other)
+        {
+            if (other.SolutionVector.Length != SolutionVector.Length)
+                throw new ArgumentOutOfRangeException(nameof(other), 
+                    "Other individual must have the same number of objectives in its Solution Vector.");
+            
+            return other.SolutionVector.Select((v, i) => v < SolutionVector.ElementAt(i)).All(b => b);
+        }
+
+        /// <summary>
+        /// Gets whether this Individual strictly dominates another one.
+        /// </summary>
+        /// <param name="other">The other Individual to compare.</param>
+        /// <returns><see langword="true"/> if the other individual is dominated.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the two Solution Vectors have different lengths.</exception>
+        public bool Dominates(Individual other)
+        {
+            if (other.SolutionVector.Length != SolutionVector.Length)
+                throw new ArgumentOutOfRangeException(nameof(other), 
+                    "Other individual must have the same number of objectives in its Solution Vector.");
+            
+            return SolutionVector.Select((v, i) => v < other.SolutionVector.ElementAt(i)).All(b => b);
         }
 
         #endregion
