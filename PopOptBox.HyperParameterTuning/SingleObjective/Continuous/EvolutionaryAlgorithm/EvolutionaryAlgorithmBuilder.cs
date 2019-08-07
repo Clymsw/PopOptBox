@@ -73,6 +73,10 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
                     recombinationOperator = new CrossoverArithmeticWeighted();
                     break;
                 
+                case AvailableOperators.RecombinationOperator.Sbx:
+                    recombinationOperator = new CrossoverSimulatedBinary(2);
+                    break;
+                
                 default:
                     throw new NotImplementedException();
             }
@@ -83,8 +87,8 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
             {
                 case AvailableOperators.MutationOperators.AddRandomNumber:
                     mutationOperator = new MutationAddRandomNumber(
-                        0.4, 
                         0.2, 
+                        0.1, 
                         problemSpace.Count);
                     break;
                 default:

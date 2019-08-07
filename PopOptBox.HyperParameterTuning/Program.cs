@@ -43,7 +43,7 @@ namespace PopOptBox.HyperParameterTuning
                     builder = EvolutionaryAlgorithmBuilder.GetBuilder(
                         problem.GetGlobalOptimum().GetDecisionSpace(),
                         AvailableOperators.ParentSelector.Tournament,
-                        AvailableOperators.RecombinationOperator.ArithmeticTwoParentWeighted,
+                        AvailableOperators.RecombinationOperator.Sbx,
                         AvailableOperators.MutationOperators.AddRandomNumber,
                         AvailableOperators.ReinsertionOperators.ReplaceWorst);
                     break;
