@@ -3,6 +3,7 @@ using Optimisation.Base.Management;
 using Optimisation.Base.Variables;
 using System.Collections.Generic;
 using System.Linq;
+using Optimisation.Base.Calculation;
 using Optimisation.Base.Helpers;
 
 namespace Optimisation.Optimisers.NelderMead.Simplices

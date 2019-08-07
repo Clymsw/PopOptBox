@@ -1,6 +1,7 @@
 ﻿using Optimisation.Base.Management;
 using Optimisation.Base.Test.Helpers;
 using System.Linq;
+using Optimisation.Base.Calculation;
 using Xunit;
 
 namespace Optimisation.Base.Helpers.Test

@@ -33,7 +33,7 @@ namespace Optimisation.Problems.SingleObjective.Continuous
             // http://benchmarkfcns.xyz/benchmarkfcns/salomonfcn.html
 
             double temp = 0;
-            for (int i = 0; i < location.Vector.Count; i++)
+            for (var i = 0; i < location.Vector.Count; i++)
             {
                 temp += Math.Pow(Convert.ToDouble(location.Vector[i]), 2);
             }
