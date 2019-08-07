@@ -19,11 +19,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PopOptBox.Problems", "PopOp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PopOptBox.Problems.Test", "PopOptBox.Problems.Test\PopOptBox.Problems.Test.csproj", "{9A48E2E0-9B8B-45BD-A059-B4D38D420847}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PopOptBox.Optimisers.NelderMead", "PopOptBox.Optimisers.NelderMead\PopOptBox.Optimisers.NelderMead.csproj", "{900DD840-B5ED-4302-B7CE-3E562BE24027}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PopOptBox.Optimisers.StructuredSearch", "PopOptBox.Optimisers.StructuredSearch\PopOptBox.Optimisers.StructuredSearch.csproj", "{900DD840-B5ED-4302-B7CE-3E562BE24027}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PopOptBox.Optimisers.NelderMead.Test", "PopOptBox.Optimisers.NelderMead.Test\PopOptBox.Optimisers.NelderMead.Test.csproj", "{7AFDD4FC-15C4-4910-B131-C7E4C2996A4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PopOptBox.Optimisers.StructuredSearch.Test", "PopOptBox.Optimisers.StructuredSearch.Test\PopOptBox.Optimisers.StructuredSearch.Test.csproj", "{7AFDD4FC-15C4-4910-B131-C7E4C2996A4F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Optimisation.HyperParameterTuning", "Optimisation.HyperParameterTuning\Optimisation.HyperParameterTuning.csproj", "{0C20CA89-F3AA-44AE-A59F-87A37A94F3A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PopOptBox.HyperParameterTuning", "PopOptBox.HyperParameterTuning\PopOptBox.HyperParameterTuning.csproj", "{0C20CA89-F3AA-44AE-A59F-87A37A94F3A4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PopOptBox.Optimisers.EvolutionaryComputation", "PopOptBox.Optimisers.EvolutionaryComputation\PopOptBox.Optimisers.EvolutionaryComputation.csproj", "{2AA55C8F-53A5-477C-B5BB-06AD6127F9E5}"
 EndProject

@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ApplicationIcon />
+    <Win32Resource />
+    <AssemblyName>PopOptBox.Optimisers.StructuredSearch</AssemblyName>
+    <RootNamespace>PopOptBox.Optimisers.StructuredSearch</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PopOptBox.Base\PopOptBox.Base.csproj" />
+  </ItemGroup>
+
+</Project>
