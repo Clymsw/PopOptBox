@@ -2,13 +2,8 @@
 using System.Linq;
 using PopOptBox.Base.Calculation;
 using PopOptBox.Base.Management;
-using PopOptBox.HyperParameterTuning.SingleObjective.Continuous.GeneticAlgorithm;
+using PopOptBox.HyperParameterTuning.SingleObjective.Continuous.EvolutionaryAlgorithm;
 using PopOptBox.HyperParameterTuning.SingleObjective.Continuous.NelderMead;
-using PopOptBox.Optimisers.EvolutionaryComputation.Mutation;
-using PopOptBox.Optimisers.EvolutionaryComputation.ParentSelection;
-using PopOptBox.Optimisers.EvolutionaryComputation.Recombination;
-using PopOptBox.Optimisers.EvolutionaryComputation.Reinsertion;
-using PopOptBox.Optimisers.StructuredSearch;
 using PopOptBox.Problems.Performance;
 
 namespace PopOptBox.HyperParameterTuning
@@ -45,15 +40,13 @@ namespace PopOptBox.HyperParameterTuning
                     break;
                 
                 case Options.OptimisersAvailable.GeneticAlgorithm:
-                    throw new ArgumentOutOfRangeException();
-                    //builder = GeneticAlgorithmBuilder.GetBuilder(
-                    //problem.GetGlobalOptimum().GetDecisionSpace(),
-                    //100,
-                    //new
-                    //new ParentSelectionTournament(40, true), 
-                    //new CrossoverUniform(0.5),
-                    //new MutationAddRandomNumber(0.1, 0.1, 1),
-                    //new ReinsertionReplaceRandom());
+                    builder = EvolutionaryAlgorithmBuilder.GetBuilder(
+                        problem.GetGlobalOptimum().GetDecisionSpace(),
+                        AvailableOperators.ParentSelector.Tournament,
+                        AvailableOperators.RecombinationOperator.MultiPoint,
+                        AvailableOperators.MutationOperators.AddRandomNumber,
+                        AvailableOperators.ReinsertionOperators.ReplaceWorst);
+                    
                 default:
                     throw new ArgumentOutOfRangeException();
             }
