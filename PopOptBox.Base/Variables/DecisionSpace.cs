@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -122,6 +123,22 @@ namespace PopOptBox.Base.Variables
             return acceptable;
         }
 
+        /// <summary>
+        /// Gets the legal location which is nearest to the provided location.
+        /// </summary>
+        /// <param name="vector">An array of objects matching (but not necessarily legal in) the decision space.</param>
+        /// <returns>A new object array representing a location.</returns>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when the location provided is of the wrong length.</exception>
+        /// <exception cref="FormatException">Thrown when the location provided has incorrect types.</exception>
+        public object[] GetNearestLegalLocation(IEnumerable<object> vector)
+        {
+            if (vector.Count() != dimensions.Count)
+                throw new ArgumentOutOfRangeException(nameof(vector),
+                    "Vector is of the wrong length.");
+            
+            return vector.Select((v, i) => dimensions.ElementAt(i).GetNearestLegalLocation(v)).ToArray();
+        }
+        
         /// <summary>
         /// Gets the string representation of a particular vector, according to the <see cref="IVariable"/> definitions of the decision space.
         /// </summary>

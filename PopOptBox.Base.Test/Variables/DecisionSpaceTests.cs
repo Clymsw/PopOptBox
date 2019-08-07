@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Xunit;
 
@@ -79,6 +80,32 @@ namespace PopOptBox.Base.Variables.Test
             var space2 = DecisionSpace.CreateForUniformDoubleArray(Dims, MinValueDiscrete, MaxValueDiscrete);
 
             Assert.NotEqual(space1, space2);
+        }
+
+        [Fact]
+        public void GetNearestLegalLocation_WrongLengthVector_Throws()
+        {
+            var space = DecisionSpace.CreateForUniformDoubleArray(Dims, MinValueContinuous, MaxValueContinuous);
+            Assert.Throws<ArgumentOutOfRangeException>(
+                () => space.GetNearestLegalLocation(Enumerable.Repeat<object>(-999.0, Dims + 1)));
+        }
+        
+        [Fact]
+        public void GetNearestLegalLocation_IllegalTypeVector_Throws()
+        {
+            var space = DecisionSpace.CreateForUniformDoubleArray(Dims, MinValueContinuous, MaxValueContinuous);
+            Assert.Throws<FormatException>(
+                () => space.GetNearestLegalLocation(Enumerable.Repeat<object>("foo", Dims)));
+        }
+        
+        [Fact]
+        public void GetNearestLegalLocation_AllContinuous_OneValueIsTooHigh_CorrectsIt()
+        {
+            var space = DecisionSpace.CreateForUniformIntArray(Dims, MinValueDiscrete, MaxValueDiscrete);
+            var expectedResult = Enumerable.Repeat<object>(MaxValueDiscrete, Dims);
+            var testVector = expectedResult.ToArray();
+            testVector[Dims - 1] = MaxValueDiscrete + 1;
+            Assert.Equal(expectedResult.ToArray(), space.GetNearestLegalLocation(testVector));
         }
     }
 }

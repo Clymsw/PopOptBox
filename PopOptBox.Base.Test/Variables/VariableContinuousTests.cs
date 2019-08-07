@@ -86,7 +86,8 @@ namespace PopOptBox.Base.Variables.Test
 
             var testValue = 3.1;
 
-            Assert.Equal(max, vbl.GetNearestLegalLocation(testValue));
+            Assert.True(max - (double)vbl.GetNearestLegalLocation(testValue) < 1e-9);
+            Assert.True(vbl.IsInBounds(vbl.GetNearestLegalLocation(testValue)));
         }
 
         [Fact]
@@ -99,6 +100,7 @@ namespace PopOptBox.Base.Variables.Test
             var testValue = -5.8;
 
             Assert.Equal(min, vbl.GetNearestLegalLocation(testValue));
+            Assert.True(vbl.IsInBounds(vbl.GetNearestLegalLocation(testValue)));
         }
 
         [Theory]

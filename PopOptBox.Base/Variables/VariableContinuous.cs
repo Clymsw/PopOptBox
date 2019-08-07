@@ -75,8 +75,8 @@ namespace PopOptBox.Base.Variables
             if (IsInBounds(testValue))
                 return testValue;
 
-            return Convert.ToDouble(testValue) > upperBound
-                ? upperBound
+            return Convert.ToDouble(testValue) >= upperBound
+                ? upperBound - 1e-12 // upper bound itself is illegal
                 : lowerBound;
         }
 
