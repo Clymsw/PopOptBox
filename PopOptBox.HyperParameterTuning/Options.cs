@@ -14,7 +14,7 @@ namespace PopOptBox.HyperParameterTuning
         public enum OptimisersAvailable
         {
             NelderMead,
-            GeneticAlgorithm
+            EvolutionaryAlgorithm
         }
 
         #endregion

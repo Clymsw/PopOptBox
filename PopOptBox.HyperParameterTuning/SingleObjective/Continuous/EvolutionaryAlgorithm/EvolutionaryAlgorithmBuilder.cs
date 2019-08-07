@@ -41,8 +41,7 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
             AvailableOperators.RecombinationOperator recombination,
             AvailableOperators.MutationOperators mutation,
             AvailableOperators.ReinsertionOperators reinsertion,
-            int? populationSize = null,
-            int? numberOfParents = null)
+            int? populationSize = null)
         {
             var hyps = EvolutionaryAlgorithmHyperParameters.GetDefaultHyperParameters();
             
@@ -55,13 +54,12 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
             {
                 case AvailableOperators.ParentSelector.Tournament:
                     parentSelector = new ParentSelectionTournament(
-                        40,
-                        true);
+                        20,
+                        false);
                     break;
                 default:
                     throw new NotImplementedException();
             }
-            hyps.UpdateHyperParameterValue(EvolutionaryAlgorithmHyperParameters.Number_Of_Parents, numberOfParents);
             
             IRecombinationOperator recombinationOperator;
             switch (recombination)
@@ -70,18 +68,24 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
                     recombinationOperator = new CrossoverMultiPoint(
                         1);
                     break;
+                
+                case AvailableOperators.RecombinationOperator.ArithmeticTwoParentWeighted:
+                    recombinationOperator = new CrossoverArithmeticWeighted();
+                    break;
+                
                 default:
                     throw new NotImplementedException();
             }
+            hyps.UpdateHyperParameterValue(EvolutionaryAlgorithmHyperParameters.Number_Of_Parents, 2);
 
             IMutationOperator mutationOperator;
             switch (mutation)
             {
                 case AvailableOperators.MutationOperators.AddRandomNumber:
                     mutationOperator = new MutationAddRandomNumber(
-                        0.1, 
-                        0.1, 
-                        1);
+                        0.4, 
+                        0.2, 
+                        problemSpace.Count);
                     break;
                 default:
                     throw new NotImplementedException();

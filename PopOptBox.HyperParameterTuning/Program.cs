@@ -20,7 +20,7 @@ namespace PopOptBox.HyperParameterTuning
         private const int Number_Of_Dimensions = 10;
         
         private const Options.OptimisersAvailable OptimiserToUse = 
-            Options.OptimisersAvailable.NelderMead;
+            Options.OptimisersAvailable.EvolutionaryAlgorithm;
 
         private const double Nelder_Mead_Simplex_Creation_Step_Size = 0.5;
         
@@ -39,14 +39,15 @@ namespace PopOptBox.HyperParameterTuning
                         Nelder_Mead_Simplex_Creation_Step_Size);
                     break;
                 
-                case Options.OptimisersAvailable.GeneticAlgorithm:
+                case Options.OptimisersAvailable.EvolutionaryAlgorithm:
                     builder = EvolutionaryAlgorithmBuilder.GetBuilder(
                         problem.GetGlobalOptimum().GetDecisionSpace(),
                         AvailableOperators.ParentSelector.Tournament,
-                        AvailableOperators.RecombinationOperator.MultiPoint,
+                        AvailableOperators.RecombinationOperator.ArithmeticTwoParentWeighted,
                         AvailableOperators.MutationOperators.AddRandomNumber,
                         AvailableOperators.ReinsertionOperators.ReplaceWorst);
-                    
+                    break;
+                
                 default:
                     throw new ArgumentOutOfRangeException();
             }
