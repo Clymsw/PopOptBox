@@ -11,7 +11,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination.Test
         public CrossoverSimulatedBinaryTests()
         {
             var decisionSpaceUniform = DecisionSpace.CreateForUniformDoubleArray(
-                4, 0.0, 5.0);
+                4, double.MinValue, double.MaxValue);
 
             parent1 = DecisionVector.CreateFromArray(
                 decisionSpaceUniform, new[] {0.5, 1.5, 2.5, 3.5});

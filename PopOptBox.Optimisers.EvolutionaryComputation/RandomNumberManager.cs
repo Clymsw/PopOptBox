@@ -45,47 +45,55 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
             if (lambda < 0 || lambda > 1)
                 throw  new ArgumentOutOfRangeException(nameof(lambda),
                     "The probability of selecting a location must be between 0 and 1.");
-            
-            if (lambda == 1 && !selectionWithReplacement)
-            {
-                // There's a fast function implemented for this...
-                return Enumerable.Range(0, maximumNumberOfLocations).SelectCombination(maximumNumberOfLocations, Rng);
-            }
 
-            var locations = new List<int>();
-            var i = 0;
-            while (i < maximumNumberOfLocations)
+            if (lambda != 0)
             {
-                // See if we will make a selection
-                var mutate = Rng.NextDouble() < lambda;
-
-                if (mutate)
+                if (lambda == 1 && !selectionWithReplacement)
                 {
-                    // See if we need to reduce the randomisation space
-                    var offset = selectionWithReplacement
-                        ? 0
-                        : locations.Count;
-
-                    // Generate a value 
-                    var location = Rng.Next(0, numberOfLocationsToChooseFrom - offset);
-
-                    if (selectionWithReplacement)
-                    {
-                        // We are generating with replacement - just add to list.
-                        locations.Add(location);
-                    }
-                    else
-                    {
-                        // Find the true value which the truncated space refers to
-                        while (locations.Contains(location))
-                            location++;
-                        // Add to list
-                        locations.Add(location);
-                    }
+                    // There's a fast function implemented for this...
+                    return Enumerable.Range(0, maximumNumberOfLocations)
+                        .SelectCombination(maximumNumberOfLocations, Rng);
                 }
-                i++;
+
+                var locations = new List<int>();
+                var i = 0;
+                while (i < maximumNumberOfLocations)
+                {
+                    // See if we will make a selection
+                    var mutate = Rng.NextDouble() < lambda;
+
+                    if (mutate)
+                    {
+                        // See if we need to reduce the randomisation space
+                        var offset = selectionWithReplacement
+                            ? 0
+                            : locations.Count;
+
+                        // Generate a value 
+                        var location = Rng.Next(0, numberOfLocationsToChooseFrom - offset);
+
+                        if (selectionWithReplacement)
+                        {
+                            // We are generating with replacement - just add to list.
+                            locations.Add(location);
+                        }
+                        else
+                        {
+                            // Find the true value which the truncated space refers to
+                            while (locations.Contains(location))
+                                location++;
+                            // Add to list
+                            locations.Add(location);
+                        }
+                    }
+
+                    i++;
+                }
+
+                return locations;
             }
-            return locations;
+
+            return new List<int>();
         }
     }
 }
