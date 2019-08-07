@@ -73,6 +73,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
         {
             if (Population.IsTargetSizeReached)
             {
+                Population.SetFitness(individual);
                 return reinsertionOperator.ReInsert(Population, individual);
             }
             else
