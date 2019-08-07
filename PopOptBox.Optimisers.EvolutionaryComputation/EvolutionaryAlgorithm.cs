@@ -2,6 +2,7 @@
 using System.Linq;
 using PopOptBox.Base.Management;
 using PopOptBox.Base.Variables;
+using PopOptBox.Optimisers.EvolutionaryComputation.Mutation;
 using PopOptBox.Optimisers.EvolutionaryComputation.ParentSelection;
 using PopOptBox.Optimisers.EvolutionaryComputation.Recombination;
 using PopOptBox.Optimisers.EvolutionaryComputation.Reinsertion;
@@ -9,37 +10,45 @@ using PopOptBox.Optimisers.EvolutionaryComputation.Reinsertion;
 namespace PopOptBox.Optimisers.EvolutionaryComputation
 {
     /// <summary>
-    /// An Evolutionary Algorithm performs guided random search on real-valued search spaces, based on recombining groups of parents.
+    /// An Evolutionary, or Genetic, Algorithm performs guided random search,
+    /// based on recombining (crossing-over) groups of parents
+    /// and then mutating the children.
+    /// See Goldberg, 1976; Deb et al., 2002
     /// </summary>
     public class EvolutionaryAlgorithm : Optimiser
     {
         private readonly Func<DecisionVector> initialIndividualGenerator;
         private readonly IParentSelectionOperator parentSelector;
         private readonly int numberOfParents;
-        private readonly IMultiParentRecombinationOperator recombinationOperator;
+        private readonly IRecombinationOperator recombinationOperator;
+        private readonly IMutationOperator mutationOperator;
         private readonly IReinsertionOperator reinsertionOperator;
 
         /// <summary>
-        /// Creates an Evolutionary Algorithm. See Deb et al. 2002
+        /// Creates an Evolutionary Algorithm.
         /// </summary>
         /// <param name="initialPopulation">The initial population (can be empty).</param>
         /// <param name="initialIndividualGenerator">Creates new decision vectors to build the first population. <seealso cref="Base.Conversion.IModel"/></param>
         /// <param name="parentSelector">The <see cref="IParentSelectionOperator"/> to use.</param>
-        /// <param name="recombinationOperator">The <see cref="IMultiParentRecombinationOperator"/> to use.</param>
+        /// <param name="recombinationOperator">The <see cref="IRecombinationOperator"/> to use.</param>
+        /// <param name="mutationOperator">The <see cref="IMutationOperator"/> to use.</param>
         /// <param name="reinsertionOperator">The <see cref="IReinsertionOperator"/> to use.</param>
+        /// <param name="hyperParameters">The <see cref="HyperParameterManager"/> object with relevant settings.</param>
         public EvolutionaryAlgorithm(
             Population initialPopulation, 
             Func<DecisionVector> initialIndividualGenerator,
             IParentSelectionOperator parentSelector,
-            IMultiParentRecombinationOperator recombinationOperator,
+            IRecombinationOperator recombinationOperator,
+            IMutationOperator mutationOperator,
             IReinsertionOperator reinsertionOperator,
-            int numberOfParents = 5) 
+            HyperParameterManager hyperParameters) 
             : base(initialPopulation)
         {
             this.initialIndividualGenerator = initialIndividualGenerator;
             this.parentSelector = parentSelector;
-            this.numberOfParents = numberOfParents;
+            numberOfParents = hyperParameters.GetHyperParameterValue<int>(EvolutionaryAlgorithmHyperParameters.Number_Of_Parents);
             this.recombinationOperator = recombinationOperator;
+            this.mutationOperator = mutationOperator;
             this.reinsertionOperator = reinsertionOperator;
         }
 
@@ -52,10 +61,12 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
 
         private DecisionVector evolveNewIndividual()
         {
-            // Select two parents
+            // Select parents
             var parents = parentSelector.Select(Population, numberOfParents);
             // Recombine their decision vectors
-            return recombinationOperator.Operate(parents.Select(p => p.DecisionVector));
+            var child = recombinationOperator.Operate(parents.Select(p => p.DecisionVector).ToArray());
+            // Mutate the child Decision Vector
+            return mutationOperator.Operate(child);
         }
 
         protected override bool ReInsert(Individual individual)
@@ -74,9 +85,10 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
         {
             return string.Join(", with ",
                 "Evolutionary Algorithm",
-                $"population {Population.TargetSize}",
-                $"{parentSelector} parent selection",
+                $"population size {Population.TargetSize}",
+                $"{parentSelector} parent selection using {numberOfParents} parents",
                 $"{recombinationOperator} recombination",
+                $"{mutationOperator} mutation",
                 $"{reinsertionOperator} reinsertion");
         }
     }

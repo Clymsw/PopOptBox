@@ -10,7 +10,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
     /// and creates a new one, by averaging each pair of elements from the two decision vectors together.
     /// See Jorge Magalhães-Mendes (2013) and Sivanandam and Deepa (2007)
     /// </summary>
-    public class CrossoverArithmeticMultiParent : Operator, IMultiParentRecombinationOperator
+    public class CrossoverArithmeticMultiParent : Operator, IRecombinationOperator
     {
         /// <summary>
         /// Constructs a crossover operator to perform arithmetic (flat) two-parent crossover of two or more parents.
@@ -31,28 +31,26 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
         /// - the parents have different length or zero length decision vectors; or
         /// - any of the parents have non-continuous Decision Vector elements.
         /// </exception>
-        public DecisionVector Operate(IEnumerable<DecisionVector> parents)
+        public DecisionVector Operate(params DecisionVector[] parents)
         {
-            var parentArray = parents as DecisionVector[] ?? parents.ToArray();
-            
-            if (parentArray.Length < 2)
+            if (parents.Length < 2)
                 throw new ArgumentOutOfRangeException(nameof(parents), 
                     "There must be at least two parents.");
             
-            if (parentArray.Any(p => p.GetContinuousElements().Count == 0))
+            if (parents.Any(p => p.GetContinuousElements().Count == 0))
                 throw new ArgumentOutOfRangeException(nameof(parents), 
                     "Parents must have non-zero length decision vectors.");
 
-            if (parentArray.Any(p => p.GetContinuousElements().Count != parentArray.First().Count))
+            if (parents.Any(p => p.GetContinuousElements().Count != parents.First().Count))
                 throw new ArgumentOutOfRangeException(nameof(parents), 
                     "Parents must have the same length and fully continuous decision vectors.");
 
             return DecisionVector.CreateFromArray(
-                parentArray.First().GetDecisionSpace(),
-                parentArray
+                parents.First().GetDecisionSpace(),
+                parents
                     .Select(p => p.Select(v => (double) v))
                     .Aggregate((p1, p2) => p1.Select((v, i) => v + p2.ElementAt(i)))
-                    .Select(v => v / parentArray.Length));
+                    .Select(v => v / parents.Length));
         }
     }
 }

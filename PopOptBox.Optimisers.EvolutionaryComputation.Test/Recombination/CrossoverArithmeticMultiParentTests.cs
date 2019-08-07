@@ -39,7 +39,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination.Test
         public void Operate_EqualLengthVectors_ReturnsAverage()
         {
             var cx = new CrossoverArithmeticMultiParent();
-            var child = cx.Operate(parents);
+            var child = cx.Operate(parents.ToArray());
             Assert.Equal(
                 new[] {3.0, 2.0, 3.0, 2.0},
                 child.Select(d => (double) d));
@@ -50,7 +50,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination.Test
         {
             parents.Add(parentBad);
             var cx = new CrossoverArithmeticMultiParent();
-            Assert.Throws<ArgumentOutOfRangeException>(() => cx.Operate(parents));
+            Assert.Throws<ArgumentOutOfRangeException>(() => cx.Operate(parents.ToArray()));
         }
     }
 }

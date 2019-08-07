@@ -9,7 +9,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
     /// <summary>
     /// Performs the Simulated Binary Crossover (SBX) as proposed by Deb and Agrawal (1995)
     /// </summary>
-    public class CrossoverSimulatedBinary : Operator, ITwoParentCrossoverOperator
+    public class CrossoverSimulatedBinary : Operator, IRecombinationOperator
     {
         private readonly RandomNumberManager rngManager;
         private readonly int n;
@@ -32,11 +32,13 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
         /// <summary>
         /// Gets a new Decision Vector, based on simulating the operation of a single-point binary crossover.
         /// </summary>
-        /// <param name="firstParent">One <see cref="DecisionVector"/> to use as a parent.</param>
-        /// <param name="secondParent">Another <see cref="DecisionVector"/> to use as a parent.</param>
+        /// <param name="parents">Two <see cref="DecisionVector"/>s to use as a parents.</param>
         /// <returns>A new <see cref="DecisionVector"/>.</returns>
-        public DecisionVector Operate(DecisionVector firstParent, DecisionVector secondParent)
+        public DecisionVector Operate(params DecisionVector[] parents)
         {
+            var firstParent = parents[0];
+            var secondParent = parents[1];
+            
             if (firstParent.GetContinuousElements().Count == 0)
                 throw new ArgumentOutOfRangeException(nameof(firstParent),
                     "Parents must have non-zero length continuous Decision Vector.");
@@ -65,16 +67,9 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
 
         private double getBetaFromU(double u)
         {
-            if (u == 0.5)
-                return 1;
-            else if (u < 0.5)
-            {
-                return Math.Exp(Math.Log(u / 0.5) / (n + 1));
-            }
-            else
-            {
-                return Math.Exp(Math.Log(0.5 / (1 - u)) / (n + 1));
-            }
+            return u < 0.5 
+                ? Math.Exp(Math.Log(u / 0.5) / (n + 1)) 
+                : Math.Exp(Math.Log(0.5 / (1 - u)) / (n + 1));
         }
     }
 }

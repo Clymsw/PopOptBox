@@ -11,7 +11,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
     /// by selecting each element at random from one of the parents.
     /// See Jorge Magalhães-Mendes (2013) and Gonçalves et al. (2005)
     /// </summary>
-    public class CrossoverUniform : Operator, ITwoParentCrossoverOperator
+    public class CrossoverUniform : Operator, IRecombinationOperator
     {
         private readonly RandomNumberManager rngManager;
         private readonly double crossoverBias;
@@ -42,11 +42,13 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
         /// If so, for each element that only exists in the longer parent, if the shorter parent is selected,
         /// that element is removed. 
         /// </remarks>
-        /// <param name="firstParent">One <see cref="DecisionVector"/> to use as a parent.</param>
-        /// <param name="secondParent">Another <see cref="DecisionVector"/> to use as a parent.</param>
+        /// <param name="parents">Two <see cref="DecisionVector"/>s to use as a parents.</param>
         /// <returns>A new <see cref="DecisionVector"/>.</returns>
-        public DecisionVector Operate(DecisionVector firstParent, DecisionVector secondParent)
+        public DecisionVector Operate(params DecisionVector[] parents)
         {
+            var firstParent = parents[0];
+            var secondParent = parents[1];
+            
             var numDims = Math.Max(firstParent.Count, secondParent.Count);
 
             var dims = new List<IVariable>();

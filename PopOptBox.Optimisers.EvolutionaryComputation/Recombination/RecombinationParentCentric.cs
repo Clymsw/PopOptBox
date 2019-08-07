@@ -10,7 +10,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
     /// <summary>
     /// The PCX operator (from Deb 2002)
     /// </summary>
-    public class RecombinationParentCentric : Operator, IMultiParentRecombinationOperator
+    public class RecombinationParentCentric : Operator, IRecombinationOperator
     {
         private readonly double sigmaEta;
         private readonly double sigmaZeta;
@@ -50,25 +50,23 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
         /// - the parents have different length or zero length decision vectors; or
         /// - any of the parents have non-continuous Decision Vector elements.
         /// </exception>
-        public DecisionVector Operate(IEnumerable<DecisionVector> parents)
+        public DecisionVector Operate(params DecisionVector[] parents)
         {
-            var parentArray = parents as DecisionVector[] ?? parents.ToArray();
-
-            if (parentArray.Length < 2)
+            if (parents.Length < 2)
                 throw new ArgumentOutOfRangeException(nameof(parents),
                     "There must be at least two parents.");
 
-            if (parentArray.Any(p => p.GetContinuousElements().Count == 0))
+            if (parents.Any(p => p.GetContinuousElements().Count == 0))
                 throw new ArgumentOutOfRangeException(nameof(parents),
                     "Parents must have non-zero length decision vectors.");
 
-            if (parentArray.Any(p => p.GetContinuousElements().Count != parentArray.First().Count))
+            if (parents.Any(p => p.GetContinuousElements().Count != parents.First().Count))
                 throw new ArgumentOutOfRangeException(nameof(parents),
                     "Parents must have the same length and fully continuous decision vectors.");
 
             // 1: Pre-process
-            var parentDVs = Matrix<double>.Build.DenseOfColumns(parentArray.Select(dv => dv.Select(d => (double)d)));
-            var motherDV = Vector<double>.Build.DenseOfArray(parentArray.ElementAt(0).Select(d => (double)d).ToArray());
+            var parentDVs = Matrix<double>.Build.DenseOfColumns(parents.Select(dv => dv.Select(d => (double)d)));
+            var motherDV = Vector<double>.Build.DenseOfArray(parents.ElementAt(0).Select(d => (double)d).ToArray());
 
             // 1a: centroid of all parents
             var centroid = parentDVs.RowSums().Divide(parents.Count());
