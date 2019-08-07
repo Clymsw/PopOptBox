@@ -23,7 +23,12 @@ namespace PopOptBox.Base.Helpers.Test
             var ind1 = ObjectCreators.EvaluateIndividual(ObjectCreators.GetIndividual(worstDv), BestFitness + FitnessDifference);
             var ind2 = ObjectCreators.EvaluateIndividual(ObjectCreators.GetIndividual(bestDv), BestFitness);
 
-            pop = new Population(140, new[] { ind1, ind2 }, true);
+            pop = ObjectCreators.GetEmptyPopulation(
+                SolutionToFitness.SingleObjectiveMinimise, 
+                Penalty.DeathPenalty,
+                140, true);
+            pop.AddIndividual(ind1);
+            pop.AddIndividual(ind2);
         }
 
         #region AbsoluteFitnessConvergence

@@ -1,4 +1,5 @@
 using System.Linq;
+using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Variables;
 using PopOptBox.Optimisers.StructuredSearch.Test;
 using Xunit;
@@ -19,7 +20,9 @@ namespace PopOptBox.Optimisers.StructuredSearch.Simplices.Test
         public void GetMean_TwoDim_ReturnsCorrectValue(double[] expectedAnswer, params double[][] testValues)
         {
             var inds = Helpers.CreateEvaluatedIndividualsFromArray(testValues);
-            var simplex = new Simplex(inds);
+            var simplex = new Simplex(
+                SolutionToFitness.SingleObjectiveMinimise, Penalty.DeathPenalty,
+                inds);
             
             // Operate() is set up to call GetMean() function.
             var meanLocation = operatorMock.Operate(simplex);

@@ -32,13 +32,22 @@ namespace PopOptBox.Base.Test.Helpers
             ind.SetSolution(Solution_Key);
             ind.SetFitness(s => s[0]);
             ind.FinishEvaluating();
+            ind.SetLegality(true);
 
             return ind;
         }
 
-        internal static Population GetEmptyPopulation(int desiredNumber)
+        internal static Population GetEmptyPopulation(
+            Func<double[], double> solutionToFitness, 
+            Func<double[], double> penalty,
+            int desiredNumber,
+            bool constantLengthDecVec = true)
         {
-            return new Population(desiredNumber);
+            return new Population(
+                solutionToFitness, 
+                penalty, 
+                desiredNumber,
+                constantLengthDv: constantLengthDecVec);
         }
         
         internal class OptimiserMock : Optimiser
@@ -46,9 +55,7 @@ namespace PopOptBox.Base.Test.Helpers
             private readonly DecisionVector decisionVector;
         
             public OptimiserMock(DecisionVector decisionVector,
-                Population initialPopulation, 
-                Func<double[], double> solutionToFitness, 
-                Func<double[], double> penalty) : base(initialPopulation, solutionToFitness, penalty)
+                Population initialPopulation) : base(initialPopulation)
             {
                 this.decisionVector = decisionVector;
             }
@@ -79,9 +86,10 @@ namespace PopOptBox.Base.Test.Helpers
             {
                 return new OptimiserMock(
                     GetDecisionVector(DecVec),
-                    GetEmptyPopulation(PopulationSize), 
-                    CreateSolutionToFitness(),
-                    CreatePenalty());
+                    GetEmptyPopulation(
+                        CreateSolutionToFitness(),
+                        CreatePenalty(),
+                        PopulationSize));
             }
 
             public override IModel CreateModel()

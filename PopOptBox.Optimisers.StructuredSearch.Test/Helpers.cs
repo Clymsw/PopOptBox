@@ -26,6 +26,7 @@ namespace PopOptBox.Optimisers.StructuredSearch.Test
             ind.SendForEvaluation();
             ind.SetProperty("solution", new[]{value});
             ind.SetSolution("solution");
+            ind.SetFitness(s => s[0]);
             ind.SetLegality(true);
             ind.FinishEvaluating();
         }

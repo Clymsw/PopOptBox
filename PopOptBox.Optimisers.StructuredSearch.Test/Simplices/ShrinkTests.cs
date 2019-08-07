@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using PopOptBox.Base.Helpers;
 using PopOptBox.Optimisers.StructuredSearch.Test;
 using Xunit;
 
@@ -27,7 +28,9 @@ namespace PopOptBox.Optimisers.StructuredSearch.Simplices.Test
             var theOperator = new Shrink(0.5);
 
             var inds = Helpers.CreateEvaluatedIndividualsFromArray(testValues);
-            var simplex = new Simplex(inds);
+            var simplex = new Simplex(
+                SolutionToFitness.SingleObjectiveMinimise, Penalty.DeathPenalty,
+                inds);
 
             var newLocation = theOperator.Operate(simplex);
 

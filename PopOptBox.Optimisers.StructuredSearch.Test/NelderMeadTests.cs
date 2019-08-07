@@ -19,13 +19,17 @@ namespace PopOptBox.Optimisers.StructuredSearch.Test
             
         public NelderMeadTests()
         {
+            var hyps = NelderMeadHyperParameters.GetDefaultHyperParameters();
+            hyps.UpdateHyperParameterValue(
+                NelderMeadHyperParameters.Simplex_Creation_Step_Size, Step_Size);
+            
             optimiser = new NelderMead(
                 v => v.ElementAt(0),
                 v => 1000.0,
                 DecisionVector.CreateFromArray(
                     DecisionSpace.CreateForUniformDoubleArray(Number_Of_Dimensions, double.MinValue, double.MaxValue),
                     Enumerable.Repeat(0.0, Number_Of_Dimensions)),
-                Step_Size);
+                hyps);
         }
 
         private void SetUp()

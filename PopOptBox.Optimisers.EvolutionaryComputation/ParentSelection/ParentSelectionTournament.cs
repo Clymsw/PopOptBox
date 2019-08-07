@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MathNet.Numerics.Optimization.TrustRegion;
 using PopOptBox.Base.Management;
 
 namespace PopOptBox.Optimisers.EvolutionaryComputation.ParentSelection
@@ -54,7 +53,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.ParentSelection
 
             var parents = new List<Individual>();
             
-            var remainingEntrants = population.GetMemberList().ToList();
+            var remainingEntrants = population.ToList();
 
             if (alwaysReturnBest)
             {

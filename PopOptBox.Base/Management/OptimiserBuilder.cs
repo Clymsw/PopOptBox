@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using PopOptBox.Base.Conversion;
 using PopOptBox.Base.Variables;
 
@@ -10,56 +9,11 @@ namespace PopOptBox.Base.Management
     /// </summary>
     public abstract class OptimiserBuilder
     {
-        private DecisionVector hyperParameters;
+        public HyperParameterManager HyperParameters { get; }
 
         protected OptimiserBuilder()
         {
-            hyperParameters = DecisionVector.CreateForEmpty();
-        }
-
-        /// <summary>
-        /// All the hyperparameter definitions and values.
-        /// </summary>
-        public DecisionVector HyperParameters => hyperParameters;
-
-        /// <summary>
-        /// Returns the value of a particular hyperparameter.
-        /// </summary>
-        /// <param name="name">The <see cref="IVariable"/> Name defining the hyperparameter.</param>
-        /// <returns>An object value for the hyperparameter.</returns>
-        /// <exception cref="InvalidOperationException">Thrown when the setting is not known.</exception>
-        public object GetHyperParameterValue(string name)
-        {
-            return hyperParameters
-                .Where((v, i) => hyperParameters.GetDecisionSpace().ElementAt(i).Name == name)
-                .Single(); 
-        }
-
-        /// <summary>
-        /// Allows adding an optimisation hyperparameter.
-        /// </summary>
-        /// <param name="definition">Hyperparameter definition, in the form of an <see cref="IVariable"/>.</param>
-        /// <param name="value">The value for the setting</param>
-        /// <returns><see langword="true" /> if set ok</returns>
-        public bool AddHyperParameter(IVariable definition, object value)
-        {
-            try
-            {
-                var decSpace = hyperParameters.GetDecisionSpace().ToList();
-                decSpace.Add(definition);
-                var values = hyperParameters.ToList();
-                values.Add(value);
-                
-                hyperParameters = DecisionVector.CreateFromArray(
-                    new DecisionSpace(decSpace),
-                    values);
-                
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
+            HyperParameters = new HyperParameterManager();
         }
 
         /// <summary>

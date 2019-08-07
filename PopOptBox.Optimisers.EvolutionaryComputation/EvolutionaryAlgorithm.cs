@@ -11,7 +11,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
     /// <summary>
     /// An Evolutionary Algorithm performs guided random search on real-valued search spaces, based on recombining groups of parents.
     /// </summary>
-    class EvolutionaryAlgorithm : Optimiser
+    public class EvolutionaryAlgorithm : Optimiser
     {
         private readonly Func<DecisionVector> initialIndividualGenerator;
         private readonly IParentSelectionOperator parentSelector;
@@ -23,22 +23,18 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
         /// Creates an Evolutionary Algorithm. See Deb et al. 2002
         /// </summary>
         /// <param name="initialPopulation">The initial population (can be empty).</param>
-        /// <param name="solutionToFitness">The conversion of solution to Fitness.</param>
-        /// <param name="penalty">The conversion of solution to penalty if individual is illegal.</param>
         /// <param name="initialIndividualGenerator">Creates new decision vectors to build the first population. <seealso cref="Base.Conversion.IModel"/></param>
         /// <param name="parentSelector">The <see cref="IParentSelectionOperator"/> to use.</param>
         /// <param name="recombinationOperator">The <see cref="IMultiParentRecombinationOperator"/> to use.</param>
         /// <param name="reinsertionOperator">The <see cref="IReinsertionOperator"/> to use.</param>
         public EvolutionaryAlgorithm(
             Population initialPopulation, 
-            Func<double[], double> solutionToFitness, 
-            Func<double[], double> penalty,
             Func<DecisionVector> initialIndividualGenerator,
             IParentSelectionOperator parentSelector,
             IMultiParentRecombinationOperator recombinationOperator,
             IReinsertionOperator reinsertionOperator,
             int numberOfParents = 5) 
-            : base(initialPopulation, solutionToFitness, penalty)
+            : base(initialPopulation)
         {
             this.initialIndividualGenerator = initialIndividualGenerator;
             this.parentSelector = parentSelector;

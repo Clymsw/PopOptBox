@@ -5,7 +5,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
     /// <summary>
     /// Crossover operator, which 'breeds' two decision vectors together to create an 'offspring'.
     /// </summary>
-    interface ITwoParentCrossoverOperator
+    public interface ITwoParentCrossoverOperator
     {
         /// <summary>
         /// Performs the crossover operation.

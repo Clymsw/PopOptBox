@@ -1,39 +1,64 @@
 ﻿using System;
 using System.Linq;
 using PopOptBox.Base.Calculation;
+using PopOptBox.Base.Management;
+using PopOptBox.HyperParameterTuning.SingleObjective.Continuous.GeneticAlgorithm;
 using PopOptBox.HyperParameterTuning.SingleObjective.Continuous.NelderMead;
-using PopOptBox.Problems.HyperparameterOptimisation;
-using PopOptBox.Problems.SingleObjective.Continuous;
+using PopOptBox.Optimisers.EvolutionaryComputation.Mutation;
+using PopOptBox.Optimisers.EvolutionaryComputation.ParentSelection;
+using PopOptBox.Optimisers.EvolutionaryComputation.Recombination;
+using PopOptBox.Optimisers.EvolutionaryComputation.Reinsertion;
+using PopOptBox.Optimisers.StructuredSearch;
+using PopOptBox.Problems.Performance;
 
 namespace PopOptBox.HyperParameterTuning
 {
     class Program
     {
-        private const int Number_Of_Dimensions = 10;
-        private const double Simplex_Creation_Step_Size = 0.5;
         private const double Convergence_Tolerance = 0.00001;
         private const int Number_Of_Restarts = 100;
         private const double Fitness_Tolerance = 0.01;
         
-        private static ProblemSingleObjectiveContinuous GetEvaluator()
-        {
-            //return new Ellipsoidal(Number_Of_Dimensions);
-            //return new Schwefel(Number_Of_Dimensions);
+        private const Options.ProblemsSingleObjectiveContinuousAvailable ProblemToUse =
+            Options.ProblemsSingleObjectiveContinuousAvailable.Rastrigin;
 
-            return new Rosenbrock(Number_Of_Dimensions);
-            //return new StyblinskiTang(Number_Of_Dimensions);
+        private const int Number_Of_Dimensions = 10;
+        
+        private const Options.OptimisersAvailable OptimiserToUse = 
+            Options.OptimisersAvailable.NelderMead;
 
-            //return new Rastrigin(Number_Of_Dimensions);
-            //return new Salomon(Number_Of_Dimensions);
-        }
+        private const double Nelder_Mead_Simplex_Creation_Step_Size = 0.5;
+        
         
         static void Main(string[] args)
         {
-            var problem = GetEvaluator();
+            var problem = Options.GetProblem(ProblemToUse, Number_Of_Dimensions);
+
+            OptimiserBuilder builder;
             
-            var runner = new ProblemPerformanceAssessor<double>(
-                NelderMeadBuilder.GetBuilder(problem.GetGlobalOptimum().GetDecisionSpace(), Simplex_Creation_Step_Size), 
-                problem,
+            switch (OptimiserToUse)
+            {
+                case Options.OptimisersAvailable.NelderMead:
+                    builder = NelderMeadBuilder.GetBuilder(
+                        problem.GetGlobalOptimum().GetDecisionSpace(),
+                        Nelder_Mead_Simplex_Creation_Step_Size);
+                    break;
+                
+                case Options.OptimisersAvailable.GeneticAlgorithm:
+                    throw new ArgumentOutOfRangeException();
+                    //builder = GeneticAlgorithmBuilder.GetBuilder(
+                    //problem.GetGlobalOptimum().GetDecisionSpace(),
+                    //100,
+                    //new
+                    //new ParentSelectionTournament(40, true), 
+                    //new CrossoverUniform(0.5),
+                    //new MutationAddRandomNumber(0.1, 0.1, 1),
+                    //new ReinsertionReplaceRandom());
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            var runner = new ProblemPerformanceAssessor<double>(builder, problem,
                 p => p.AbsoluteDecisionVectorConvergence(Convergence_Tolerance));
 
             var results = runner.RunAssessment(

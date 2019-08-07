@@ -20,11 +20,33 @@ namespace PopOptBox.Optimisers.StructuredSearch.Test
         [InlineData(0.1, 1.1, 0.1, 1, true)]
         public void InvalidCoefficients_ThrowError(double r, double e, double c, double s, bool errorExpected)
         {
+            var hyps = NelderMeadHyperParameters.GetDefaultHyperParameters();
+
+            var numUpdates = 0;
+            numUpdates += 
+                hyps.UpdateHyperParameterValue(NelderMeadHyperParameters.Reflection_Coefficient, r)
+                    ? 1 : 0;
+            numUpdates += 
+                hyps.UpdateHyperParameterValue(NelderMeadHyperParameters.Expansion_Coefficient, e)
+                    ? 1 : 0;
+            numUpdates += 
+                hyps.UpdateHyperParameterValue(NelderMeadHyperParameters.Contraction_Coefficient, c)
+                    ? 1 : 0;
+            numUpdates += 
+                hyps.UpdateHyperParameterValue(NelderMeadHyperParameters.Shrinkage_Coefficient, s)
+                    ? 1 : 0;
+
             if (errorExpected)
-                Assert.Throws<ArgumentOutOfRangeException>(() => 
-                    new NelderMeadSimplexOperationsManager(r,e,c,s));
+            {
+                if (numUpdates == 4)
+                    Assert.Throws<ArgumentOutOfRangeException>(() => 
+                        new NelderMeadSimplexOperationsManager(hyps));
+            }
             else
-                new NelderMeadSimplexOperationsManager(r,e,c,s);
+            {
+                Assert.Equal(4, numUpdates);
+                new NelderMeadSimplexOperationsManager(hyps);
+            }
         } 
     }
 }

@@ -29,24 +29,36 @@ namespace PopOptBox.Base.Management
         /// Whether we have met or exceeded our desired size of population.
         /// </summary>
         public bool IsTargetSizeReached => members.Count >= TargetSize;
+        
+        private readonly Func<double[], double> solutionToFitness;
+        private readonly Func<double[], double> penalty;
 
         #endregion
 
         #region Constructors
 
         /// <summary>
-        /// Initialise population with a target size and an initial array of individuals
+        /// Initialise population.
         /// </summary>
+        /// <param name="solutionToFitness">Conversion function to change Solution Vector into Fitness. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
+        /// <param name="penalty">Function determining what penalty to assign for illegal individuals. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
         /// <param name="initialPopulation">An array of individuals</param>
         /// <param name="initialSize">Expected max size of population</param>
         /// <param name="constantLengthDv">Whether the Decision Vector should be expected to be constant</param>
         public Population(
+            Func<double[], double> solutionToFitness,
+            Func<double[], double> penalty,
             int initialSize = 100,
             IEnumerable<Individual> initialPopulation = null,
             bool constantLengthDv = true)
         {
-            if (initialSize > 0)
-                TargetSize = initialSize;
+            this.solutionToFitness = solutionToFitness;
+            this.penalty = penalty;
+            
+            if (initialSize <= 0)
+                throw new ArgumentOutOfRangeException(nameof(initialSize),
+                    "Population size must be greater than zero.");
+            TargetSize = initialSize;
 
             ConstantLengthDecisionVector = constantLengthDv;
 
@@ -64,6 +76,8 @@ namespace PopOptBox.Base.Management
         public virtual Population Clone()
         {
             return new Population(
+                solutionToFitness,
+                penalty,
                 TargetSize,
                 members.Select(m => m.Clone()),
                 ConstantLengthDecisionVector);
@@ -80,15 +94,6 @@ namespace PopOptBox.Base.Management
         /// <returns>An <see cref="Individual"/>.</returns>
         public Individual this[int index] => members[index];
 
-        /// <summary>
-        /// Allows read-only access to the individuals
-        /// </summary>
-        /// <returns>List of <see cref="Individual"/>s.</returns>
-        public IReadOnlyList<Individual> GetMemberList()
-        {
-            return members;
-        }
-        
         /// <summary>
         /// Gets the individual with the best (lowest) Fitness.
         /// </summary>
@@ -192,6 +197,12 @@ namespace PopOptBox.Base.Management
             
             if (ind.State != IndividualState.Evaluated)
                 throw new ArgumentException("Individual is not yet evaluated.");
+            
+            //If the individual has been evaluated and is legal, 
+            // assign fitness and store in population.
+            //If the individual has been evaluated but is not legal, 
+            // assign soft penalty and store in population.
+            ind.SetFitness(ind.Legal ? solutionToFitness : penalty);
             
             // Add to population
             members.Add(ind);

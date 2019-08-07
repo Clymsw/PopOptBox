@@ -4,17 +4,17 @@ using PopOptBox.Base.Conversion;
 using PopOptBox.Base.Variables;
 using PopOptBox.Problems.SingleObjective.Continuous;
 
-namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.NelderMead
+namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous
 {
-    public class NelderMeadForContinuousProblemModel : Model<DecisionVector>
+    public class ContinuousProblemModel : Model<DecisionVector>
     {
         private RandomSource rng;
         private DecisionSpace decisionSpace;
         
-        public NelderMeadForContinuousProblemModel(DecisionSpace decisionSpace) 
+        public ContinuousProblemModel(DecisionSpace decisionSpace) 
             : base(new ContinuousProblemConverter(decisionSpace), ContinuousProblemPropertyNames.TheLocation)
         {
-            rng = new MersenneTwister();
+            rng = new MersenneTwister(true);
             this.decisionSpace = decisionSpace;
         }
 

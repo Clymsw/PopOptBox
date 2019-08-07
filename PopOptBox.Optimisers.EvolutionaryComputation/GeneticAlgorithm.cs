@@ -12,7 +12,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
     /// <summary>
     /// A Genetic Algorithm performs guided random search using the breeding and mutation of individual pairs, similar to animal reproduction.
     /// </summary>
-    class GeneticAlgorithm : Optimiser
+    public class GeneticAlgorithm : Optimiser
     {
         private readonly Func<DecisionVector> initialIndividualGenerator;
         private readonly IParentSelectionOperator parentSelector;
@@ -24,23 +24,19 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
         /// Creates a Genetic Algorithm.
         /// </summary>
         /// <param name="initialPopulation">The initial population (can be empty).</param>
-        /// <param name="solutionToFitness">The conversion of solution to Fitness.</param>
-        /// <param name="penalty">The conversion of solution to penalty if individual is illegal.</param>
         /// <param name="initialIndividualGenerator">Creates new decision vectors to build the first population. <seealso cref="Base.Conversion.IModel"/></param>
         /// <param name="parentSelector">The <see cref="IParentSelectionOperator"/> to use.</param>
         /// <param name="crossoverOperator">The <see cref="ITwoParentCrossoverOperator"/> to use.</param>
         /// <param name="mutationOperator">The <see cref="IMutationOperator"/> to use.</param>
         /// <param name="reinsertionOperator">The <see cref="IReinsertionOperator"/> to use.</param>
         public GeneticAlgorithm(
-            Population initialPopulation, 
-            Func<double[], double> solutionToFitness, 
-            Func<double[], double> penalty,
+            Population initialPopulation,
             Func<DecisionVector> initialIndividualGenerator,
             IParentSelectionOperator parentSelector,
             ITwoParentCrossoverOperator crossoverOperator,
             IMutationOperator mutationOperator,
             IReinsertionOperator reinsertionOperator) 
-            : base(initialPopulation, solutionToFitness, penalty)
+            : base(initialPopulation)
         {
             this.initialIndividualGenerator = initialIndividualGenerator;
             this.parentSelector = parentSelector;

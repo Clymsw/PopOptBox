@@ -5,7 +5,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Reinsertion
     /// <summary>
     /// Interface for all re-insertion operators, that will be used to override <see cref="Optimiser.ReInsert(Individual)"/>.
     /// </summary>
-    interface IReinsertionOperator
+    public interface IReinsertionOperator
     {
         /// <summary>
         /// Perform the re-insertion.

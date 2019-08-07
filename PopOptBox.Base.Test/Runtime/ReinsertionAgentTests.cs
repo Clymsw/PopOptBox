@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Threading.Tasks.Dataflow;
 using PopOptBox.Base.Calculation;
-using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Management;
 using PopOptBox.Base.Test.Helpers;
 using Xunit;

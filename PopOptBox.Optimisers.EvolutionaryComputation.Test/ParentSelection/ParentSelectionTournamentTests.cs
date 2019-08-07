@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Management;
 using PopOptBox.Optimisers.EvolutionaryComputation.Test;
 using Xunit;
@@ -17,7 +18,9 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.ParentSelection.Test
                 fitnesses.Select((f, i) => new[] { 0.5, 1.5 }).ToArray(),
                 fitnesses);
 
-            testPop = new Population(initialPopulation: inds);
+            testPop = new Population(
+                SolutionToFitness.SingleObjectiveMinimise, Penalty.DeathPenalty,
+                initialPopulation: inds);
         }
 
         [Fact]

@@ -39,32 +39,29 @@ namespace PopOptBox.Optimisers.StructuredSearch
         #endregion
 
         /// <summary>
-        /// Constructs a new Nelder-Mead Simplex local search optimiser
+        /// Constructs a new Nelder-Mead Simplex local search optimiser.
         /// </summary>
         /// <param name="solutionToFitness"><see cref="Optimiser"/></param>
         /// <param name="penalty"><see cref="Optimiser"/></param>
-        /// <param name="initialLocation">Starting location for the search</param>
-        /// <param name="simplexCreationStepSize">Step size for creating the initial simplex</param>
-        /// <param name="reflectionCoefficient">Reflection coefficient (only change this if you know what you are doing!)</param>
-        /// <param name="expansionCoefficient">Expansion coefficient (only change this if you know what you are doing!)</param>
-        /// <param name="contractionCoefficient">Contraction coefficient (only change this if you know what you are doing!)</param>
-        /// <param name="shrinkageCoefficient">Shrinkage coefficient (only change this if you know what you are doing!)</param>
+        /// <param name="initialLocation">Starting location for the search.</param>
+        /// <param name="hyperParameters">
+        /// Instance of <see cref="HyperParameterManager"/> containing values for
+        /// all the coefficients required by <see cref="NelderMeadHyperParameters"/>.
+        /// </param>
         public NelderMead(
             Func<double[], double> solutionToFitness,
             Func<double[], double> penalty,
-            DecisionVector initialLocation, double simplexCreationStepSize = 1,
-            double reflectionCoefficient = 1, double expansionCoefficient = 2,
-            double contractionCoefficient = 0.5, double shrinkageCoefficient = 0.5) :
-            base(new Simplex(initialLocation.Count), solutionToFitness, penalty)
+            DecisionVector initialLocation, 
+            HyperParameterManager hyperParameters) :
+            base(new Simplex(solutionToFitness, penalty, initialLocation.Count))
         {
             // Set up simplex operations
-            OperationsManager = new NelderMeadSimplexOperationsManager(reflectionCoefficient,
-                expansionCoefficient, contractionCoefficient, shrinkageCoefficient);
+            OperationsManager = new NelderMeadSimplexOperationsManager(hyperParameters);
 
             //Set up simplex
             InitialVerticesStillUnevaluated = Simplex.CreateInitialVertices(
                 initialLocation,
-                simplexCreationStepSize);
+                hyperParameters.GetHyperParameterValue<double>(NelderMeadHyperParameters.Simplex_Creation_Step_Size));
 
             //Initialise historian
             tempProgress.Add(NelderMeadSimplexOperations.R);
@@ -235,7 +232,8 @@ namespace PopOptBox.Optimisers.StructuredSearch
                     return true;
                 
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(CurrentOperation), "This operation is not understood.");
+                    throw new ArgumentOutOfRangeException(nameof(CurrentOperation), 
+                        "This operation is not understood.");
             }
 
             return false;

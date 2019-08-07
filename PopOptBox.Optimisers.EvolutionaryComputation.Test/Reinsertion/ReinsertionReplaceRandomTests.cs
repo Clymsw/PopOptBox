@@ -1,5 +1,6 @@
 ﻿using PopOptBox.Optimisers.EvolutionaryComputation.Reinsertion;
 using System.Linq;
+using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Management;
 using Xunit;
 
@@ -16,7 +17,9 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test.Reinsertion
                 fitnesses.Select((f, i) => new[] { 0.5, 1.5 }).ToArray(),
                 fitnesses);
 
-            testPop = new Population(initialPopulation: inds);
+            testPop = new Population(
+                SolutionToFitness.SingleObjectiveMinimise, Penalty.DeathPenalty,
+                initialPopulation: inds);
         }
 
         [Fact]

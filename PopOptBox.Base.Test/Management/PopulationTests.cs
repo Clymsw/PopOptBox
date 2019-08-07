@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Test.Helpers;
 using Xunit;
 
@@ -16,7 +17,10 @@ namespace PopOptBox.Base.Management.Test
         
         public PopulationTests()
         {
-            popConstLenDv = new Population(140, null, true);
+            popConstLenDv = new Population(
+                SolutionToFitness.SingleObjectiveMinimise,
+                Penalty.DeathPenalty,
+                140, null, true);
             
             var testVector = new[] { 0.5, 1.5 };
             
@@ -27,8 +31,14 @@ namespace PopOptBox.Base.Management.Test
             ind = ObjectCreators.EvaluateIndividual(
                 ObjectCreators.GetIndividual(testVector), fitness);
             
-            popConstLenDvInitInd = new Population(140, new[] {ind}, true);
-            popVarLenDv = new Population(140, new[] {ind}, false);
+            popConstLenDvInitInd = new Population(
+                SolutionToFitness.SingleObjectiveMinimise,
+                Penalty.DeathPenalty,
+                140, new[] {ind}, true);
+            popVarLenDv = new Population(
+                SolutionToFitness.SingleObjectiveMinimise,
+                Penalty.DeathPenalty,
+                140, new[] {ind}, false);
         }
 
         [Fact]

@@ -1,6 +1,5 @@
 ﻿using System;
 using MathNet.Numerics.Random;
-using PopOptBox.Base.Variables;
 using System.Collections.Generic;
 using System.Linq;
 using MathNet.Numerics;

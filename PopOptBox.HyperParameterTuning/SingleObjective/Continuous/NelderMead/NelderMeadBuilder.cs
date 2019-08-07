@@ -3,6 +3,7 @@ using PopOptBox.Base.Conversion;
 using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Management;
 using PopOptBox.Base.Variables;
+using PopOptBox.Optimisers.StructuredSearch;
 
 namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.NelderMead
 {
@@ -10,28 +11,23 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.NelderMead
     {
         private readonly DecisionSpace decisionSpace;
 
-        public NelderMeadBuilder(DecisionSpace decisionSpace)
+        public NelderMeadBuilder(DecisionSpace decisionSpace, HyperParameterManager hyperParameters)
         {
             this.decisionSpace = decisionSpace;
+            HyperParameters.AddFromExistingHyperParameterSet(hyperParameters);
         }
         
-        public static OptimiserBuilder GetBuilder(DecisionSpace problemSpace, double simplexCreationStepSize)
+        public static OptimiserBuilder GetBuilder(
+            DecisionSpace problemSpace, 
+            double? simplexCreationStepSize = null)
         {
-            var builder = new NelderMeadBuilder(problemSpace);
+            var hyps = NelderMeadHyperParameters.GetDefaultHyperParameters();
+            if (simplexCreationStepSize != null)
+                hyps.UpdateHyperParameterValue(
+                    NelderMeadHyperParameters.Simplex_Creation_Step_Size,
+                    simplexCreationStepSize);
             
-            builder.AddHyperParameter(
-                new VariableDiscrete(1, int.MaxValue,
-                    name: HyperParameterNames.NumberOfDimensions),
-                problemSpace.Count);
-            
-            builder.AddHyperParameter(
-                new VariableContinuous(
-                    lowerBoundForGeneration: 0.0001,
-                    upperBoundForGeneration: 1,
-                    name: HyperParameterNames.SimplexStepCreationSize), 
-                simplexCreationStepSize);
-
-            return builder;
+            return new NelderMeadBuilder(problemSpace, hyps);
         }
         
         public override Optimiser CreateOptimiser()
@@ -40,12 +36,12 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.NelderMead
                 CreateSolutionToFitness(),
                 CreatePenalty(),
                 CreateModel().GetNewDecisionVector(),
-                (double)GetHyperParameterValue(HyperParameterNames.SimplexStepCreationSize));
+                HyperParameters);
         }
 
         public override IModel CreateModel()
         {
-            return new NelderMeadForContinuousProblemModel(decisionSpace);
+            return new ContinuousProblemModel(decisionSpace);
         }
 
         protected override Func<double[], double> CreateSolutionToFitness()

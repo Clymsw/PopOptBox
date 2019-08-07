@@ -4,7 +4,7 @@ using PopOptBox.Base.Management;
 using PopOptBox.Base.Runtime;
 using PopOptBox.Problems.SingleObjective;
 
-namespace PopOptBox.Problems.HyperparameterOptimisation
+namespace PopOptBox.Problems.Performance
 {
     public class ProblemPerformanceAssessor<T>
     {
@@ -45,7 +45,6 @@ namespace PopOptBox.Problems.HyperparameterOptimisation
                 results.Add(
                     new ProblemPerformanceSingleObjective(
                         builder.CreateOptimiser().ToString(),
-                        builder.HyperParameters,
                         evaluator,
                         optimiserRunner));
 

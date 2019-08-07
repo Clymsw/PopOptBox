@@ -7,7 +7,7 @@ using PopOptBox.Base.Runtime;
 using PopOptBox.Base.Variables;
 using PopOptBox.Problems.SingleObjective;
 
-namespace PopOptBox.Problems.HyperparameterOptimisation
+namespace PopOptBox.Problems.Performance
 {
     /// <summary>
     /// Captures information on the performance of an optimisation algorithm on a given test problem.
@@ -17,7 +17,6 @@ namespace PopOptBox.Problems.HyperparameterOptimisation
     {
         // Definitions
         private readonly string optimiserDescription; 
-        private readonly DecisionVector hyperParameters;
         private readonly ProblemSingleObjective problem;
 
         private double[] globalOptimumSolution;
@@ -33,17 +32,14 @@ namespace PopOptBox.Problems.HyperparameterOptimisation
         /// Constructs the performance assessment class.
         /// </summary>
         /// <param name="optimiserDescription">A user-friendly description of the optimiser (perhaps its class name).</param>
-        /// <param name="hyperParameters">The hyperparameters used for the optimiser.</param>
         /// <param name="problem">The problem description.</param>
         /// <param name="results">The completed optimisation runner.</param>
         public ProblemPerformanceSingleObjective(
             string optimiserDescription, 
-            DecisionVector hyperParameters,
             ProblemSingleObjective problem,
             OptimiserRunner results)
         {
             this.optimiserDescription = optimiserDescription;
-            this.hyperParameters = hyperParameters;
             this.problem = problem;
 
             startRunTime = results.StartTime;

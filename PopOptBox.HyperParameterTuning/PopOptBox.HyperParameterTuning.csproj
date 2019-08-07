@@ -9,6 +9,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\PopOptBox.Base\PopOptBox.Base.csproj" />
+      <ProjectReference Include="..\PopOptBox.Optimisers.EvolutionaryComputation\PopOptBox.Optimisers.EvolutionaryComputation.csproj" />
       <ProjectReference Include="..\PopOptBox.Optimisers.StructuredSearch\PopOptBox.Optimisers.StructuredSearch.csproj" />
       <ProjectReference Include="..\PopOptBox.Problems\PopOptBox.Problems.csproj" />
     </ItemGroup>

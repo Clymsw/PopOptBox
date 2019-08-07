@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Management;
 using PopOptBox.Base.Variables;
 using PopOptBox.Optimisers.StructuredSearch.Test;
@@ -61,7 +62,9 @@ namespace PopOptBox.Optimisers.StructuredSearch.Simplices.Test
                 Helpers.EvaluateIndividual(ind);
             }
             
-            Assert.Throws<ArgumentException>(() => new Simplex(testInds));
+            Assert.Throws<ArgumentException>(() => new Simplex(
+                SolutionToFitness.SingleObjectiveMinimise, Penalty.DeathPenalty,
+                testInds));
         }
         
         [Fact]
@@ -84,7 +87,9 @@ namespace PopOptBox.Optimisers.StructuredSearch.Simplices.Test
                 Helpers.EvaluateIndividual(ind);
             }
             
-            Assert.Throws<ArgumentException>(() => new Simplex(testInds));
+            Assert.Throws<ArgumentException>(() => new Simplex(
+                SolutionToFitness.SingleObjectiveMinimise, Penalty.DeathPenalty,
+                testInds));
         }
         
         [Fact]
@@ -107,7 +112,9 @@ namespace PopOptBox.Optimisers.StructuredSearch.Simplices.Test
                 Helpers.EvaluateIndividual(ind);
             }
             
-            Assert.Throws<ArgumentException>(() => new Simplex(testInds));
+            Assert.Throws<ArgumentException>(() => new Simplex(
+                SolutionToFitness.SingleObjectiveMinimise, Penalty.DeathPenalty,
+                testInds));
         }
     }
 }

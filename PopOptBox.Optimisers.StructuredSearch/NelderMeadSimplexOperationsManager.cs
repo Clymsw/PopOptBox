@@ -1,4 +1,5 @@
 ﻿using System;
+using PopOptBox.Base.Management;
 using PopOptBox.Base.Variables;
 using PopOptBox.Optimisers.StructuredSearch.Simplices;
 
@@ -80,21 +81,20 @@ namespace PopOptBox.Optimisers.StructuredSearch
         #endregion
 
         /// <summary>
-        /// Constructor for the simplex operations manager.
+        ///     Constructor for the simplex operations manager.
         /// </summary>
-        /// <param name="reflectionCoefficient">Coefficient for <see cref="ReflectExpandContract"/> simplex operator, resulting in a <see cref="NelderMeadSimplexOperations.R"/> action.</param>
-        /// <param name="expansionCoefficient">Coefficient for <see cref="ReflectExpandContract"/> simplex operator, resulting in a <see cref="NelderMeadSimplexOperations.E"/> action.</param>
-        /// <param name="contractionCoefficient">Coefficient for <see cref="ReflectExpandContract"/> simplex operator, resulting in a <see cref="NelderMeadSimplexOperations.C"/> or <see cref="NelderMeadSimplexOperations.K"/> action.</param>
-        /// <param name="shrinkageCoefficient">Coefficient for <see cref="Shrink"/> simplex operator, resulting in a <see cref="NelderMeadSimplexOperations.S"/> action.</param>
+        /// <param name="coefficients">
+        ///     Instance of the <see cref="HyperParameterManager"/> with coefficients for
+        ///     the <see cref="ReflectExpandContract"/> and <see cref="Shrink"/> simplex operators.
+        /// </param>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when coefficients are not meaningful.</exception>
-        public NelderMeadSimplexOperationsManager(double reflectionCoefficient, double expansionCoefficient,
-                double contractionCoefficient, double shrinkageCoefficient)
+        public NelderMeadSimplexOperationsManager(HyperParameterManager coefficients)
         {
             ParseCoefficientsAndBuild(
-                reflectionCoefficient,
-                expansionCoefficient,
-                contractionCoefficient,
-                shrinkageCoefficient);
+                coefficients.GetHyperParameterValue<double>(NelderMeadHyperParameters.Reflection_Coefficient),
+                coefficients.GetHyperParameterValue<double>(NelderMeadHyperParameters.Expansion_Coefficient),
+                coefficients.GetHyperParameterValue<double>(NelderMeadHyperParameters.Contraction_Coefficient),
+                coefficients.GetHyperParameterValue<double>(NelderMeadHyperParameters.Shrinkage_Coefficient));
         }
 
         /// <summary>
@@ -124,6 +124,10 @@ namespace PopOptBox.Optimisers.StructuredSearch
             }
         }
 
+        /// <summary>
+        /// Ensures all coefficients are present and correct. 
+        /// </summary>
+        /// <remarks>Many of the basic checks are performed by the <see cref="DecisionSpace"/>s in <see cref="NelderMeadHyperParameters"/>.</remarks>
         private void ParseCoefficientsAndBuild(
             double reflectCoefficient, 
             double expandCoefficient, 

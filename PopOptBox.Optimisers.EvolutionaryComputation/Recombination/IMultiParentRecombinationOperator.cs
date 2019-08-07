@@ -6,7 +6,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
     /// <summary>
     /// Recombination operator, where multiple parent decision vectors are used to create an 'offspring'.
     /// </summary>
-    interface IMultiParentRecombinationOperator
+    public interface IMultiParentRecombinationOperator
     {
         /// <summary>
         /// Performs the recombination.
