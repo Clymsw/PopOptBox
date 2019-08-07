@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using PopOptBox.Base.Variables;
 
 namespace PopOptBox.Base.Management
@@ -117,6 +118,9 @@ namespace PopOptBox.Base.Management
                     OptimiserPropertyNames.ReinsertionTime,
                     DateTime.Now);
 
+                if (Population.Contains(ind)) 
+                    continue;
+                
                 var wasReInserted = ReInsert(ind);
 
                 if (wasReInserted)
