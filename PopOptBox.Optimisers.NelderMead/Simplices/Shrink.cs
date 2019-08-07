@@ -28,9 +28,9 @@ namespace PopOptBox.Optimisers.NelderMead.Simplices
             var worst = simplex.Worst().DecisionVector;
             var best = simplex.Best().DecisionVector;
 
-            var newLocation = best.Vector.Select(
+            var newLocation = best.Select(
                 (d,i) => (1 - Coefficient) * (double)d + 
-                Coefficient * (double)worst.Vector[i]);
+                Coefficient * (double)worst[i]);
 
             return DecisionVector.CreateFromArray(
                 best.GetDecisionSpace(),

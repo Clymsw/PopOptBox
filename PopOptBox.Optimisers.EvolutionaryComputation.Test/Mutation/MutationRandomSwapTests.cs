@@ -44,9 +44,9 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation.Test
             var newDv = mutator.Operate(testDv);
 
             Assert.NotEqual(testDv, newDv);
-            Assert.Equal(testDv.Vector.Count, newDv.Vector.Count);
-            Assert.Equal(testDv.Vector.Count - 2,
-                newDv.Vector.Where((v, i) => v == testDv.Vector.ElementAt(i)).Count());
+            Assert.Equal(testDv.Count, newDv.Count);
+            Assert.Equal(testDv.Count - 2,
+                newDv.Where((v, i) => v == testDv.ElementAt(i)).Count());
         }
     }
 }

@@ -24,8 +24,8 @@ namespace PopOptBox.Optimisers.NelderMead.Simplices.Test
             // Operate() is set up to call GetMean() function.
             var meanLocation = operatorMock.Operate(simplex);
 
-            Assert.True(meanLocation.Vector.Count == expectedAnswer.Length);
-            Assert.Equal(expectedAnswer, meanLocation.Vector.Select(d => (double)d).ToArray());
+            Assert.True(meanLocation.Count == expectedAnswer.Length);
+            Assert.Equal(expectedAnswer, meanLocation.Select(d => (double)d).ToArray());
         }
 
         public class OperatorMock : SimplexOperator

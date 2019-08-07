@@ -34,10 +34,10 @@ namespace PopOptBox.Problems.SingleObjective.Continuous
             // http://benchmarkfcns.xyz/benchmarkfcns/rosenbrockfcn.html
 
             double result = 0;
-            for (int i = 0; i < location.Vector.Count - 1; i++)
+            for (int i = 0; i < location.Count - 1; i++)
             {
-                result += 100 * Math.Pow(Convert.ToDouble(location.Vector[i + 1]) - Math.Pow(Convert.ToDouble(location.Vector[i]), 2), 2)
-                          + Math.Pow(1 - Convert.ToDouble(location.Vector[i]), 2);
+                result += 100 * Math.Pow(Convert.ToDouble(location[i + 1]) - Math.Pow(Convert.ToDouble(location[i]), 2), 2)
+                          + Math.Pow(1 - Convert.ToDouble(location[i]), 2);
             }
             return new[] { result };
         }

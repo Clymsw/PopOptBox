@@ -33,10 +33,10 @@ namespace PopOptBox.Problems.SingleObjective.Continuous
             // http://benchmarkfcns.xyz/benchmarkfcns/rastriginfcn.html
             // http://www.sfu.ca/~ssurjano/rastr.html
 
-            double result = 10 * location.Vector.Count;
-            for (int i = 0; i < location.Vector.Count; i++)
+            double result = 10 * location.Count;
+            for (int i = 0; i < location.Count; i++)
             {
-                result += Math.Pow(Convert.ToDouble(location.Vector[i]), 2) - (10 * Math.Cos(2 * Math.PI * Convert.ToDouble(location.Vector[i])));
+                result += Math.Pow(Convert.ToDouble(location[i]), 2) - (10 * Math.Cos(2 * Math.PI * Convert.ToDouble(location[i])));
             }
             return new[] { result };
         }

@@ -20,7 +20,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination.Test
             parent2 = DecisionVector.CreateFromArray(
                 decisionSpaceUniform, new[] {3, 2, 0, 1});
             
-            var heteroSpace = decisionSpaceUniform.Dimensions.ToList();
+            var heteroSpace = decisionSpaceUniform.ToList();
             heteroSpace.Add(new VariableDiscrete(-4, -1));
             heteroSpace.Add(new VariableDiscrete(-4, -1));
             var decisionSpaceHetero = new DecisionSpace(heteroSpace);
@@ -38,10 +38,10 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination.Test
                 // Try this a few times to try to cause a mistake.
                 var child = cx.Operate(parent1, parent2);
                 
-                for (var d = 0; d < child.Vector.Count; d++)
+                for (var d = 0; d < child.Count; d++)
                 {
-                    Assert.True(child.Vector.ElementAt(d) == parent1.Vector.ElementAt(d)
-                                || child.Vector.ElementAt(d) == parent2.Vector.ElementAt(d));
+                    Assert.True(child.ElementAt(d) == parent1.ElementAt(d)
+                                || child.ElementAt(d) == parent2.ElementAt(d));
                 }
             }
         }
@@ -55,13 +55,13 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination.Test
                 // Try this a few times to try to cause a mistake.
                 var child = cx.Operate(parent1, parent3Longer);
                 
-                Assert.True(child.Vector.Count <= parent3Longer.Vector.Count
-                            && child.Vector.Count >= parent1.Vector.Count);
+                Assert.True(child.Count <= parent3Longer.Count
+                            && child.Count >= parent1.Count);
                 
-                for (var d = 0; d < parent1.Vector.Count; d++)
+                for (var d = 0; d < parent1.Count; d++)
                 {
-                    Assert.True(child.Vector.ElementAt(d) == parent1.Vector.ElementAt(d)
-                                || child.Vector.ElementAt(d) == parent3Longer.Vector.ElementAt(d));
+                    Assert.True(child.ElementAt(d) == parent1.ElementAt(d)
+                                || child.ElementAt(d) == parent3Longer.ElementAt(d));
                 }
             }
         }

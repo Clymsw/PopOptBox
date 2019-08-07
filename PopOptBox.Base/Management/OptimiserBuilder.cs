@@ -30,8 +30,8 @@ namespace PopOptBox.Base.Management
         /// <exception cref="InvalidOperationException">Thrown when the setting is not known.</exception>
         public object GetHyperParameterValue(string name)
         {
-            return hyperParameters.Vector
-                .Where((v, i) => hyperParameters.GetDecisionSpace().Dimensions.ElementAt(i).Name == name)
+            return hyperParameters
+                .Where((v, i) => hyperParameters.GetDecisionSpace().ElementAt(i).Name == name)
                 .Single(); 
         }
 
@@ -45,9 +45,9 @@ namespace PopOptBox.Base.Management
         {
             try
             {
-                var decSpace = hyperParameters.GetDecisionSpace().Dimensions.ToList();
+                var decSpace = hyperParameters.GetDecisionSpace().ToList();
                 decSpace.Add(definition);
-                var values = hyperParameters.Vector.ToList();
+                var values = hyperParameters.ToList();
                 values.Add(value);
                 
                 hyperParameters = DecisionVector.CreateFromArray(

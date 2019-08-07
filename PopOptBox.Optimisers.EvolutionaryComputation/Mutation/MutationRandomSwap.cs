@@ -36,7 +36,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation
         /// <exception cref="ArgumentException">Thrown when the Decision Vector has less than 2 elements.</exception>
         public DecisionVector Operate(DecisionVector decisionVector)
         {
-            if (decisionVector.Vector.Count < 2)
+            if (decisionVector.Count < 2)
                 throw new ArgumentException("Decision Vector must more than one element.",
                     nameof(decisionVector));
 
@@ -44,10 +44,10 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation
                 return decisionVector;
 
             var locationsToSwap = rngManager.GetLocations(
-                decisionVector.Vector.Count, 2, false, 1);
+                decisionVector.Count, 2, false, 1);
 
             // New vector - swap elements
-            var vector = decisionVector.Vector.ToList();
+            var vector = decisionVector.ToList();
             var firstItem = vector.ElementAt(locationsToSwap.ElementAt(0));
             var secondItem = vector.ElementAt(locationsToSwap.ElementAt(1));
             vector.RemoveAt(locationsToSwap.ElementAt(0));

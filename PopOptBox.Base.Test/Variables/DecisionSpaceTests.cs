@@ -22,11 +22,11 @@ namespace PopOptBox.Base.Variables.Test
 
             var space = new DecisionSpace(new List<IVariable> { vbl1, vbl2, vbl3, vbl4 });
 
-            Assert.Equal(4, space.Dimensions.Count);
-            Assert.Equal(space.Dimensions.ElementAt(0).IsInBounds(0), vbl1.IsInBounds(0));
-            Assert.Equal(space.Dimensions.ElementAt(1).IsInBounds(0), vbl2.IsInBounds(0));
-            Assert.Equal(space.Dimensions.ElementAt(2).IsInBounds(0), vbl3.IsInBounds(0));
-            Assert.Equal(space.Dimensions.ElementAt(3).IsInBounds(0), vbl4.IsInBounds(0));
+            Assert.Equal(4, space.Count);
+            Assert.Equal(space.ElementAt(0).IsInBounds(0), vbl1.IsInBounds(0));
+            Assert.Equal(space.ElementAt(1).IsInBounds(0), vbl2.IsInBounds(0));
+            Assert.Equal(space.ElementAt(2).IsInBounds(0), vbl3.IsInBounds(0));
+            Assert.Equal(space.ElementAt(3).IsInBounds(0), vbl4.IsInBounds(0));
         }
 
         [Fact]
@@ -34,11 +34,11 @@ namespace PopOptBox.Base.Variables.Test
         {
             var space = DecisionSpace.CreateForUniformIntArray(Dims, MinValueDiscrete, MaxValueDiscrete);
 
-            Assert.Equal(Dims, space.Dimensions.Count);
-            Assert.True(space.Dimensions.First().IsInBounds(MinValueDiscrete));
-            Assert.True(space.Dimensions.First().IsInBounds(MaxValueDiscrete));
-            Assert.False(space.Dimensions.First().IsInBounds(MinValueDiscrete - 1));
-            Assert.False(space.Dimensions.First().IsInBounds(MaxValueDiscrete + 1));
+            Assert.Equal(Dims, space.Count);
+            Assert.True(space.First().IsInBounds(MinValueDiscrete));
+            Assert.True(space.First().IsInBounds(MaxValueDiscrete));
+            Assert.False(space.First().IsInBounds(MinValueDiscrete - 1));
+            Assert.False(space.First().IsInBounds(MaxValueDiscrete + 1));
         }
 
         [Fact]
@@ -48,10 +48,10 @@ namespace PopOptBox.Base.Variables.Test
 
             var range = MaxValueContinuous - MinValueContinuous;
 
-            Assert.Equal(Dims, space.Dimensions.Count);
-            Assert.True(space.Dimensions.First().IsInBounds(MinValueContinuous + range/2));
-            Assert.False(space.Dimensions.First().IsInBounds(MinValueContinuous - range/2));
-            Assert.False(space.Dimensions.First().IsInBounds(MaxValueContinuous + range/2));
+            Assert.Equal(Dims, space.Count);
+            Assert.True(space.First().IsInBounds(MinValueContinuous + range/2));
+            Assert.False(space.First().IsInBounds(MinValueContinuous - range/2));
+            Assert.False(space.First().IsInBounds(MaxValueContinuous + range/2));
         }
 
         [Fact]

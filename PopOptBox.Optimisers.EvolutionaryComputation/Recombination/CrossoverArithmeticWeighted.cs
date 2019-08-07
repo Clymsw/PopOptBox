@@ -49,13 +49,13 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the parents are not continuous decision vectors or not the same length.</exception>
         public DecisionVector Operate(DecisionVector firstParent, DecisionVector secondParent)
         {
-            if (firstParent.GetContinuousElements().Vector.Count != firstParent.Vector.Count
-                || firstParent.Vector.Count == 0)
+            if (firstParent.GetContinuousElements().Count != firstParent.Count
+                || firstParent.Count == 0)
                 throw new ArgumentOutOfRangeException(nameof(firstParent),
                     "This operator can only be used on continuous variable decision vectors of non-zero length.");
             
-            if (firstParent.Vector.Count !=
-                secondParent.GetContinuousElements().Vector.Count)
+            if (firstParent.Count !=
+                secondParent.GetContinuousElements().Count)
                 throw new ArgumentOutOfRangeException(nameof(secondParent),
                     "Both parents must have the same length (continuous) decision vectors");
             
@@ -63,19 +63,19 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
             {
                 return DecisionVector.CreateFromArray(
                     firstParent.GetDecisionSpace(),
-                    firstParent.Vector.Select(
+                    firstParent.Select(
                         (v, i) => fixedWeight * (double) v
-                                  + (1 - fixedWeight) * (double) secondParent.Vector.ElementAt(i)));
+                                  + (1 - fixedWeight) * (double) secondParent.ElementAt(i)));
             }
             
             return DecisionVector.CreateFromArray(
                 firstParent.GetDecisionSpace(),
-                firstParent.Vector.Select(
+                firstParent.Select(
                     (v, i) =>
                     {
                         var weight = rngManager.Rng.NextDouble(); 
                         return weight * (double) v
-                               + (1 - weight) * (double) secondParent.Vector.ElementAt(i);
+                               + (1 - weight) * (double) secondParent.ElementAt(i);
                     }));
         }
     }

@@ -90,7 +90,7 @@ namespace PopOptBox.Base.Runtime
             if (timeOutEvaluations == 0)
             {
                 var numDims =
-                    builder.CreateModel().GetNewDecisionVector().Vector.Count;
+                    builder.CreateModel().GetNewDecisionVector().Count;
                 timeOutEvaluations = Math.Min(numDims * 20000, 2000000);
             }
 

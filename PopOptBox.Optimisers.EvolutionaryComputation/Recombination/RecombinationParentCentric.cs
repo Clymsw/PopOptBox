@@ -58,17 +58,17 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
                 throw new ArgumentOutOfRangeException(nameof(parents),
                     "There must be at least two parents.");
 
-            if (parentArray.Any(p => p.GetContinuousElements().Vector.Count == 0))
+            if (parentArray.Any(p => p.GetContinuousElements().Count == 0))
                 throw new ArgumentOutOfRangeException(nameof(parents),
                     "Parents must have non-zero length decision vectors.");
 
-            if (parentArray.Any(p => p.GetContinuousElements().Vector.Count != parentArray.First().Vector.Count))
+            if (parentArray.Any(p => p.GetContinuousElements().Count != parentArray.First().Count))
                 throw new ArgumentOutOfRangeException(nameof(parents),
                     "Parents must have the same length and fully continuous decision vectors.");
 
             // 1: Pre-process
-            var parentDVs = Matrix<double>.Build.DenseOfColumns(parentArray.Select(dv => dv.Vector.Select(d => (double)d)));
-            var motherDV = Vector<double>.Build.DenseOfArray(parentArray.ElementAt(0).Vector.Select(d => (double)d).ToArray());
+            var parentDVs = Matrix<double>.Build.DenseOfColumns(parentArray.Select(dv => dv.Select(d => (double)d)));
+            var motherDV = Vector<double>.Build.DenseOfArray(parentArray.ElementAt(0).Select(d => (double)d).ToArray());
 
             // 1a: centroid of all parents
             var centroid = parentDVs.RowSums().Divide(parents.Count());

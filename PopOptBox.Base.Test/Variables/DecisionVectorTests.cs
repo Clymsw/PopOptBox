@@ -50,10 +50,10 @@ namespace PopOptBox.Base.Variables.Test
         {
             var dv = DecisionVector.CreateFromArray(continuousSpace, exampleContinuousVector);
 
-            for (var i = 0; i < continuousSpace.Dimensions.Count; i++)
+            for (var i = 0; i < continuousSpace.Count; i++)
             {
-                Assert.Equal(dv.Vector.ElementAt(i), exampleContinuousVector[i]);
-                Assert.True(continuousSpace.Dimensions.ElementAt(i).IsInBounds(dv.Vector.ElementAt(i)));
+                Assert.Equal(dv.ElementAt(i), exampleContinuousVector[i]);
+                Assert.True(continuousSpace.ElementAt(i).IsInBounds(dv.ElementAt(i)));
             }
         }
         
@@ -62,10 +62,10 @@ namespace PopOptBox.Base.Variables.Test
         {
             var dv = DecisionVector.CreateFromArray(continuousSpace, exampleDiscreteVector);
 
-            for (var i = 0; i < continuousSpace.Dimensions.Count; i++)
+            for (var i = 0; i < continuousSpace.Count; i++)
             {
-                Assert.Equal(dv.Vector.ElementAt(i), exampleDiscreteVector[i]);
-                Assert.True(continuousSpace.Dimensions.ElementAt(i).IsInBounds(dv.Vector.ElementAt(i)));
+                Assert.Equal(dv.ElementAt(i), exampleDiscreteVector[i]);
+                Assert.True(continuousSpace.ElementAt(i).IsInBounds(dv.ElementAt(i)));
             }
         }
 
@@ -75,9 +75,9 @@ namespace PopOptBox.Base.Variables.Test
             var dv = DecisionVector.CreateFromArray(continuousSpace,
                 new object[] { exampleContinuousVector[0], exampleContinuousVector[1], exampleContinuousVector[2], exampleContinuousVector[3] });
 
-            for (var i = 0; i < continuousSpace.Dimensions.Count; i++)
+            for (var i = 0; i < continuousSpace.Count; i++)
             {
-                Assert.Equal(dv.Vector.ElementAt(i), exampleContinuousVector[i]);
+                Assert.Equal(dv.ElementAt(i), exampleContinuousVector[i]);
             }
         }
 
@@ -87,9 +87,9 @@ namespace PopOptBox.Base.Variables.Test
             var dv = DecisionVector.CreateFromItems(continuousSpace,
                 exampleContinuousVector[0], exampleContinuousVector[1], exampleContinuousVector[2], exampleContinuousVector[3]);
 
-            for (var i = 0; i < continuousSpace.Dimensions.Count; i++)
+            for (var i = 0; i < continuousSpace.Count; i++)
             {
-                Assert.Equal(dv.Vector.ElementAt(i), exampleContinuousVector[i]);
+                Assert.Equal(dv.ElementAt(i), exampleContinuousVector[i]);
             }
         }
         
@@ -100,7 +100,7 @@ namespace PopOptBox.Base.Variables.Test
             var dv1 = DecisionVector.CreateFromArray(continuousSpace, exampleContinuousVector);
             var dv2 = DecisionVector.CreateFromArray(continuousSpace, values2);
 
-            Assert.Equal(dv1, dv2);
+            Assert.True(dv1.Equals(dv2));
         }
         
         [Fact]
@@ -110,7 +110,7 @@ namespace PopOptBox.Base.Variables.Test
             var dv1 = DecisionVector.CreateFromArray(continuousSpace, exampleContinuousVector);
             var dv2 = DecisionVector.CreateFromArray(space2, exampleContinuousVector);
 
-            Assert.NotEqual(dv1, dv2);
+            Assert.False(dv1.Equals(dv2));
         }
         
         [Fact]
@@ -120,7 +120,7 @@ namespace PopOptBox.Base.Variables.Test
             var dv1 = DecisionVector.CreateFromArray(continuousSpace, exampleContinuousVector);
             var dv2 = DecisionVector.CreateFromArray(continuousSpace, values2);
 
-            Assert.NotEqual(dv1, dv2);
+            Assert.False(dv1.Equals(dv2));
         }
         
         [Fact]
@@ -172,8 +172,8 @@ namespace PopOptBox.Base.Variables.Test
 
             var continuousSubSet = mixedDecVec.GetContinuousElements();
             
-            Assert.True(continuousSubSet.Vector.Count == Dims);
-            Assert.True(continuousSubSet.Vector.SequenceEqual(exampleContinuousVector.Cast<object>()));
+            Assert.True(continuousSubSet.Count == Dims);
+            Assert.True(continuousSubSet.SequenceEqual(exampleContinuousVector.Cast<object>()));
         }
         
         [Fact]
@@ -187,8 +187,8 @@ namespace PopOptBox.Base.Variables.Test
 
             var continuousSubSet = mixedDecVec.GetDiscreteElements();
             
-            Assert.True(continuousSubSet.Vector.Count == Dims);
-            Assert.True(continuousSubSet.Vector.SequenceEqual(exampleDiscreteVector.Cast<object>()));
+            Assert.True(continuousSubSet.Count == Dims);
+            Assert.True(continuousSubSet.SequenceEqual(exampleDiscreteVector.Cast<object>()));
         }
     }
 }

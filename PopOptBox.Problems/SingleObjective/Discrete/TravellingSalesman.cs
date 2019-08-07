@@ -11,7 +11,7 @@ namespace PopOptBox.Problems.SingleObjective.Discrete
             DecisionVector globalOptimum) 
             : base(name, locations, globalOptimum)
         {
-            if (globalOptimum.Vector.Count != locations.Count() + 1)
+            if (globalOptimum.Count != locations.Count() + 1)
                 throw new System.ArgumentOutOfRangeException(
                     nameof(globalOptimum), 
                     $"The optimum route should be a complete tour of {locations.Count() + 1} stops.");
@@ -32,11 +32,11 @@ namespace PopOptBox.Problems.SingleObjective.Discrete
 
         public override IEnumerable<double> Evaluate(DecisionVector definition)
         {
-            if (definition.Vector.Count != globalOptimum.Vector.Count)
+            if (definition.Count != globalOptimum.Count)
                 throw new System.ArgumentOutOfRangeException(nameof(definition),
-                    $"Route should be a complete tour of {globalOptimum.Vector.Count} stops.");
+                    $"Route should be a complete tour of {globalOptimum.Count} stops.");
 
-            return new[] { CalculateTotalTravelDistance(definition.Vector.Select(l => (int)l)) };
+            return new[] { CalculateTotalTravelDistance(definition.Select(l => (int)l)) };
         }
     }
 }

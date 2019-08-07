@@ -49,7 +49,7 @@ namespace PopOptBox.Problems.SingleObjective.Discrete.Test
 
             var tsp = TravellingSalesman.CreateFromFile(problemFilePath);
 
-            Assert.Equal(17, tsp.GetGlobalOptimum().Vector.Count);
+            Assert.Equal(17, tsp.GetGlobalOptimum().Count);
         }
     }
 }

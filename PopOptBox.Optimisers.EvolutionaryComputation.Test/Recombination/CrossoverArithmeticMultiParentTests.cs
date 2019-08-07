@@ -26,7 +26,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination.Test
                     decisionSpaceUniform, new[] {4.0, 1.0, 4.0, 1.0})
             };
 
-            var heteroSpace = decisionSpaceUniform.Dimensions.ToList();
+            var heteroSpace = decisionSpaceUniform.ToList();
             heteroSpace.RemoveAt(0);
             heteroSpace.Add(new VariableDiscrete(1, 4));
             var decisionSpaceHetero = new DecisionSpace(heteroSpace);
@@ -42,7 +42,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination.Test
             var child = cx.Operate(parents);
             Assert.Equal(
                 new[] {3.0, 2.0, 3.0, 2.0},
-                child.Vector.Select(d => (double) d));
+                child.Select(d => (double) d));
         }
         
         [Fact]

@@ -34,11 +34,11 @@ namespace PopOptBox.Problems.SingleObjective.Continuous
             // http://benchmarkfcns.xyz/benchmarkfcns/styblinskitankfcn.html
 
             double result = 0;
-            for (int i = 0; i < location.Vector.Count; i++)
+            for (int i = 0; i < location.Count; i++)
             {
-                result += Math.Pow(Convert.ToDouble(location.Vector[i]), 4) -
-                    16 * Math.Pow(Convert.ToDouble(location.Vector[i]), 2) +
-                    5 * Convert.ToDouble(location.Vector[i]);
+                result += Math.Pow(Convert.ToDouble(location[i]), 4) -
+                    16 * Math.Pow(Convert.ToDouble(location[i]), 2) +
+                    5 * Convert.ToDouble(location[i]);
             }
             return new[] { result / 2 };
         }

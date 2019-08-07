@@ -47,7 +47,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
         /// <returns>A new <see cref="DecisionVector"/>.</returns>
         public DecisionVector Operate(DecisionVector firstParent, DecisionVector secondParent)
         {
-            var numDims = Math.Max(firstParent.Vector.Count, secondParent.Vector.Count);
+            var numDims = Math.Max(firstParent.Count, secondParent.Count);
 
             var dims = new List<IVariable>();
             var newVector = new List<object>();
@@ -57,11 +57,11 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
                     ? firstParent
                     : secondParent;
 
-                if (parentToUse.Vector.Count < (d + 1)) 
+                if (parentToUse.Count < (d + 1)) 
                     continue;
                 
-                dims.Add(parentToUse.GetDecisionSpace().Dimensions.ElementAt(d));
-                newVector.Add(parentToUse.Vector.ElementAt(d));
+                dims.Add(parentToUse.GetDecisionSpace().ElementAt(d));
+                newVector.Add(parentToUse.ElementAt(d));
             }
             
             return DecisionVector.CreateFromArray(new DecisionSpace(dims), newVector);

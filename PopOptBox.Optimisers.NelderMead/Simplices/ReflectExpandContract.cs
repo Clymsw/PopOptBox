@@ -30,9 +30,9 @@ namespace PopOptBox.Optimisers.NelderMead.Simplices
             var mean = GetMean(simplex);
             var worst = simplex.Worst().DecisionVector;
 
-            var newLocation = mean.Vector.Select(
+            var newLocation = mean.Select(
                 (d, i) => (1 + Coefficient) * (double)d -
-                Coefficient * (double)worst.Vector[i]);
+                Coefficient * (double)worst[i]);
 
             return DecisionVector.CreateFromArray(
                 worst.GetDecisionSpace(),

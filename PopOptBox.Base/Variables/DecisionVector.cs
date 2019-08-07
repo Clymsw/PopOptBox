@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +9,7 @@ namespace PopOptBox.Base.Variables
     /// A Decision Vector is a particular point inside a decision space.
     /// In other words, a particular solution to an optimisation problem.
     /// </summary>
-    public class DecisionVector
+    public class DecisionVector : IReadOnlyCollection<object>
     {
         private readonly DecisionSpace decisionSpace;
 
@@ -16,7 +17,7 @@ namespace PopOptBox.Base.Variables
         /// Definition of the solution for the optimiser.
         /// Valid in conjunction with the <see cref="DecisionSpace"/> stored inside.
         /// </summary>
-        public readonly IReadOnlyList<object> Vector;
+        private readonly IReadOnlyList<object> vector;
 
         #region Constructor
 
@@ -30,7 +31,7 @@ namespace PopOptBox.Base.Variables
                 throw new ArgumentOutOfRangeException(nameof(values),
                     "These values are not accepted by the decision space");
 
-            Vector = values.ToArray();
+            vector = values.ToArray();
         }
 
         /// <summary>
@@ -99,6 +100,13 @@ namespace PopOptBox.Base.Variables
 
         #endregion
 
+        /// <summary>
+        /// An indexer to allow direct indexation to the DecisionVector class, which will return the object of interest.
+        /// </summary>
+        /// <param name="index">Element index.</param>
+        /// <returns>An object.</returns>
+        public object this[int index] => vector[index];
+        
         #region Decision Space
 
         /// <summary>
@@ -117,10 +125,10 @@ namespace PopOptBox.Base.Variables
         public DecisionVector GetContinuousElements()
         {
             return CreateFromArray(
-                new DecisionSpace(decisionSpace.Dimensions
+                new DecisionSpace(decisionSpace
                     .Where(d => d.GetType() == typeof(VariableContinuous))),
-                Vector.Where(
-                        (v, i) => decisionSpace.Dimensions.ElementAt(i).GetType() == typeof(VariableContinuous))
+                vector.Where(
+                        (v, i) => decisionSpace.ElementAt(i).GetType() == typeof(VariableContinuous))
                     .Cast<double>());
         }
         
@@ -131,10 +139,10 @@ namespace PopOptBox.Base.Variables
         public DecisionVector GetDiscreteElements()
         {
             return CreateFromArray(
-                new DecisionSpace(decisionSpace.Dimensions
+                new DecisionSpace(decisionSpace
                         .Where(d => d.GetType() == typeof(VariableDiscrete))),
-                Vector.Where(
-                        (v, i) => decisionSpace.Dimensions.ElementAt(i).GetType() == typeof(VariableDiscrete))
+                vector.Where(
+                        (v, i) => decisionSpace.ElementAt(i).GetType() == typeof(VariableDiscrete))
                     .Cast<int>());
         }
 
@@ -153,10 +161,10 @@ namespace PopOptBox.Base.Variables
             if (!v1.decisionSpace.Equals(v2.decisionSpace))
                 throw new ArgumentException("Decision vectors for comparison must have identical decision spaces.");
 
-            var difference = new double[v1.Vector.Count];
-            for (var i = 0; i < v1.Vector.Count; i++)
+            var difference = new double[v1.vector.Count];
+            for (var i = 0; i < v1.vector.Count; i++)
             {
-                difference[i] = (double) v1.Vector[i] - (double) v2.Vector[i];
+                difference[i] = (double) v1.vector[i] - (double) v2.vector[i];
             }
 
             return difference;
@@ -173,10 +181,10 @@ namespace PopOptBox.Base.Variables
             if (!v1.decisionSpace.Equals(v2.decisionSpace))
                 throw new ArgumentException("Decision vectors for comparison must have identical decision spaces.");
 
-            var sum = new double[v1.Vector.Count];
-            for (var i = 0; i < v1.Vector.Count; i++)
+            var sum = new double[v1.vector.Count];
+            for (var i = 0; i < v1.vector.Count; i++)
             {
-                sum[i] = (double) v1.Vector[i] + (double) v2.Vector[i];
+                sum[i] = (double) v1.vector[i] + (double) v2.vector[i];
             }
 
             return sum;
@@ -188,7 +196,7 @@ namespace PopOptBox.Base.Variables
 
         public override string ToString()
         {
-            return decisionSpace.FormatAsString(Vector);
+            return decisionSpace.FormatAsString(vector);
         }
 
         #endregion
@@ -201,7 +209,7 @@ namespace PopOptBox.Base.Variables
                 return false;
 
             return decisionSpace.Equals(other.decisionSpace) &&
-                Vector.SequenceEqual(other.Vector);
+                vector.SequenceEqual(other.vector);
         }
         
         public override int GetHashCode()
@@ -209,10 +217,30 @@ namespace PopOptBox.Base.Variables
             return new
             {
                 decisionSpace,
-                Vector
+                Vector = vector
             }.GetHashCode();
         }
 
+        #endregion
+        
+        #region Implementation of IReadOnlyCollection<out object>
+
+        public int Count => vector.Count;
+        
+        #endregion
+        
+        #region Implementation of IEnumerable
+        
+        public IEnumerator<object> GetEnumerator()
+        {
+            return vector.GetEnumerator();
+        }
+        
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable) vector).GetEnumerator();
+        }
+        
         #endregion
     }
 }

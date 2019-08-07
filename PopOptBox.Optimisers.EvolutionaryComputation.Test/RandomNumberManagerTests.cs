@@ -25,12 +25,12 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test
         public void GetLocations_InvalidNumberOfLocations_Throws()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => 
-                rngManager.GetLocations(testDv.Vector.Count,
-                maximumNumberOfLocations: testDv.Vector.Count + 1,
+                rngManager.GetLocations(testDv.Count,
+                maximumNumberOfLocations: testDv.Count + 1,
                 selectionWithReplacement: false));
             
             Assert.Throws<ArgumentOutOfRangeException>(() => 
-                rngManager.GetLocations(testDv.Vector.Count,
+                rngManager.GetLocations(testDv.Count,
                     maximumNumberOfLocations: 0,
                     selectionWithReplacement: false));
         }
@@ -39,18 +39,18 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test
         public void GetLocations_InvalidProbabilityOfSelection_Throws()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => 
-                rngManager.GetLocations(testDv.Vector.Count,
+                rngManager.GetLocations(testDv.Count,
                     lambda: -0.01));
             
             Assert.Throws<ArgumentOutOfRangeException>(() => 
-                rngManager.GetLocations(testDv.Vector.Count,
+                rngManager.GetLocations(testDv.Count,
                     lambda: 1.01));
         }
         
         [Fact]
         public void GetLocations_OneLocationRequested_ZeroProbability_ReturnsEmptyList()
         {
-            var locations = rngManager.GetLocations(testDv.Vector.Count, 
+            var locations = rngManager.GetLocations(testDv.Count, 
                 maximumNumberOfLocations: 1,
                 lambda: 0);
             
@@ -63,13 +63,13 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test
             for (var i = 0; i < 10; i++)
             {
                 // Try this a few times to try to cause a mistake.
-                var locations = rngManager.GetLocations(testDv.Vector.Count,
+                var locations = rngManager.GetLocations(testDv.Count,
                     maximumNumberOfLocations: 1,
                     selectionWithReplacement: false,
                     lambda: 1);
                 
                 Assert.True(locations.Count() == 1);
-                Assert.True(locations.ElementAt(0) >= 0 && locations.ElementAt(0) < testDv.Vector.Count);
+                Assert.True(locations.ElementAt(0) >= 0 && locations.ElementAt(0) < testDv.Count);
             }
         }
         
@@ -79,13 +79,13 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test
             for (var i = 0; i < 10; i++)
             {
                 // Try this a few times to try to cause a mistake.
-                var locations = rngManager.GetLocations(testDv.Vector.Count,
+                var locations = rngManager.GetLocations(testDv.Count,
                     maximumNumberOfLocations: 5,
                     selectionWithReplacement: true,
                     lambda: 1);
                 
                 Assert.True(locations.Count() == 5);
-                Assert.True(locations.All(l => l >= 0 && l < testDv.Vector.Count));
+                Assert.True(locations.All(l => l >= 0 && l < testDv.Count));
             }
         }
         
@@ -95,14 +95,14 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test
             for (var i = 0; i < 10; i++)
             {
                 // Try this a few times to try to cause a mistake.
-                var locations = rngManager.GetLocations(testDv.Vector.Count,
-                    maximumNumberOfLocations: testDv.Vector.Count,
+                var locations = rngManager.GetLocations(testDv.Count,
+                    maximumNumberOfLocations: testDv.Count,
                     selectionWithReplacement: false,
                     lambda: 1);
 
-                Assert.True(locations.Count() == testDv.Vector.Count);
-                Assert.True(locations.Distinct().Count() == testDv.Vector.Count);
-                Assert.True(locations.All(l => l >= 0 && l < testDv.Vector.Count));
+                Assert.True(locations.Count() == testDv.Count);
+                Assert.True(locations.Distinct().Count() == testDv.Count);
+                Assert.True(locations.All(l => l >= 0 && l < testDv.Count));
             }
         }
     }

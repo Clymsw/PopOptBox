@@ -25,15 +25,14 @@ namespace PopOptBox.Optimisers.NelderMead.Simplices.Test
             Assert.True(newVertices.Count == numDims + 1);
             
             // Every vector must be D long
-            Assert.All(newVertices, v => Assert.True(v.Vector.Count == numDims));
+            Assert.All(newVertices, v => Assert.True(v.Count == numDims));
             
             // The Euclidean distance of every vector from the initial one must be equal to stepSize
             Assert.All(newVertices.Skip(1),
-                v => Assert.True(Math.Sqrt(
-                                     v.Vector
-                                         .Select((a,i) => (double)a - (double)initialVertex.Vector.ElementAt(i))
-                                         .Select(a => Math.Pow(a,2))
-                                         .Sum())
+                v => Assert.True(Math.Sqrt(v
+                                     .Select((a,i) => (double)a - (double)initialVertex.ElementAt(i))
+                                     .Select(a => Math.Pow(a,2))
+                                     .Sum())
                                  == stepSize));
         }
 

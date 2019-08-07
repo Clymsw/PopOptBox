@@ -47,30 +47,30 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation
         /// <exception cref="ArgumentException">Thrown when Decision Vector is zero length.</exception>
         public DecisionVector Operate(DecisionVector decisionVector)
         {
-            if (decisionVector.Vector.Count == 0)
+            if (decisionVector.Count == 0)
                 throw new ArgumentException("Decision Vector must not be empty.",
                     nameof(decisionVector)); 
             
             var locationsToMutate = rngManager.GetLocations(
-                decisionVector.Vector.Count, maximumNumberOfMutations,
+                decisionVector.Count, maximumNumberOfMutations,
                 true, mutationProbability);
             
-            var newDv = new object[decisionVector.Vector.Count];
+            var newDv = new object[decisionVector.Count];
             var newDs = decisionVector.GetDecisionSpace();
-            for (var i = 0; i < decisionVector.Vector.Count; i++)
+            for (var i = 0; i < decisionVector.Count; i++)
             {
                 // Variable may be mutated multiple times.
                 var numTimesToMutate = locationsToMutate.Count(l => l == i);
 
                 if (numTimesToMutate == 0)
                 {
-                    newDv[i] = decisionVector.Vector.ElementAt(i);
+                    newDv[i] = decisionVector.ElementAt(i);
                 }
                 else
                 {
                     for (var j = 0; j < numTimesToMutate; j++)
                     {
-                        newDv[i] = newDs.Dimensions.ElementAt(i).GetNextRandom(rngManager.Rng);
+                        newDv[i] = newDs.ElementAt(i).GetNextRandom(rngManager.Rng);
                     }
                 }
             }

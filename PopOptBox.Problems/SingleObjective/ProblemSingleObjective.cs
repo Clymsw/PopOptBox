@@ -13,7 +13,7 @@ namespace PopOptBox.Problems.SingleObjective
             string name, DecisionVector globalOptimum,
             string definitionKey, string solutionKey) : base(definitionKey, solutionKey)
         {
-            if (globalOptimum.Vector.Count < 1)
+            if (globalOptimum.Count < 1)
             {
                 throw new ArgumentOutOfRangeException(
                     nameof(globalOptimum),
@@ -37,9 +37,7 @@ namespace PopOptBox.Problems.SingleObjective
         public override bool GetLegality(DecisionVector definition)
         {
             // By definition, if we can construct a Decision Vector in the same decision space, it is legal
-            return definition.GetDecisionSpace() == globalOptimum.GetDecisionSpace()
-                ? true
-                : false;
+            return definition.GetDecisionSpace().Equals(globalOptimum.GetDecisionSpace());
         }
 
         #endregion
@@ -47,7 +45,7 @@ namespace PopOptBox.Problems.SingleObjective
         #region ToString
         public override string ToString()
         {
-            return $"{name} ({globalOptimum.Vector.Count} dimensions)";
+            return $"{name} ({globalOptimum.Count} dimensions)";
         }
         #endregion
     }

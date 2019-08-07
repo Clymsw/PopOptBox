@@ -57,9 +57,9 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation.Test
             
             // TODO: This can fail if it generates the same value it already had!
             Assert.NotEqual(testDv, newDv);
-            Assert.Equal(testDv.Vector.Count, newDv.Vector.Count);
-            Assert.Equal(testDv.Vector.Count - 1,
-                newDv.Vector.Where((v, i) => v == testDv.Vector.ElementAt(i)).Count());
+            Assert.Equal(testDv.Count, newDv.Count);
+            Assert.Equal(testDv.Count - 1,
+                newDv.Where((v, i) => v == testDv.ElementAt(i)).Count());
         }
         
         [Fact]
@@ -71,9 +71,9 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation.Test
             var newDv = mutator.Operate(testDv);
             
             Assert.NotEqual(testDv, newDv);
-            Assert.Equal(testDv.Vector.Count, newDv.Vector.Count);
-            Assert.True(newDv.Vector.Where((v, i) => v == testDv.Vector.ElementAt(i)).Count()
-                        <= testDv.Vector.Count - 1);
+            Assert.Equal(testDv.Count, newDv.Count);
+            Assert.True(newDv.Where((v, i) => v == testDv.ElementAt(i)).Count()
+                        <= testDv.Count - 1);
         }
     }
 }

@@ -57,23 +57,23 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation
         {
             var oldVectorContinuousElements = decisionVector.GetContinuousElements();
 
-            if (oldVectorContinuousElements.Vector.Count == 0)
+            if (oldVectorContinuousElements.Count == 0)
                 throw new ArgumentException("Decision Vector must have continuous elements",
                     nameof(decisionVector)); 
             
             var locationsToMutate = rngManager.GetLocations(
-                oldVectorContinuousElements.Vector.Count, maximumNumberOfMutations,
+                oldVectorContinuousElements.Count, maximumNumberOfMutations,
                 true, mutationProbability);
 
-            var newDv = new object[decisionVector.Vector.Count];
+            var newDv = new object[decisionVector.Count];
             var newDs = decisionVector.GetDecisionSpace();
             var offset = 0;
-            for (var i = 0; i < decisionVector.Vector.Count; i++)
+            for (var i = 0; i < decisionVector.Count; i++)
             {
-                newDv[i] = decisionVector.Vector.ElementAt(i);
+                newDv[i] = decisionVector.ElementAt(i);
 
                 // If variable is not continuous, just copy
-                if (newDs.Dimensions.ElementAt(i).GetType() != typeof(VariableContinuous))
+                if (newDs.ElementAt(i).GetType() != typeof(VariableContinuous))
                 {
                     offset++;
                     continue;
@@ -85,7 +85,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation
                 for (var j = 0; j < numTimesToMutate; j++)
                 {
                     var randomValue = Normal.Sample(rngManager.Rng, 0, normalStandardDeviation);
-                    newDv[i] = newDs.Dimensions.ElementAt(i).AddOrWrap(newDv[i], randomValue);
+                    newDv[i] = newDs.ElementAt(i).AddOrWrap(newDv[i], randomValue);
                 }
             }
             return DecisionVector.CreateFromArray(newDs, newDv);

@@ -24,7 +24,7 @@ namespace PopOptBox.Base.Management.Test
 
             var newInd = newInds.ElementAt(0);
             Assert.Equal(builder.DecVec, 
-                newInd.DecisionVector.Vector.Select(v => (double)v));
+                newInd.DecisionVector.Select(v => (double)v));
             Assert.Equal(IndividualState.New, newInd.State);
 
             var creationTime = newInd.GetProperty<DateTime>(OptimiserPropertyNames.CreationTime);
@@ -60,7 +60,7 @@ namespace PopOptBox.Base.Management.Test
             
             Assert.Collection(optimiserMock.Population, 
                 i => Assert.Equal(
-                    builder.DecVec, i.DecisionVector.Vector.Select(d => (double)d)));
+                    builder.DecVec, i.DecisionVector.Select(d => (double)d)));
             
             var reinsertionTime = newInd.GetProperty<DateTime>(OptimiserPropertyNames.ReinsertionTime);
             Assert.True(reinsertionTime < DateTime.Now);

@@ -70,7 +70,7 @@ namespace PopOptBox.Base.Runtime
 
             if (timeOutEvaluations == 0)
             {
-                var numDims = nextInd.DecisionVector.Vector.Count;
+                var numDims = nextInd.DecisionVector.Count;
                 timeOutEvaluations = Math.Min(numDims * 20000, 2000000);
             }
 
@@ -87,7 +87,7 @@ namespace PopOptBox.Base.Runtime
             BestFound = nextInd;
 
             //Go!
-            while (nextInd.DecisionVector.Vector.Count > 0)
+            while (nextInd.DecisionVector.Count > 0)
             {
                 nextInd.SetProperty(
                     OptimiserPropertyNames.CreationIndex,

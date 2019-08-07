@@ -32,9 +32,9 @@ namespace PopOptBox.Problems.SingleObjective.Continuous
             // http://profesores.elo.utfsm.cl/~tarredondo/info/soft-comp/functions/node3.html
 
             double result = 0;
-            for (int i = 0; i < location.Vector.Count; i++)
+            for (int i = 0; i < location.Count; i++)
             {
-                result += (i + 1) * Math.Pow(Convert.ToDouble(location.Vector[i]), 2);
+                result += (i + 1) * Math.Pow(Convert.ToDouble(location[i]), 2);
             }
             return new[] { result };
         }

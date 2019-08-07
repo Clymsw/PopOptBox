@@ -91,7 +91,7 @@ namespace PopOptBox.Base.Management
         /// <returns>A string version of <see cref="DecisionVector"/>.</returns>
         public override string ToString()
         {
-            return $"{Fitness} [{string.Join(" - ", DecisionVector.Vector)}]";
+            return $"{Fitness} [{string.Join(" - ", DecisionVector)}]";
         }
 
         /// <summary>

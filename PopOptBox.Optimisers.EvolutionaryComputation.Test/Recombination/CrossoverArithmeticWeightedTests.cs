@@ -21,7 +21,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination.Test
             parent2 = DecisionVector.CreateFromArray(
                 decisionSpaceUniform, new[] {4.5, 3.5, 2.5, 1.5});
             
-            var heteroSpace = decisionSpaceUniform.Dimensions.ToList();
+            var heteroSpace = decisionSpaceUniform.ToList();
             heteroSpace.RemoveAt(0);
             heteroSpace.Add(new VariableDiscrete(1, 4));
             var decisionSpaceHetero = new DecisionSpace(heteroSpace);
@@ -51,10 +51,10 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination.Test
         {
             var cx = new CrossoverArithmeticWeighted();
             var child = cx.Operate(parent1, parent2);
-            for (var i = 0; i < child.Vector.Count; i++)
+            for (var i = 0; i < child.Count; i++)
             {
-                var avg = 0.5 * ((double) parent1.Vector.ElementAt(i) + (double) parent2.Vector.ElementAt(i));
-                Assert.True(Math.Abs((double) child.Vector.ElementAt(i) - avg) < 1e-6);
+                var avg = 0.5 * ((double) parent1.ElementAt(i) + (double) parent2.ElementAt(i));
+                Assert.True(Math.Abs((double) child.ElementAt(i) - avg) < 1e-6);
             }
         }
         

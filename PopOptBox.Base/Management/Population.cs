@@ -74,10 +74,10 @@ namespace PopOptBox.Base.Management
         #region Information Extraction
 
         /// <summary>
-        /// An indexer to allow direct indexation to the Population class, which will return the individual of interest.
+        /// An indexer to allow direct indexation to the Population class, which will return the <see cref="Individual"/> of interest.
         /// </summary>
-        /// <param name="index">Integer index into population.</param>
-        /// <returns>Individual</returns>
+        /// <param name="index">Element index.</param>
+        /// <returns>An <see cref="Individual"/>.</returns>
         public Individual this[int index] => members[index];
 
         /// <summary>
@@ -147,7 +147,7 @@ namespace PopOptBox.Base.Management
         /// <returns>List of object arrays: Decision Vector</returns>
         public IEnumerable<object[]> GetMemberDecisionVectors()
         {
-            return members.Select(i => i.DecisionVector.Vector.ToArray());
+            return members.Select(i => i.DecisionVector.ToArray());
         }
         
         /// <summary>
@@ -186,7 +186,7 @@ namespace PopOptBox.Base.Management
         public void AddIndividual(Individual ind)
         {
             if (ConstantLengthDecisionVector && members.Count > 0)
-                if (ind.DecisionVector.Vector.Count != members[0].DecisionVector.Vector.Count)
+                if (ind.DecisionVector.Count != members[0].DecisionVector.Count)
                     throw new ArgumentException(
                         "Decision Vector is not the right length!");
             
@@ -275,7 +275,7 @@ namespace PopOptBox.Base.Management
 
         #endregion
 
-        #region Implementation of IReadOnlyCollection<out Individual<TDecVec>>
+        #region Implementation of IReadOnlyCollection<out Individual>
 
         public int Count => members.Count;
 

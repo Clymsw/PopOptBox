@@ -29,7 +29,7 @@ namespace PopOptBox.Base.Management.Test
         [Fact]
         public void NewOptimiserBuilder_HasNoHyperParameters()
         {
-            Assert.Equal(0, optBuilder.HyperParameters.Vector.Count);
+            Assert.True(optBuilder.HyperParameters.Count == 0);
         }
         
         [Fact]
@@ -37,10 +37,10 @@ namespace PopOptBox.Base.Management.Test
         {
             optBuilder.AddHyperParameter(hyperParams.ElementAt(0), values.ElementAt(0));
             
-            Assert.Equal(1, optBuilder.HyperParameters.Vector.Count);
-            Assert.Equal(values.ElementAt(0), optBuilder.HyperParameters.Vector.ElementAt(0));
+            Assert.True(optBuilder.HyperParameters.Count == 1);
+            Assert.Equal(values.ElementAt(0), optBuilder.HyperParameters.ElementAt(0));
             Assert.Equal(hyperParams.ElementAt(0).Name, 
-                optBuilder.HyperParameters.GetDecisionSpace().Dimensions.ElementAt(0).Name);
+                optBuilder.HyperParameters.GetDecisionSpace().ElementAt(0).Name);
         }
         
         [Fact]
@@ -51,7 +51,7 @@ namespace PopOptBox.Base.Management.Test
                 optBuilder.AddHyperParameter(hyperParams.ElementAt(i), values.ElementAt(i));
             }
 
-            Assert.Equal(hyperParams.Count, optBuilder.HyperParameters.Vector.Count);
+            Assert.Equal(hyperParams.Count, optBuilder.HyperParameters.Count);
 
             for (var i = 0; i < hyperParams.Count; i++)
             {

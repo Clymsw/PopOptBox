@@ -55,7 +55,7 @@ namespace PopOptBox.Optimisers.NelderMead
             DecisionVector initialLocation, double simplexCreationStepSize = 1,
             double reflectionCoefficient = 1, double expansionCoefficient = 2,
             double contractionCoefficient = 0.5, double shrinkageCoefficient = 0.5) :
-            base(new Simplex(initialLocation.Vector.Count), solutionToFitness, penalty)
+            base(new Simplex(initialLocation.Count), solutionToFitness, penalty)
         {
             // Set up simplex operations
             OperationsManager = new NelderMeadSimplexOperationsManager(reflectionCoefficient,
@@ -140,7 +140,7 @@ namespace PopOptBox.Optimisers.NelderMead
             var bestFitness = fitnesses.First();
             var worstFitness = fitnesses.Last();
             double nextToWorstFitness;
-            if (individual.DecisionVector.Vector.Count == 1)
+            if (individual.DecisionVector.Count == 1)
                 nextToWorstFitness = bestFitness;
             else
                 nextToWorstFitness = fitnesses.ElementAt(fitnesses.Count() - 2);

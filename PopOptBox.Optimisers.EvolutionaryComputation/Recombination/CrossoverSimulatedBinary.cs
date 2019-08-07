@@ -37,11 +37,11 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
         /// <returns>A new <see cref="DecisionVector"/>.</returns>
         public DecisionVector Operate(DecisionVector firstParent, DecisionVector secondParent)
         {
-            if (firstParent.GetContinuousElements().Vector.Count == 0)
+            if (firstParent.GetContinuousElements().Count == 0)
                 throw new ArgumentOutOfRangeException(nameof(firstParent),
                     "Parents must have non-zero length continuous Decision Vector.");
 
-            if (secondParent.GetContinuousElements().Vector.Count == 0)
+            if (secondParent.GetContinuousElements().Count == 0)
                 throw new ArgumentOutOfRangeException(nameof(secondParent),
                     "Parents must have non-zero length continuous Decision Vector.");
 

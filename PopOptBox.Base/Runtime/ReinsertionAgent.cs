@@ -183,7 +183,7 @@ namespace PopOptBox.Base.Runtime
 
             foreach (var ind in nextInds)
             {
-                if (ind.DecisionVector.Vector.Count == 0)
+                if (ind.DecisionVector.Count == 0)
                 {
                     // Optimiser.GetNextDecisionVector() has generated a cancellation condition
                     CancellationSource.Cancel();

@@ -27,7 +27,7 @@ namespace PopOptBox.Base.Calculation
 
             var newDVs = new List<DecisionVector>();
 
-            var startDv = initialLocation.Vector.Select(d => (double)d).ToArray();
+            var startDv = initialLocation.Select(d => (double)d).ToArray();
 
             for (var i = 2; i <= startDv.Length + 1; i++)
             {
@@ -73,9 +73,9 @@ namespace PopOptBox.Base.Calculation
             for (var i = 1; i <= numberToCreate; i++)
             {
                 var vector = new List<object>();
-                foreach(var d in space.Dimensions)
+                foreach(var dim in space)
                 {
-                    vector.Add(d.GetNextRandom(rng));
+                    vector.Add(dim.GetNextRandom(rng));
                 }
                 newDVs.Add(DecisionVector.CreateFromArray(space, vector));
             }
@@ -91,7 +91,7 @@ namespace PopOptBox.Base.Calculation
         /// <returns>A list of evenly-spaced <see cref="DecisionVector"/>s.</returns>
         public static List<DecisionVector> CreateLatinHypercube(DecisionSpace space, int numberToCreate)
         {
-            var orderedLocations = space.Dimensions.Select(d => d.GetSpacedArray(numberToCreate));
+            var orderedLocations = space.Select(d => d.GetSpacedArray(numberToCreate));
 
             // TODO!
             throw new NotImplementedException();

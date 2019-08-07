@@ -20,7 +20,7 @@ namespace PopOptBox.HyperParameterTuning
 
         public override DecisionVector GetNewDecisionVector()
         {
-            var newVector = decisionSpace.Dimensions.Select(d => (double) d.GetNextRandom(rng));
+            var newVector = decisionSpace.Select(d => (double) d.GetNextRandom(rng));
             return DecisionVector.CreateFromArray(decisionSpace, newVector);
         }
     }

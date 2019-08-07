@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,12 +8,12 @@ namespace PopOptBox.Base.Variables
     /// An array of dimensions which together specify the N-D space for optimisation.
     /// Immutable by design.
     /// </summary>
-    public class DecisionSpace
+    public class DecisionSpace : IReadOnlyCollection<IVariable>
     {
         /// <summary>
         /// The list of <see cref="IVariable"/> definitions for the dimensions.
         /// </summary>
-        public readonly IReadOnlyList<IVariable> Dimensions;
+        private readonly IReadOnlyList<IVariable> dimensions;
 
         #region Constructors
         
@@ -26,7 +27,7 @@ namespace PopOptBox.Base.Variables
         /// <param name="decisionSpace">The array of <see cref="IVariable"/>s.</param>
         public DecisionSpace(IEnumerable<IVariable> decisionSpace)
         {
-            Dimensions = decisionSpace.ToArray();
+            dimensions = decisionSpace.ToArray();
         }
 
         /// <summary>
@@ -87,6 +88,13 @@ namespace PopOptBox.Base.Variables
         #endregion
         
         /// <summary>
+        /// An indexer to allow direct indexation to the DecisionSpace class, which will return the <see cref="IVariable"/> of interest.
+        /// </summary>
+        /// <param name="index">Element index.</param>
+        /// <returns>An <see cref="IVariable"/>.</returns>
+        public IVariable this[int index] => dimensions[index];
+        
+        /// <summary>
         /// Helper function, which can be used to check an array for validity,
         /// before using it to construct a <see cref="DecisionVector"/>.
         /// </summary>
@@ -94,7 +102,7 @@ namespace PopOptBox.Base.Variables
         /// <returns>True (acceptable) or false (not acceptable).</returns>
         public bool IsAcceptableDecisionVector(IEnumerable<object> vector)
         {
-            if (vector.Count() != Dimensions.Count)
+            if (vector.Count() != dimensions.Count)
                 return false;
 
             var acceptable = true;
@@ -102,7 +110,7 @@ namespace PopOptBox.Base.Variables
             {
                 try
                 {
-                    var ok = Dimensions.ElementAt(i).IsInBounds(vector.ElementAt(i));
+                    var ok = dimensions.ElementAt(i).IsInBounds(vector.ElementAt(i));
                     acceptable &= ok;
                 }
                 catch
@@ -122,27 +130,47 @@ namespace PopOptBox.Base.Variables
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown if the vector is the wrong length. Use <seealso cref="IsAcceptableDecisionVector(IEnumerable{object})"/> first.</exception>
         public string FormatAsString(IEnumerable<object> vector)
         {
-            return string.Join(" - ", vector.Select((d, i) => Dimensions.ElementAt(i).FormatAsString(d)));
+            return string.Join(" - ", vector.Select((d, i) => dimensions.ElementAt(i).FormatAsString(d)));
         }
 
         #region Equals, GetHashCode
-        
+
         public override bool Equals(object obj)
         {
             if (!(obj is DecisionSpace other))
                 return false;
 
-            return Dimensions.SequenceEqual(other.Dimensions);
+            return dimensions.SequenceEqual(other.dimensions);
         }
         
         public override int GetHashCode()
         {
             return new
             {
-                Dimensions
+                Dimensions = dimensions
             }.GetHashCode();
         }
 
+        #endregion
+        
+        #region Implementation of IEnumerable
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return ((IEnumerable) dimensions).GetEnumerator();
+        }
+        
+        public IEnumerator<IVariable> GetEnumerator()
+        {
+            return dimensions.GetEnumerator();
+        }
+        
+        #endregion
+
+        #region Implementation of IReadOnlyCollection<out IVariable>
+        
+        public int Count => dimensions.Count;
+        
         #endregion
     }
 }

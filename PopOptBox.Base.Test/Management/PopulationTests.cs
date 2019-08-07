@@ -76,7 +76,7 @@ namespace PopOptBox.Base.Management.Test
         [Fact]
         public void ConstantLengthDvPop_AddIndividualWithDifferentLengthDv_Fails()
         {
-            var numDims = ind.DecisionVector.Vector.Count;
+            var numDims = ind.DecisionVector.Count;
             var ind1 = ObjectCreators.GetIndividual(Enumerable.Range(0, numDims + 1).ToArray());
             
             Assert.Throws<ArgumentException>(
@@ -86,7 +86,7 @@ namespace PopOptBox.Base.Management.Test
         [Fact]
         public void VariableLengthDvPop_AddIndividualWithDifferentLengthDv_Succeeds()
         {
-            var numDims = ind.DecisionVector.Vector.Count;
+            var numDims = ind.DecisionVector.Count;
             var ind1 = ObjectCreators.EvaluateIndividual( 
                 ObjectCreators.GetIndividual(Enumerable.Range(0, numDims + 1).ToArray()));
             
@@ -101,7 +101,7 @@ namespace PopOptBox.Base.Management.Test
         {
             var ind1 = ObjectCreators.EvaluateIndividual(
                 ObjectCreators.GetIndividual(
-                    ind.DecisionVector.Vector.Select(i => (double)i+1).ToArray()),
+                    ind.DecisionVector.Select(i => (double)i+1).ToArray()),
                 ind.Fitness + 1);
             
             popConstLenDvInitInd.AddIndividual(ind1);
@@ -115,7 +115,7 @@ namespace PopOptBox.Base.Management.Test
         {
             var ind1 = ObjectCreators.EvaluateIndividual(
                 ObjectCreators.GetIndividual(
-                    ind.DecisionVector.Vector.Select(i => (double)i+1).ToArray()),
+                    ind.DecisionVector.Select(i => (double)i+1).ToArray()),
                 ind.Fitness - 1);
             
             popConstLenDvInitInd.AddIndividual(ind1);
@@ -129,14 +129,14 @@ namespace PopOptBox.Base.Management.Test
         {
             var bestInd = ObjectCreators.EvaluateIndividual(
                 ObjectCreators.GetIndividual(
-                    ind.DecisionVector.Vector.Select(i => (double)i + 1).ToArray()),
+                    ind.DecisionVector.Select(i => (double)i + 1).ToArray()),
                 ind.Fitness - 1);
 
             popConstLenDvInitInd.AddIndividual(bestInd);
 
             var evenBetterInd = ObjectCreators.EvaluateIndividual(
                 ObjectCreators.GetIndividual(
-                    ind.DecisionVector.Vector.Select(i => (double)i + 1).ToArray()),
+                    ind.DecisionVector.Select(i => (double)i + 1).ToArray()),
                 ind.Fitness - 2);
 
             popConstLenDvInitInd.ReplaceWorst(evenBetterInd);
@@ -150,14 +150,14 @@ namespace PopOptBox.Base.Management.Test
         {
             var bestInd = ObjectCreators.EvaluateIndividual(
                 ObjectCreators.GetIndividual(
-                    ind.DecisionVector.Vector.Select(i => (double)i + 1).ToArray()),
+                    ind.DecisionVector.Select(i => (double)i + 1).ToArray()),
                 ind.Fitness - 1);
 
             popConstLenDvInitInd.AddIndividual(bestInd);
 
             var evenBetterInd = ObjectCreators.EvaluateIndividual(
                 ObjectCreators.GetIndividual(
-                    ind.DecisionVector.Vector.Select(i => (double)i + 1).ToArray()),
+                    ind.DecisionVector.Select(i => (double)i + 1).ToArray()),
                 ind.Fitness - 2);
 
             popConstLenDvInitInd.ReplaceIndividual(bestInd, evenBetterInd);
@@ -171,14 +171,14 @@ namespace PopOptBox.Base.Management.Test
         {
             var bestInd = ObjectCreators.EvaluateIndividual(
                 ObjectCreators.GetIndividual(
-                    ind.DecisionVector.Vector.Select(i => (double)i + 1).ToArray()),
+                    ind.DecisionVector.Select(i => (double)i + 1).ToArray()),
                 ind.Fitness - 1);
 
             popConstLenDvInitInd.AddIndividual(bestInd);
 
             var evenBetterInd = ObjectCreators.EvaluateIndividual(
                 ObjectCreators.GetIndividual(
-                    ind.DecisionVector.Vector.Select(i => (double)i + 1).ToArray()),
+                    ind.DecisionVector.Select(i => (double)i + 1).ToArray()),
                 ind.Fitness - 2);
 
             popConstLenDvInitInd.ReplaceIndividualAt(1, evenBetterInd);
@@ -192,7 +192,7 @@ namespace PopOptBox.Base.Management.Test
         {
             var ind1 = ObjectCreators.EvaluateIndividual(
                 ObjectCreators.GetIndividual(
-                    ind.DecisionVector.Vector.Select(i => (double)i+1).ToArray()),
+                    ind.DecisionVector.Select(i => (double)i+1).ToArray()),
                 ind.Fitness - 1);
             
             popConstLenDvInitInd.AddIndividual(ind1);
@@ -207,7 +207,7 @@ namespace PopOptBox.Base.Management.Test
         {
             var ind1 = ObjectCreators.EvaluateIndividual(
                 ObjectCreators.GetIndividual(
-                    ind.DecisionVector.Vector.Select(i => (double)i+1).ToArray()),
+                    ind.DecisionVector.Select(i => (double)i+1).ToArray()),
                 ind.Fitness - 1);
             
             popConstLenDvInitInd.AddIndividual(ind1);
@@ -222,14 +222,14 @@ namespace PopOptBox.Base.Management.Test
         {
             var ind1 = ObjectCreators.EvaluateIndividual(
                 ObjectCreators.GetIndividual(
-                    ind.DecisionVector.Vector.Select(i => (double)i+1).ToArray()),
+                    ind.DecisionVector.Select(i => (double)i+1).ToArray()),
                 ind.Fitness - 1);
             
             popConstLenDvInitInd.AddIndividual(ind1);
 
             var decisionVectors = popConstLenDvInitInd.GetMemberDecisionVectors();
             Assert.True(decisionVectors.Count() == 2);
-            Assert.Equal(ind1.DecisionVector.Vector, decisionVectors.ElementAt(0));
+            Assert.Equal(ind1.DecisionVector, decisionVectors.ElementAt(0));
         }
     }
 }

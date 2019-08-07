@@ -22,16 +22,16 @@ namespace PopOptBox.Optimisers.NelderMead.Simplices
         /// <param name="initialSimplex">Array of <see cref="DecisionVector"/>s representing the simplex vertices.</param>
         /// <exception cref="ArgumentException">Thrown when the Decision Vector is not all continuous, or not the same number of dimensions</exception>
         public Simplex(IEnumerable<Individual> initialSimplex) :
-            base(initialSimplex.First().DecisionVector.Vector.Count + 1, initialSimplex, constantLengthDv: true)
+            base(initialSimplex.First().DecisionVector.Count + 1, initialSimplex, constantLengthDv: true)
         {
             if (initialSimplex.Any(vx => 
-                vx.DecisionVector.GetContinuousElements().Vector.Count < vx.DecisionVector.Vector.Count))
+                vx.DecisionVector.GetContinuousElements().Count < vx.DecisionVector.Count))
                 throw new ArgumentException("All elements of the Decision Vector must be continuous for the Nelder-Mead optimiser", nameof(initialSimplex)); 
             
             // All vertices in the simplex must have the same number of dimensions
             // Checked by Population's check on DV length. 
             
-            if (initialSimplex.Count() != initialSimplex.First().DecisionVector.Vector.Count + 1)
+            if (initialSimplex.Count() != initialSimplex.First().DecisionVector.Count + 1)
                 throw new ArgumentException("The simplex must have D+1 elements",
                     nameof(initialSimplex));
         }

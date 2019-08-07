@@ -39,18 +39,18 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
                 throw new ArgumentOutOfRangeException(nameof(parents), 
                     "There must be at least two parents.");
             
-            if (parentArray.Any(p => p.GetContinuousElements().Vector.Count == 0))
+            if (parentArray.Any(p => p.GetContinuousElements().Count == 0))
                 throw new ArgumentOutOfRangeException(nameof(parents), 
                     "Parents must have non-zero length decision vectors.");
 
-            if (parentArray.Any(p => p.GetContinuousElements().Vector.Count != parentArray.First().Vector.Count))
+            if (parentArray.Any(p => p.GetContinuousElements().Count != parentArray.First().Count))
                 throw new ArgumentOutOfRangeException(nameof(parents), 
                     "Parents must have the same length and fully continuous decision vectors.");
 
             return DecisionVector.CreateFromArray(
                 parentArray.First().GetDecisionSpace(),
                 parentArray
-                    .Select(p => p.Vector.Select(v => (double) v))
+                    .Select(p => p.Select(v => (double) v))
                     .Aggregate((p1, p2) => p1.Select((v, i) => v + p2.ElementAt(i)))
                     .Select(v => v / parentArray.Length));
         }

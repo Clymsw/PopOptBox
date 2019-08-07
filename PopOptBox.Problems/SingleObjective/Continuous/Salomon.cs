@@ -33,9 +33,9 @@ namespace PopOptBox.Problems.SingleObjective.Continuous
             // http://benchmarkfcns.xyz/benchmarkfcns/salomonfcn.html
 
             double temp = 0;
-            for (var i = 0; i < location.Vector.Count; i++)
+            for (var i = 0; i < location.Count; i++)
             {
-                temp += Math.Pow(Convert.ToDouble(location.Vector[i]), 2);
+                temp += Math.Pow(Convert.ToDouble(location[i]), 2);
             }
             return new[] { 1 - Math.Cos(2 * Math.PI * Math.Sqrt(temp)) + 0.1 * Math.Sqrt(temp) };
         }

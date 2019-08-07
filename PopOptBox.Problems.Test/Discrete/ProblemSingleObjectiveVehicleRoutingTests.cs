@@ -40,7 +40,7 @@ namespace PopOptBox.Problems.SingleObjective.Discrete.Test
 
         public override IEnumerable<double> Evaluate(DecisionVector definition)
         {
-            return new[] { CalculateTotalTravelDistance(definition.Vector.Select(x => (int)x)) };
+            return new[] { CalculateTotalTravelDistance(definition.Select(x => (int)x)) };
         }
     }
 }

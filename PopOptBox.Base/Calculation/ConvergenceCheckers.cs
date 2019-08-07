@@ -96,7 +96,7 @@ namespace PopOptBox.Base.Calculation
             double tolerance = 0.001)
         {
             var dvRange = pop.DecisionVectorRangeByFitness();
-            var relativeDifferences = pop.Best().DecisionVector.Vector
+            var relativeDifferences = pop.Best().DecisionVector
                 .Select((n,i) => dvRange.ElementAt(i) / (double) n);
             
             return relativeDifferences.All(r => r <= tolerance);
@@ -124,7 +124,7 @@ namespace PopOptBox.Base.Calculation
                 throw new ArgumentException("Tolerance must have same length as Decision Vector",
                     nameof(tolerance));
             
-            var relativeDifferences = pop.Best().DecisionVector.Vector
+            var relativeDifferences = pop.Best().DecisionVector
                 .Select((n,i) => dvRange.ElementAt(i) / (double) n);
 
             return AllWithinTolerances(relativeDifferences, tolerance);

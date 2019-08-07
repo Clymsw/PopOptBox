@@ -33,8 +33,8 @@ namespace PopOptBox.Problems.SingleObjective.Continuous
             // http://www.sfu.ca/~ssurjano/schwef.html
             // http://benchmarkfcns.xyz/benchmarkfcns/schwefelfcn.html
 
-            var result = 418.9829 * location.Vector.Count;
-            foreach (var d in location.Vector)
+            var result = 418.9829 * location.Count;
+            foreach (var d in location)
             {
                 var t = Convert.ToDouble(d);
                 result -= t * Math.Sin(Math.Sqrt(Math.Abs(t)));

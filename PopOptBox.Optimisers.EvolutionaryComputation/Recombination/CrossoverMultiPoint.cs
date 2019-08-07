@@ -51,9 +51,9 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
             // This lies in between vector elements, hence Count + 1
             // The vectors might be different lengths, so select the shortest one.
             var crossoverPoints = rngManager.GetLocations(
-                firstParent.Vector.Count > secondParent.Vector.Count
-                    ? secondParent.Vector.Count + 1
-                    : firstParent.Vector.Count + 1,
+                firstParent.Count > secondParent.Count
+                    ? secondParent.Count + 1
+                    : firstParent.Count + 1,
                 numberOfCrossoverLocations, 
                 false, 
                 1).ToList();
@@ -66,7 +66,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
             {
                 var numPointsToTake = crossoverPoints.ElementAt(i) - crossoverPoints.ElementAt(i - 1);
                 // Add elements to the new Decision Vector
-                newVector.AddRange(parents.ElementAt(parentIdx).Vector
+                newVector.AddRange(parents.ElementAt(parentIdx)
                     .Skip(crossoverPoints.ElementAt(i - 1))
                     .Take(numPointsToTake));
                 
@@ -76,11 +76,11 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
                     parentIdx = 0;
             }
 
-            newVector.AddRange(parents.ElementAt(parentIdx).Vector
+            newVector.AddRange(parents.ElementAt(parentIdx)
                 .Skip(crossoverPoints.Last()));
 
             return DecisionVector.CreateFromArray(
-                firstParent.Vector.Count == newVector.Count 
+                firstParent.Count == newVector.Count 
                     ? firstParent.GetDecisionSpace()
                     : secondParent.GetDecisionSpace(), 
                 newVector);

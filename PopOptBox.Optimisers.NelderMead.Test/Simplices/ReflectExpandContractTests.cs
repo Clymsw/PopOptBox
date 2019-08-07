@@ -31,7 +31,7 @@ namespace PopOptBox.Optimisers.NelderMead.Simplices.Test
 
             var newLocation = theOperator.Operate(simplex);
 
-            Assert.Equal(expectedAnswer, newLocation.Vector.Select(d => (double)d));
+            Assert.Equal(expectedAnswer, newLocation.Select(d => (double)d));
         }
 
         [Theory]
@@ -45,7 +45,7 @@ namespace PopOptBox.Optimisers.NelderMead.Simplices.Test
 
             var newLocation = theOperator.Operate(simplex);
 
-            Assert.Equal(expectedAnswer, newLocation.Vector.Select(d => (double)d));
+            Assert.Equal(expectedAnswer, newLocation.Select(d => (double)d));
         }
 
         [Theory]
@@ -59,7 +59,7 @@ namespace PopOptBox.Optimisers.NelderMead.Simplices.Test
 
             var newLocation = theOperator.Operate(simplex);
 
-            Assert.Equal(expectedAnswer, newLocation.Vector.Select(d => (double)d));
+            Assert.Equal(expectedAnswer, newLocation.Select(d => (double)d));
         }
 
         [Theory]
@@ -73,7 +73,7 @@ namespace PopOptBox.Optimisers.NelderMead.Simplices.Test
 
             var newLocation = theOperator.Operate(simplex);
 
-            Assert.Equal(expectedAnswer, newLocation.Vector.Select(d => (double)d));
+            Assert.Equal(expectedAnswer, newLocation.Select(d => (double)d));
         }
     }
 }

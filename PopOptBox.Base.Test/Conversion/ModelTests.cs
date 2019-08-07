@@ -27,7 +27,7 @@ namespace PopOptBox.Base.Conversion.Test
             Assert.Equal(IndividualState.New, ind.State);
             
             Assert.Equal(builder.DecVec, 
-                ind.DecisionVector.Vector.Select(v => (double)v));
+                ind.DecisionVector.Select(v => (double)v));
         }
         
         [Fact]
