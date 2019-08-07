@@ -6,9 +6,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Optimisation.Base\Optimisation.Base.csproj" />
-      <ProjectReference Include="..\Optimisation.Optimisers.NelderMead\Optimisation.Optimisers.NelderMead.csproj" />
-      <ProjectReference Include="..\Optimisation.Problems\Optimisation.Problems.csproj" />
+      <ProjectReference Include="..\PopOptBox.Base\PopOptBox.Base.csproj" />
+      <ProjectReference Include="..\PopOptBox.Optimisers.NelderMead\PopOptBox.Optimisers.NelderMead.csproj" />
+      <ProjectReference Include="..\PopOptBox.Problems\PopOptBox.Problems.csproj" />
     </ItemGroup>
 
 </Project>

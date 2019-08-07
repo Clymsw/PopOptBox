@@ -1,10 +1,10 @@
 using System.Linq;
 using MathNet.Numerics.Random;
-using Optimisation.Base.Conversion;
-using Optimisation.Base.Variables;
-using Optimisation.Problems.SingleObjective.Continuous;
+using PopOptBox.Base.Conversion;
+using PopOptBox.Base.Variables;
+using PopOptBox.Problems.SingleObjective.Continuous;
 
-namespace Optimisation.HyperParameterTuning
+namespace PopOptBox.HyperParameterTuning
 {
     public class NelderMeadForContinuousProblemModel : Model<DecisionVector>
     {

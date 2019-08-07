@@ -1,7 +1,7 @@
-﻿using Optimisation.Base.Conversion;
-using Optimisation.Base.Variables;
+﻿using PopOptBox.Base.Conversion;
+using PopOptBox.Base.Variables;
 
-namespace Optimisation.HyperParameterTuning
+namespace PopOptBox.HyperParameterTuning
 {
     internal class ContinuousProblemConverter : IConverter<DecisionVector>
     {

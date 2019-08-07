@@ -1,11 +1,11 @@
 using System;
-using Optimisation.Base.Conversion;
-using Optimisation.Base.Helpers;
-using Optimisation.Base.Management;
-using Optimisation.Base.Variables;
-using Optimisation.Optimisers.NelderMead;
+using PopOptBox.Base.Conversion;
+using PopOptBox.Base.Helpers;
+using PopOptBox.Base.Management;
+using PopOptBox.Base.Variables;
+using PopOptBox.Optimisers.NelderMead;
 
-namespace Optimisation.HyperParameterTuning
+namespace PopOptBox.HyperParameterTuning
 {
     public class NelderMeadBuilder : OptimiserBuilder
     {

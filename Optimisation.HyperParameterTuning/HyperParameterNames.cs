@@ -1,4 +1,4 @@
-namespace Optimisation.HyperParameterTuning
+namespace PopOptBox.HyperParameterTuning
 {
     public static class HyperParameterNames
     {

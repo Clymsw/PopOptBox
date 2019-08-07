@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <RootNamespace>PopOptBox.Base</RootNamespace>
+        <ApplicationIcon />
+        <Win32Resource />
+        <AssemblyVersion>2.0.0.0</AssemblyVersion>
+        <Version>2.0.0</Version>
+        <NeutralLanguage>en-GB</NeutralLanguage>
+        <AssemblyName>PopOptBox.Base</AssemblyName>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MathNet.Numerics" Version="4.8.1" />
+      <PackageReference Include="System.Threading.Tasks.Dataflow" Version="4.10.0-preview5.19224.8" />
+    </ItemGroup>
+
+</Project>

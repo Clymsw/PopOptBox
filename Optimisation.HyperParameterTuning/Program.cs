@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Linq;
-using Optimisation.Base.Calculation;
-using Optimisation.Base.Helpers;
-using Optimisation.Base.Management;
-using Optimisation.Base.Variables;
-using Optimisation.Problems.SingleObjective.Continuous;
-using Optimisation.Problems.HyperparameterOptimisation;
+using PopOptBox.Base.Calculation;
+using PopOptBox.Base.Helpers;
+using PopOptBox.Base.Management;
+using PopOptBox.Base.Variables;
+using PopOptBox.Problems.HyperparameterOptimisation;
+using PopOptBox.Problems.SingleObjective.Continuous;
 
-namespace Optimisation.HyperParameterTuning
+namespace PopOptBox.HyperParameterTuning
 {
     class Program
     {
