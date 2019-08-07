@@ -195,19 +195,31 @@ namespace PopOptBox.Base.Management
                     throw new ArgumentException(
                         "Decision Vector is not the right length!");
             
-            if (ind.State != IndividualState.Evaluated)
+            if (ind.State == IndividualState.New || ind.State == IndividualState.Evaluating)
                 throw new ArgumentException("Individual is not yet evaluated.");
             
-            //If the individual has been evaluated and is legal, 
-            // assign fitness and store in population.
-            //If the individual has been evaluated but is not legal, 
-            // assign soft penalty and store in population.
-            ind.SetFitness(ind.Legal ? solutionToFitness : penalty);
+            if (ind.State != IndividualState.FitnessAssessed)
+                SetFitness(ind);
             
             // Add to population
             members.Add(ind);
 
             Sort();
+        }
+
+        /// <summary>
+        /// Applies the population's fitness assessment logic to the <see cref="Individual"/>.
+        /// </summary>
+        /// <param name="ind">The <see cref="Individual"/> whose Fitness should be set.</param>
+        public void SetFitness(Individual ind)
+        {
+            //If the individual has been evaluated and is legal, 
+            // assign fitness and store in population.
+            //If the individual has been evaluated but is not legal, 
+            // assign soft penalty and store in population.
+            ind.SetFitness(ind.Legal ? solutionToFitness : penalty);
+
+            ind.State = IndividualState.FitnessAssessed;
         }
 
         /// <summary>

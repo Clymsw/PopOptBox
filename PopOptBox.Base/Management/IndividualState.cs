@@ -7,6 +7,7 @@ namespace PopOptBox.Base.Management
     {
         New,
         Evaluating,
-        Evaluated
+        Evaluated,
+        FitnessAssessed
     }
 }

@@ -142,6 +142,8 @@ namespace PopOptBox.Optimisers.StructuredSearch
             else
                 nextToWorstFitness = fitnesses.ElementAt(fitnesses.Count() - 2);
 
+            Population.SetFitness(individual);
+            
             switch (CurrentOperation)
             {
                 case (NelderMeadSimplexOperations.R):
