@@ -15,6 +15,25 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.NelderMead
             this.decisionSpace = decisionSpace;
         }
         
+        public static OptimiserBuilder GetBuilder(DecisionSpace problemSpace, double simplexCreationStepSize)
+        {
+            var builder = new NelderMeadBuilder(problemSpace);
+            
+            builder.AddHyperParameter(
+                new VariableDiscrete(1, int.MaxValue,
+                    name: HyperParameterNames.NumberOfDimensions),
+                problemSpace.Count);
+            
+            builder.AddHyperParameter(
+                new VariableContinuous(
+                    lowerBoundForGeneration: 0.0001,
+                    upperBoundForGeneration: 1,
+                    name: HyperParameterNames.SimplexStepCreationSize), 
+                simplexCreationStepSize);
+
+            return builder;
+        }
+        
         public override Optimiser CreateOptimiser()
         {
             return new Optimisers.StructuredSearch.NelderMead(

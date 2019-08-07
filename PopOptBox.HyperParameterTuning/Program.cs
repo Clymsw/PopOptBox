@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Linq;
 using PopOptBox.Base.Calculation;
-using PopOptBox.Base.Management;
-using PopOptBox.Base.Variables;
 using PopOptBox.HyperParameterTuning.SingleObjective.Continuous.NelderMead;
 using PopOptBox.Problems.HyperparameterOptimisation;
 using PopOptBox.Problems.SingleObjective.Continuous;
@@ -14,7 +12,7 @@ namespace PopOptBox.HyperParameterTuning
         private const int Number_Of_Dimensions = 10;
         private const double Simplex_Creation_Step_Size = 0.5;
         private const double Convergence_Tolerance = 0.00001;
-        private const int Number_Of_Restarts = 1000;
+        private const int Number_Of_Restarts = 100;
         private const double Fitness_Tolerance = 0.01;
         
         private static ProblemSingleObjectiveContinuous GetEvaluator()
@@ -34,7 +32,8 @@ namespace PopOptBox.HyperParameterTuning
             var problem = GetEvaluator();
             
             var runner = new ProblemPerformanceAssessor<double>(
-                GetBuilder(problem.GetGlobalOptimum().GetDecisionSpace()), problem,
+                NelderMeadBuilder.GetBuilder(problem.GetGlobalOptimum().GetDecisionSpace(), Simplex_Creation_Step_Size), 
+                problem,
                 p => p.AbsoluteDecisionVectorConvergence(Convergence_Tolerance));
 
             var results = runner.RunAssessment(
@@ -78,25 +77,6 @@ namespace PopOptBox.HyperParameterTuning
                 $"{results.Average(r => r.EvaluationsToConverge).ToString("F1", System.Globalization.CultureInfo.InvariantCulture)}");
             Console.WriteLine("Mean time required to converge: " +
                 $"{results.Average(r => r.TimeToConverge.TotalSeconds).ToString("F2", System.Globalization.CultureInfo.InvariantCulture)} seconds");
-        }
-
-        private static OptimiserBuilder GetBuilder(DecisionSpace space)
-        {
-            var builder = new NelderMeadBuilder(space);
-            
-            builder.AddHyperParameter(
-                new VariableDiscrete(1, int.MaxValue,
-                    name: HyperParameterNames.NumberOfDimensions),
-                Number_Of_Dimensions);
-            
-            builder.AddHyperParameter(
-                new VariableContinuous(
-                    lowerBoundForGeneration: 0.0001,
-                    upperBoundForGeneration: 1,
-                    name: HyperParameterNames.SimplexStepCreationSize), 
-                Simplex_Creation_Step_Size);
-
-            return builder;
         }
     }
 }
