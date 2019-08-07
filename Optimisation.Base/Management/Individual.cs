@@ -31,7 +31,7 @@ namespace Optimisation.Base.Management
         public double[] SolutionVector { get; private set; }
 
         /// <summary>
-        /// The fitness, used to rank individuals and ultimately determine optimality.
+        /// The Fitness, used to rank individuals and ultimately determine optimality.
         /// Lower is better.
         /// </summary>
         public double Fitness { get; private set; }
@@ -84,7 +84,7 @@ namespace Optimisation.Base.Management
         #region Utility
 
         /// <summary>
-        /// Returns the decision vector as a string.
+        /// Returns the Decision Vector as a string.
         /// </summary>
         /// <returns>A string version of <see cref="DecisionVector"/>.</returns>
         public override string ToString()
@@ -183,8 +183,8 @@ namespace Optimisation.Base.Management
         /// Assigns Fitness based on a function which must be passed
         /// in as a delegate that converts a double array into a single value.
         /// </summary>
-        /// <param name="solutionToFitness">Delegate converting Solution vector to Fitness.</param>
-        /// <exception cref="InvalidOperationException">Thrown when Solution vector is null. <seealso cref="SetSolution(string)"/>.</exception>
+        /// <param name="solutionToFitness">Delegate converting Solution Vector to Fitness.</param>
+        /// <exception cref="InvalidOperationException">Thrown when Solution Vector is null. <seealso cref="SetSolution(string)"/>.</exception>
         public void SetFitness(Func<double[], double> solutionToFitness)
         {
             Fitness = solutionToFitness(SolutionVector);
