@@ -51,7 +51,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
                 if (lambda == 1 && !selectionWithReplacement)
                 {
                     // There's a fast function implemented for this...
-                    return Enumerable.Range(0, maximumNumberOfLocations)
+                    return Enumerable.Range(0, numberOfLocationsToChooseFrom)
                         .SelectCombination(maximumNumberOfLocations, Rng);
                 }
 
