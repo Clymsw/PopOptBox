@@ -56,6 +56,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
                 throw new ArgumentOutOfRangeException(nameof(parents),
                     "There must be at least two parents.");
 
+            // TODO: These calls to .Any() are slow - can be remove the error checking?
             if (parents.Any(p => p.GetContinuousElements().Count == 0))
                 throw new ArgumentOutOfRangeException(nameof(parents),
                     "Parents must have non-zero length decision vectors.");
