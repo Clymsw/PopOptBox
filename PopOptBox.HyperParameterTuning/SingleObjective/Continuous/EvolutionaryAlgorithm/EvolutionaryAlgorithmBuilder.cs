@@ -54,7 +54,7 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
             {
                 case AvailableOperators.ParentSelector.Tournament:
                     parentSelector = new ParentSelectionTournament(
-                        20,
+                        40,
                         false);
                     break;
                 
@@ -99,7 +99,7 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
                     recombinationOperator = new CrossoverArithmeticMultiParent();
                     hyps.UpdateHyperParameterValue(
                         EvolutionaryAlgorithmHyperParameters.Number_Of_Parents, 
-                        4);
+                        6);
                     break;
                 
                 case AvailableOperators.RecombinationOperator.Uniform:

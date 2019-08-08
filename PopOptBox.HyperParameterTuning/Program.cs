@@ -15,9 +15,9 @@ namespace PopOptBox.HyperParameterTuning
         private const double Fitness_Tolerance = 0.01;
         
         private const Options.ProblemsSingleObjectiveContinuousAvailable ProblemToUse =
-            Options.ProblemsSingleObjectiveContinuousAvailable.Rastrigin;
+            Options.ProblemsSingleObjectiveContinuousAvailable.Ellipsoidal;
 
-        private const int Number_Of_Dimensions = 10;
+        private const int Number_Of_Dimensions = 6;
         
         private const Options.OptimisersAvailable OptimiserToUse = 
             Options.OptimisersAvailable.EvolutionaryAlgorithm;
@@ -43,9 +43,10 @@ namespace PopOptBox.HyperParameterTuning
                     builder = EvolutionaryAlgorithmBuilder.GetBuilder(
                         problem.GetGlobalOptimum().GetDecisionSpace(),
                         AvailableOperators.ParentSelector.Tournament,
-                        AvailableOperators.RecombinationOperator.Sbx,
-                        AvailableOperators.MutationOperators.AddRandomNumber,
-                        AvailableOperators.ReinsertionOperators.ReplaceWorst);
+                        AvailableOperators.RecombinationOperator.Pcx,
+                        AvailableOperators.MutationOperators.None,
+                        AvailableOperators.ReinsertionOperators.ReplaceRandom,
+                        200);
                     break;
                 
                 default:
@@ -57,6 +58,7 @@ namespace PopOptBox.HyperParameterTuning
 
             var results = runner.RunAssessment(
                 Number_Of_Restarts,
+                5000,
                 r => Console.Write("."),
                 i =>
                 {
@@ -64,7 +66,7 @@ namespace PopOptBox.HyperParameterTuning
                     Console.WriteLine($"Optimisation {i}/{Number_Of_Restarts} complete.");
                     Console.WriteLine(); 
                 },
-                timeOutEvaluations: (int)Math.Pow(Number_Of_Dimensions, 3.0) * 10);
+                timeOutEvaluations: Math.Max(5000, (int)Math.Pow(Number_Of_Dimensions, 3.0) * 20));
             
             Console.WriteLine();
 
