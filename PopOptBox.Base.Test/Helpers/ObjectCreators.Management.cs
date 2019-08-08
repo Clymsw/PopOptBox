@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using Moq;
 using PopOptBox.Base.Conversion;
@@ -52,12 +53,13 @@ namespace PopOptBox.Base.Test.Helpers
         
         internal class OptimiserMock : Optimiser
         {
-            private readonly DecisionVector decisionVector;
+            private DecisionVector decisionVector;
         
             public OptimiserMock(DecisionVector decisionVector,
                 Population initialPopulation) : base(initialPopulation)
             {
                 this.decisionVector = decisionVector;
+                updateDecisionVector(false);
             }
 
             protected override bool ReInsert(Individual individual)
@@ -67,25 +69,35 @@ namespace PopOptBox.Base.Test.Helpers
 
             protected override DecisionVector GetNewDecisionVector()
             {
+                updateDecisionVector();
                 return decisionVector;
+            }
+
+            private void updateDecisionVector(bool add = true)
+            {
+                var elements = decisionVector.Select(d => (double)d).ToList();
+                elements[0] += add ? 0.01 : -0.01;
+                var space = decisionVector.GetDecisionSpace();
+                decisionVector = DecisionVector.CreateFromArray(
+                    space, elements);
             }
         }
 
         internal class OptimiserBuilderMock : OptimiserBuilder
         {
-            public readonly double[] DecVec;
+            public readonly double[] StartingDecVec;
             public const int PopulationSize = 5;
             public const double PenaltyValue = 1000;
 
             public OptimiserBuilderMock()
             {
-                DecVec = new[] {1.2};
+                StartingDecVec = new[] {1.2};
             }
             
             public override Optimiser CreateOptimiser()
             {
                 return new OptimiserMock(
-                    GetDecisionVector(DecVec),
+                    GetDecisionVector(StartingDecVec),
                     GetEmptyPopulation(
                         CreateSolutionToFitness(),
                         CreatePenalty(),
@@ -94,7 +106,7 @@ namespace PopOptBox.Base.Test.Helpers
 
             public override IModel CreateModel()
             {
-                return new ModelMock(GetDecisionVector(DecVec), GetConverterMock());
+                return new ModelMock(GetDecisionVector(StartingDecVec), GetConverterMock());
             }
 
             protected override Func<double[], double> CreateSolutionToFitness()
@@ -112,8 +124,8 @@ namespace PopOptBox.Base.Test.Helpers
                 var converterMock = new Mock<IConverter<double>>();
             
                 converterMock.Setup(x => x.ConvertToReality(
-                        GetDecisionVector(DecVec)))
-                    .Returns(DecVec.ElementAt(0));
+                        GetDecisionVector(StartingDecVec)))
+                    .Returns(StartingDecVec.ElementAt(0));
 
                 return converterMock.Object;
             }

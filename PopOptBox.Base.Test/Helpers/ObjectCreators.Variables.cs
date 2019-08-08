@@ -35,8 +35,8 @@ namespace PopOptBox.Base.Test.Helpers
             return DecisionVector.CreateFromArray(
                 GetDecisionSpace(
                     dv.Count(),
-                    dv.Min(),
-                    dv.Max() + 0.01), 
+                    double.MinValue,
+                    double.MaxValue), 
                 dv);
         }
     }

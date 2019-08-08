@@ -19,7 +19,7 @@ namespace PopOptBox.Base.Runtime.Test
             agent = new ReinsertionAgent(
                 builder.CreateOptimiser(),
                 new ObjectCreators.ModelMock(
-                    ObjectCreators.GetDecisionVector(builder.DecVec),
+                    ObjectCreators.GetDecisionVector(builder.StartingDecVec),
                     builder.GetConverterMock()),
                 new TimeOutManager(5, TimeSpan.MaxValue),
                 p => p.AbsoluteDecisionVectorConvergence(1),

@@ -23,7 +23,7 @@ namespace PopOptBox.Base.Management.Test
             Assert.Equal(1, newInds.Count);
 
             var newInd = newInds.ElementAt(0);
-            Assert.Equal(builder.DecVec, 
+            Assert.Equal(builder.StartingDecVec, 
                 newInd.DecisionVector.Select(v => (double)v));
             Assert.Equal(IndividualState.New, newInd.State);
 
@@ -34,7 +34,7 @@ namespace PopOptBox.Base.Management.Test
         [Fact]
         public void Reinsertion_NewIndividual_NotAllowed()
         {
-            var newInd = ObjectCreators.GetIndividual(builder.DecVec);
+            var newInd = ObjectCreators.GetIndividual(builder.StartingDecVec);
             
             Assert.Throws<ArgumentException>(() => optimiserMock.ReInsert(new[] {newInd}));
         }
@@ -42,7 +42,7 @@ namespace PopOptBox.Base.Management.Test
         [Fact]
         public void Reinsertion_EvaluatingIndividual_NotAllowed()
         {
-            var newInd = ObjectCreators.GetIndividual(builder.DecVec);
+            var newInd = ObjectCreators.GetIndividual(builder.StartingDecVec);
             newInd.SendForEvaluation();
 
             Assert.Throws<ArgumentException>(() => optimiserMock.ReInsert(new[] {newInd}));
@@ -51,7 +51,7 @@ namespace PopOptBox.Base.Management.Test
         [Fact]
         public void Reinsertion_EvaluatedIndividual_AddedToPopulation()
         {
-            var newInd = ObjectCreators.GetIndividual(builder.DecVec);
+            var newInd = ObjectCreators.GetIndividual(builder.StartingDecVec);
             ObjectCreators.EvaluateIndividual(newInd);
             
             Assert.Empty(optimiserMock.Population);
@@ -60,7 +60,7 @@ namespace PopOptBox.Base.Management.Test
             
             Assert.Collection(optimiserMock.Population, 
                 i => Assert.Equal(
-                    builder.DecVec, i.DecisionVector.Select(d => (double)d)));
+                    builder.StartingDecVec, i.DecisionVector.Select(d => (double)d)));
             
             var reinsertionTime = newInd.GetProperty<DateTime>(OptimiserPropertyNames.ReinsertionTime);
             Assert.True(reinsertionTime < DateTime.Now);
