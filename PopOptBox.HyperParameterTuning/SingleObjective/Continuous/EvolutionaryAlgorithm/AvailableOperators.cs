@@ -24,7 +24,8 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
         {
             AddRandomNumber,
             RandomSwap,
-            ReplaceWithRandomNumber
+            ReplaceWithRandomNumber,
+            None
         }
 
         public enum ReinsertionOperators

@@ -57,11 +57,26 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
                         20,
                         false);
                     break;
+                
+                case AvailableOperators.ParentSelector.Greedy:
+                    parentSelector = new ParentSelectionGreedy();
+                    break;
+                
+                case AvailableOperators.ParentSelector.Random:
+                    parentSelector = new ParentSelectionRandom();
+                    break;
+                
+                case AvailableOperators.ParentSelector.Roulette:
+                    parentSelector = new ParentSelectionRoulette(
+                        false);
+                    break;
+                
                 default:
                     throw new NotImplementedException();
             }
             
             IRecombinationOperator recombinationOperator;
+            hyps.UpdateHyperParameterValue(EvolutionaryAlgorithmHyperParameters.Number_Of_Parents, 2);
             switch (recombination)
             {
                 case AvailableOperators.RecombinationOperator.MultiPoint:
@@ -70,27 +85,67 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
                     break;
                 
                 case AvailableOperators.RecombinationOperator.ArithmeticTwoParentWeighted:
-                    recombinationOperator = new CrossoverArithmeticWeighted();
+                    recombinationOperator = new CrossoverArithmeticWeighted(
+                        false,
+                        0.5);
                     break;
                 
                 case AvailableOperators.RecombinationOperator.Sbx:
-                    recombinationOperator = new CrossoverSimulatedBinary(2);
+                    recombinationOperator = new CrossoverSimulatedBinary(
+                        2);
+                    break;
+
+                case AvailableOperators.RecombinationOperator.ArithmeticMultiParent:
+                    recombinationOperator = new CrossoverArithmeticMultiParent();
+                    hyps.UpdateHyperParameterValue(
+                        EvolutionaryAlgorithmHyperParameters.Number_Of_Parents, 
+                        4);
+                    break;
+                
+                case AvailableOperators.RecombinationOperator.Uniform:
+                    recombinationOperator = new CrossoverUniform(
+                        0.5);
+                    break;
+                
+                case AvailableOperators.RecombinationOperator.Pcx:
+                    recombinationOperator = new RecombinationParentCentric(
+                        0.1, 
+                        0.1);
+                    hyps.UpdateHyperParameterValue(
+                        EvolutionaryAlgorithmHyperParameters.Number_Of_Parents, 
+                        4);
                     break;
                 
                 default:
                     throw new NotImplementedException();
             }
-            hyps.UpdateHyperParameterValue(EvolutionaryAlgorithmHyperParameters.Number_Of_Parents, 2);
 
             IMutationOperator mutationOperator;
             switch (mutation)
             {
                 case AvailableOperators.MutationOperators.AddRandomNumber:
                     mutationOperator = new MutationAddRandomNumber(
-                        0.2, 
                         0.1, 
-                        problemSpace.Count);
+                        0.1, 
+                        1);
                     break;
+                
+                case AvailableOperators.MutationOperators.RandomSwap:
+                    mutationOperator = new MutationRandomSwap(
+                        0.1);
+                    break;
+                
+                case AvailableOperators.MutationOperators.ReplaceWithRandomNumber:
+                    mutationOperator = new MutationReplaceWithRandomNumber(
+                        0.1, 
+                        1);
+                    break;
+
+                case AvailableOperators.MutationOperators.None:
+                    mutationOperator = new MutationReplaceWithRandomNumber(
+                        0,1);
+                    break;
+                
                 default:
                     throw new NotImplementedException();
             }
@@ -101,6 +156,11 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
                 case AvailableOperators.ReinsertionOperators.ReplaceWorst:
                     reinsertionOperator = new ReinsertionReplaceWorst();
                     break;
+                
+                case AvailableOperators.ReinsertionOperators.ReplaceRandom:
+                    reinsertionOperator = new ReinsertionReplaceRandom();
+                    break;
+                
                 default:
                     throw new NotImplementedException();
             }
