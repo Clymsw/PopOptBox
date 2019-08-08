@@ -24,6 +24,7 @@ namespace PopOptBox.Problems.Performance
 
         public List<ProblemPerformanceSingleObjective> RunAssessment(
             int numberOfRestarts, 
+            int reportingFrequency,
             Action<Population> reporters, 
             Action<int> iterationReporter,
             int timeOutEvaluations = 0, 
@@ -33,12 +34,10 @@ namespace PopOptBox.Problems.Performance
 
             for (var i = 1; i <= numberOfRestarts; i++)
             {
-                var timeStart = DateTime.Now;
-                
                 var optimiserRunner = new OptimiserRunnerBasic(builder, evaluator, convergenceCheckers, reporters);
 
                 optimiserRunner.Run(
-                    reportingFrequency: 1000,
+                    reportingFrequency: reportingFrequency,
                     timeOutEvaluations: timeOutEvaluations, 
                     timeOutDuration: timeOutDuration);
 
