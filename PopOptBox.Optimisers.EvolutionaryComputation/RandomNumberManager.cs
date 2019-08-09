@@ -28,7 +28,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
         /// <param name="selectionWithReplacement"><see langword="true"/> if the same location can be returned more than once.</param>
         /// <param name="lambda">The probability of choosing a location at all.</param>
         /// <returns>A list of locations in the original array.</returns>
-        public IEnumerable<int> GetLocations(
+        public int[] GetLocations(
             int numberOfLocationsToChooseFrom,
             int maximumNumberOfLocations = 1,
             bool selectionWithReplacement = false,
@@ -52,7 +52,8 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
                 {
                     // There's a fast function implemented for this...
                     return Enumerable.Range(0, numberOfLocationsToChooseFrom)
-                        .SelectCombination(maximumNumberOfLocations, Rng);
+                        .SelectCombination(maximumNumberOfLocations, Rng)
+                        .ToArray();
                 }
 
                 var locations = new List<int>();
@@ -90,10 +91,10 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
                     i++;
                 }
 
-                return locations;
+                return locations.ToArray();
             }
 
-            return new List<int>();
+            return new int[0];
         }
     }
 }
