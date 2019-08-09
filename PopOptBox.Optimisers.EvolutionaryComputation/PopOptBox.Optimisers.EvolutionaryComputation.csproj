@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <Compile Remove="Recombination\CrossoverTwoPoint.cs" />
+    <Compile Remove="ReInsertion\ReinsertionReplaceRandom.cs" />
   </ItemGroup>
 
   <ItemGroup>
