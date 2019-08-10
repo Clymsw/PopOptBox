@@ -46,7 +46,7 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.NelderMead
 
         protected override Func<double[], double> CreateSolutionToFitness()
         {
-            return SolutionToFitness.SingleObjectiveMinimise;
+            return SolutionToFitnessSingleObjective.Minimise;
         }
 
         protected override Func<double[], double> CreatePenalty()

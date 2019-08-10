@@ -29,7 +29,7 @@ namespace PopOptBox.Base.Management.Test
             ind = ObjectCreators.EvaluateIndividual(
                 ObjectCreators.GetIndividual(testVector), 
                 fitness);
-            ind.SetFitness(SolutionToFitness.SingleObjectiveMinimise);
+            ind.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
             popConstLenDvInitInd = new Population(
                 140, new[] {ind}, true);
@@ -95,7 +95,7 @@ namespace PopOptBox.Base.Management.Test
             var numDims = ind.DecisionVector.Count;
             var ind1 = ObjectCreators.EvaluateIndividual( 
                 ObjectCreators.GetIndividual(Enumerable.Range(0, numDims + 1).ToArray()));
-            ind1.SetFitness(SolutionToFitness.SingleObjectiveMinimise);
+            ind1.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
             popVarLenDv.AddIndividual(ind1);
             
@@ -110,7 +110,7 @@ namespace PopOptBox.Base.Management.Test
                 ObjectCreators.GetIndividual(
                     ind.DecisionVector.Select(i => (double)i+1).ToArray()),
                 ind.Fitness + 1);
-            ind1.SetFitness(SolutionToFitness.SingleObjectiveMinimise);
+            ind1.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
             popConstLenDvInitInd.AddIndividual(ind1);
             
@@ -125,7 +125,7 @@ namespace PopOptBox.Base.Management.Test
                 ObjectCreators.GetIndividual(
                     ind.DecisionVector.Select(i => (double)i+1).ToArray()),
                 ind.Fitness - 1);
-            ind1.SetFitness(SolutionToFitness.SingleObjectiveMinimise);
+            ind1.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
             popConstLenDvInitInd.AddIndividual(ind1);
             
@@ -140,7 +140,7 @@ namespace PopOptBox.Base.Management.Test
                 ObjectCreators.GetIndividual(
                     ind.DecisionVector.Select(i => (double)i + 1).ToArray()),
                 ind.Fitness - 1);
-            bestInd.SetFitness(SolutionToFitness.SingleObjectiveMinimise);
+            bestInd.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
             popConstLenDvInitInd.AddIndividual(bestInd);
 
@@ -148,7 +148,7 @@ namespace PopOptBox.Base.Management.Test
                 ObjectCreators.GetIndividual(
                     ind.DecisionVector.Select(i => (double)i + 1).ToArray()),
                 ind.Fitness - 2);
-            evenBetterInd.SetFitness(SolutionToFitness.SingleObjectiveMinimise);
+            evenBetterInd.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
             popConstLenDvInitInd.ReplaceWorst(evenBetterInd);
 
@@ -163,7 +163,7 @@ namespace PopOptBox.Base.Management.Test
                 ObjectCreators.GetIndividual(
                     ind.DecisionVector.Select(i => (double)i + 1).ToArray()),
                 ind.Fitness - 1);
-            bestInd.SetFitness(SolutionToFitness.SingleObjectiveMinimise);
+            bestInd.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
             popConstLenDvInitInd.AddIndividual(bestInd);
 
@@ -171,7 +171,7 @@ namespace PopOptBox.Base.Management.Test
                 ObjectCreators.GetIndividual(
                     ind.DecisionVector.Select(i => (double)i + 1).ToArray()),
                 ind.Fitness - 2);
-            evenBetterInd.SetFitness(SolutionToFitness.SingleObjectiveMinimise);
+            evenBetterInd.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
             popConstLenDvInitInd.ReplaceIndividual(bestInd, evenBetterInd);
 
@@ -186,7 +186,7 @@ namespace PopOptBox.Base.Management.Test
                 ObjectCreators.GetIndividual(
                     ind.DecisionVector.Select(i => (double)i + 1).ToArray()),
                 ind.Fitness - 1);
-            bestInd.SetFitness(SolutionToFitness.SingleObjectiveMinimise);
+            bestInd.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
             popConstLenDvInitInd.AddIndividual(bestInd);
 
@@ -194,7 +194,7 @@ namespace PopOptBox.Base.Management.Test
                 ObjectCreators.GetIndividual(
                     ind.DecisionVector.Select(i => (double)i + 1).ToArray()),
                 ind.Fitness - 2);
-            evenBetterInd.SetFitness(SolutionToFitness.SingleObjectiveMinimise);
+            evenBetterInd.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
             popConstLenDvInitInd.ReplaceIndividualAt(1, evenBetterInd);
 
@@ -209,7 +209,7 @@ namespace PopOptBox.Base.Management.Test
                 ObjectCreators.GetIndividual(
                     ind.DecisionVector.Select(i => (double)i+1).ToArray()),
                 ind.Fitness - 1);
-            ind1.SetFitness(SolutionToFitness.SingleObjectiveMinimise);
+            ind1.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
             popConstLenDvInitInd.AddIndividual(ind1);
 
@@ -225,7 +225,7 @@ namespace PopOptBox.Base.Management.Test
                 ObjectCreators.GetIndividual(
                     ind.DecisionVector.Select(i => (double)i+1).ToArray()),
                 ind.Fitness - 1);
-            ind1.SetFitness(SolutionToFitness.SingleObjectiveMinimise);
+            ind1.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
             popConstLenDvInitInd.AddIndividual(ind1);
 
@@ -241,7 +241,7 @@ namespace PopOptBox.Base.Management.Test
                 ObjectCreators.GetIndividual(
                     ind.DecisionVector.Select(i => (double)i+1).ToArray()),
                 ind.Fitness - 1);
-            ind1.SetFitness(SolutionToFitness.SingleObjectiveMinimise);
+            ind1.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
             popConstLenDvInitInd.AddIndividual(ind1);
 

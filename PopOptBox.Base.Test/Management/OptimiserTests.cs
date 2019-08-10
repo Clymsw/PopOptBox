@@ -54,7 +54,7 @@ namespace PopOptBox.Base.Management.Test
         {
             var newInd = ObjectCreators.GetIndividual(builder.StartingDecVec);
             ObjectCreators.EvaluateIndividual(newInd);
-            newInd.SetFitness(SolutionToFitness.SingleObjectiveMinimise);
+            newInd.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
             Assert.Throws<ArgumentException>(() => optimiserMock.ReInsert(new[] { newInd }));
         }

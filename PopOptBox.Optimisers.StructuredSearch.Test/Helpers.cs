@@ -18,7 +18,7 @@ namespace PopOptBox.Optimisers.StructuredSearch.Test
             foreach (var ind in inds)
             {
                 EvaluateIndividual(ind);
-                ind.SetFitness(SolutionToFitness.SingleObjectiveMinimise);
+                ind.SetFitness(SolutionToFitnessSingleObjective.Minimise);
             }
             return inds;
         }

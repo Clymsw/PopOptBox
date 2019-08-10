@@ -14,7 +14,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.ParentSelection.Test
         public ParentSelectionRouletteTests()
         {
             var fitnesses = Enumerable.Range(-5, 20).Select(d => (double)d).ToArray();
-            var inds = Helpers.CreateEvaluatedIndividualsFromArray(
+            var inds = Helpers.CreateFitnessAssessedIndividualsFromArray(
                 fitnesses.Select((f, i) => new[] { 0.5, 1.5 }).ToArray(),
                 fitnesses);
 
