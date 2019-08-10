@@ -6,11 +6,22 @@ using PopOptBox.Base.Management;
 namespace PopOptBox.Base.Calculation
 {
     /// <summary>
-    /// Helper functions to see (in different ways) if an optimisation has converged,
-    /// <see cref="Runtime.OptimiserRunnerBasic"/> and <see cref="Runtime.OptimiserRunnerParallel"/>.
+    /// Helper functions to calculate <see cref="Population"/> metrics, 
+    /// for example to support calculating whether an optimisation has converged,
+    /// or for multiobjective optimisation.
     /// </summary>
-    public static class ConvergenceCheckers
+    public static class PopulationMetrics
     {
+        /// <summary>
+        /// Gets the centroid of the population (the average location of all the decision vectors).
+        /// </summary>
+        /// <param name="pop">The population.</param>
+        /// <returns>A double array representing the centroid location.</returns>
+        public static double[] Centroid(this Population pop)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         ///     Checks to see if the Fitness of the best and worst individuals in a population
         ///     are closer than a specified amount.
