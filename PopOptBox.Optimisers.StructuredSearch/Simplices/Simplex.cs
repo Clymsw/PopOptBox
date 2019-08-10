@@ -22,11 +22,8 @@ namespace PopOptBox.Optimisers.StructuredSearch.Simplices
         /// <param name="penalty"><see cref="Population"/></param>
         /// <param name="initialSimplex">Array of <see cref="DecisionVector"/>s representing the simplex vertices.</param>
         /// <exception cref="ArgumentException">Thrown when the Decision Vector is not all continuous, or not the same number of dimensions</exception>
-        public Simplex(
-            Func<double[], double> solutionToFitness,
-            Func<double[], double> penalty,
-            IEnumerable<Individual> initialSimplex) 
-            : base(solutionToFitness, penalty, initialSimplex.First().DecisionVector.Count + 1, initialSimplex, constantLengthDv: true)
+        public Simplex(IEnumerable<Individual> initialSimplex) 
+            : base(initialSimplex.First().DecisionVector.Count + 1, initialSimplex, constantLengthDv: true)
         {
             if (initialSimplex.Any(vx => 
                 vx.DecisionVector.GetContinuousElements().Count < vx.DecisionVector.Count))
@@ -44,11 +41,8 @@ namespace PopOptBox.Optimisers.StructuredSearch.Simplices
         /// Creates an empty Simplex.
         /// </summary>
         /// <param name="numberOfDimensions">Number of dimensions.</param>
-        public Simplex(
-            Func<double[], double> solutionToFitness,
-            Func<double[], double> penalty,
-            int numberOfDimensions) 
-            : base(solutionToFitness, penalty, numberOfDimensions + 1)
+        public Simplex(int numberOfDimensions) 
+            : base(numberOfDimensions + 1)
         {
         }
 

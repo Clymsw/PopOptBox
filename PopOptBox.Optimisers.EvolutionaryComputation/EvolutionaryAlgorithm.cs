@@ -35,14 +35,16 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
         /// <param name="reinsertionOperator">The <see cref="IReinsertionOperator"/> to use.</param>
         /// <param name="hyperParameters">The <see cref="HyperParameterManager"/> object with relevant settings.</param>
         public EvolutionaryAlgorithm(
-            Population initialPopulation, 
+            Population initialPopulation,
+            Func<double[], double> solutionToFitness,
+            Func<double[], double> penalty,
             Func<DecisionVector> initialIndividualGenerator,
             IParentSelectionOperator parentSelector,
             IRecombinationOperator recombinationOperator,
             IMutationOperator mutationOperator,
             IReinsertionOperator reinsertionOperator,
             HyperParameterManager hyperParameters) 
-            : base(initialPopulation)
+            : base(initialPopulation, solutionToFitness, penalty)
         {
             this.initialIndividualGenerator = initialIndividualGenerator;
             this.parentSelector = parentSelector;
@@ -73,7 +75,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
         {
             if (Population.IsTargetSizeReached)
             {
-                Population.SetFitness(individual);
+                SetFitness(individual);
                 return reinsertionOperator.ReInsert(Population, individual);
             }
             else

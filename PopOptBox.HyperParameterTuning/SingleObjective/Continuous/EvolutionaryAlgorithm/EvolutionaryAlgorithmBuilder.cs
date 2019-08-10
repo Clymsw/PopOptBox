@@ -172,9 +172,9 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
         public override Optimiser CreateOptimiser()
         {
             return new Optimisers.EvolutionaryComputation.EvolutionaryAlgorithm(
-                new Population(CreateSolutionToFitness(),
-                    CreatePenalty(),
-                    HyperParameters.GetHyperParameterValue<int>(EvolutionaryAlgorithmHyperParameters.Population_Size)),
+                new Population(HyperParameters.GetHyperParameterValue<int>(EvolutionaryAlgorithmHyperParameters.Population_Size)),
+                CreateSolutionToFitness(),
+                CreatePenalty(),
                 CreateDecisionVectorGenerator(),
                 parentSelector,
                 recombinationOperator,

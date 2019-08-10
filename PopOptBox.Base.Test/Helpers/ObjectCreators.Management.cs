@@ -31,22 +31,16 @@ namespace PopOptBox.Base.Test.Helpers
             ind.SendForEvaluation();
             ind.SetProperty(Solution_Key, new[] {fitness});
             ind.SetSolution(Solution_Key);
-            ind.SetFitness(s => s[0]);
-            ind.FinishEvaluating();
             ind.SetLegality(true);
 
             return ind;
         }
 
         internal static Population GetEmptyPopulation(
-            Func<double[], double> solutionToFitness, 
-            Func<double[], double> penalty,
             int desiredNumber,
             bool constantLengthDecVec = true)
         {
             return new Population(
-                solutionToFitness, 
-                penalty, 
                 desiredNumber,
                 constantLengthDv: constantLengthDecVec);
         }
@@ -55,8 +49,12 @@ namespace PopOptBox.Base.Test.Helpers
         {
             private DecisionVector decisionVector;
         
-            public OptimiserMock(DecisionVector decisionVector,
-                Population initialPopulation) : base(initialPopulation)
+            public OptimiserMock(
+                DecisionVector decisionVector,
+                Population initialPopulation,
+                Func<double[], double> solutionToFitness,
+                Func<double[], double> penalty) 
+                : base(initialPopulation, solutionToFitness, penalty)
             {
                 this.decisionVector = decisionVector;
                 updateDecisionVector(false);
@@ -98,10 +96,9 @@ namespace PopOptBox.Base.Test.Helpers
             {
                 return new OptimiserMock(
                     GetDecisionVector(StartingDecVec),
-                    GetEmptyPopulation(
-                        CreateSolutionToFitness(),
-                        CreatePenalty(),
-                        PopulationSize));
+                    GetEmptyPopulation(PopulationSize),
+                    CreateSolutionToFitness(),
+                    CreatePenalty());
             }
 
             public override IModel CreateModel()

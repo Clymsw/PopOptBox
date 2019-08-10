@@ -29,9 +29,6 @@ namespace PopOptBox.Base.Management
         /// Whether we have met or exceeded our desired size of population.
         /// </summary>
         public bool IsTargetSizeReached => members.Count >= TargetSize;
-        
-        private readonly Func<double[], double> solutionToFitness;
-        private readonly Func<double[], double> penalty;
 
         #endregion
 
@@ -40,21 +37,14 @@ namespace PopOptBox.Base.Management
         /// <summary>
         /// Initialise population.
         /// </summary>
-        /// <param name="solutionToFitness">Conversion function to change Solution Vector into Fitness. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
-        /// <param name="penalty">Function determining what penalty to assign for illegal individuals. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
         /// <param name="initialPopulation">An array of individuals</param>
         /// <param name="initialSize">Expected max size of population</param>
         /// <param name="constantLengthDv">Whether the Decision Vector should be expected to be constant</param>
         public Population(
-            Func<double[], double> solutionToFitness,
-            Func<double[], double> penalty,
             int initialSize = 100,
             IEnumerable<Individual> initialPopulation = null,
             bool constantLengthDv = true)
         {
-            this.solutionToFitness = solutionToFitness;
-            this.penalty = penalty;
-            
             if (initialSize <= 0)
                 throw new ArgumentOutOfRangeException(nameof(initialSize),
                     "Population size must be greater than zero.");
@@ -67,7 +57,8 @@ namespace PopOptBox.Base.Management
             if (initialPopulation == null)
                 return;
 
-            foreach (var ind in initialPopulation) AddIndividual(ind);
+            foreach (var ind in initialPopulation)
+                AddIndividual(ind);
         }
 
         /// <summary>
@@ -76,8 +67,6 @@ namespace PopOptBox.Base.Management
         public virtual Population Clone()
         {
             return new Population(
-                solutionToFitness,
-                penalty,
                 TargetSize,
                 members.Select(m => m.Clone()),
                 ConstantLengthDecisionVector);
@@ -186,7 +175,7 @@ namespace PopOptBox.Base.Management
         /// <exception cref="ArgumentException">
         /// Thrown if: 
         /// 1) we are expecting individuals to have the same length Decision Vector and it is not true; 
-        /// 2) The Individual is not yet evaluated.
+        /// 2) The Individual is not yet evaluated or fitness assessed.
         /// </exception>
         public void AddIndividual(Individual ind)
         {
@@ -195,31 +184,14 @@ namespace PopOptBox.Base.Management
                     throw new ArgumentException(
                         "Decision Vector is not the right length!");
             
-            if (ind.State == IndividualState.New || ind.State == IndividualState.Evaluating)
-                throw new ArgumentException("Individual is not yet evaluated.");
-            
             if (ind.State != IndividualState.FitnessAssessed)
-                SetFitness(ind);
+                throw new ArgumentException("Individual is not yet evaluated and given a fitness.");
             
             // Add to population
             members.Add(ind);
+            // TODO: Update domination 
 
             Sort();
-        }
-
-        /// <summary>
-        /// Applies the population's fitness assessment logic to the <see cref="Individual"/>.
-        /// </summary>
-        /// <param name="ind">The <see cref="Individual"/> whose Fitness should be set.</param>
-        public void SetFitness(Individual ind)
-        {
-            //If the individual has been evaluated and is legal, 
-            // assign fitness and store in population.
-            //If the individual has been evaluated but is not legal, 
-            // assign soft penalty and store in population.
-            ind.SetFitness(ind.Legal ? solutionToFitness : penalty);
-
-            ind.State = IndividualState.FitnessAssessed;
         }
 
         /// <summary>
@@ -239,7 +211,7 @@ namespace PopOptBox.Base.Management
         {
             if (members.Count == 0)
                 throw new InvalidOperationException("Population has no members.");
-
+            // TODO: Update domination 
             members.Remove(Worst());
             AddIndividual(individualToInsert);
         }
@@ -258,7 +230,7 @@ namespace PopOptBox.Base.Management
             
             if (index < 0 || index >= members.Count)
                 throw new ArgumentOutOfRangeException(nameof(index), $"{index} is not a valid index into the population.");
-            
+            // TODO: Update domination 
             members.RemoveAt(index);
             
             AddIndividual(individualToInsert);
@@ -274,7 +246,7 @@ namespace PopOptBox.Base.Management
         {
             if (members.Count == 0)
                 throw new InvalidOperationException("Population has no members.");
-
+            // TODO: Update domination 
             var removedOk = members.Remove(individualToRemove);
             if (!removedOk)
                 throw new InvalidOperationException("Old individual was not found in population.");

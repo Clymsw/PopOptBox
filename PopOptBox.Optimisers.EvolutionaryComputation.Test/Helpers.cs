@@ -31,6 +31,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test
             ind.FinishEvaluating();
 
             ind.SetFitness(SolutionToFitness.SingleObjectiveMinimise);
+            ind.State = IndividualState.FitnessAssessed;
         }
     }
 }

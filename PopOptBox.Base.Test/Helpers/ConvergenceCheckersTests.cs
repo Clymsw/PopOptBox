@@ -21,12 +21,11 @@ namespace PopOptBox.Base.Helpers.Test
             worstDv = new[] { 0.1, bestDv[1] + DvDifference, 1.2 };
 
             var ind1 = ObjectCreators.EvaluateIndividual(ObjectCreators.GetIndividual(worstDv), BestFitness + FitnessDifference);
+            ind1.SetFitness(SolutionToFitness.SingleObjectiveMinimise);
             var ind2 = ObjectCreators.EvaluateIndividual(ObjectCreators.GetIndividual(bestDv), BestFitness);
+            ind2.SetFitness(SolutionToFitness.SingleObjectiveMinimise);
 
-            pop = ObjectCreators.GetEmptyPopulation(
-                SolutionToFitness.SingleObjectiveMinimise, 
-                Penalty.DeathPenalty,
-                140, true);
+            pop = ObjectCreators.GetEmptyPopulation(140, true);
             pop.AddIndividual(ind1);
             pop.AddIndividual(ind2);
         }

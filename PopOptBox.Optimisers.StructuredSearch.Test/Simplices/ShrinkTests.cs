@@ -27,10 +27,8 @@ namespace PopOptBox.Optimisers.StructuredSearch.Simplices.Test
         {
             var theOperator = new Shrink(0.5);
 
-            var inds = Helpers.CreateEvaluatedIndividualsFromArray(testValues);
-            var simplex = new Simplex(
-                SolutionToFitness.SingleObjectiveMinimise, Penalty.DeathPenalty,
-                inds);
+            var inds = Helpers.CreateFitnessAssessedIndividualsFromArray(testValues);
+            var simplex = new Simplex(inds);
 
             var newLocation = theOperator.Operate(simplex);
 

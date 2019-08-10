@@ -11,16 +11,25 @@ namespace PopOptBox.Base.Management
     /// </summary>
     public abstract class Optimiser : IOptimiser
     {
+        private readonly Func<double[], double> solutionToFitness;
+        private readonly Func<double[], double> penalty;
+
         #region Constructor
 
         /// <summary>
         /// Constructs the optimiser.
         /// </summary>
         /// <param name="initialPopulation">An initial population (can be empty).</param>
+        /// <param name="solutionToFitness">Conversion function to change Solution Vector into Fitness. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
+        /// <param name="penalty">Function determining what penalty to assign for illegal individuals. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
         protected Optimiser(
-            Population initialPopulation)
+            Population initialPopulation,
+            Func<double[], double> solutionToFitness,
+            Func<double[], double> penalty)
         {
             Population = initialPopulation;
+            this.solutionToFitness = solutionToFitness;
+            this.penalty = penalty;
         }
 
         #endregion
@@ -88,6 +97,7 @@ namespace PopOptBox.Base.Management
         {
             try
             {
+                SetFitness(individual);
                 Population.AddIndividual(individual);
             }
             catch (Exception e)
@@ -96,6 +106,17 @@ namespace PopOptBox.Base.Management
                 return false;
             }
             return true;
+        }
+
+        protected void SetFitness(Individual individual)
+        {
+            //If the individual has been evaluated and is legal, 
+            // assign fitness and store in population.
+            //If the individual has been evaluated but is not legal, 
+            // assign soft penalty and store in population.
+            individual.SetFitness(individual.Legal ? solutionToFitness : penalty);
+
+            individual.State = IndividualState.FitnessAssessed;
         }
 
         /// <summary>

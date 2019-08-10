@@ -32,6 +32,25 @@ namespace PopOptBox.Base.Management
         public double[] SolutionVector { get; private set; }
 
         /// <summary>
+        /// The <see cref="Individual"/>s which this individual currently dominates.
+        /// Managed by <see cref="Optimiser"/>.
+        /// <seealso cref="IsDominating(Individual)"/>
+        /// </summary>
+        public List<Individual> Dominating { get; private set; }
+
+        /// <summary>
+        /// The <see cref="Individual"/>s which are currently dominating this individual.
+        /// Managed by <see cref="Optimiser"/>.
+        /// <seealso cref="IsDominatedBy(Individual)"/>
+        /// </summary>
+        public List<Individual> DominatedBy { get; private set; }
+
+        /// <summary>
+        /// The Pareto Front rank of this <see cref="Individual"/> in the current <see cref="Population"/>.
+        /// </summary>
+        public int Rank => DominatedBy.Count;
+
+        /// <summary>
         /// The Fitness, used to rank individuals and ultimately determine optimality.
         /// Lower is better.
         /// </summary>
@@ -58,6 +77,8 @@ namespace PopOptBox.Base.Management
         public Individual(DecisionVector decisionVector)
         {
             DecisionVector = decisionVector;
+            Dominating = new List<Individual>();
+            DominatedBy = new List<Individual>();
         }
 
         /// <summary>
@@ -70,14 +91,20 @@ namespace PopOptBox.Base.Management
             {
                 propCopy.Add(key, properties[key]);
             }
+            Individual[] dominatedBy = new Individual[DominatedBy.Count];
+            DominatedBy.CopyTo(dominatedBy);
+            Individual[] dominating = new Individual[Dominating.Count];
+            DominatedBy.CopyTo(dominating);
 
             return new Individual(DecisionVector)
             {
-                SolutionVector = (double[]) SolutionVector?.Clone(),
+                SolutionVector = (double[])SolutionVector?.Clone(),
                 Fitness = Fitness,
                 properties = propCopy,
                 Legal = Legal,
-                State = State
+                State = State,
+                Dominating = dominating.ToList(),
+                DominatedBy = dominatedBy.ToList()
             };
         }
 
@@ -122,19 +149,6 @@ namespace PopOptBox.Base.Management
         }
 
         /// <summary>
-        /// Call when finished evaluating.
-        /// </summary>
-        /// <remarks>Managed automatically by <see cref="Evaluator{TReality}"/>.</remarks>
-        /// <exception cref="InvalidOperationException">Individual is not evaluating.</exception>
-        internal void FinishEvaluating()
-        {
-            if (State == IndividualState.Evaluating)
-                State = IndividualState.Evaluated;
-            else
-                throw new InvalidOperationException("Individual is not evaluating!");
-        }
-
-        /// <summary>
         /// Stores a Key-Value pair in the individual's properties.
         /// If key already exists, value is over-written.
         /// Use <seealso cref="GetPropertyNames"/> to find existing property names.
@@ -175,10 +189,15 @@ namespace PopOptBox.Base.Management
         /// <exception cref="ArgumentOutOfRangeException">Thrown when property name does not exist.</exception>
         public void SetSolution(string keyName)
         {
+            if (State != IndividualState.Evaluating)
+                throw new InvalidOperationException("Individual is not evaluating!");
+
             var solutionValue = GetProperty<double[]>(keyName);
             SolutionVector = solutionValue ??
                              throw new ArgumentOutOfRangeException(nameof(keyName),
-                                 "Invalid key to set solution!");
+                                 "Invalid key provided to get solution!");
+
+            State = IndividualState.Evaluated;
         }
 
         /// <summary>
@@ -189,7 +208,12 @@ namespace PopOptBox.Base.Management
         /// <exception cref="InvalidOperationException">Thrown when Solution Vector is null. <seealso cref="SetSolution(string)"/>.</exception>
         public void SetFitness(Func<double[], double> solutionToFitness)
         {
+            if (State != IndividualState.Evaluated)
+                throw new InvalidOperationException("Individual is not evaluated!");
+
             Fitness = solutionToFitness(SolutionVector);
+
+            State = IndividualState.FitnessAssessed;
         }
 
         /// <summary>
@@ -222,7 +246,7 @@ namespace PopOptBox.Base.Management
         /// <param name="other">The other Individual to compare.</param>
         /// <returns><see langword="true"/> if the other individual is dominated.</returns>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the two Solution Vectors have different lengths.</exception>
-        public bool Dominates(Individual other)
+        public bool IsDominating(Individual other)
         {
             if (other.SolutionVector.Length != SolutionVector.Length)
                 throw new ArgumentOutOfRangeException(nameof(other), 

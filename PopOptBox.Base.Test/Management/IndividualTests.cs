@@ -63,6 +63,7 @@ namespace PopOptBox.Base.Management.Test
 
             Assert.Equal(ind1, ind);
 
+            ind1.SendForEvaluation();
             ind1.SetProperty(Cloning_Key, 1.2);
             ind1.SetProperty(ObjectCreators.Solution_Key, new[]{0.2, 5.1, 55});
             ind1.SetSolution(ObjectCreators.Solution_Key);
@@ -81,9 +82,11 @@ namespace PopOptBox.Base.Management.Test
             var vector2 = testVector.ToArray();
             var dv2 = ObjectCreators.GetDecisionVector(vector2);
             var ind2 = new Individual(dv2);
-            
+
+            ind.SendForEvaluation();
             ind.SetProperty(ObjectCreators.Solution_Key, new[] { 2.6 });
             ind.SetSolution(ObjectCreators.Solution_Key);
+            ind2.SendForEvaluation();
             ind2.SetProperty(ObjectCreators.Solution_Key, new[] { 2.6 });
             ind2.SetSolution(ObjectCreators.Solution_Key);
             
@@ -93,6 +96,7 @@ namespace PopOptBox.Base.Management.Test
         [Fact]
         public void Individual_SolutionSettingWorks()
         {
+            ind.SendForEvaluation();
             var solution = new[] {0.2, 5.1, 55};
             ind.SetProperty(ObjectCreators.Solution_Key, solution);
             ind.SetSolution(ObjectCreators.Solution_Key);
@@ -105,6 +109,7 @@ namespace PopOptBox.Base.Management.Test
         [Fact]
         public void Individual_FitnessSettingWorks()
         {
+            ind.SendForEvaluation();
             var solution = new[] {0.2, 5.1, 55};
             ind.SetProperty(ObjectCreators.Solution_Key, solution);
             ind.SetSolution(ObjectCreators.Solution_Key);
@@ -116,69 +121,77 @@ namespace PopOptBox.Base.Management.Test
         [Fact]
         public void Dominates_IsDominatedBy_OtherSolutionVectorIsDifferentLength_Throws()
         {
+            ind.SendForEvaluation();
             var solution = new[] {0.2, 5.1, 55};
             ind.SetProperty(ObjectCreators.Solution_Key, solution);
-            ind.SetSolution(ObjectCreators.Solution_Key);
             
             var otherInd = ind.Clone();
             var solution2 = new[] {0.1, 54.9};
             otherInd.SetProperty(ObjectCreators.Solution_Key, solution2);
+
+            ind.SetSolution(ObjectCreators.Solution_Key);
             otherInd.SetSolution(ObjectCreators.Solution_Key);
             
             Assert.Throws<ArgumentOutOfRangeException>(() => ind.IsDominatedBy(otherInd));
-            Assert.Throws<ArgumentOutOfRangeException>(() => otherInd.Dominates(ind));
+            Assert.Throws<ArgumentOutOfRangeException>(() => otherInd.IsDominating(ind));
         }
 
         [Fact]
         public void Dominates_IsDominatedBy_OtherIsStrictlyBetter_ReturnsTrue()
         {
+            ind.SendForEvaluation();
             var solution = new[] {0.2, 5.1, 55};
             ind.SetProperty(ObjectCreators.Solution_Key, solution);
-            ind.SetSolution(ObjectCreators.Solution_Key);
             
             var otherInd = ind.Clone();
             var solution2 = new[] {0.1, 5.0, 54.9};
             otherInd.SetProperty(ObjectCreators.Solution_Key, solution2);
+
             otherInd.SetSolution(ObjectCreators.Solution_Key);
-            
+            ind.SetSolution(ObjectCreators.Solution_Key);
+
             Assert.True(ind.IsDominatedBy(otherInd));
-            Assert.False(ind.Dominates(otherInd));
-            Assert.True(otherInd.Dominates(ind));
+            Assert.False(ind.IsDominating(otherInd));
+            Assert.True(otherInd.IsDominating(ind));
             Assert.False(otherInd.IsDominatedBy(ind));
         }
         
         [Fact]
         public void Dominates_IsDominatedBy_OtherIsEqual_ReturnsFalse()
         {
+            ind.SendForEvaluation();
             var solution = new[] {0.2, 5.1, 55};
             ind.SetProperty(ObjectCreators.Solution_Key, solution);
-            ind.SetSolution(ObjectCreators.Solution_Key);
             
             var otherInd = ind.Clone();
             otherInd.SetProperty(ObjectCreators.Solution_Key, solution);
+
             otherInd.SetSolution(ObjectCreators.Solution_Key);
-            
+            ind.SetSolution(ObjectCreators.Solution_Key);
+
             Assert.False(ind.IsDominatedBy(otherInd));
-            Assert.False(ind.Dominates(otherInd));
-            Assert.False(otherInd.Dominates(ind));
+            Assert.False(ind.IsDominating(otherInd));
+            Assert.False(otherInd.IsDominating(ind));
             Assert.False(otherInd.IsDominatedBy(ind));
         }
         
         [Fact]
         public void Dominates_IsDominatedBy_OnParetoFront_ReturnsFalse()
         {
+            ind.SendForEvaluation();
             var solution = new[] {0.2, 5.1, 55};
             ind.SetProperty(ObjectCreators.Solution_Key, solution);
-            ind.SetSolution(ObjectCreators.Solution_Key);
             
             var otherInd = ind.Clone();
             var solution2 = new[] {0.1, 5.2, 55.0};
             otherInd.SetProperty(ObjectCreators.Solution_Key, solution2);
+
             otherInd.SetSolution(ObjectCreators.Solution_Key);
-            
+            ind.SetSolution(ObjectCreators.Solution_Key);
+
             Assert.False(ind.IsDominatedBy(otherInd));
-            Assert.False(ind.Dominates(otherInd));
-            Assert.False(otherInd.Dominates(ind));
+            Assert.False(ind.IsDominating(otherInd));
+            Assert.False(otherInd.IsDominating(ind));
             Assert.False(otherInd.IsDominatedBy(ind));
         }
     }

@@ -62,9 +62,7 @@ namespace PopOptBox.Optimisers.StructuredSearch.Simplices.Test
                 Helpers.EvaluateIndividual(ind);
             }
             
-            Assert.Throws<ArgumentException>(() => new Simplex(
-                SolutionToFitness.SingleObjectiveMinimise, Penalty.DeathPenalty,
-                testInds));
+            Assert.Throws<ArgumentException>(() => new Simplex(testInds));
         }
         
         [Fact]
@@ -87,9 +85,7 @@ namespace PopOptBox.Optimisers.StructuredSearch.Simplices.Test
                 Helpers.EvaluateIndividual(ind);
             }
             
-            Assert.Throws<ArgumentException>(() => new Simplex(
-                SolutionToFitness.SingleObjectiveMinimise, Penalty.DeathPenalty,
-                testInds));
+            Assert.Throws<ArgumentException>(() => new Simplex(testInds));
         }
         
         [Fact]
@@ -112,9 +108,7 @@ namespace PopOptBox.Optimisers.StructuredSearch.Simplices.Test
                 Helpers.EvaluateIndividual(ind);
             }
             
-            Assert.Throws<ArgumentException>(() => new Simplex(
-                SolutionToFitness.SingleObjectiveMinimise, Penalty.DeathPenalty,
-                testInds));
+            Assert.Throws<ArgumentException>(() => new Simplex(testInds));
         }
     }
 }

@@ -19,10 +19,8 @@ namespace PopOptBox.Optimisers.StructuredSearch.Simplices.Test
         [InlineData(new[] { 0.5, 0.5 }, new[] { 0.0, 1 }, new[] { 1.0, 0 }, new[] { 0.0, 0 })]
         public void GetMean_TwoDim_ReturnsCorrectValue(double[] expectedAnswer, params double[][] testValues)
         {
-            var inds = Helpers.CreateEvaluatedIndividualsFromArray(testValues);
-            var simplex = new Simplex(
-                SolutionToFitness.SingleObjectiveMinimise, Penalty.DeathPenalty,
-                inds);
+            var inds = Helpers.CreateFitnessAssessedIndividualsFromArray(testValues);
+            var simplex = new Simplex(inds);
             
             // Operate() is set up to call GetMean() function.
             var meanLocation = operatorMock.Operate(simplex);

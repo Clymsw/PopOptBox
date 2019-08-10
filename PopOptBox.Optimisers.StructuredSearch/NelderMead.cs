@@ -53,7 +53,7 @@ namespace PopOptBox.Optimisers.StructuredSearch
             Func<double[], double> penalty,
             DecisionVector initialLocation, 
             HyperParameterManager hyperParameters) :
-            base(new Simplex(solutionToFitness, penalty, initialLocation.Count))
+            base(new Simplex(initialLocation.Count), solutionToFitness, penalty)
         {
             // Set up simplex operations
             OperationsManager = new NelderMeadSimplexOperationsManager(hyperParameters);
@@ -107,6 +107,10 @@ namespace PopOptBox.Optimisers.StructuredSearch
 
         protected override bool ReInsert(Individual individual)
         {
+            // Assign fitness
+            SetFitness(individual);
+
+            // Initial simplex creation
             if (InitialVerticesStillUnevaluated.Count > 0)
             {
                 if (InitialVerticesStillUnevaluated.Contains(individual.DecisionVector))
@@ -123,15 +127,15 @@ namespace PopOptBox.Optimisers.StructuredSearch
 
             if (VerticesNotEvaluated.Count == 0)
             {
-                throw new System.ArgumentOutOfRangeException(nameof(individual), "This vertex was not expected");
+                throw new ArgumentOutOfRangeException(nameof(individual), "This vertex was not expected");
             }
             if (!individual.DecisionVector.Equals(VerticesNotEvaluated.First()))
             {
-                throw new System.ArgumentOutOfRangeException(nameof(individual), "This vertex was not expected");
+                throw new ArgumentOutOfRangeException(nameof(individual), "This vertex was not expected");
             }
             VerticesNotEvaluated.Remove(individual.DecisionVector);
 
-            //NM Logic
+            // Into Nelder Mead logic
             var fitnesses = Population.GetMemberFitnesses();
 
             var bestFitness = fitnesses.First();
@@ -141,8 +145,6 @@ namespace PopOptBox.Optimisers.StructuredSearch
                 nextToWorstFitness = bestFitness;
             else
                 nextToWorstFitness = fitnesses.ElementAt(fitnesses.Count() - 2);
-
-            Population.SetFitness(individual);
             
             switch (CurrentOperation)
             {

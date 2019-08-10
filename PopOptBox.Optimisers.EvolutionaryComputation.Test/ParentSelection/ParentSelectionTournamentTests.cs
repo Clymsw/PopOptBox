@@ -18,9 +18,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.ParentSelection.Test
                 fitnesses.Select((f, i) => new[] { 0.5, 1.5 }).ToArray(),
                 fitnesses);
 
-            testPop = new Population(
-                SolutionToFitness.SingleObjectiveMinimise, Penalty.DeathPenalty,
-                initialPopulation: inds);
+            testPop = new Population(initialPopulation: inds);
         }
 
         [Fact]

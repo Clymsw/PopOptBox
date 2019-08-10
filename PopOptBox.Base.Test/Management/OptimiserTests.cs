@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Test.Helpers;
 using Xunit;
 
@@ -47,13 +48,23 @@ namespace PopOptBox.Base.Management.Test
 
             Assert.Throws<ArgumentException>(() => optimiserMock.ReInsert(new[] {newInd}));
         }
-        
+
+        [Fact]
+        public void Reinsertion_FitnessAssessedIndividual_NotAllowed()
+        {
+            var newInd = ObjectCreators.GetIndividual(builder.StartingDecVec);
+            ObjectCreators.EvaluateIndividual(newInd);
+            newInd.SetFitness(SolutionToFitness.SingleObjectiveMinimise);
+
+            Assert.Throws<ArgumentException>(() => optimiserMock.ReInsert(new[] { newInd }));
+        }
+
         [Fact]
         public void Reinsertion_EvaluatedIndividual_AddedToPopulation()
         {
             var newInd = ObjectCreators.GetIndividual(builder.StartingDecVec);
             ObjectCreators.EvaluateIndividual(newInd);
-            
+
             Assert.Empty(optimiserMock.Population);
             
             optimiserMock.ReInsert(new[] {newInd});

@@ -63,7 +63,6 @@ namespace PopOptBox.Base.Conversion
         {
             ind.SetProperty(solutionKey, solVector);
             ind.SetSolution(solutionKey);
-            ind.FinishEvaluating();
         }
     }
 }
