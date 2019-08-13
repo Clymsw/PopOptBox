@@ -1,12 +1,14 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using PopOptBox.Base.Calculation;
+using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Management;
 using PopOptBox.Base.Test.Helpers;
 using Xunit;
 
-namespace PopOptBox.Base.Helpers.Test
+namespace PopOptBox.Base.Calculation.Test
 {
-    public class ConvergenceCheckersTests
+    public class PopulationMetricsTests
     {
         private readonly Population pop;
         private readonly double[] bestDv;
@@ -15,7 +17,7 @@ namespace PopOptBox.Base.Helpers.Test
         private const double FitnessDifference = 2;
         private const double DvDifference = 0.3;
 
-        public ConvergenceCheckersTests()
+        public PopulationMetricsTests()
         {
             bestDv = new[] { 0.1, 0.5, 1.2 };
             worstDv = new[] { 0.1, bestDv[1] + DvDifference, 1.2 };
@@ -30,7 +32,32 @@ namespace PopOptBox.Base.Helpers.Test
             pop.AddIndividual(ind2);
         }
 
+        #region Centroid
+
+        [Fact]
+        public void Centroid_DifferentLengthDecisionVectors_Throws()
+        {
+            var newInd = ObjectCreators.EvaluateIndividual(
+                ObjectCreators.GetIndividual(Enumerable.Repeat<double>(1.2, bestDv.Length+1)), 
+                BestFitness + FitnessDifference);
+            newInd.SetFitness(SolutionToFitnessSingleObjective.Minimise);
+            
+            var pop2 = ObjectCreators.GetEmptyPopulation(5, false);
+            pop2.AddIndividual(pop.Best());
+            pop2.AddIndividual(newInd);
+            Assert.Throws<InvalidOperationException>(() => pop2.Centroid());
+        }
+
+        [Fact]
+        public void Centroid_CalculatesCorrectly()
+        {
+            Assert.Equal(bestDv.Select((v,i) => 0.5 * (v + worstDv[i])), pop.Centroid());
+        }
+        
+        #endregion
+            
         #region AbsoluteFitnessConvergence
+        
         [Fact]
         public void AbsoluteFitnessConvergence_MeetsCriterion_IsTrue()
         {
@@ -42,9 +69,11 @@ namespace PopOptBox.Base.Helpers.Test
         {
             Assert.False(pop.AbsoluteFitnessConvergence(FitnessDifference / 2));
         }
+        
         #endregion
 
         #region RelativeFitnessConvergence
+        
         [Fact]
         public void RelativeFitnessConvergence_MeetsCriterion_IsTrue()
         {
@@ -56,9 +85,11 @@ namespace PopOptBox.Base.Helpers.Test
         {
             Assert.False(pop.RelativeFitnessConvergence(FitnessDifference / BestFitness / 2));
         }
+        
         #endregion
 
         #region AbsoluteDecisionVectorConvergence
+        
         [Fact]
         public void AbsoluteDecisionVectorConvergence_MeetsSingleCriterion_IsTrue()
         {
@@ -84,9 +115,11 @@ namespace PopOptBox.Base.Helpers.Test
             var criteria = bestDv.Select(v => DvDifference/2).ToArray();
             Assert.False(pop.AbsoluteDecisionVectorConvergence(criteria));
         }
+        
         #endregion
 
         #region RelativeDecisionVectorDivergence
+        
         [Fact]
         public void RelativeDecisionVectorDivergence_MeetsSingleCriterion_IsTrue()
         {
@@ -112,6 +145,7 @@ namespace PopOptBox.Base.Helpers.Test
             var criteria = bestDv.Select(v => (DvDifference + 1E-9) / v / 2).ToArray();
             Assert.False(pop.RelativeDecisionVectorDivergence(criteria));
         }
+        
         #endregion
     }
 }
