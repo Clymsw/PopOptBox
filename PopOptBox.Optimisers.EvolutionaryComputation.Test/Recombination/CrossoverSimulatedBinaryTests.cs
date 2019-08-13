@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using PopOptBox.Base.Variables;
 using Xunit;
 
@@ -20,11 +22,20 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination.Test
         }
         
         [Fact]
-        public void Operate_EqualLengthVectors_NoBias_ReturnsAverage()
+        public void Operate_VeryHighEta_ReturnsOneOrOtherParent()
         {
-            var cx = new CrossoverSimulatedBinary(2);
-            var child = cx.Operate(parent1, parent2);
-            // TODO!
+            var cx = new CrossoverSimulatedBinary(int.MaxValue - 10);
+            var child = cx.Operate(parent1, parent2)
+                .Select(d => (double)d).ToArray();
+            
+            // Since we've set eta so high, the child should always be very close to one or other parent.
+            Assert.True(
+                child
+                    .Select((d,i) => Math.Abs(d - (double)parent1.ElementAt(i)))
+                    .All(d => d < 1e-6) 
+                || child
+                    .Select((d,i) => Math.Abs(d - (double)parent2.ElementAt(i)))
+                    .All(d => d < 1e-6));
         }
     }
 }
