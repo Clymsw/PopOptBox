@@ -32,25 +32,6 @@ namespace PopOptBox.Base.Management
         public double[] SolutionVector { get; private set; }
 
         /// <summary>
-        /// The <see cref="Individual"/>s which this individual currently dominates.
-        /// Managed by <see cref="Optimiser"/>.
-        /// <seealso cref="IsDominating(Individual)"/>
-        /// </summary>
-        public List<Individual> Dominating { get; private set; }
-
-        /// <summary>
-        /// The <see cref="Individual"/>s which are currently dominating this individual.
-        /// Managed by <see cref="Optimiser"/>.
-        /// <seealso cref="IsDominatedBy(Individual)"/>
-        /// </summary>
-        public List<Individual> DominatedBy { get; private set; }
-
-        /// <summary>
-        /// The Pareto Front rank of this <see cref="Individual"/> in the current <see cref="Population"/>.
-        /// </summary>
-        public int Rank => DominatedBy.Count;
-
-        /// <summary>
         /// The Fitness, used to rank individuals and ultimately determine optimality.
         /// Lower is better.
         /// </summary>
@@ -77,8 +58,6 @@ namespace PopOptBox.Base.Management
         public Individual(DecisionVector decisionVector)
         {
             DecisionVector = decisionVector;
-            Dominating = new List<Individual>();
-            DominatedBy = new List<Individual>();
         }
 
         /// <summary>
@@ -91,10 +70,6 @@ namespace PopOptBox.Base.Management
             {
                 propCopy.Add(key, properties[key]);
             }
-            Individual[] dominatedBy = new Individual[DominatedBy.Count];
-            DominatedBy.CopyTo(dominatedBy);
-            Individual[] dominating = new Individual[Dominating.Count];
-            DominatedBy.CopyTo(dominating);
 
             return new Individual(DecisionVector)
             {
@@ -103,8 +78,6 @@ namespace PopOptBox.Base.Management
                 properties = propCopy,
                 Legal = Legal,
                 State = State,
-                Dominating = dominating.ToList(),
-                DominatedBy = dominatedBy.ToList()
             };
         }
 
@@ -223,36 +196,6 @@ namespace PopOptBox.Base.Management
         public void SetLegality(bool legal)
         {
             Legal = legal;
-        }
-
-        /// <summary>
-        /// Gets whether another Individual strictly dominates this one.
-        /// </summary>
-        /// <param name="other">The other Individual to compare.</param>
-        /// <returns><see langword="true"/> if this individual is dominated.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when the two Solution Vectors have different lengths.</exception>
-        public bool IsDominatedBy(Individual other)
-        {
-            if (other.SolutionVector.Length != SolutionVector.Length)
-                throw new ArgumentOutOfRangeException(nameof(other), 
-                    "Other individual must have the same number of objectives in its Solution Vector.");
-            
-            return other.SolutionVector.Select((v, i) => v < SolutionVector.ElementAt(i)).All(b => b);
-        }
-
-        /// <summary>
-        /// Gets whether this Individual strictly dominates another one.
-        /// </summary>
-        /// <param name="other">The other Individual to compare.</param>
-        /// <returns><see langword="true"/> if the other individual is dominated.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when the two Solution Vectors have different lengths.</exception>
-        public bool IsDominating(Individual other)
-        {
-            if (other.SolutionVector.Length != SolutionVector.Length)
-                throw new ArgumentOutOfRangeException(nameof(other), 
-                    "Other individual must have the same number of objectives in its Solution Vector.");
-            
-            return SolutionVector.Select((v, i) => v < other.SolutionVector.ElementAt(i)).All(b => b);
         }
 
         #endregion
