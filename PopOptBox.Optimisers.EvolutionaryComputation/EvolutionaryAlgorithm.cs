@@ -13,7 +13,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
     /// An Evolutionary, or Genetic, Algorithm performs guided random search,
     /// based on recombining (crossing-over) groups of parents
     /// and then mutating the children.
-    /// See Goldberg, 1976; Deb et al., 2002
+    /// See Goldberg, 1989; Deb et al., 2002
     /// </summary>
     public class EvolutionaryAlgorithm : Optimiser
     {

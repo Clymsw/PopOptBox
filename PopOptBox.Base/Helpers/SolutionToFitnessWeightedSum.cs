@@ -8,7 +8,7 @@ namespace PopOptBox.Base.Helpers
     /// through applying a weighted average.
     /// <see cref="Management.Optimiser"/>.
     /// </summary>
-    public class SolutionToFitnessWeightedAverage
+    public class SolutionToFitnessWeightedSum
     {
         private readonly double[] weights;
 
@@ -19,7 +19,7 @@ namespace PopOptBox.Base.Helpers
         /// The weights to multiply each objective by. 
         /// Dimensions to be maximised should have a negative value.
         /// </param>
-        public SolutionToFitnessWeightedAverage(IEnumerable<double> weights)
+        public SolutionToFitnessWeightedSum(IEnumerable<double> weights)
         {
             this.weights = weights.ToArray();
         }
@@ -30,7 +30,7 @@ namespace PopOptBox.Base.Helpers
         /// <param name="solution">The Solution Vector.</param>
         /// <returns>The Fitness.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the weights vector and solution vector are different lengths.</exception>
-        public double Weight(double[] solution)
+        public double CalculateFitness(double[] solution)
         {
             if (solution.Length != weights.Length)
                 throw new System.ArgumentOutOfRangeException(nameof(solution),

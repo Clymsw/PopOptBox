@@ -28,7 +28,7 @@ namespace PopOptBox.Base.Helpers
         /// <param name="solution">The Solution Vector.</param>
         /// <returns>The Fitness.</returns>
         /// <exception cref="System.ArgumentOutOfRangeException">Thrown when the optimal point vector and solution vector are different lengths.</exception>
-        public double Weight(double[] solution)
+        public double CalculateFitness(double[] solution)
         {
             if (solution.Length != optimalPoint.Length)
                 throw new System.ArgumentOutOfRangeException(nameof(solution),
