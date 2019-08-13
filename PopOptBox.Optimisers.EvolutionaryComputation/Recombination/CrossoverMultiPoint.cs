@@ -33,8 +33,9 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
         /// The order the parents are provided does not matter, they are selected at random to ensure uniform probability distribution over outcomes.
         /// </summary>
         /// <remarks>
-        /// All outcomes are equally likely, including that one or the other parent is returned complete.
-        /// The parents can have different length decision vectors; the parent with the correct length <see cref="DecisionSpace"/> is used.
+        /// All outcomes are equally likely, excluding that one or the other parent is returned complete.
+        /// The parents can have different length decision vectors;
+        /// the <see cref="DecisionSpace"/> from the parent with the same length as the child is used.
         /// </remarks>
         /// <param name="parents">Two <see cref="DecisionVector"/>s to use as a parents.</param>
         /// <returns>A new <see cref="DecisionVector"/>.</returns>
@@ -47,16 +48,17 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
                 : new[] {parents[0], parents[1]};
 
             // Select a crossover location
-            // This lies in between vector elements, hence Count + 1
+            // This lies in between vector elements, hence Count - 1 (to exclude the two end points)
             // The vectors might be different lengths, so select the shortest one.
             var crossoverPoints = rngManager.GetLocations(
                 sortedParents[0].Count > sortedParents[1].Count
-                    ? sortedParents[1].Count + 1
-                    : sortedParents[0].Count + 1,
-                numberOfCrossoverLocations, 
-                false, 
-                1).ToList();
-            crossoverPoints.Add(0);
+                    ? sortedParents[1].Count - 1
+                    : sortedParents[0].Count - 1,
+                numberOfCrossoverLocations,
+                false,
+                1)
+                .Select(i => i + 1).ToList(); // to exclude end points properly
+            crossoverPoints.Add(0); // for the difference calculation: see below...
             crossoverPoints.Sort();
 
             var newVector = new List<object>();
