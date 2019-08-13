@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using PopOptBox.Base.Management;
+using MathNet.Numerics.LinearAlgebra;
 
 namespace PopOptBox.Base.Calculation
 {
@@ -19,7 +20,13 @@ namespace PopOptBox.Base.Calculation
         /// <returns>A double array representing the centroid location.</returns>
         public static double[] Centroid(this Population pop)
         {
-            throw new NotImplementedException();
+            if (!pop.ConstantLengthDecisionVector) 
+                throw new InvalidOperationException("This function is not valid for a population with variable length Decision Vectors.");
+            
+            var decisionVectors = pop.GetMemberDecisionVectors().Select(dv => dv.Select(d => (double) d));
+            var matrix = Matrix<double>.Build.DenseOfColumns(decisionVectors);
+            var centroid = matrix.RowSums() / matrix.ColumnCount;
+            return centroid.ToArray();
         }
 
         /// <summary>
