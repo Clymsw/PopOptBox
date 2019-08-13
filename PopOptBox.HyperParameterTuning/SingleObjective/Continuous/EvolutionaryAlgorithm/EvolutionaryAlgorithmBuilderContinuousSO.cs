@@ -11,15 +11,17 @@ using PopOptBox.Optimisers.EvolutionaryComputation.Reinsertion;
 
 namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.EvolutionaryAlgorithm
 {
-    public class EvolutionaryAlgorithmBuilder : OptimiserBuilder
+    public class EvolutionaryAlgorithmBuilderContinuousSO : OptimiserBuilder
     {
+        private readonly Population population;
         private readonly DecisionSpace decisionSpace;
         private readonly IParentSelectionOperator parentSelector;
         private readonly IRecombinationOperator recombinationOperator;
         private readonly IMutationOperator mutationOperator;
         private readonly IReinsertionOperator reinsertionOperator;
             
-        public EvolutionaryAlgorithmBuilder(
+        public EvolutionaryAlgorithmBuilderContinuousSO(
+            Population population,
             DecisionSpace decisionSpace, 
             HyperParameterManager hyperParameters,
             IParentSelectionOperator parentSelector,
@@ -29,7 +31,7 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
         {
             this.decisionSpace = decisionSpace;
             HyperParameters.AddFromExistingHyperParameterSet(hyperParameters);
-
+            this.population = population;
             this.parentSelector = parentSelector;
             this.recombinationOperator = recombinationOperator;
             this.mutationOperator = mutationOperator;
@@ -48,7 +50,9 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
             if (populationSize != null)
                 hyps.UpdateHyperParameterValue(
                     EvolutionaryAlgorithmHyperParameters.Population_Size, populationSize);
-
+            var population = new Population(
+                hyps.GetHyperParameterValue<int>(EvolutionaryAlgorithmHyperParameters.Population_Size));
+            
             IParentSelectionOperator parentSelector;
             switch (parentSelection)
             {
@@ -81,7 +85,7 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
             {
                 case AvailableOperators.RecombinationOperator.MultiPoint:
                     recombinationOperator = new CrossoverMultiPoint(
-                        1);
+                        2);
                     break;
                 
                 case AvailableOperators.RecombinationOperator.ArithmeticTwoParentWeighted:
@@ -95,6 +99,11 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
                         2);
                     break;
 
+                case AvailableOperators.RecombinationOperator.SbxSa2:
+                    recombinationOperator = new CrossoverSimulatedBinarySelfAdaptive2(
+                        population, 2);
+                    break;
+                    
                 case AvailableOperators.RecombinationOperator.ArithmeticMultiParent:
                     recombinationOperator = new CrossoverArithmeticMultiParent();
                     hyps.UpdateHyperParameterValue(
@@ -126,8 +135,8 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
                 case AvailableOperators.MutationOperators.AddRandomNumber:
                     mutationOperator = new MutationAddRandomNumber(
                         0.1, 
-                        0.1, 
-                        1);
+                        0.5, 
+                        2);
                     break;
                 
                 case AvailableOperators.MutationOperators.RandomSwap:
@@ -165,14 +174,16 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
                     throw new NotImplementedException();
             }
             
-            return new EvolutionaryAlgorithmBuilder(problemSpace, hyps, 
+            return new EvolutionaryAlgorithmBuilderContinuousSO(population, problemSpace, hyps, 
                 parentSelector, recombinationOperator, mutationOperator, reinsertionOperator);
         }
         
         public override Optimiser CreateOptimiser()
         {
+            population.Clear();
+            
             return new Optimisers.EvolutionaryComputation.EvolutionaryAlgorithm(
-                new Population(HyperParameters.GetHyperParameterValue<int>(EvolutionaryAlgorithmHyperParameters.Population_Size)),
+                population,
                 CreateSolutionToFitness(),
                 CreatePenalty(),
                 CreateDecisionVectorGenerator(),

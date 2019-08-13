@@ -17,6 +17,7 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
             MultiPoint,
             Uniform,
             Sbx,
+            SbxSa2,
             Pcx
         }
 
