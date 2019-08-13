@@ -31,7 +31,6 @@ namespace PopOptBox.Base.Management
         /// <summary>
         /// The <see cref="Management.Individual"/>s which are currently dominating this individual.
         /// Managed by <see cref="Optimiser"/>.
-        /// <seealso cref="IsDominatedBy(Management.Individual)"/>
         /// </summary>
         public readonly List<Individual> DominatedBy;
 
@@ -43,22 +42,6 @@ namespace PopOptBox.Base.Management
         #endregion
 
         #region Pareto
-        
-        /// <summary>
-        /// Gets whether another Individual strictly dominates this one.
-        /// </summary>
-        /// <param name="other">The other Individual to compare.</param>
-        /// <returns><see langword="true"/> if this individual is dominated.</returns>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when the two Solution Vectors have different lengths.</exception>
-        public bool IsDominatedBy(Individual other)
-        {
-            if (other.SolutionVector.Length != TheIndividual.SolutionVector.Length)
-                throw new ArgumentOutOfRangeException(nameof(other), 
-                    "Other individual must have the same number of objectives in its Solution Vector.");
-            
-            return other.SolutionVector.Select((v, i) => 
-                v < TheIndividual.SolutionVector.ElementAt(i)).All(b => b);
-        }
 
         /// <summary>
         /// Gets whether this Individual strictly dominates another one.
@@ -69,7 +52,7 @@ namespace PopOptBox.Base.Management
         public bool IsDominating(Individual other)
         {
             if (other.SolutionVector.Length != TheIndividual.SolutionVector.Length)
-                throw new ArgumentOutOfRangeException(nameof(other), 
+                throw new InvalidOperationException(
                     "Other individual must have the same number of objectives in its Solution Vector.");
             
             return TheIndividual.SolutionVector.Select((v, i) => 

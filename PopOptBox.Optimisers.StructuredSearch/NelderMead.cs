@@ -115,7 +115,7 @@ namespace PopOptBox.Optimisers.StructuredSearch
             {
                 if (InitialVerticesStillUnevaluated.Contains(individual.DecisionVector))
                 {
-                    Population.AddIndividual(individual);
+                    Population.AddIndividual(individual, SetFitness);
                     InitialVerticesStillUnevaluated.Remove(individual.DecisionVector);
                     return true;
                 }
@@ -152,7 +152,7 @@ namespace PopOptBox.Optimisers.StructuredSearch
                     if (individual.Fitness < nextToWorstFitness & individual.Fitness >= bestFitness)
                     {
                         // Reflection vertex lies inside the population, accept it.
-                        Population.ReplaceWorst(individual);
+                        Population.ReplaceWorst(individual, SetFitness);
                         ChooseReflect();
                         Reset();
                         return true;
@@ -183,13 +183,13 @@ namespace PopOptBox.Optimisers.StructuredSearch
                     if (individual.Fitness < tempReflect.Fitness)
                     {
                         // Expansion vertex is better than reflection vertex, accept it.
-                        Population.ReplaceWorst(individual);
+                        Population.ReplaceWorst(individual, SetFitness);
                         ChooseExpand();
                     }
                     else
                     {
                         // Expansion vertex is worse than reflection vertex, accept reflection.
-                        Population.ReplaceWorst(tempReflect);
+                        Population.ReplaceWorst(tempReflect, SetFitness);
                         ChooseReflect();
                     }
                     Reset();
@@ -199,7 +199,7 @@ namespace PopOptBox.Optimisers.StructuredSearch
                     if (individual.Fitness <= tempReflect.Fitness)
                     {
                         // Contract Outside vertex is better than reflection vertex, accept it.
-                        Population.ReplaceWorst(individual);
+                        Population.ReplaceWorst(individual, SetFitness);
                         ChooseContractOut();
                         Reset();
                         return true;
@@ -216,7 +216,7 @@ namespace PopOptBox.Optimisers.StructuredSearch
                     if (individual.Fitness < worstFitness)
                     {
                         //Contract Inside vertex is better than the worst, accept it.
-                        Population.ReplaceWorst(individual);
+                        Population.ReplaceWorst(individual, SetFitness);
                         ChooseContractIn();
                         Reset();
                         return true;
@@ -230,7 +230,7 @@ namespace PopOptBox.Optimisers.StructuredSearch
                     break;
 
                 case (NelderMeadSimplexOperations.S):
-                    Population.ReplaceWorst(individual);
+                    Population.ReplaceWorst(individual, SetFitness);
                     ChooseShrink();
                     Reset();
                     return true;

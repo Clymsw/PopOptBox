@@ -97,8 +97,7 @@ namespace PopOptBox.Base.Management
         {
             try
             {
-                SetFitness(individual);
-                Population.AddIndividual(individual);
+                Population.AddIndividual(individual, SetFitness);
             }
             catch (Exception e)
             {
@@ -108,6 +107,7 @@ namespace PopOptBox.Base.Management
             return true;
         }
 
+        // Assigns (single objective) fitness
         protected void SetFitness(Individual individual)
         {
             //If the individual has been evaluated and is legal, 
@@ -115,8 +115,6 @@ namespace PopOptBox.Base.Management
             //If the individual has been evaluated but is not legal, 
             // assign soft penalty and store in population.
             individual.SetFitness(individual.Legal ? solutionToFitness : penalty);
-
-            individual.State = IndividualState.FitnessAssessed;
         }
 
         /// <summary>

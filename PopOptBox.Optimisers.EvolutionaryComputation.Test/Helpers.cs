@@ -8,6 +8,20 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test
 {
     public static class Helpers
     {
+        public static List<Individual> CreateEvaluatedIndividualsFromArray(double[][] testValues, double[] fitness)
+        {
+            var ds = DecisionSpace.CreateForUniformDoubleArray(testValues.ElementAt(0).Length, double.MinValue, double.MaxValue);
+
+            var dvs = testValues.Select(v => DecisionVector.CreateFromArray(ds, v));
+
+            var inds = dvs.Select(v => new Individual(v)).ToList();
+            for (var i = 0; i < inds.Count; i++)
+            {
+                inds.ElementAt(i).EvaluateIndividual(fitness.ElementAt(i));
+            }
+            return inds;
+        }
+
         public static List<Individual> CreateFitnessAssessedIndividualsFromArray(double[][] testValues, double[] fitness)
         {
             var ds = DecisionSpace.CreateForUniformDoubleArray(testValues.ElementAt(0).Length, double.MinValue, double.MaxValue);
@@ -22,7 +36,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test
             }
             return inds;
         }
-
+        
         public static void EvaluateIndividual(this Individual ind, double fitness = 1.0)
         {
             ind.SendForEvaluation();

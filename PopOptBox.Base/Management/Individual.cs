@@ -177,11 +177,12 @@ namespace PopOptBox.Base.Management
         /// Assigns Fitness based on a function which must be passed
         /// in as a delegate that converts a double array into a single value.
         /// </summary>
+        /// <remarks>Can be performed more than once.</remarks>
         /// <param name="solutionToFitness">Delegate converting Solution Vector to Fitness.</param>
         /// <exception cref="InvalidOperationException">Thrown when Solution Vector is null. <seealso cref="SetSolution(string)"/>.</exception>
         public void SetFitness(Func<double[], double> solutionToFitness)
         {
-            if (State != IndividualState.Evaluated)
+            if (State != IndividualState.Evaluated && State != IndividualState.FitnessAssessed)
                 throw new InvalidOperationException("Individual is not evaluated!");
 
             Fitness = solutionToFitness(SolutionVector);

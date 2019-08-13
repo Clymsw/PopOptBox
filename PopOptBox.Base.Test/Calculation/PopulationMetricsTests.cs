@@ -22,13 +22,11 @@ namespace PopOptBox.Base.Calculation.Test
             worstDv = new[] { 0.1, bestDv[1] + DvDifference, 1.2 };
 
             var ind1 = ObjectCreators.EvaluateIndividual(ObjectCreators.GetIndividual(worstDv), BestFitness + FitnessDifference);
-            ind1.SetFitness(SolutionToFitnessSingleObjective.Minimise);
             var ind2 = ObjectCreators.EvaluateIndividual(ObjectCreators.GetIndividual(bestDv), BestFitness);
-            ind2.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
             pop = ObjectCreators.GetEmptyPopulation(140, true);
-            pop.AddIndividual(ind1);
-            pop.AddIndividual(ind2);
+            pop.AddIndividual(ind1, i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
+            pop.AddIndividual(ind2, i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
         }
 
         #region Centroid
@@ -39,11 +37,10 @@ namespace PopOptBox.Base.Calculation.Test
             var newInd = ObjectCreators.EvaluateIndividual(
                 ObjectCreators.GetIndividual(Enumerable.Repeat<double>(1.2, bestDv.Length+1)), 
                 BestFitness + FitnessDifference);
-            newInd.SetFitness(SolutionToFitnessSingleObjective.Minimise);
             
             var pop2 = ObjectCreators.GetEmptyPopulation(5, false);
-            pop2.AddIndividual(pop.Best());
-            pop2.AddIndividual(newInd);
+            pop2.AddIndividual(pop.Best(), i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
+            pop2.AddIndividual(newInd, i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
             Assert.Throws<InvalidOperationException>(() => pop2.Centroid());
         }
 

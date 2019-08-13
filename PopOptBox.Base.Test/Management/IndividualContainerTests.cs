@@ -73,8 +73,8 @@ namespace PopOptBox.Base.Management.Test
             var container1 = new IndividualContainer(ind);
             var containerWrong = new IndividualContainer(indWrong);
             
-            Assert.Throws<ArgumentOutOfRangeException>(() => container1.IsDominatedBy(indWrong));
-            Assert.Throws<ArgumentOutOfRangeException>(() => containerWrong.IsDominating(container1.TheIndividual));
+            Assert.Throws<InvalidOperationException>(() => container1.IsDominating(indWrong));
+            Assert.Throws<InvalidOperationException>(() => containerWrong.IsDominating(container1.TheIndividual));
         }
 
         [Fact]
@@ -83,10 +83,8 @@ namespace PopOptBox.Base.Management.Test
             var container1 = new IndividualContainer(ind);
             var container2 = new IndividualContainer(indStrictlyBetter);
 
-            Assert.True(container1.IsDominatedBy(indStrictlyBetter));
             Assert.False(container1.IsDominating(indStrictlyBetter));
             Assert.True(container2.IsDominating(ind));
-            Assert.False(container2.IsDominatedBy(ind));
         }
         
         [Fact]
@@ -95,22 +93,18 @@ namespace PopOptBox.Base.Management.Test
             var container1 = new IndividualContainer(ind);
             var container2 = new IndividualContainer(indEqual);
 
-            Assert.False(container1.IsDominatedBy(indEqual));
             Assert.False(container1.IsDominating(indEqual));
             Assert.False(container2.IsDominating(ind));
-            Assert.False(container2.IsDominatedBy(ind));
         }
         
         [Fact]
-        public void Dominates_IsDominatedBy_OnParetoFront_ReturnsFalse()
+        public void Dominates_IsDominatedBy_OnSameParetoFront_ReturnsFalse()
         {
             var container1 = new IndividualContainer(ind);
             var container2 = new IndividualContainer(indParetoEqual);
 
-            Assert.False(container1.IsDominatedBy(indParetoEqual));
             Assert.False(container1.IsDominating(indParetoEqual));
             Assert.False(container2.IsDominating(ind));
-            Assert.False(container2.IsDominatedBy(ind));
         }
     }
 }

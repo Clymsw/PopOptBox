@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Management;
 using PopOptBox.Base.Variables;
 using PopOptBox.Optimisers.StructuredSearch.Test;
@@ -105,6 +106,7 @@ namespace PopOptBox.Optimisers.StructuredSearch.Simplices.Test
             foreach (var ind in testInds)
             {
                 Helpers.EvaluateIndividual(ind);
+                ind.SetFitness(SolutionToFitnessSingleObjective.Minimise);
             }
             
             Assert.Throws<ArgumentException>(() => new Simplex(testInds));

@@ -24,11 +24,9 @@ namespace PopOptBox.Base.Management.Test
             
             unevaluatedInd = ObjectCreators.GetIndividual(testVector);
 
-            var fitness = 2;
-            
             ind = ObjectCreators.EvaluateIndividual(
                 ObjectCreators.GetIndividual(testVector), 
-                fitness);
+                2.0);
             ind.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
             popConstLenDvInitInd = new Population(
@@ -52,7 +50,8 @@ namespace PopOptBox.Base.Management.Test
             Assert.Throws<System.InvalidOperationException>(
                 () => popConstLenDv.Worst());
             Assert.Throws<System.InvalidOperationException>(
-                () => popConstLenDv.ReplaceWorst(ind));
+                () => popConstLenDv.ReplaceWorst(ind,
+                    i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise)));
         }
         
         [Fact]
@@ -67,13 +66,15 @@ namespace PopOptBox.Base.Management.Test
         public void NewEmptyPopulation_AddUnevaluatedIndividual_Fails()
         {
             Assert.Throws<ArgumentException>(
-                () => popConstLenDv.AddIndividual(unevaluatedInd));
+                () => popConstLenDv.AddIndividual(unevaluatedInd,
+                    i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise)));
         }
         
         [Fact]
         public void NewEmptyPopulation_AddFirstIndividual_InsertedOk()
         {
-            popConstLenDv.AddIndividual(ind);
+            popConstLenDv.AddIndividual(ind,
+                i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
             
             Assert.True(popConstLenDv.Count == 1);
             Assert.Equal(popConstLenDv[0], ind);
@@ -86,7 +87,8 @@ namespace PopOptBox.Base.Management.Test
             var ind1 = ObjectCreators.GetIndividual(Enumerable.Range(0, numDims + 1).ToArray());
             
             Assert.Throws<ArgumentException>(
-                () => popConstLenDvInitInd.AddIndividual(ind1));
+                () => popConstLenDvInitInd.AddIndividual(ind1,
+                    i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise)));
         }
         
         [Fact]
@@ -95,9 +97,9 @@ namespace PopOptBox.Base.Management.Test
             var numDims = ind.DecisionVector.Count;
             var ind1 = ObjectCreators.EvaluateIndividual( 
                 ObjectCreators.GetIndividual(Enumerable.Range(0, numDims + 1).ToArray()));
-            ind1.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
-            popVarLenDv.AddIndividual(ind1);
+            popVarLenDv.AddIndividual(ind1,
+                i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
             
             Assert.True(popVarLenDv.Count == 2);
             Assert.Equal(popVarLenDv[1], ind1);
@@ -110,9 +112,9 @@ namespace PopOptBox.Base.Management.Test
                 ObjectCreators.GetIndividual(
                     ind.DecisionVector.Select(i => (double)i+1).ToArray()),
                 ind.Fitness + 1);
-            ind1.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
-            popConstLenDvInitInd.AddIndividual(ind1);
+            popConstLenDvInitInd.AddIndividual(ind1,
+                i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
             
             Assert.Equal(ind, popConstLenDvInitInd.Best());
             Assert.Equal(ind1, popConstLenDvInitInd.Worst());
@@ -125,9 +127,9 @@ namespace PopOptBox.Base.Management.Test
                 ObjectCreators.GetIndividual(
                     ind.DecisionVector.Select(i => (double)i+1).ToArray()),
                 ind.Fitness - 1);
-            ind1.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
-            popConstLenDvInitInd.AddIndividual(ind1);
+            popConstLenDvInitInd.AddIndividual(ind1,
+                i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
             
             Assert.Equal(ind1, popConstLenDvInitInd.Best());
             Assert.Equal(ind, popConstLenDvInitInd.Worst());
@@ -140,17 +142,17 @@ namespace PopOptBox.Base.Management.Test
                 ObjectCreators.GetIndividual(
                     ind.DecisionVector.Select(i => (double)i + 1).ToArray()),
                 ind.Fitness - 1);
-            bestInd.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
-            popConstLenDvInitInd.AddIndividual(bestInd);
+            popConstLenDvInitInd.AddIndividual(bestInd,
+                i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
 
             var evenBetterInd = ObjectCreators.EvaluateIndividual(
                 ObjectCreators.GetIndividual(
                     ind.DecisionVector.Select(i => (double)i + 1).ToArray()),
                 ind.Fitness - 2);
-            evenBetterInd.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
-            popConstLenDvInitInd.ReplaceWorst(evenBetterInd);
+            popConstLenDvInitInd.ReplaceWorst(evenBetterInd,
+                i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
 
             Assert.Equal(evenBetterInd, popConstLenDvInitInd.Best());
             Assert.Equal(bestInd, popConstLenDvInitInd.Worst());
@@ -163,17 +165,17 @@ namespace PopOptBox.Base.Management.Test
                 ObjectCreators.GetIndividual(
                     ind.DecisionVector.Select(i => (double)i + 1).ToArray()),
                 ind.Fitness - 1);
-            bestInd.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
-            popConstLenDvInitInd.AddIndividual(bestInd);
+            popConstLenDvInitInd.AddIndividual(bestInd,
+                i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
 
             var evenBetterInd = ObjectCreators.EvaluateIndividual(
                 ObjectCreators.GetIndividual(
                     ind.DecisionVector.Select(i => (double)i + 1).ToArray()),
                 ind.Fitness - 2);
-            evenBetterInd.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
-            popConstLenDvInitInd.ReplaceIndividual(bestInd, evenBetterInd);
+            popConstLenDvInitInd.ReplaceIndividual(bestInd, evenBetterInd,
+                i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
 
             Assert.Equal(evenBetterInd, popConstLenDvInitInd.Best());
             Assert.True(popConstLenDvInitInd.Count == 2);
@@ -186,17 +188,17 @@ namespace PopOptBox.Base.Management.Test
                 ObjectCreators.GetIndividual(
                     ind.DecisionVector.Select(i => (double)i + 1).ToArray()),
                 ind.Fitness - 1);
-            bestInd.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
-            popConstLenDvInitInd.AddIndividual(bestInd);
+            popConstLenDvInitInd.AddIndividual(bestInd,
+                i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
 
             var evenBetterInd = ObjectCreators.EvaluateIndividual(
                 ObjectCreators.GetIndividual(
                     ind.DecisionVector.Select(i => (double)i + 1).ToArray()),
                 ind.Fitness - 2);
-            evenBetterInd.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
-            popConstLenDvInitInd.ReplaceIndividualAt(1, evenBetterInd);
+            popConstLenDvInitInd.ReplaceIndividualAt(1, evenBetterInd,
+                i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
 
             Assert.Equal(evenBetterInd, popConstLenDvInitInd.Best());
             Assert.True(popConstLenDvInitInd.Count == 2);
@@ -209,9 +211,9 @@ namespace PopOptBox.Base.Management.Test
                 ObjectCreators.GetIndividual(
                     ind.DecisionVector.Select(i => (double)i+1).ToArray()),
                 ind.Fitness - 1);
-            ind1.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
-            popConstLenDvInitInd.AddIndividual(ind1);
+            popConstLenDvInitInd.AddIndividual(ind1,
+                i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
 
             var fitnesses = popConstLenDvInitInd.GetMemberFitnesses();
             Assert.True(fitnesses.Count() == 2);
@@ -225,9 +227,9 @@ namespace PopOptBox.Base.Management.Test
                 ObjectCreators.GetIndividual(
                     ind.DecisionVector.Select(i => (double)i+1).ToArray()),
                 ind.Fitness - 1);
-            ind1.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
-            popConstLenDvInitInd.AddIndividual(ind1);
+            popConstLenDvInitInd.AddIndividual(ind1,
+                i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
 
             var solutionVectors = popConstLenDvInitInd.GetMemberSolutionVectors();
             Assert.True(solutionVectors.Count() == 2);
@@ -241,13 +243,36 @@ namespace PopOptBox.Base.Management.Test
                 ObjectCreators.GetIndividual(
                     ind.DecisionVector.Select(i => (double)i+1).ToArray()),
                 ind.Fitness - 1);
-            ind1.SetFitness(SolutionToFitnessSingleObjective.Minimise);
 
-            popConstLenDvInitInd.AddIndividual(ind1);
+            popConstLenDvInitInd.AddIndividual(ind1,
+                i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
 
             var decisionVectors = popConstLenDvInitInd.GetMemberDecisionVectors();
             Assert.True(decisionVectors.Count() == 2);
             Assert.Equal(ind1.DecisionVector, decisionVectors.ElementAt(0));
+        }
+
+        [Fact]
+        public void GetParetoFront_OneDimension_ReturnsBest()
+        {
+            var bestInd = ObjectCreators.EvaluateIndividual(
+                ObjectCreators.GetIndividual(
+                    ind.DecisionVector.Select(i => (double)i + 1).ToArray()),
+                ind.Fitness - 1);
+
+            popConstLenDvInitInd.AddIndividual(bestInd,
+                i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
+
+            var evenBetterInd = ObjectCreators.EvaluateIndividual(
+                ObjectCreators.GetIndividual(
+                    ind.DecisionVector.Select(i => (double)i + 1).ToArray()),
+                ind.Fitness - 2);
+
+            popConstLenDvInitInd.AddIndividual(evenBetterInd,
+                i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
+            
+            Assert.True(popConstLenDvInitInd.ParetoFront().Count() == 1);
+            Assert.Equal(popConstLenDvInitInd.Best(), popConstLenDvInitInd.ParetoFront().First());
         }
     }
 }

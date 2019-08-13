@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Management;
 using PopOptBox.Optimisers.EvolutionaryComputation.Reinsertion;
 using Xunit;
@@ -15,20 +16,21 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test.Reinsertion
             var inds = Helpers.CreateFitnessAssessedIndividualsFromArray(
                 fitnesses.Select((f, i) => new[] { 0.5, 1.5 }).ToArray(),
                 fitnesses);
-
+            
             testPop = new Population(initialPopulation: inds);
         }
 
         [Fact]
         public void ReInsert_WorseThanWorst_DoesNotInsert()
         {
-            var newInd = Helpers.CreateFitnessAssessedIndividualsFromArray(
+            var newInd = Helpers.CreateEvaluatedIndividualsFromArray(
                 new double[][] { new[] { 1.0, 1.0 } },
                 new[] { testPop.Worst().Fitness + 1 })
                 .First();
             var reinserter = new ReinsertionReplaceWorst();
 
-            reinserter.ReInsert(testPop, newInd);
+            reinserter.ReInsert(testPop, newInd,
+                i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
 
             Assert.DoesNotContain(newInd, testPop);
         }
@@ -36,13 +38,14 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test.Reinsertion
         [Fact]
         public void ReInsert_EqualToWorst_DoesNotInsert()
         {
-            var newInd = Helpers.CreateFitnessAssessedIndividualsFromArray(
+            var newInd = Helpers.CreateEvaluatedIndividualsFromArray(
                 new double[][] { new[] { 1.0, 1.0 } }, 
                 new[] { testPop.Worst().Fitness })
                 .First();
             var reinserter = new ReinsertionReplaceWorst();
 
-            reinserter.ReInsert(testPop, newInd);
+            reinserter.ReInsert(testPop, newInd,
+                i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
 
             Assert.DoesNotContain(newInd, testPop);
         }
@@ -50,13 +53,14 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test.Reinsertion
         [Fact]
         public void ReInsert_BetterThanWorst_Inserts()
         {
-            var newInd = Helpers.CreateFitnessAssessedIndividualsFromArray(
+            var newInd = Helpers.CreateEvaluatedIndividualsFromArray(
                 new double[][] { new[] { 1.0, 1.0 } },
                 new[] { testPop.Worst().Fitness - 1 })
                 .First();
             var reinserter = new ReinsertionReplaceWorst();
 
-            reinserter.ReInsert(testPop, newInd);
+            reinserter.ReInsert(testPop, newInd,
+                i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
 
             Assert.Contains(newInd, testPop);
         }

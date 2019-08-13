@@ -1,4 +1,5 @@
-﻿using PopOptBox.Base.Management;
+﻿using System;
+using PopOptBox.Base.Management;
 
 namespace PopOptBox.Optimisers.EvolutionaryComputation.Reinsertion
 {
@@ -12,7 +13,8 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Reinsertion
         /// </summary>
         /// <param name="population">The <see cref="Population"/> to re-insert into.</param>
         /// <param name="individual">The <see cref="Individual"/> candidate for re-insertion.</param>
+        /// <param name="fitnessAssessment">Delegate used by the <see cref="Population"/> for calculating fitness.</param>
         /// <returns><see langword="true"/> if re-insertion has occurred.</returns>
-        bool ReInsert(Population population, Individual individual);
+        bool ReInsert(Population population, Individual individual, Action<Individual> fitnessAssessment);
     }
 }

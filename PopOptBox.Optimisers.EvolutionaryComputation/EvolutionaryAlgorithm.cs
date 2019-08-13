@@ -73,15 +73,9 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
 
         protected override bool ReInsert(Individual individual)
         {
-            if (Population.IsTargetSizeReached)
-            {
-                SetFitness(individual);
-                return reinsertionOperator.ReInsert(Population, individual);
-            }
-            else
-            {
-                return base.ReInsert(individual);
-            }
+            return Population.IsTargetSizeReached 
+                ? reinsertionOperator.ReInsert(Population, individual, SetFitness) 
+                : base.ReInsert(individual);
         }
 
         public override string ToString()
