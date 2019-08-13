@@ -78,6 +78,15 @@ namespace PopOptBox.Base.Management
         
         #endregion
 
+        #region ToString
+
+        public override string ToString()
+        {
+            return $"R={Rank} F=" + TheIndividual.ToString();
+        }
+
+        #endregion
+
         #region Equals, GetHashCode
 
         public override bool Equals(object obj)
