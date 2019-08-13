@@ -4,13 +4,17 @@ using System.Linq;
 
 namespace PopOptBox.Base.Management
 {
+    /// <summary>
+    /// Container for <see cref="Management.Individual"/>s inside a <see cref="Population"/>.
+    /// Extra information, e.g. relative strength compared with other individuals in the population. 
+    /// </summary>
     internal class IndividualContainer
     {
-        private readonly Individual individual;
+        public readonly Individual TheIndividual;
         
-        public IndividualContainer(Individual individual)
+        public IndividualContainer(Individual theIndividual)
         {
-            this.individual = individual;
+            TheIndividual = theIndividual;
             Dominating = new List<Individual>();
             DominatedBy = new List<Individual>();
         }
@@ -18,25 +22,27 @@ namespace PopOptBox.Base.Management
         #region Properties
 
         /// <summary>
-        /// The <see cref="Individual"/>s which this individual currently dominates.
+        /// The <see cref="Management.Individual"/>s which this individual currently dominates.
         /// Managed by <see cref="Optimiser"/>.
-        /// <seealso cref="IsDominating(Individual)"/>
+        /// <seealso cref="IsDominating(Management.Individual)"/>
         /// </summary>
         public readonly List<Individual> Dominating;
 
         /// <summary>
-        /// The <see cref="Individual"/>s which are currently dominating this individual.
+        /// The <see cref="Management.Individual"/>s which are currently dominating this individual.
         /// Managed by <see cref="Optimiser"/>.
-        /// <seealso cref="IsDominatedBy(Individual)"/>
+        /// <seealso cref="IsDominatedBy(Management.Individual)"/>
         /// </summary>
         public readonly List<Individual> DominatedBy;
 
         /// <summary>
-        /// The Pareto Front rank of this <see cref="Individual"/> in the current <see cref="Population"/>.
+        /// The Pareto Front rank of this <see cref="Management.Individual"/> in the current <see cref="Population"/>.
         /// </summary>
         public int Rank => DominatedBy.Count;
         
         #endregion
+
+        #region Pareto
         
         /// <summary>
         /// Gets whether another Individual strictly dominates this one.
@@ -46,12 +52,12 @@ namespace PopOptBox.Base.Management
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the two Solution Vectors have different lengths.</exception>
         public bool IsDominatedBy(Individual other)
         {
-            if (other.SolutionVector.Length != individual.SolutionVector.Length)
+            if (other.SolutionVector.Length != TheIndividual.SolutionVector.Length)
                 throw new ArgumentOutOfRangeException(nameof(other), 
                     "Other individual must have the same number of objectives in its Solution Vector.");
             
             return other.SolutionVector.Select((v, i) => 
-                v < individual.SolutionVector.ElementAt(i)).All(b => b);
+                v < TheIndividual.SolutionVector.ElementAt(i)).All(b => b);
         }
 
         /// <summary>
@@ -62,12 +68,31 @@ namespace PopOptBox.Base.Management
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the two Solution Vectors have different lengths.</exception>
         public bool IsDominating(Individual other)
         {
-            if (other.SolutionVector.Length != individual.SolutionVector.Length)
+            if (other.SolutionVector.Length != TheIndividual.SolutionVector.Length)
                 throw new ArgumentOutOfRangeException(nameof(other), 
                     "Other individual must have the same number of objectives in its Solution Vector.");
             
-            return individual.SolutionVector.Select((v, i) => 
+            return TheIndividual.SolutionVector.Select((v, i) => 
                 v < other.SolutionVector.ElementAt(i)).All(b => b);
         }
+        
+        #endregion
+
+        #region Equals, GetHashCode
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is IndividualContainer other))
+                return false;
+            
+            return TheIndividual.Equals(other.TheIndividual);
+        }
+
+        public override int GetHashCode()
+        {
+            return TheIndividual.GetHashCode();
+        }
+        
+        #endregion
     }
 }

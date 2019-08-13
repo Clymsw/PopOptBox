@@ -13,7 +13,7 @@ namespace PopOptBox.Base.Management
     {
         #region Fields
 
-        private readonly List<Individual> members;
+        private readonly List<IndividualContainer> members;
 
         /// <summary>
         /// Whether or not one should expect every individual to have the same length of <see cref="Variables.DecisionSpace"/>. 
@@ -52,7 +52,7 @@ namespace PopOptBox.Base.Management
 
             ConstantLengthDecisionVector = constantLengthDv;
 
-            members = new List<Individual>(TargetSize);
+            members = new List<IndividualContainer>(TargetSize);
 
             if (initialPopulation == null)
                 return;
@@ -68,7 +68,7 @@ namespace PopOptBox.Base.Management
         {
             return new Population(
                 TargetSize,
-                members.Select(m => m.Clone()),
+                members.Select(m => m.TheIndividual.Clone()),
                 ConstantLengthDecisionVector);
         }
 
@@ -81,7 +81,7 @@ namespace PopOptBox.Base.Management
         /// </summary>
         /// <param name="index">Element index.</param>
         /// <returns>An <see cref="Individual"/>.</returns>
-        public Individual this[int index] => members[index];
+        public Individual this[int index] => members.ElementAt(index).TheIndividual;
 
         /// <summary>
         /// Gets the individual with the best (lowest) Fitness.
@@ -91,7 +91,7 @@ namespace PopOptBox.Base.Management
         public Individual Best()
         {
             return members.Count > 0
-                ? members[0]
+                ? members.First().TheIndividual
                 : throw new InvalidOperationException("Population has no members.");
         }
 
@@ -103,18 +103,17 @@ namespace PopOptBox.Base.Management
         public Individual Worst()
         {
             return members.Count > 0
-                ? members[members.Count - 1]
+                ? members.Last().TheIndividual
                 : throw new InvalidOperationException("Population has no members.");
         }
 
         /// <summary>
         /// Gets the individuals on the first Pareto Front.
         /// </summary>
-        /// <returns>A (read-only) list of <see cref="Individual"/>s.</returns>
-        public IReadOnlyList<Individual> GetParetoFront()
+        /// <returns>An array of <see cref="Individual"/>s.</returns>
+        public IEnumerable<Individual> ParetoFront(int rank = 0)
         {
-            // TODO
-            throw new NotImplementedException();
+            return members.Where(i => i.Rank == rank).Select(i => i.TheIndividual);
         }
 
         /// <summary>
@@ -123,7 +122,7 @@ namespace PopOptBox.Base.Management
         /// <returns>List of doubles: Fitness</returns>
         public IEnumerable<double> GetMemberFitnesses()
         {
-            return members.Select(i => i.Fitness);
+            return members.Select(i => i.TheIndividual.Fitness);
         }
 
         /// <summary>
@@ -132,7 +131,7 @@ namespace PopOptBox.Base.Management
         /// <returns>List of double arrays: Solution Vector</returns>
         public IEnumerable<double[]> GetMemberSolutionVectors()
         {
-            return members.Select(i => i.SolutionVector);
+            return members.Select(i => i.TheIndividual.SolutionVector);
         }
 
         /// <summary>
@@ -141,7 +140,7 @@ namespace PopOptBox.Base.Management
         /// <returns>List of object arrays: Decision Vector</returns>
         public IEnumerable<object[]> GetMemberDecisionVectors()
         {
-            return members.Select(i => i.DecisionVector.ToArray());
+            return members.Select(i => i.TheIndividual.DecisionVector.ToArray());
         }
         
         /// <summary>
@@ -180,7 +179,7 @@ namespace PopOptBox.Base.Management
         public void AddIndividual(Individual ind)
         {
             if (ConstantLengthDecisionVector && members.Count > 0)
-                if (ind.DecisionVector.Count != members[0].DecisionVector.Count)
+                if (ind.DecisionVector.Count != Best().DecisionVector.Count)
                     throw new ArgumentException(
                         "Decision Vector is not the right length!");
             
@@ -188,7 +187,7 @@ namespace PopOptBox.Base.Management
                 throw new ArgumentException("Individual is not yet evaluated and given a fitness.");
             
             // Add to population
-            members.Add(ind);
+            members.Add(new IndividualContainer(ind));
             // TODO: Update domination 
 
             Sort();
@@ -199,7 +198,7 @@ namespace PopOptBox.Base.Management
         /// </summary>
         private void Sort()
         {
-            members.Sort((p, q) => p.Fitness.CompareTo(q.Fitness));
+            members.Sort((p, q) => p.TheIndividual.Fitness.CompareTo(q.TheIndividual.Fitness));
         }
         
         /// <summary>
@@ -212,7 +211,7 @@ namespace PopOptBox.Base.Management
             if (members.Count == 0)
                 throw new InvalidOperationException("Population has no members.");
             // TODO: Update domination 
-            members.Remove(Worst());
+            members.RemoveAt(members.Count - 1);
             AddIndividual(individualToInsert);
         }
 
@@ -247,7 +246,7 @@ namespace PopOptBox.Base.Management
             if (members.Count == 0)
                 throw new InvalidOperationException("Population has no members.");
             // TODO: Update domination 
-            var removedOk = members.Remove(individualToRemove);
+            var removedOk = members.Remove(new IndividualContainer(individualToRemove));
             if (!removedOk)
                 throw new InvalidOperationException("Old individual was not found in population.");
 
@@ -260,12 +259,12 @@ namespace PopOptBox.Base.Management
 
         public IEnumerator<Individual> GetEnumerator()
         {
-            return members.GetEnumerator();
+            return members.Select(m => m.TheIndividual).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return ((IEnumerable) members).GetEnumerator();
+            return members.Select(m => m.TheIndividual).GetEnumerator();
         }
 
         #endregion
