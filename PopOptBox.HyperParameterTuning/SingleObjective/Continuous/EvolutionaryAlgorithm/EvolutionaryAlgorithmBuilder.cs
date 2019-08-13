@@ -99,7 +99,7 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
                     recombinationOperator = new CrossoverArithmeticMultiParent();
                     hyps.UpdateHyperParameterValue(
                         EvolutionaryAlgorithmHyperParameters.Number_Of_Parents, 
-                        6);
+                        4);
                     break;
                 
                 case AvailableOperators.RecombinationOperator.Uniform:
@@ -113,7 +113,7 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
                         0.1);
                     hyps.UpdateHyperParameterValue(
                         EvolutionaryAlgorithmHyperParameters.Number_Of_Parents, 
-                        4);
+                        6);
                     break;
                 
                 default:
@@ -190,7 +190,7 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
 
         protected override Func<double[], double> CreateSolutionToFitness()
         {
-            return SolutionToFitness.SingleObjectiveMinimise;
+            return SolutionToFitnessSingleObjective.Minimise;
         }
 
         protected override Func<double[], double> CreatePenalty()
