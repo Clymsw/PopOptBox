@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using PopOptBox.Base.Helpers;
 using PopOptBox.Optimisers.StructuredSearch.Test;
 using Xunit;
 

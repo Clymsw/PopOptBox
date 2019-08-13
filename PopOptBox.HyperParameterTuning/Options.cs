@@ -1,8 +1,4 @@
 using System;
-using PopOptBox.Base.Management;
-using PopOptBox.Base.Variables;
-using PopOptBox.HyperParameterTuning.SingleObjective.Continuous.NelderMead;
-using PopOptBox.Optimisers.StructuredSearch;
 using PopOptBox.Problems.SingleObjective.Continuous;
 
 namespace PopOptBox.HyperParameterTuning

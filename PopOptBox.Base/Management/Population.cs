@@ -253,6 +253,14 @@ namespace PopOptBox.Base.Management
             AddIndividual(individualToInsert);
         }
 
+        /// <summary>
+        /// Empties the population of all its members.
+        /// </summary>
+        public void Clear()
+        {
+            members.Clear();
+        }
+
         #endregion
 
         #region Implementation of IEnumerable

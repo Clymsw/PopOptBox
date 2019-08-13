@@ -1,6 +1,5 @@
 ﻿using PopOptBox.Optimisers.EvolutionaryComputation.Reinsertion;
 using System.Linq;
-using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Management;
 using Xunit;
 

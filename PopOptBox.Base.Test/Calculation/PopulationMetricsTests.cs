@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using PopOptBox.Base.Calculation;
 using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Management;
 using PopOptBox.Base.Test.Helpers;
