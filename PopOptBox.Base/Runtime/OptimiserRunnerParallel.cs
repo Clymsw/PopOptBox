@@ -78,11 +78,13 @@ namespace PopOptBox.Base.Runtime
         /// <param name="reportingFrequency">The number of evaluations between reporting progress.</param>
         /// <param name="timeOutEvaluations">The maximum number of evaluations before terminating the optimisation.</param>
         /// <param name="timeOutDuration">The maximum time allowed before terminating the optimisation.</param>
+        /// <param name="newIndividualsPerGeneration">The number of new <see cref="Individual"/>s to generate each time new individuals are generated from the <see cref="Population"/>.</param>
         public override void Run(
             bool storeAll = true,
             int reportingFrequency = 100,
             int timeOutEvaluations = 0,
-            TimeSpan? timeOutDuration = null)
+            TimeSpan? timeOutDuration = null,
+            int newIndividualsPerGeneration = 1)
         {
             StartTime = DateTime.Now;
 
@@ -108,7 +110,7 @@ namespace PopOptBox.Base.Runtime
 
             // Get started
             var pumpPrimingInds = reinsertionAgent.CreateNewIndividuals(
-                NumberOfIndividualsToStart);
+                Math.Max(NumberOfIndividualsToStart, newIndividualsPerGeneration));
             foreach (var ind in pumpPrimingInds)
             {
                 reinsertionAgent.NewIndividuals.Post(ind);
@@ -136,9 +138,8 @@ namespace PopOptBox.Base.Runtime
             if (FinalPopulation.Count <= 0) 
                 return;
             
-            var best = FinalPopulation.Best();
-
-            BestFound = best;
+            // Not really the best found unless the optimiser is elitist
+            BestFound = FinalPopulation.Best();
         }
 
         /// <summary>

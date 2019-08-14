@@ -28,7 +28,8 @@ namespace PopOptBox.Problems.Performance
             Action<Population> reporters, 
             Action<int> iterationReporter,
             int timeOutEvaluations = 0, 
-            TimeSpan? timeOutDuration = null)
+            TimeSpan? timeOutDuration = null,
+            int numberOfNewIndividualsPerGeneration = 1)
         { 
             var results = new List<ProblemPerformanceSingleObjective>();
 
@@ -39,7 +40,8 @@ namespace PopOptBox.Problems.Performance
                 optimiserRunner.Run(
                     reportingFrequency: reportingFrequency,
                     timeOutEvaluations: timeOutEvaluations, 
-                    timeOutDuration: timeOutDuration);
+                    timeOutDuration: timeOutDuration,
+                    newIndividualsPerGeneration: numberOfNewIndividualsPerGeneration);
 
                 results.Add(
                     new ProblemPerformanceSingleObjective(

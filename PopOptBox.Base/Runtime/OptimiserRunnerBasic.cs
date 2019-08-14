@@ -52,11 +52,13 @@ namespace PopOptBox.Base.Runtime
         /// <param name="reportingFrequency">The number of evaluations between reporting progress.</param>
         /// <param name="timeOutEvaluations">The maximum number of evaluations before terminating the optimisation.</param>
         /// <param name="timeOutDuration">The maximum time allowed before terminating the optimisation.</param>
+        /// <param name="newIndividualsPerGeneration">The number of new <see cref="Individual"/>s to generate each time new individuals are generated from the <see cref="Population"/>.</param>
         public override void Run(
             bool storeAll = true, 
             int reportingFrequency = 100, 
             int timeOutEvaluations = 0, 
-            TimeSpan? timeOutDuration = null)
+            TimeSpan? timeOutDuration = null,
+            int newIndividualsPerGeneration = 1)
         {
             // Initialise
             StartTime = DateTime.Now;
@@ -65,12 +67,11 @@ namespace PopOptBox.Base.Runtime
             cancelDemanded = false;
 
             //Setup
-            var nextInds = optimiser.GetNextToEvaluate(1);
-            var nextInd = nextInds[0];
+            var nextInds = optimiser.GetNextToEvaluate(newIndividualsPerGeneration);
 
             if (timeOutEvaluations == 0)
             {
-                var numDims = nextInd.DecisionVector.Count;
+                var numDims = nextInds[0].DecisionVector.Count;
                 timeOutEvaluations = Math.Min(numDims * 20000, 2000000);
             }
 
@@ -84,46 +85,47 @@ namespace PopOptBox.Base.Runtime
 
             AllEvaluated = new List<Individual>();
             FinalPopulation = null;
-            BestFound = nextInd;
+            BestFound = null;
 
             //Go!
-            while (nextInd.DecisionVector.Count > 0)
+            while (nextInds.Count > 0 && nextInds[0].DecisionVector.Count > 0)
             {
-                nextInd.SetProperty(
-                    OptimiserPropertyNames.CreationIndex,
-                    timeOutManager.EvaluationsRun);
+                foreach (var nextInd in nextInds)
+                {
+                    nextInd.SetProperty(
+                        OptimiserPropertyNames.CreationIndex,
+                        timeOutManager.EvaluationsRun);
 
-                // Evaluate
-                model.PrepareForEvaluation(nextInd);
-                evaluator.Evaluate(nextInd);
+                    // Evaluate
+                    model.PrepareForEvaluation(nextInd);
+                    evaluator.Evaluate(nextInd);
+                }
 
                 // Reinsert
-                var returnInds = new List<Individual>
-                {
-                    nextInd
-                };
-                optimiser.ReInsert(returnInds);
+                optimiser.ReInsert(nextInds);
 
-                nextInd.SetProperty(
+                foreach (var nextInd in nextInds)
+                {
+                    nextInd.SetProperty(
                     OptimiserPropertyNames.ReinsertionIndex,
                     timeOutManager.EvaluationsRun);
+                }
 
                 // Store
                 if (storeAll)
                 {
-                    AllEvaluated.Add(nextInd);
+                    AllEvaluated.AddRange(nextInds);
                 }
 
                 // Update best
                 var bestInd = optimiser.Population.Best();
-                if (bestInd != null && bestInd.Fitness < BestFound.Fitness)
+                if (BestFound == null || (bestInd != null && bestInd.Fitness < BestFound.Fitness))
                     BestFound = bestInd;
 
                 // Create individuals for next loop
                 timeOutManager.IncrementEvaluationsRun();
 
-                nextInds = optimiser.GetNextToEvaluate(1);
-                nextInd = nextInds[0];
+                nextInds = optimiser.GetNextToEvaluate(newIndividualsPerGeneration);
                 
                 // Check for completion
                 if (timeOutManager.HasPerformedTooManyEvaluations() 
