@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using PopOptBox.Base.Calculation;
 using PopOptBox.Base.Variables;
 
 namespace PopOptBox.Base.Management
@@ -11,25 +12,18 @@ namespace PopOptBox.Base.Management
     /// </summary>
     public abstract class Optimiser : IOptimiser
     {
-        private readonly Func<double[], double> solutionToFitness;
-        private readonly Func<double[], double> penalty;
-
+        private readonly Dictionary<string, IIndividualPerformanceCalculator> calculators;
+        
         #region Constructor
 
         /// <summary>
         /// Constructs the optimiser.
         /// </summary>
         /// <param name="initialPopulation">An initial population (can be empty).</param>
-        /// <param name="solutionToFitness">Conversion function to change Solution Vector into Fitness. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
-        /// <param name="penalty">Function determining what penalty to assign for illegal individuals. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
-        protected Optimiser(
-            Population initialPopulation,
-            Func<double[], double> solutionToFitness,
-            Func<double[], double> penalty)
+        protected Optimiser(Population initialPopulation)
         {
             Population = initialPopulation;
-            this.solutionToFitness = solutionToFitness;
-            this.penalty = penalty;
+            calculators = new Dictionary<string, IIndividualPerformanceCalculator>();
         }
 
         #endregion
@@ -44,6 +38,19 @@ namespace PopOptBox.Base.Management
         #endregion
 
         #region Activity
+
+        /// <summary>
+        /// Add a <see cref="IIndividualPerformanceCalculator"/> calculator, to be used for calculating the (relative)
+        /// performance of <see cref="Individual"/>s in the <see cref="Population"/>.
+        /// </summary>
+        /// <param name="name">The name to be used for the calculation.</param>
+        /// <param name="calculator">The calculation to be applied.</param>
+        /// <exception cref="ArgumentNullException">Thrown when the name is null.</exception>
+        /// <exception cref="ArgumentException">Thrown when the specified name already exists.</exception>
+        public void RegisterCalculator(string name, IIndividualPerformanceCalculator calculator)
+        {
+            calculators.Add(name, calculator);
+        }
 
         /// <summary>
         ///     Optimiser-specific logic to implement, which works out what to try next.
@@ -107,20 +114,8 @@ namespace PopOptBox.Base.Management
             return true;
         }
 
-        // Assigns (single objective) fitness
-        protected void SetFitness(Individual individual)
-        {
-            //If the individual has been evaluated and is legal, 
-            // assign fitness and store in population.
-            //If the individual has been evaluated but is not legal, 
-            // assign soft penalty and store in population.
-            individual.SetFitness(individual.Legal ? solutionToFitness : penalty);
-        }
-
         /// <summary>
-        /// Reinserts individuals, sets their fitness based on the functions provided in the constructor:
-        ///  - if legal, solution -> fitness
-        ///  - if illegal, solution -> penalty
+        /// Staging area for re-inserting individuals.
         ///  <seealso cref="ReInsert(Individual)"/>
         /// </summary>
         /// <param name="individualList">List of <see cref="Individual"/>s to reinsert.</param>
@@ -132,13 +127,13 @@ namespace PopOptBox.Base.Management
             {
                 if (ind.State != IndividualState.Evaluated)
                     throw new ArgumentException("Individual is not evaluated!");
-
+                
+                if (Population.Contains(ind)) 
+                    continue;
+                
                 ind.SetProperty(
                     OptimiserPropertyNames.ReinsertionTime,
                     DateTime.Now);
-
-                if (Population.Contains(ind)) 
-                    continue;
                 
                 var wasReInserted = ReInsert(ind);
 
