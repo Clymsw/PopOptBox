@@ -32,12 +32,6 @@ namespace PopOptBox.Base.Management
         public double[] SolutionVector { get; private set; }
 
         /// <summary>
-        /// The Fitness, used to rank individuals and ultimately determine optimality.
-        /// Lower is better.
-        /// </summary>
-        public double Fitness { get; private set; }
-
-        /// <summary>
         /// If the individual is legal or not.
         /// </summary>
         public bool Legal { get; private set; }
@@ -74,7 +68,6 @@ namespace PopOptBox.Base.Management
             return new Individual(DecisionVector)
             {
                 SolutionVector = (double[])SolutionVector?.Clone(),
-                Fitness = Fitness,
                 properties = propCopy,
                 Legal = Legal,
                 State = State,
@@ -91,7 +84,7 @@ namespace PopOptBox.Base.Management
         /// <returns>A string version of <see cref="DecisionVector"/>.</returns>
         public override string ToString()
         {
-            return $"{Fitness} [{string.Join(" - ", DecisionVector)}]";
+            return string.Join(" - ", DecisionVector);
         }
 
         /// <summary>
@@ -171,23 +164,6 @@ namespace PopOptBox.Base.Management
                                  "Invalid key provided to get solution!");
 
             State = IndividualState.Evaluated;
-        }
-
-        /// <summary>
-        /// Assigns Fitness based on a function which must be passed
-        /// in as a delegate that converts a double array into a single value.
-        /// </summary>
-        /// <remarks>Can be performed more than once.</remarks>
-        /// <param name="solutionToFitness">Delegate converting Solution Vector to Fitness.</param>
-        /// <exception cref="InvalidOperationException">Thrown when Solution Vector is null. <seealso cref="SetSolution(string)"/>.</exception>
-        public void SetFitness(Func<double[], double> solutionToFitness)
-        {
-            if (State != IndividualState.Evaluated && State != IndividualState.FitnessAssessed)
-                throw new InvalidOperationException("Individual is not evaluated!");
-
-            Fitness = solutionToFitness(SolutionVector);
-
-            State = IndividualState.FitnessAssessed;
         }
 
         /// <summary>

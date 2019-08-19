@@ -8,6 +8,5 @@ namespace PopOptBox.Base.Management
         New,
         Evaluating,
         Evaluated,
-        FitnessAssessed
     }
 }
