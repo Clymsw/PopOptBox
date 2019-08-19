@@ -48,6 +48,6 @@ namespace PopOptBox.Base.Management
         ///     The Solution Vector to penalty converter for illegal individuals
         /// </summary>
         /// <returns></returns>
-        protected abstract Func<double[], double> CreatePenalty();
+        protected abstract Func<DecisionVector, double> CreatePenalty();
     }
 }

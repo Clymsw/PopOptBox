@@ -1,4 +1,6 @@
-﻿namespace PopOptBox.Base.Helpers
+﻿using PopOptBox.Base.Variables;
+
+namespace PopOptBox.Base.Helpers
 {
     /// <summary>
     /// Delegate functions for penalties, <see cref="Management.Optimiser"/>.
@@ -8,9 +10,9 @@
         /// <summary>
         /// Applies a sudden "wall" to the optimisation when the DV is outside the legal range
         /// </summary>
-        /// <param name="solVector">Solution Vector is not used</param>
+        /// <param name="decisionVector">Decision Vector is not used.</param>
         /// <returns><see cref="double.MaxValue"/></returns>
-        public static double DeathPenalty(double[] solVector)
+        public static double DeathPenalty(DecisionVector decisionVector = null)
         {
             // Optimisers minimise, therefore this is the worst possible value.
             return double.MaxValue;
