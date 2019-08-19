@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using PopOptBox.Base.Calculation;
 
 namespace PopOptBox.Base.Management
 {
@@ -55,7 +56,7 @@ namespace PopOptBox.Base.Management
         /// <param name="others">Other individuals. Not relevant, not used.</param>
         /// <exception cref="InvalidOperationException">Thrown when contained <see cref="Individual"/> is not evaluated.</exception>
         public void SetFitness(
-            IIndividualPerformance performanceCalculator, 
+            IIndividualPerformanceCalculator performanceCalculator, 
             IEnumerable<Individual> others = null)
         {
             if (individual.State != IndividualState.Evaluated)

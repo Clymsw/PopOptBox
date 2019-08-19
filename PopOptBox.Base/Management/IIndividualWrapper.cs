@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using PopOptBox.Base.Calculation;
 
 namespace PopOptBox.Base.Management
 {
@@ -29,6 +30,6 @@ namespace PopOptBox.Base.Management
         /// </summary>
         /// <param name="performanceCalculator">The calculator to assess fitness.</param>
         /// <param name="others">The other individuals to be compared against.</param>
-        void SetFitness(IIndividualPerformance performanceCalculator, IEnumerable<Individual> others = null);
+        void SetFitness(IIndividualPerformanceCalculator performanceCalculator, IEnumerable<Individual> others = null);
     }
 }
