@@ -5,7 +5,7 @@ using PopOptBox.Base.Variables;
 
 namespace PopOptBox.Base.Calculation
 {
-    public class FitnessSingleObjective : IIndividualCalculation
+    public class FitnessSingleObjective : IIndividualPerformanceCalculator
     {
         private readonly Func<double[], double> solutionToFitness;
         private readonly Func<DecisionVector, double> penalty;
