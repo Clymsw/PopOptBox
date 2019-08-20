@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using PopOptBox.Base.Conversion;
 using PopOptBox.Base.Variables;
 
@@ -98,6 +99,7 @@ namespace PopOptBox.Base.Management
         /// Gets all the keys currently stored in the properties.
         /// </summary>
         /// <returns>A list of property names.</returns>
+        // ReSharper disable once UnusedMember.Global - API function
         public IEnumerable<string> GetPropertyNames()
         {
             var keynames = properties.Keys;
@@ -158,17 +160,14 @@ namespace PopOptBox.Base.Management
         /// <summary>
         /// Assigns Solution Vector based on a given Property name
         /// </summary>
-        /// <param name="keyName">Name of property key</param>
-        /// <exception cref="ArgumentOutOfRangeException">Thrown when property name does not exist.</exception>
-        public void SetSolution(string keyName)
+        /// <param name="keyNames">Names of property keys to set as solution vector</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when any property name does not exist.</exception>
+        public void SetSolution(params string[] keyNames)
         {
             if (State != IndividualState.Evaluating)
                 throw new InvalidOperationException("Individual is not evaluating!");
 
-            var solutionValue = GetProperty<double[]>(keyName);
-            SolutionVector = solutionValue ??
-                             throw new ArgumentOutOfRangeException(nameof(keyName),
-                                 "Invalid key provided to get solution!");
+            SolutionVector = keyNames.Select(GetProperty<double>).ToArray();
 
             State = IndividualState.Evaluated;
         }
@@ -178,14 +177,14 @@ namespace PopOptBox.Base.Management
         /// in as a delegate that converts a double array into a single value.
         /// </summary>
         /// <remarks>Can be performed more than once.</remarks>
-        /// <param name="solutionToFitness">Delegate converting Solution Vector to Fitness.</param>
-        /// <exception cref="InvalidOperationException">Thrown when Solution Vector is null. <seealso cref="SetSolution(string)"/>.</exception>
-        public void SetFitness(Func<double[], double> solutionToFitness)
+        /// <param name="fitness">The fitness value which has been calculated by the <see cref="Optimiser"/>.</param>
+        /// <exception cref="InvalidOperationException">Thrown when Individual is not evaluated. <seealso cref="SetSolution"/>.</exception>
+        public void SetFitness(double fitness)
         {
-            if (State != IndividualState.Evaluated && State != IndividualState.FitnessAssessed)
+            if (State != IndividualState.Evaluated)
                 throw new InvalidOperationException("Individual is not evaluated!");
 
-            Fitness = solutionToFitness(SolutionVector);
+            Fitness = fitness;
 
             State = IndividualState.FitnessAssessed;
         }

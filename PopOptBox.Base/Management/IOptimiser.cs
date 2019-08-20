@@ -19,9 +19,9 @@ namespace PopOptBox.Base.Management
         /// <summary>
         /// Handles reinsertion of evaluated individuals into the population
         /// </summary>
-        /// <param name="individualList">List of Individuals</param>
+        /// <param name="individuals">List of Individuals</param>
         /// <returns>The number successfully reinserted.</returns>
         /// <exception cref="ArgumentException">One of the individuals is not yet evaluated.</exception>
-        int ReInsert(IEnumerable<Individual> individualList);
+        int ReInsert(IEnumerable<Individual> individuals);
     }
 }

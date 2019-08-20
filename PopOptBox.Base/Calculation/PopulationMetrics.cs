@@ -16,17 +16,32 @@ namespace PopOptBox.Base.Calculation
         /// <summary>
         /// Gets the centroid of the population (the average location of all the decision vectors).
         /// </summary>
-        /// <param name="pop">The population.</param>
+        /// <param name="population">The population.</param>
         /// <returns>A double array representing the centroid location.</returns>
-        public static double[] Centroid(this Population pop)
+        public static double[] Centroid(this Population population)
         {
-            if (!pop.ConstantLengthDecisionVector) 
+            if (!population.ConstantLengthDecisionVector) 
                 throw new InvalidOperationException("This function is not valid for a population with variable length Decision Vectors.");
             
-            var decisionVectors = pop.GetMemberDecisionVectors().Select(dv => dv.Select(d => (double) d));
+            var decisionVectors = population.GetMemberDecisionVectors().Select(dv => dv.Select(d => (double) d));
             var matrix = Matrix<double>.Build.DenseOfColumns(decisionVectors);
             var centroid = matrix.RowSums() / matrix.ColumnCount;
             return centroid.ToArray();
+        }
+        
+        /// <summary>
+        /// Gets the individuals on the specified Pareto Front.
+        /// </summary>
+        /// <param name="front">The desired Pareto Front (1 is the first, by tradition).</param>
+        /// <returns>An array of <see cref="Individual"/>s.</returns>
+        public static Individual[] ParetoFront(this Population population, int front = 1)
+        {
+            return population.Best().SolutionVector.Length > 1
+                   ? population
+                       .Where(i => i.GetProperty<int>(OptimiserPropertyNames.ParetoFront) == front).ToArray()
+                   : front < population.Count
+                     ? new [] { population[front - 1] }
+                     : new Individual[0];
         }
 
         /// <summary>

@@ -32,5 +32,13 @@ namespace PopOptBox.Base.Management
         /// If an error has been encountered on reinsertion, it is stored here.
         /// </summary>
         public const string ReinsertionError = "Reinsertion error";
+
+        public const string ParetoFront = "Pareto Front";
+
+        public const string DominationRank = "Number of individuals dominating this";
+
+        public const string Dominating = "Individuals dominated";
+
+        public const string DominatedBy = "Individuals dominating this";
     }
 }

@@ -1,18 +1,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using PopOptBox.Base.Variables;
 
 namespace PopOptBox.Base.Management
 {
     /// <summary>
     /// The Optimiser handles the logic for deciding which individuals to try.
-    /// As a metaheuristic, it only knows about the Decision Vector and the Fitness of each Individual.
+    /// As a meta-heuristic, it only knows about the Decision Vector and the Fitness of each Individual.
     /// </summary>
     public abstract class Optimiser : IOptimiser
     {
-        private readonly Func<double[], double> solutionToFitness;
-        private readonly Func<double[], double> penalty;
+        private readonly Action<Individual, IEnumerable<Individual>> fitnessAssessmentMechanism;
 
         #region Constructor
 
@@ -20,16 +20,12 @@ namespace PopOptBox.Base.Management
         /// Constructs the optimiser.
         /// </summary>
         /// <param name="initialPopulation">An initial population (can be empty).</param>
-        /// <param name="solutionToFitness">Conversion function to change Solution Vector into Fitness. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
-        /// <param name="penalty">Function determining what penalty to assign for illegal individuals. <seealso cref="Individual.SetFitness(Func{double[], double})"/></param>
-        protected Optimiser(
-            Population initialPopulation,
-            Func<double[], double> solutionToFitness,
-            Func<double[], double> penalty)
+        /// <param name="fitnessAssessmentMechanism">Conversion function to assign Fitness to an Individual. <seealso cref="Individual.SetFitness"/></param>
+        protected Optimiser(Population initialPopulation, 
+            Action<Individual, IEnumerable<Individual>> fitnessAssessmentMechanism)
         {
             Population = initialPopulation;
-            this.solutionToFitness = solutionToFitness;
-            this.penalty = penalty;
+            this.fitnessAssessmentMechanism = fitnessAssessmentMechanism;
         }
 
         #endregion
@@ -86,35 +82,30 @@ namespace PopOptBox.Base.Management
         }
 
         /// <summary>
-        /// Try to reinsert Individual back into the Population.
+        /// Try to reinsert Individuals back into the Population.
         /// </summary>
-        /// <param name="individual">The individual to try to reinsert.</param>
-        /// <returns>
-        /// <see langword="true" /> if the individual was actually inserted;
-        /// <see langword="false" /> if rejected. A <seealso cref="OptimiserPropertyNames.ReinsertionError"/> property is added to the <see cref="Individual"/>.
-        /// </returns>
-        protected virtual bool ReInsert(Individual individual)
+        /// <remarks>A basic implementation to override.</remarks>
+        /// <param name="individuals">The individuals to try to reinsert.</param>
+        /// <returns>The number of individuals actually inserted.</returns>
+        protected virtual int AssessFitnessAndDecideFate(IEnumerable<Individual> individuals)
         {
-            try
+            var numberReinserted = 0;
+            
+            foreach (var ind in individuals)
             {
-                Population.AddIndividual(individual, SetFitness);
+                try
+                {
+                    fitnessAssessmentMechanism(ind, Population);
+                    Population.AddIndividual(ind);
+                    numberReinserted++;
+                }
+                catch (Exception e)
+                {
+                    throw new InvalidOperationException("Error occurred while re-inserting individuals", e);
+                }
             }
-            catch (Exception e)
-            {
-                individual.SetProperty(OptimiserPropertyNames.ReinsertionError, e);
-                return false;
-            }
-            return true;
-        }
 
-        // Assigns (single objective) fitness
-        protected void SetFitness(Individual individual)
-        {
-            //If the individual has been evaluated and is legal, 
-            // assign fitness and store in population.
-            //If the individual has been evaluated but is not legal, 
-            // assign soft penalty and store in population.
-            individual.SetFitness(individual.Legal ? solutionToFitness : penalty);
+            return numberReinserted;
         }
 
         /// <summary>
@@ -123,12 +114,13 @@ namespace PopOptBox.Base.Management
         ///  - if illegal, solution -> penalty
         ///  <seealso cref="ReInsert(Individual)"/>
         /// </summary>
-        /// <param name="individualList">List of <see cref="Individual"/>s to reinsert.</param>
+        /// <param name="individuals">List of <see cref="Individual"/>s to reinsert.</param>
         /// <returns>The number of individuals successfully reinserted.</returns>
-        public int ReInsert(IEnumerable<Individual> individualList)
+        public int ReInsert(IEnumerable<Individual> individuals)
         {
-            var numInserted = 0;
-            foreach (var ind in individualList)
+            var individualsToReinsert = new List<Individual>();
+            
+            foreach (var ind in individuals)
             {
                 if (ind.State != IndividualState.Evaluated)
                     throw new ArgumentException("Individual is not evaluated!");
@@ -136,16 +128,19 @@ namespace PopOptBox.Base.Management
                 ind.SetProperty(
                     OptimiserPropertyNames.ReinsertionTime,
                     DateTime.Now);
-
-                if (Population.Contains(ind)) 
-                    continue;
                 
-                var wasReInserted = ReInsert(ind);
-
-                if (wasReInserted)
-                    numInserted += 1;
+                if (Population.Contains(ind)) 
+                {
+                    ind.SetProperty(
+                        OptimiserPropertyNames.ReinsertionError,
+                        new InvalidOperationException("Individual already exists in Population."));
+                    continue;
+                }
+                
+                individualsToReinsert.Add(ind);
             }
-            return numInserted;
+            
+            return AssessFitnessAndDecideFate(individualsToReinsert);
         }
 
         #endregion
