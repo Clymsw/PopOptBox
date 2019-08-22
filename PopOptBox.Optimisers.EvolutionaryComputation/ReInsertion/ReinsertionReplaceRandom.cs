@@ -8,7 +8,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Reinsertion
     /// <summary>
     /// A re-insertion operator which replaces a randomly-selected individual in the population 
     /// if the candidate individual is better.
-    /// Same as G3 of Deb et al. (2002)
+    /// Same as G3 of Deb et al. (2002) TODO: Check this is true!
     /// </summary>
     public class ReinsertionReplaceRandom : Operator, IReinsertionOperator
     {

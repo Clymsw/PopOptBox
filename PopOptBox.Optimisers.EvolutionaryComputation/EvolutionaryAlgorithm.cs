@@ -79,13 +79,14 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
             {
                 return base.AssessFitnessAndDecideFate(individuals);
             }
-            
-            foreach (var individual in individuals)
+
+            var inds = individuals as Individual[] ?? individuals.ToArray();
+            foreach (var individual in inds)
             {
                 fitnessCalculator.CalculateAndAssignFitness(individual, null);
             }
 
-            return reinsertionOperator.ReInsert(individuals, Population);
+            return reinsertionOperator.ReInsert(inds, Population);
         }
 
         public override string ToString()
