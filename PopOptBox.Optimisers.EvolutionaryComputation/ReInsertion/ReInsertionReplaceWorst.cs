@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using PopOptBox.Base.Management;
 
 namespace PopOptBox.Optimisers.EvolutionaryComputation.Reinsertion
@@ -19,23 +20,23 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Reinsertion
         /// <summary>
         /// Re-inserts an individual if it is fitter than the worst in the population.
         /// </summary>
+        /// <param name="individuals">The <see cref="Individual"/> candidates for re-insertion.</param>
         /// <param name="population">The <see cref="Population"/> to re-insert into.</param>
-        /// <param name="individual">The <see cref="Individual"/> candidate for re-insertion.</param>
-        /// <param name="fitnessAssessment">Delegate used by the <see cref="Population"/> for calculating fitness.</param>
-        /// <returns><see langword="true"/> if re-insertion has occurred.</returns>
-        public bool ReInsert(Population population, Individual individual, Action<Individual> fitnessAssessment)
+        /// <returns>The number of individuals re-inserted.</returns>
+        public int ReInsert(IEnumerable<Individual> individuals, Population population)
         {
-            fitnessAssessment(individual);
+            var numberInserted = 0;
             
-            if (individual.Fitness < population.Worst().Fitness)
+            foreach (var individual in individuals)
             {
-                population.ReplaceWorst(individual, i => { });
-                return true;
+                if (individual.Fitness >= population.Worst().Fitness) 
+                    continue;
+                
+                population.ReplaceWorst(individual);
+                numberInserted++;
             }
-            else
-            {
-                return false;
-            }
+
+            return numberInserted;
         }
     }
 }

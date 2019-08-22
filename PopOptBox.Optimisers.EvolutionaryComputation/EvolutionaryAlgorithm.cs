@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Management;
 using PopOptBox.Base.Variables;
 using PopOptBox.Optimisers.EvolutionaryComputation.Mutation;
@@ -28,6 +30,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
         /// Creates an Evolutionary Algorithm.
         /// </summary>
         /// <param name="initialPopulation">The initial population (can be empty).</param>
+        /// <param name="fitnessCalculator">A <see cref="FitnessCalculatorSingleObjective"/>. <see cref="Optimiser"/></param>
         /// <param name="initialIndividualGenerator">Creates new decision vectors to build the first population. <seealso cref="Base.Conversion.IModel"/></param>
         /// <param name="parentSelector">The <see cref="IParentSelectionOperator"/> to use.</param>
         /// <param name="recombinationOperator">The <see cref="IRecombinationOperator"/> to use.</param>
@@ -36,15 +39,14 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
         /// <param name="hyperParameters">The <see cref="HyperParameterManager"/> object with relevant settings.</param>
         public EvolutionaryAlgorithm(
             Population initialPopulation,
-            Func<double[], double> solutionToFitness,
-            Func<double[], double> penalty,
+            IFitnessCalculator fitnessCalculator,
             Func<DecisionVector> initialIndividualGenerator,
             IParentSelectionOperator parentSelector,
             IRecombinationOperator recombinationOperator,
             IMutationOperator mutationOperator,
             IReinsertionOperator reinsertionOperator,
             HyperParameterManager hyperParameters) 
-            : base(initialPopulation, solutionToFitness, penalty)
+            : base(initialPopulation, fitnessCalculator)
         {
             this.initialIndividualGenerator = initialIndividualGenerator;
             this.parentSelector = parentSelector;
@@ -71,11 +73,19 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
             return mutationOperator.Operate(child);
         }
 
-        protected override bool ReInsert(Individual individual)
+        protected override int AssessFitnessAndDecideFate(IEnumerable<Individual> individuals)
         {
-            return Population.IsTargetSizeReached 
-                ? reinsertionOperator.ReInsert(Population, individual, SetFitness) 
-                : base.ReInsert(individual);
+            if (!Population.IsTargetSizeReached)
+            {
+                return base.AssessFitnessAndDecideFate(individuals);
+            }
+            
+            foreach (var individual in individuals)
+            {
+                fitnessCalculator.CalculateAndAssignFitness(individual, null);
+            }
+
+            return reinsertionOperator.ReInsert(individuals, Population);
         }
 
         public override string ToString()
