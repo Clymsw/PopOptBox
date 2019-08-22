@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Variables;
 
 namespace PopOptBox.Base.Management
@@ -12,7 +13,7 @@ namespace PopOptBox.Base.Management
     /// </summary>
     public abstract class Optimiser : IOptimiser
     {
-        private readonly Action<Individual, IEnumerable<Individual>> fitnessAssessmentMechanism;
+        protected readonly IFitnessCalculator fitnessCalculator;
 
         #region Constructor
 
@@ -20,12 +21,12 @@ namespace PopOptBox.Base.Management
         /// Constructs the optimiser.
         /// </summary>
         /// <param name="initialPopulation">An initial population (can be empty).</param>
-        /// <param name="fitnessAssessmentMechanism">Conversion function to assign Fitness to an Individual. <seealso cref="Individual.SetFitness"/></param>
+        /// <param name="fitnessCalculator">Conversion function to assign Fitness to an Individual. <seealso cref="Individual.SetFitness"/></param>
         protected Optimiser(Population initialPopulation, 
-            Action<Individual, IEnumerable<Individual>> fitnessAssessmentMechanism)
+            IFitnessCalculator fitnessCalculator)
         {
             Population = initialPopulation;
-            this.fitnessAssessmentMechanism = fitnessAssessmentMechanism;
+            this.fitnessCalculator = fitnessCalculator;
         }
 
         #endregion
@@ -95,7 +96,7 @@ namespace PopOptBox.Base.Management
             {
                 try
                 {
-                    fitnessAssessmentMechanism(ind, Population);
+                    fitnessCalculator.CalculateAndAssignFitness(ind, Population);
                     Population.AddIndividual(ind);
                     numberReinserted++;
                 }
