@@ -40,7 +40,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test
         public static void EvaluateIndividual(this Individual ind, double fitness = 1.0)
         {
             ind.SendForEvaluation();
-            ind.SetProperty("solution", new[] { fitness });
+            ind.SetProperty("solution", fitness);
             ind.SetSolution("solution");
             ind.SetLegality(true);
         }

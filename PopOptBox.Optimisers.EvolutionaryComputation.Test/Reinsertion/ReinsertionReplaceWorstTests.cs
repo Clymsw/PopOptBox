@@ -23,7 +23,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test.Reinsertion
         [Fact]
         public void ReInsert_WorseThanWorst_DoesNotInsert()
         {
-            var newInd = Helpers.CreateEvaluatedIndividualsFromArray(
+            var newInd = Helpers.CreateFitnessAssessedIndividualsFromArray(
                 new double[][] { new[] { 1.0, 1.0 } },
                 new[] { testPop.Worst().Fitness + 1 })
                 .First();
@@ -37,7 +37,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test.Reinsertion
         [Fact]
         public void ReInsert_EqualToWorst_DoesNotInsert()
         {
-            var newInd = Helpers.CreateEvaluatedIndividualsFromArray(
+            var newInd = Helpers.CreateFitnessAssessedIndividualsFromArray(
                 new double[][] { new[] { 1.0, 1.0 } }, 
                 new[] { testPop.Worst().Fitness })
                 .First();
@@ -51,7 +51,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test.Reinsertion
         [Fact]
         public void ReInsert_BetterThanWorst_Inserts()
         {
-            var newInd = Helpers.CreateEvaluatedIndividualsFromArray(
+            var newInd = Helpers.CreateFitnessAssessedIndividualsFromArray(
                 new double[][] { new[] { 1.0, 1.0 } },
                 new[] { testPop.Worst().Fitness - 1 })
                 .First();
