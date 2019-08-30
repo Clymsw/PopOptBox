@@ -144,8 +144,7 @@ namespace PopOptBox.Base.Management
         }
 
         /// <summary>
-        /// Retrieves the value for a given property key, if it exists.
-        /// Otherwise returns a zero element double array and a warning.
+        /// Retrieves the value for a given property key.
         /// </summary>
         /// <param name="key">String acting as key for the property</param>
         /// <returns>Property value</returns>
