@@ -24,8 +24,8 @@ namespace PopOptBox.Base.Conversion.Test
             
             evaluatorMock.Evaluate(ind);
             
-            Assert.Equal(new[]{Test_Solution}, 
-                ind.GetProperty<double[]>(ObjectCreators.Solution_Key));
+            Assert.Equal(Test_Solution, 
+                ind.GetProperty<double>(ObjectCreators.Solution_Key));
             Assert.Equal(IndividualState.Evaluated, ind.State);
             Assert.True(ind.Legal);
             Assert.Equal(new[]{Test_Solution}, ind.SolutionVector);
