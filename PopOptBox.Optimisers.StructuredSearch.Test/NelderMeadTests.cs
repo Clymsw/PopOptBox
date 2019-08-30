@@ -65,8 +65,11 @@ namespace PopOptBox.Optimisers.StructuredSearch.Test
                     Enumerable.Repeat(5, Number_Of_Dimensions + 1)));
             Helpers.EvaluateIndividual(wrongIndividual);
 
-            // Should it throw an error?
-            Assert.Throws<ArgumentException>(() => optimiser.ReInsert(new[] {wrongIndividual}));
+            // Act
+            optimiser.ReInsert(new[] { wrongIndividual });
+
+            // This will thrown an error if key is not present.
+            wrongIndividual.GetProperty<string>(OptimiserPropertyNames.ReinsertionError);
         }
         
         [Fact]

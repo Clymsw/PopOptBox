@@ -26,7 +26,7 @@ namespace PopOptBox.Optimisers.StructuredSearch.Test
         public static void EvaluateIndividual(Individual ind, double value = 1.0)
         {
             ind.SendForEvaluation();
-            ind.SetProperty("solution", new[]{value});
+            ind.SetProperty("solution", value);
             ind.SetSolution("solution");
             ind.SetLegality(true);
         }
