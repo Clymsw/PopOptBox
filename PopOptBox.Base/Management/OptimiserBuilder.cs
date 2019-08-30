@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using PopOptBox.Base.Conversion;
 using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Variables;

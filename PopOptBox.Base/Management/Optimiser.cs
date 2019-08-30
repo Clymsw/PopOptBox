@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Variables;
 

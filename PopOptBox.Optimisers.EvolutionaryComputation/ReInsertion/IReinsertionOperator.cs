@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PopOptBox.Base.Management;
 
 namespace PopOptBox.Optimisers.EvolutionaryComputation.Reinsertion
