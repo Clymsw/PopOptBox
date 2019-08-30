@@ -109,10 +109,8 @@ namespace PopOptBox.Base.Management
         }
 
         /// <summary>
-        /// Reinserts individuals, sets their fitness based on the functions provided in the constructor:
-        ///  - if legal, solution -> fitness
-        ///  - if illegal, solution -> penalty
-        ///  <seealso cref="ReInsert(Individual)"/>
+        /// Reinserts individuals, sets their fitness based on the class provided in the constructor.
+        /// <seealso cref="AssessFitnessAndDecideFate(IEnumerable{Individual})"/>
         /// </summary>
         /// <param name="individuals">List of <see cref="Individual"/>s to reinsert.</param>
         /// <returns>The number of individuals successfully reinserted.</returns>
