@@ -69,7 +69,7 @@ namespace PopOptBox.Base.Management.Test
             ind1.SetProperty(Cloning_Key, 1.2);
             ind1.SetProperty(ObjectCreators.Solution_Key, fitness);
             ind1.SetProperty("sol2", 5.1);
-            ind1.SetProperty("sol3", 55);
+            ind1.SetProperty("sol3", 55.0);
             ind1.SetSolution(ObjectCreators.Solution_Key, "sol2", "sol3");
             ind1.SetFitness(fitness);
 

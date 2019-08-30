@@ -27,10 +27,17 @@ namespace PopOptBox.Base.Test.Helpers
         internal static Individual EvaluateIndividual(Individual ind, double fitness = 2)
         {
             ind.SendForEvaluation();
-            ind.SetProperty(Solution_Key, new[] {fitness});
+            ind.SetProperty(Solution_Key, fitness);
             ind.SetSolution(Solution_Key);
             ind.SetLegality(true);
 
+            return ind;
+        }
+
+        internal static Individual EvaluateIndividualAndSetFitness(Individual ind, double fitness = 2)
+        {
+            ind = EvaluateIndividual(ind, fitness);
+            ind.SetFitness(fitness);
             return ind;
         }
 

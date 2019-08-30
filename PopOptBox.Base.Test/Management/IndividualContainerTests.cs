@@ -42,14 +42,14 @@ namespace PopOptBox.Base.Management.Test
             indWrong.SetSolution(ObjectCreators.Solution_Key);
         }
         
-        [Fact]
+        [Fact(Skip = "Container not in use")]
         public void ContainedIndividual_IsSameAsUsedInConstructor()
         {
             var container1 = new IndividualContainer(ind);
             
             Assert.Equal(ind, container1.TheIndividual);
         }
-        [Fact]
+        [Fact(Skip = "Container not in use")]
         public void Equals_ContainerWithSameIndividual_True()
         {
             var container1 = new IndividualContainer(ind);
@@ -58,7 +58,7 @@ namespace PopOptBox.Base.Management.Test
             Assert.Equal(container1, container1A);
         }
         
-        [Fact]
+        [Fact(Skip = "Container not in use")]
         public void Equals_ContainerWithDifferentIndividual_False()
         {
             var container1 = new IndividualContainer(ind);
@@ -67,7 +67,7 @@ namespace PopOptBox.Base.Management.Test
             Assert.NotEqual(container1, container2);
         }
         
-        [Fact]
+        [Fact(Skip = "Container not in use")]
         public void Dominates_IsDominatedBy_OtherSolutionVectorIsDifferentLength_Throws()
         {
             var container1 = new IndividualContainer(ind);
@@ -77,7 +77,7 @@ namespace PopOptBox.Base.Management.Test
             Assert.Throws<InvalidOperationException>(() => containerWrong.IsDominating(container1.TheIndividual));
         }
 
-        [Fact]
+        [Fact(Skip = "Container not in use")]
         public void Dominates_IsDominatedBy_OtherIsStrictlyBetter_ReturnsTrue()
         {
             var container1 = new IndividualContainer(ind);
@@ -87,7 +87,7 @@ namespace PopOptBox.Base.Management.Test
             Assert.True(container2.IsDominating(ind));
         }
         
-        [Fact]
+        [Fact(Skip = "Container not in use")]
         public void Dominates_IsDominatedBy_OtherIsEqual_ReturnsFalse()
         {
             var container1 = new IndividualContainer(ind);
@@ -97,7 +97,7 @@ namespace PopOptBox.Base.Management.Test
             Assert.False(container2.IsDominating(ind));
         }
         
-        [Fact]
+        [Fact(Skip = "Container not in use")]
         public void Dominates_IsDominatedBy_OnSameParetoFront_ReturnsFalse()
         {
             var container1 = new IndividualContainer(ind);

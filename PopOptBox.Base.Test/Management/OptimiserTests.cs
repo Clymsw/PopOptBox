@@ -52,10 +52,9 @@ namespace PopOptBox.Base.Management.Test
         [Fact]
         public void Reinsertion_FitnessAssessedIndividual_NotAllowed()
         {
+            // TODO: Is this the desired behaviour?
             var newInd = ObjectCreators.GetIndividual(builder.StartingDecVec);
-            var fitness = 2.0;
-            ObjectCreators.EvaluateIndividual(newInd, fitness);
-            newInd.SetFitness(fitness);
+            newInd = ObjectCreators.EvaluateIndividualAndSetFitness(newInd);
 
             Assert.Throws<ArgumentException>(() => optimiserMock.ReInsert(new[] { newInd }));
         }
