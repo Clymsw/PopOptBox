@@ -158,7 +158,7 @@ namespace PopOptBox.Base.Management
         }
 
         /// <summary>
-        /// Assigns Solution Vector based on a given Property name
+        /// Assigns Solution Vector based on given Property names
         /// </summary>
         /// <param name="keyNames">Names of property keys to set as solution vector</param>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when any property name does not exist.</exception>
@@ -173,8 +173,7 @@ namespace PopOptBox.Base.Management
         }
 
         /// <summary>
-        /// Assigns Fitness based on a function which must be passed
-        /// in as a delegate that converts a double array into a single value.
+        /// Assigns Fitness value.
         /// </summary>
         /// <remarks>Can be performed more than once.</remarks>
         /// <param name="fitness">The fitness value which has been calculated by the <see cref="Optimiser"/>.</param>

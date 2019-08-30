@@ -29,8 +29,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test.Reinsertion
                 .First();
             var reinserter = new ReinsertionReplaceRandom();
 
-            reinserter.ReInsert(testPop, newInd, 
-                    i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
+            reinserter.ReInsert(new[] { newInd }, testPop);
 
             Assert.DoesNotContain(newInd, testPop);
         }
@@ -44,8 +43,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test.Reinsertion
                 .First();
             var reinserter = new ReinsertionReplaceRandom();
 
-            reinserter.ReInsert(testPop, newInd,
-                i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
+            reinserter.ReInsert(new[] { newInd }, testPop);
 
             Assert.Contains(newInd, testPop);
         }

@@ -60,14 +60,20 @@ namespace PopOptBox.Base.Management.Test
         {
             var ind1 = ind.Clone();
 
+            // Currently equal
             Assert.Equal(ind1, ind);
 
+            // Change some properties
+            var fitness = 0.2;
             ind1.SendForEvaluation();
             ind1.SetProperty(Cloning_Key, 1.2);
-            ind1.SetProperty(ObjectCreators.Solution_Key, new[]{0.2, 5.1, 55});
-            ind1.SetSolution(ObjectCreators.Solution_Key);
-            ind1.SetFitness(s => s[0]);
+            ind1.SetProperty(ObjectCreators.Solution_Key, fitness);
+            ind1.SetProperty("sol2", 5.1);
+            ind1.SetProperty("sol3", 55);
+            ind1.SetSolution(ObjectCreators.Solution_Key, "sol2", "sol3");
+            ind1.SetFitness(fitness);
 
+            // Now not equal
             Assert.Throws<System.ArgumentOutOfRangeException>(
                 () => ind.GetProperty<double>(Cloning_Key));
             Assert.NotEqual(ind.SolutionVector, ind1.SolutionVector);
@@ -83,10 +89,10 @@ namespace PopOptBox.Base.Management.Test
             var ind2 = new Individual(dv2);
 
             ind.SendForEvaluation();
-            ind.SetProperty(ObjectCreators.Solution_Key, new[] { 2.6 });
+            ind.SetProperty(ObjectCreators.Solution_Key, 2.6);
             ind.SetSolution(ObjectCreators.Solution_Key);
             ind2.SendForEvaluation();
-            ind2.SetProperty(ObjectCreators.Solution_Key, new[] { 2.6 });
+            ind2.SetProperty(ObjectCreators.Solution_Key, 2.6);
             ind2.SetSolution(ObjectCreators.Solution_Key);
             
             Assert.Equal(ind2, ind);
@@ -97,8 +103,10 @@ namespace PopOptBox.Base.Management.Test
         {
             ind.SendForEvaluation();
             var solution = new[] {0.2, 5.1, 55};
-            ind.SetProperty(ObjectCreators.Solution_Key, solution);
-            ind.SetSolution(ObjectCreators.Solution_Key);
+            ind.SetProperty(ObjectCreators.Solution_Key, solution[0]);
+            ind.SetProperty("sol2", solution[1]);
+            ind.SetProperty("sol3", solution[2]);
+            ind.SetSolution(ObjectCreators.Solution_Key, "sol2", "sol3");
 
             Assert.Equal(solution[0], ind.SolutionVector.ElementAt(0));
             Assert.Equal(solution[1], ind.SolutionVector.ElementAt(1));
@@ -110,9 +118,11 @@ namespace PopOptBox.Base.Management.Test
         {
             ind.SendForEvaluation();
             var solution = new[] {0.2, 5.1, 55};
-            ind.SetProperty(ObjectCreators.Solution_Key, solution);
-            ind.SetSolution(ObjectCreators.Solution_Key);
-            ind.SetFitness(s => s[0] * 2);
+            ind.SetProperty(ObjectCreators.Solution_Key, solution[0]);
+            ind.SetProperty("sol2", solution[1]);
+            ind.SetProperty("sol3", solution[2]);
+            ind.SetSolution(ObjectCreators.Solution_Key, "sol2", "sol3");
+            ind.SetFitness(solution[0] * 2);
 
             Assert.Equal(solution[0] * 2, ind.Fitness);
         }

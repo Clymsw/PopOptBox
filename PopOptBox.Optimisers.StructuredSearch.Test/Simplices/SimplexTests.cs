@@ -105,8 +105,8 @@ namespace PopOptBox.Optimisers.StructuredSearch.Simplices.Test
             };
             foreach (var ind in testInds)
             {
-                Helpers.EvaluateIndividual(ind);
-                ind.SetFitness(SolutionToFitnessSingleObjective.Minimise);
+                Helpers.EvaluateIndividual(ind, 1.0);
+                ind.SetFitness(1.0);
             }
             
             Assert.Throws<ArgumentException>(() => new Simplex(testInds));

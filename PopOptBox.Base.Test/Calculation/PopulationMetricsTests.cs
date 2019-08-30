@@ -25,8 +25,8 @@ namespace PopOptBox.Base.Calculation.Test
             var ind2 = ObjectCreators.EvaluateIndividual(ObjectCreators.GetIndividual(bestDv), BestFitness);
 
             pop = ObjectCreators.GetEmptyPopulation(140, true);
-            pop.AddIndividual(ind1, i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
-            pop.AddIndividual(ind2, i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
+            pop.AddIndividual(ind1);
+            pop.AddIndividual(ind2);
         }
 
         #region Centroid
@@ -39,8 +39,8 @@ namespace PopOptBox.Base.Calculation.Test
                 BestFitness + FitnessDifference);
             
             var pop2 = ObjectCreators.GetEmptyPopulation(5, false);
-            pop2.AddIndividual(pop.Best(), i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
-            pop2.AddIndividual(newInd, i => i.SetFitness(SolutionToFitnessSingleObjective.Minimise));
+            pop2.AddIndividual(pop.Best());
+            pop2.AddIndividual(newInd);
             Assert.Throws<InvalidOperationException>(() => pop2.Centroid());
         }
 

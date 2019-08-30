@@ -32,7 +32,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test
             for (var i = 0; i < inds.Count; i++)
             {
                 inds.ElementAt(i).EvaluateIndividual(fitness.ElementAt(i));
-                inds.ElementAt(i).SetFitness(SolutionToFitnessSingleObjective.Minimise);
+                inds.ElementAt(i).SetFitness(fitness.ElementAt(i));
             }
             return inds;
         }
