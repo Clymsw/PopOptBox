@@ -83,7 +83,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
             var inds = individuals as Individual[] ?? individuals.ToArray();
             foreach (var individual in inds)
             {
-                fitnessCalculator.CalculateAndAssignFitness(individual, null);
+                fitnessCalculator.CalculateAndAssignFitness(individual, Population);
             }
 
             return reinsertionOperator.ReInsert(inds, Population);
