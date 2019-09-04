@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using PopOptBox.Base;
 using PopOptBox.Base.Management;
 using PopOptBox.Base.Runtime;
 using PopOptBox.Base.Variables;
