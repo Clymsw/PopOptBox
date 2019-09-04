@@ -9,7 +9,7 @@ namespace PopOptBox.Base.Calculation
     /// <summary>
     /// Helper functions to calculate <see cref="Population"/> metrics, 
     /// for example to support calculating whether an optimisation has converged,
-    /// or for multiobjective optimisation.
+    /// or for multi-objective optimisation.
     /// </summary>
     public static class PopulationMetrics
     {
@@ -29,9 +29,12 @@ namespace PopOptBox.Base.Calculation
             return centroid.ToArray();
         }
         
+        #region MultiObjective
+
         /// <summary>
         /// Gets the individuals on the specified Pareto Front.
         /// </summary>
+        /// <param name="population">The population extended by this method.</param>
         /// <param name="front">The desired Pareto Front (1 is the first, by tradition).</param>
         /// <returns>An array of <see cref="Individual"/>s.</returns>
         public static Individual[] ParetoFront(this Population population, int front = 1)
@@ -44,6 +47,49 @@ namespace PopOptBox.Base.Calculation
                      : new Individual[0];
         }
 
+        /// <summary>
+        /// Gets all non-dominated individuals.
+        /// </summary>
+        /// <remarks>
+        /// Equivalent to population.ParetoFront(1).
+        /// </remarks>
+        /// <param name="population">The population extended by this method.</param>
+        /// <returns>An array of <see cref="Individual"/>s.</returns>
+        public static Individual[] NonDominatedSet(this Population population)
+        {
+            return population.Best().SolutionVector.Length > 1
+                ? population
+                    .Where(i => i.GetProperty<Individual[]>(OptimiserPropertyNames.DominatedBy).Length == 0).ToArray()
+                : new[] { population.Best() };
+        }
+        
+        /// <summary>
+        /// Gets whether an <see cref="Individual"/> dominates another one.
+        /// This is defined as:
+        ///  - for all objectives, the solution values are equal or worse, and
+        ///  - for at least one objective, the solution value is worse. 
+        /// </summary>
+        /// <param name="individual">The individual extended by this method.</param>
+        /// <param name="other">The individual to compare to.</param>
+        /// <returns><see langword="true"/> if the other individual is dominated.</returns>
+        /// <exception cref="InvalidOperationException">Thrown when the two Solution Vectors have different lengths.</exception>
+        public static bool IsDominating(this Individual individual, Individual other)
+        {
+            if (other.SolutionVector.Length != individual.SolutionVector.Length)
+                throw new InvalidOperationException(
+                    "Other individual must have the same number of objectives in its Solution Vector.");
+
+            if (individual.SolutionVector.Select((v, i) => v < other.SolutionVector.ElementAt(i)).Any(b => b))
+                if (individual.SolutionVector.Select((v, i) => v <= other.SolutionVector.ElementAt(i)).All(b => b))
+                    return true;
+
+            return false;
+        }
+        
+        #endregion
+
+        #region Convergence
+        
         /// <summary>
         ///     Checks to see if the Fitness of the best and worst individuals in a population
         ///     are closer than a specified amount.
@@ -151,7 +197,7 @@ namespace PopOptBox.Base.Calculation
             this Population pop,
             double[] tolerance)
         {
-            var dvRange = pop.DecisionVectorRangeByFitness();
+            var dvRange = pop.DecisionVectorRangeByFitness().ToArray();
 
             if (dvRange.Count() != tolerance.Length)
                 throw new ArgumentException("Tolerance must have same length as Decision Vector",
@@ -173,5 +219,7 @@ namespace PopOptBox.Base.Calculation
             var withinTolerance = differences.Zip(tolerance, IsWithinTolerance);
             return withinTolerance.All(b => b);
         }
+        
+        #endregion
     }
 }

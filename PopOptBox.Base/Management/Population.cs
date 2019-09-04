@@ -198,7 +198,6 @@ namespace PopOptBox.Base.Management
         /// Replaces worst individual with a new one.
         /// </summary>
         /// <param name="individualToInsert">New individual to insert.</param>
-        /// <param name="fitnessAllocationMechanism">A delegate for calculating the fitness.</param>
         /// <exception cref="System.InvalidOperationException">Thrown when the population is empty.</exception>
         public void ReplaceWorst(Individual individualToInsert)
         {
@@ -215,7 +214,6 @@ namespace PopOptBox.Base.Management
         /// </summary>
         /// <param name="index">The index of the individual to remove.</param>
         /// <param name="individualToInsert">New individual to insert.</param>
-        /// <param name="fitnessAllocationMechanism">A delegate for calculating the fitness.</param>
         /// <exception cref="InvalidOperationException">Thrown when the population is empty.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the index is not valid.</exception>
         public void ReplaceIndividualAt(int index, Individual individualToInsert)
@@ -236,7 +234,6 @@ namespace PopOptBox.Base.Management
         /// </summary>
         /// <param name="individualToRemove">Old individual to remove.</param>
         /// <param name="individualToInsert">New individual to insert.</param>
-        /// <param name="fitnessAllocationMechanism">A delegate for calculating the fitness.</param>
         /// <exception cref="InvalidOperationException">Thrown when the population is empty, or old individual is not present.</exception>
         public void ReplaceIndividual(Individual individualToRemove, Individual individualToInsert)
         {
