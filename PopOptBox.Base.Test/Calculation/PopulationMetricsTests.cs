@@ -20,7 +20,9 @@ namespace PopOptBox.Base.Calculation.Test
         private readonly Individual moTestInd;
         private readonly Individual indEqual;
         private readonly Individual indParetoDominant;
-        private readonly Individual indParetoEqual;
+        private readonly Individual indParetoEqual1;
+        private readonly Individual indParetoEqual2;
+        private readonly Individual indParetoEqual3;
         private readonly Individual indWrong;
         
         public PopulationMetricsTests()
@@ -54,17 +56,25 @@ namespace PopOptBox.Base.Calculation.Test
             
             indEqual = moTestInd.Clone();
             indParetoDominant = moTestInd.Clone();
-            indParetoEqual = moTestInd.Clone();
+            indParetoEqual1 = moTestInd.Clone();
+            indParetoEqual2 = moTestInd.Clone();
+            indParetoEqual3 = moTestInd.Clone();
             indWrong = moTestInd.Clone();
             
             indParetoDominant.SetProperty(solution1Name, solution1 - 0.1);
-            indParetoEqual.SetProperty(solution1Name, solution1 - 0.1);
-            indParetoEqual.SetProperty(solution2Name, solution2 + 0.1);
-                
+            indParetoEqual1.SetProperty(solution1Name, solution1 - 0.1);
+            indParetoEqual1.SetProperty(solution2Name, solution2 + 0.1);
+            indParetoEqual2.SetProperty(solution1Name, solution1 - 0.1);
+            indParetoEqual2.SetProperty(solution3Name, solution3 + 0.1);
+            indParetoEqual3.SetProperty(solution2Name, solution2 - 0.1);
+            indParetoEqual3.SetProperty(solution3Name, solution3 + 0.1);
+            
             moTestInd.SetSolution(solution1Name, solution2Name, solution3Name);
             indEqual.SetSolution(solution1Name, solution2Name, solution3Name);
             indParetoDominant.SetSolution(solution1Name, solution2Name, solution3Name);
-            indParetoEqual.SetSolution(solution1Name, solution2Name, solution3Name);
+            indParetoEqual1.SetSolution(solution1Name, solution2Name, solution3Name);
+            indParetoEqual2.SetSolution(solution1Name, solution2Name, solution3Name);
+            indParetoEqual3.SetSolution(solution1Name, solution2Name, solution3Name);
             indWrong.SetSolution(solution1Name, solution2Name);
         }
 
@@ -92,6 +102,20 @@ namespace PopOptBox.Base.Calculation.Test
         #endregion
 
         #region MultiObjective
+
+        [Fact]
+        public void AssignCrowdingDistance_WorksCorrectly()
+        {
+            PopulationMetrics.AssignCrowdingDistance(new[]
+                {moTestInd, indParetoEqual1, indParetoEqual2, indParetoEqual3},
+                "crowdingDistance");
+            
+            Assert.Equal(double.MaxValue, moTestInd.GetProperty<double>("crowdingDistance"));
+            Assert.Equal(double.MaxValue, indParetoEqual1.GetProperty<double>("crowdingDistance"));
+            // Assuming ordering in place, crowding distance should be 0.1/0.1 + 0.1/0.2 + 0.1/0.1
+            Assert.Equal(2.5, indParetoEqual2.GetProperty<double>("crowdingDistance"));
+            Assert.Equal(double.MaxValue, indParetoEqual3.GetProperty<double>("crowdingDistance"));
+        }
         
         [Fact]
         public void Dominates_IsDominatedBy_OtherSolutionVectorIsDifferentLength_Throws()
@@ -117,8 +141,8 @@ namespace PopOptBox.Base.Calculation.Test
         [Fact]
         public void Dominates_IsDominatedBy_OtherIsBetterOnOneAndWorseOnAnother_ReturnsFalse()
         {
-            Assert.False(moTestInd.IsDominating(indParetoEqual));
-            Assert.False(indParetoEqual.IsDominating(moTestInd));
+            Assert.False(moTestInd.IsDominating(indParetoEqual1));
+            Assert.False(indParetoEqual1.IsDominating(moTestInd));
         }
         
         #endregion

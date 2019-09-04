@@ -32,6 +32,41 @@ namespace PopOptBox.Base.Calculation
         #region MultiObjective
 
         /// <summary>
+        /// Implements the Crowding Distance algorithm proposed by Deb et al (2002).
+        /// Note that the individuals provided should be on the same Pareto Front.
+        /// Calculates the crowding distance and assigns it into the individual based on the property name provided.
+        /// </summary>
+        /// <param name="individuals">Individuals forming a Pareto Front.</param>
+        public static void AssignCrowdingDistance(IEnumerable<Individual> individuals, string propertyName)
+        {
+            var inds = individuals as Individual[] ?? individuals.ToArray();
+            for (var m = 0; m < inds[0].SolutionVector.Length; m++)
+            {
+                var tempSorted = inds.OrderBy(a => a.SolutionVector.ElementAt(m)).ToArray();
+                var fmin = tempSorted.First().SolutionVector[m];
+                tempSorted.First().SetProperty(propertyName, double.MaxValue);
+                var fmax = tempSorted.Last().SolutionVector[m];
+                tempSorted.Last().SetProperty(propertyName, double.MaxValue);
+                
+                for (var i = 1; i < inds.Length - 1; i++)
+                {
+                    var distance = 0.0;
+                    if (m > 0)
+                        distance = inds[i].GetProperty<double>(propertyName);
+                    
+                    if (distance == double.MaxValue)
+                        continue;
+
+                    tempSorted.ElementAt(i).SetProperty(propertyName,
+                        distance + 
+                            (tempSorted.ElementAt(i + 1).SolutionVector.ElementAt(m) -
+                             tempSorted.ElementAt(i - 1).SolutionVector.ElementAt(m)) /
+                            (fmax - fmin));
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets the individuals on the specified Pareto Front.
         /// </summary>
         /// <param name="population">The population extended by this method.</param>
@@ -51,7 +86,8 @@ namespace PopOptBox.Base.Calculation
         /// Gets all non-dominated individuals.
         /// </summary>
         /// <remarks>
-        /// Equivalent to population.ParetoFront(1).
+        /// Should be equivalent to population.ParetoFront(1),
+        /// but depends on different property (from <see cref="OptimiserPropertyNames"/>).
         /// </remarks>
         /// <param name="population">The population extended by this method.</param>
         /// <returns>An array of <see cref="Individual"/>s.</returns>
@@ -59,8 +95,18 @@ namespace PopOptBox.Base.Calculation
         {
             return population.Best().SolutionVector.Length > 1
                 ? population
-                    .Where(i => i.GetProperty<Individual[]>(OptimiserPropertyNames.DominatedBy).Length == 0).ToArray()
+                    .Where(i => i.NonDominationRank() == 0).ToArray()
                 : new[] { population.Best() };
+        }
+
+        /// <summary>
+        /// Gets the non-domination rank of an individual (the number of individuals dominating it).
+        /// </summary>
+        /// <param name="individual">individuals</param>
+        /// <returns>The rank.</returns>
+        public static int NonDominationRank(this Individual individual)
+        {
+            return individual.GetProperty<List<Individual>>(OptimiserPropertyNames.DominatedBy).Count;
         }
         
         /// <summary>
