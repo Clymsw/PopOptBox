@@ -89,13 +89,14 @@ namespace PopOptBox.Base.Management
         /// <returns>The number of individuals actually inserted.</returns>
         protected virtual int AssessFitnessAndDecideFate(IEnumerable<Individual> individuals)
         {
-            var numberReinserted = 0;
+            var inds = individuals as Individual[] ?? individuals.ToArray();
+            fitnessCalculator.CalculateAndAssignFitness(inds, Population);
             
-            foreach (var ind in individuals)
+            var numberReinserted = 0;
+            foreach (var ind in inds)
             {
                 try
                 {
-                    fitnessCalculator.CalculateAndAssignFitness(ind, Population);
                     Population.AddIndividual(ind);
                     numberReinserted++;
                 }
@@ -104,7 +105,6 @@ namespace PopOptBox.Base.Management
                     throw new InvalidOperationException("Error occurred while re-inserting individuals", e);
                 }
             }
-
             return numberReinserted;
         }
 

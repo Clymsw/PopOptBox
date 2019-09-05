@@ -11,7 +11,7 @@ namespace PopOptBox.Optimisers.StructuredSearch
 {
     public class NelderMead : Optimiser
     {
-        protected NelderMeadSimplexOperationsManager OperationsManager;
+        protected readonly NelderMeadSimplexOperationsManager OperationsManager;
 
         #region Simplex Management
 
@@ -108,13 +108,13 @@ namespace PopOptBox.Optimisers.StructuredSearch
 
         protected override int AssessFitnessAndDecideFate(IEnumerable<Individual> individuals)
         {
+            // Assign fitness
+            var inds = individuals as Individual[] ?? individuals.ToArray();
+            fitnessCalculator.CalculateAndAssignFitness(inds, null);
+
             var numberInserted = 0;
-
-            foreach (var individual in individuals)
+            foreach (var individual in inds)
             {
-                // Assign fitness
-                fitnessCalculator.CalculateAndAssignFitness(individual, null);
-
                 // Initial simplex creation
                 if (InitialVerticesStillUnevaluated.Count > 0)
                 {

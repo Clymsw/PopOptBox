@@ -75,17 +75,15 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
 
         protected override int AssessFitnessAndDecideFate(IEnumerable<Individual> individuals)
         {
+            var inds = individuals as Individual[] ?? individuals.ToArray();
+            
             if (!Population.IsTargetSizeReached)
             {
-                return base.AssessFitnessAndDecideFate(individuals);
+                return base.AssessFitnessAndDecideFate(inds);
             }
 
-            var inds = individuals as Individual[] ?? individuals.ToArray();
-            foreach (var individual in inds)
-            {
-                fitnessCalculator.CalculateAndAssignFitness(individual, Population);
-            }
-
+            // Use EA logic
+            fitnessCalculator.CalculateAndAssignFitness(inds, Population);
             return reinsertionOperator.ReInsert(inds, Population);
         }
 
