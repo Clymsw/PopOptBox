@@ -20,11 +20,9 @@ namespace PopOptBox.Base.Management
         public readonly DecisionVector DecisionVector;
 
         /// <summary>
-        /// This contains any numeric information an evaluator wishes to store.
+        /// This contains any additional information a process wishes to store.
         /// </summary>
-        /// <remarks>Not readonly to enable Individual cloning</remarks>
-        private Dictionary<string, object> properties =
-            new Dictionary<string, object>();
+        private readonly Dictionary<string, object> properties = new Dictionary<string, object>();
 
         /// <summary>
         /// The solution(s) currently relevant for the optimisation.
@@ -65,20 +63,20 @@ namespace PopOptBox.Base.Management
         /// </summary>
         public Individual Clone()
         {
-            var propCopy = new Dictionary<string, object>();
-            foreach (var key in properties.Keys)
-            {
-                propCopy.Add(key, properties[key]);
-            }
-
-            return new Individual(DecisionVector)
+            var newIndividual = new Individual(DecisionVector)
             {
                 SolutionVector = (double[])SolutionVector?.Clone(),
                 Fitness = Fitness,
-                properties = propCopy,
                 Legal = Legal,
                 State = State,
             };
+            
+            foreach (var key in properties.Keys)
+            {
+                newIndividual.SetProperty(key, properties[key]);
+            }
+
+            return newIndividual;
         }
 
         #endregion
@@ -158,7 +156,7 @@ namespace PopOptBox.Base.Management
         /// <summary>
         /// Assigns Solution Vector based on given Property names
         /// </summary>
-        /// <param name="keyNames">Names of property keys to set as solution vector</param>
+        /// <param name="keyNames">Names of property keys to set as solution vector.</param>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when any property name does not exist.</exception>
         public void SetSolution(params string[] keyNames)
         {
@@ -174,7 +172,10 @@ namespace PopOptBox.Base.Management
         /// Assigns Fitness value.
         /// </summary>
         /// <remarks>Can be performed more than once.</remarks>
-        /// <param name="fitness">The fitness value which has been calculated by the <see cref="Optimiser"/>.</param>
+        /// <param name="fitness">
+        /// The fitness value which has been calculated by the <see cref="Optimiser"/>.
+        /// <seealso cref="PopOptBox.Base.Helpers.IFitnessCalculator"/>
+        /// </param>
         /// <exception cref="InvalidOperationException">Thrown when Individual is not evaluated. <seealso cref="SetSolution"/>.</exception>
         public void SetFitness(double fitness)
         {
