@@ -1,5 +1,6 @@
 using System;
 using PopOptBox.Base.Conversion;
+using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Variables;
 
 namespace PopOptBox.Base.Management
@@ -39,15 +40,9 @@ namespace PopOptBox.Base.Management
         }
 
         /// <summary>
-        ///     The solution to Fitness converter
+        ///     The Solution Vector to Fitness converter passed into the <see cref="Optimiser"/>.
         /// </summary>
         /// <returns></returns>
-        protected abstract Func<double[], double> CreateSolutionToFitness();
-
-        /// <summary>
-        ///     The Solution Vector to penalty converter for illegal individuals
-        /// </summary>
-        /// <returns></returns>
-        protected abstract Func<DecisionVector, double> CreatePenalty();
+        protected abstract IFitnessCalculator CreateFitnessCalculator();
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using PopOptBox.Base;
+using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Management;
 using PopOptBox.Base.Variables;
 using PopOptBox.Optimisers.StructuredSearch.Simplices;
@@ -9,27 +11,28 @@ namespace PopOptBox.Optimisers.StructuredSearch
 {
     public class NelderMead : Optimiser
     {
-        protected NelderMeadSimplexOperationsManager OperationsManager;
+        protected readonly NelderMeadSimplexOperationsManager OperationsManager;
 
         #region Simplex Management
 
         //Logic management
-        public NelderMeadSimplexOperations CurrentOperation { get; private set; } 
+        public NelderMeadSimplexOperations CurrentOperation { get; private set; }
             = NelderMeadSimplexOperations.R;
-        
+
         private readonly List<NelderMeadSimplexOperations> tempProgress =
             new List<NelderMeadSimplexOperations>();
-        
+
         private Individual tempReflect;
 
         //History management
         public NelderMeadSteps LastStep { get; private set; }
-        
+
         //Population management
         /// <summary>
         /// List of vertices from initial simplex which have not yet been reinserted
         /// </summary>
         protected readonly List<DecisionVector> InitialVerticesStillUnevaluated;
+
         /// <summary>
         /// List (length 0-1) of vertices which have been sent out during optimisation
         /// </summary>
@@ -41,19 +44,17 @@ namespace PopOptBox.Optimisers.StructuredSearch
         /// <summary>
         /// Constructs a new Nelder-Mead Simplex local search optimiser.
         /// </summary>
-        /// <param name="solutionToFitness"><see cref="Optimiser"/></param>
-        /// <param name="penalty"><see cref="Optimiser"/></param>
+        /// <param name="fitnessCalculator">A <see cref="FitnessCalculatorSingleObjective"/>. <see cref="Optimiser"/></param>
         /// <param name="initialLocation">Starting location for the search.</param>
         /// <param name="hyperParameters">
         /// Instance of <see cref="HyperParameterManager"/> containing values for
         /// all the coefficients required by <see cref="NelderMeadHyperParameters"/>.
         /// </param>
         public NelderMead(
-            Func<double[], double> solutionToFitness,
-            Func<double[], double> penalty,
-            DecisionVector initialLocation, 
+            IFitnessCalculator fitnessCalculator,
+            DecisionVector initialLocation,
             HyperParameterManager hyperParameters) :
-            base(new Simplex(initialLocation.Count), solutionToFitness, penalty)
+            base(new Simplex(initialLocation.Count), fitnessCalculator)
         {
             // Set up simplex operations
             OperationsManager = new NelderMeadSimplexOperationsManager(hyperParameters);
@@ -87,7 +88,7 @@ namespace PopOptBox.Optimisers.StructuredSearch
                     try
                     {
                         //Create new individual
-                        var newDv = OperationsManager.PerformOperation((Simplex)Population, CurrentOperation);
+                        var newDv = OperationsManager.PerformOperation((Simplex) Population, CurrentOperation);
                         VerticesNotEvaluated.Add(newDv);
                         return newDv;
                     }
@@ -105,142 +106,161 @@ namespace PopOptBox.Optimisers.StructuredSearch
             }
         }
 
-        protected override bool ReInsert(Individual individual)
+        protected override int AssessFitnessAndDecideFate(IEnumerable<Individual> individuals)
         {
             // Assign fitness
-            SetFitness(individual);
+            var inds = individuals as Individual[] ?? individuals.ToArray();
+            fitnessCalculator.CalculateAndAssignFitness(inds);
 
-            // Initial simplex creation
-            if (InitialVerticesStillUnevaluated.Count > 0)
+            var numberInserted = 0;
+            foreach (var individual in inds)
             {
-                if (InitialVerticesStillUnevaluated.Contains(individual.DecisionVector))
+                // Initial simplex creation
+                if (InitialVerticesStillUnevaluated.Count > 0)
                 {
-                    Population.AddIndividual(individual, SetFitness);
-                    InitialVerticesStillUnevaluated.Remove(individual.DecisionVector);
-                    return true;
+                    if (InitialVerticesStillUnevaluated.Contains(individual.DecisionVector))
+                    {
+                        Population.AddIndividual(individual);
+                        InitialVerticesStillUnevaluated.Remove(individual.DecisionVector);
+                        numberInserted++;
+                        continue;
+                    }
+                    else
+                    {
+                        individual.SetProperty(OptimiserPropertyNames.ReinsertionError,
+                            "This vertex was not expected during simplex initialisation");
+                        continue;
+                    }
                 }
-                else
+
+                if (VerticesNotEvaluated.Count == 0)
                 {
-                    throw new ArgumentException("This vertex was not expected during simplex initialisation");
+                    individual.SetProperty(OptimiserPropertyNames.ReinsertionError,
+                        "This vertex was not expected during simplex initialisation");
+                    continue;
+                }
+
+                if (!individual.DecisionVector.Equals(VerticesNotEvaluated.First()))
+                {
+                    individual.SetProperty(OptimiserPropertyNames.ReinsertionError,
+                        "This vertex was not expected during simplex initialisation");
+                    continue;
+                }
+
+                VerticesNotEvaluated.Remove(individual.DecisionVector);
+
+                // Into Nelder Mead logic
+                var fitnesses = Population.GetMemberFitnesses().ToArray();
+
+                var bestFitness = fitnesses.First();
+                var worstFitness = fitnesses.Last();
+                double nextToWorstFitness;
+                nextToWorstFitness = individual.DecisionVector.Count == 1 
+                    ? bestFitness 
+                    : fitnesses.ElementAt(fitnesses.Count() - 2);
+
+                switch (CurrentOperation)
+                {
+                    case (NelderMeadSimplexOperations.R):
+                        if (individual.Fitness < nextToWorstFitness & individual.Fitness >= bestFitness)
+                        {
+                            // Reflection vertex lies inside the population, accept it.
+                            Population.ReplaceWorst(individual);
+                            ChooseReflect();
+                            Reset();
+                            numberInserted++;
+                        }
+                        else if (individual.Fitness < bestFitness)
+                        {
+                            // Reflection vertex is better than the best, try expansion.
+                            CurrentOperation = NelderMeadSimplexOperations.E;
+                            TryExpand();
+                        }
+                        else if (individual.Fitness < worstFitness & individual.Fitness >= nextToWorstFitness)
+                        {
+                            // Reflection vertex is strictly better than worst, 
+                            //  but is worse than every other vertex, try contract out.
+                            CurrentOperation = NelderMeadSimplexOperations.C;
+                            TryContractOut();
+                        }
+                        else if (individual.Fitness >= worstFitness)
+                        {
+                            // Reflection vertex is the worst we've found, try contract in.
+                            CurrentOperation = NelderMeadSimplexOperations.K;
+                            TryContractIn();
+                        }
+
+                        tempReflect = individual;
+                        break;
+
+                    case (NelderMeadSimplexOperations.E):
+                        if (individual.Fitness < tempReflect.Fitness)
+                        {
+                            // Expansion vertex is better than reflection vertex, accept it.
+                            Population.ReplaceWorst(individual);
+                            ChooseExpand();
+                        }
+                        else
+                        {
+                            // Expansion vertex is worse than reflection vertex, accept reflection.
+                            Population.ReplaceWorst(tempReflect);
+                            ChooseReflect();
+                        }
+
+                        Reset();
+                        numberInserted++;
+                        break;
+
+                    case (NelderMeadSimplexOperations.C):
+                        if (individual.Fitness <= tempReflect.Fitness)
+                        {
+                            // Contract Outside vertex is better than reflection vertex, accept it.
+                            Population.ReplaceWorst(individual);
+                            ChooseContractOut();
+                            Reset();
+                            numberInserted++;
+                        }
+                        else
+                        {
+                            // Contract Outside vertex is worse than reflection vertex, shrink.
+                            CurrentOperation = NelderMeadSimplexOperations.S;
+                            TryShrink();
+                        }
+
+                        break;
+
+                    case (NelderMeadSimplexOperations.K):
+                        if (individual.Fitness < worstFitness)
+                        {
+                            //Contract Inside vertex is better than the worst, accept it.
+                            Population.ReplaceWorst(individual);
+                            ChooseContractIn();
+                            Reset();
+                            numberInserted++;
+                        }
+                        else
+                        {
+                            // Contract Inside vertex is worst, shrink.
+                            CurrentOperation = NelderMeadSimplexOperations.S;
+                            TryShrink();
+                        }
+
+                        break;
+
+                    case (NelderMeadSimplexOperations.S):
+                        Population.ReplaceWorst(individual);
+                        ChooseShrink();
+                        Reset();
+                        numberInserted++;
+                        break;
+
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(CurrentOperation),
+                            "This operation is not understood.");
                 }
             }
 
-            if (VerticesNotEvaluated.Count == 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(individual), "This vertex was not expected");
-            }
-            if (!individual.DecisionVector.Equals(VerticesNotEvaluated.First()))
-            {
-                throw new ArgumentOutOfRangeException(nameof(individual), "This vertex was not expected");
-            }
-            VerticesNotEvaluated.Remove(individual.DecisionVector);
-
-            // Into Nelder Mead logic
-            var fitnesses = Population.GetMemberFitnesses();
-
-            var bestFitness = fitnesses.First();
-            var worstFitness = fitnesses.Last();
-            double nextToWorstFitness;
-            if (individual.DecisionVector.Count == 1)
-                nextToWorstFitness = bestFitness;
-            else
-                nextToWorstFitness = fitnesses.ElementAt(fitnesses.Count() - 2);
-            
-            switch (CurrentOperation)
-            {
-                case (NelderMeadSimplexOperations.R):
-                    if (individual.Fitness < nextToWorstFitness & individual.Fitness >= bestFitness)
-                    {
-                        // Reflection vertex lies inside the population, accept it.
-                        Population.ReplaceWorst(individual, SetFitness);
-                        ChooseReflect();
-                        Reset();
-                        return true;
-                    }
-                    else if (individual.Fitness < bestFitness)
-                    {
-                        // Reflection vertex is better than the best, try expansion.
-                        CurrentOperation = NelderMeadSimplexOperations.E;
-                        TryExpand();
-                    }
-                    else if (individual.Fitness < worstFitness & individual.Fitness >= nextToWorstFitness)
-                    {
-                        // Reflection vertex is strictly better than worst, 
-                        //  but is worse than every other vertex, try contract out.
-                        CurrentOperation = NelderMeadSimplexOperations.C;
-                        TryContractOut();
-                    }
-                    else if (individual.Fitness >= worstFitness)
-                    {
-                        // Reflection vertex is the worst we've found, try contract in.
-                        CurrentOperation = NelderMeadSimplexOperations.K;
-                        TryContractIn();
-                    }
-                    tempReflect = individual;
-                    break;
-
-                case (NelderMeadSimplexOperations.E):
-                    if (individual.Fitness < tempReflect.Fitness)
-                    {
-                        // Expansion vertex is better than reflection vertex, accept it.
-                        Population.ReplaceWorst(individual, SetFitness);
-                        ChooseExpand();
-                    }
-                    else
-                    {
-                        // Expansion vertex is worse than reflection vertex, accept reflection.
-                        Population.ReplaceWorst(tempReflect, SetFitness);
-                        ChooseReflect();
-                    }
-                    Reset();
-                    return true;
-
-                case (NelderMeadSimplexOperations.C):
-                    if (individual.Fitness <= tempReflect.Fitness)
-                    {
-                        // Contract Outside vertex is better than reflection vertex, accept it.
-                        Population.ReplaceWorst(individual, SetFitness);
-                        ChooseContractOut();
-                        Reset();
-                        return true;
-                    }
-                    else
-                    {
-                        // Contract Outside vertex is worse than reflection vertex, shrink.
-                        CurrentOperation = NelderMeadSimplexOperations.S;
-                        TryShrink();
-                    }
-                    break;
-
-                case (NelderMeadSimplexOperations.K):
-                    if (individual.Fitness < worstFitness)
-                    {
-                        //Contract Inside vertex is better than the worst, accept it.
-                        Population.ReplaceWorst(individual, SetFitness);
-                        ChooseContractIn();
-                        Reset();
-                        return true;
-                    }
-                    else
-                    {
-                        // Contract Inside vertex is worst, shrink.
-                        CurrentOperation = NelderMeadSimplexOperations.S;
-                        TryShrink();
-                    }
-                    break;
-
-                case (NelderMeadSimplexOperations.S):
-                    Population.ReplaceWorst(individual, SetFitness);
-                    ChooseShrink();
-                    Reset();
-                    return true;
-                
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(CurrentOperation), 
-                        "This operation is not understood.");
-            }
-
-            return false;
+            return numberInserted;
         }
 
         private void Reset()
@@ -251,60 +271,74 @@ namespace PopOptBox.Optimisers.StructuredSearch
         }
 
         #region Historian
+
         #region Try
+
         private void TryReflect()
         {
             tempProgress.Add(NelderMeadSimplexOperations.R);
         }
+
         private void TryExpand()
         {
             tempProgress.Add(NelderMeadSimplexOperations.E);
         }
+
         private void TryContractOut()
         {
             tempProgress.Add(NelderMeadSimplexOperations.C);
         }
+
         private void TryContractIn()
         {
             tempProgress.Add(NelderMeadSimplexOperations.K);
         }
+
         private void TryShrink()
         {
             tempProgress.Add(NelderMeadSimplexOperations.S);
         }
+
         #endregion
+
         #region Choose
+
         private void ChooseReflect()
         {
-            LastStep = CurrentOperation == NelderMeadSimplexOperations.R 
-                ? NelderMeadSteps.rR 
+            LastStep = CurrentOperation == NelderMeadSimplexOperations.R
+                ? NelderMeadSteps.rR
                 : NelderMeadSteps.reR;
             tempProgress.Clear();
         }
+
         private void ChooseExpand()
         {
             LastStep = NelderMeadSteps.reE;
             tempProgress.Clear();
         }
+
         private void ChooseContractOut()
         {
             LastStep = NelderMeadSteps.rcC;
             tempProgress.Clear();
         }
+
         private void ChooseContractIn()
         {
             LastStep = NelderMeadSteps.rkK;
             tempProgress.Clear();
         }
+
         private void ChooseShrink()
         {
-            LastStep = tempProgress[1] == NelderMeadSimplexOperations.C 
-                ? NelderMeadSteps.rcsS 
+            LastStep = tempProgress[1] == NelderMeadSimplexOperations.C
+                ? NelderMeadSteps.rcsS
                 : NelderMeadSteps.rksS;
             tempProgress.Clear();
         }
 
         #endregion
+
         #endregion
     }
 }

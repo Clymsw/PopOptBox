@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Management;
 using PopOptBox.Base.Variables;
 
@@ -8,13 +7,16 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test
 {
     public static class Helpers
     {
-        public static List<Individual> CreateEvaluatedIndividualsFromArray(double[][] testValues, double[] fitness)
+        public static List<Individual> CreateNewIndividualsFromArray(double[][] testValues)
         {
             var ds = DecisionSpace.CreateForUniformDoubleArray(testValues.ElementAt(0).Length, double.MinValue, double.MaxValue);
-
             var dvs = testValues.Select(v => DecisionVector.CreateFromArray(ds, v));
-
-            var inds = dvs.Select(v => new Individual(v)).ToList();
+            return dvs.Select(v => new Individual(v)).ToList();
+        }
+        
+        public static List<Individual> CreateEvaluatedIndividualsFromArray(double[][] testValues, double[] fitness)
+        {
+            var inds = CreateNewIndividualsFromArray(testValues);
             for (var i = 0; i < inds.Count; i++)
             {
                 inds.ElementAt(i).EvaluateIndividual(fitness.ElementAt(i));
@@ -24,15 +26,11 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test
 
         public static List<Individual> CreateFitnessAssessedIndividualsFromArray(double[][] testValues, double[] fitness)
         {
-            var ds = DecisionSpace.CreateForUniformDoubleArray(testValues.ElementAt(0).Length, double.MinValue, double.MaxValue);
-
-            var dvs = testValues.Select(v => DecisionVector.CreateFromArray(ds, v));
-
-            var inds = dvs.Select(v => new Individual(v)).ToList();
+            var inds = CreateNewIndividualsFromArray(testValues);
             for (var i = 0; i < inds.Count; i++)
             {
                 inds.ElementAt(i).EvaluateIndividual(fitness.ElementAt(i));
-                inds.ElementAt(i).SetFitness(SolutionToFitnessSingleObjective.Minimise);
+                inds.ElementAt(i).SetFitness(fitness.ElementAt(i));
             }
             return inds;
         }
@@ -40,7 +38,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test
         public static void EvaluateIndividual(this Individual ind, double fitness = 1.0)
         {
             ind.SendForEvaluation();
-            ind.SetProperty("solution", new[] { fitness });
+            ind.SetProperty("solution", fitness);
             ind.SetSolution("solution");
             ind.SetLegality(true);
         }

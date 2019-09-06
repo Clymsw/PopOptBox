@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Management;
 using PopOptBox.Base.Variables;
 
@@ -17,8 +16,8 @@ namespace PopOptBox.Optimisers.StructuredSearch.Test
             var inds = dvs.Select(v => new Individual(v)).ToList();
             foreach (var ind in inds)
             {
-                EvaluateIndividual(ind);
-                ind.SetFitness(SolutionToFitnessSingleObjective.Minimise);
+                EvaluateIndividual(ind, 1.0);
+                ind.SetFitness(1.0);
             }
             return inds;
         }
@@ -26,7 +25,7 @@ namespace PopOptBox.Optimisers.StructuredSearch.Test
         public static void EvaluateIndividual(Individual ind, double value = 1.0)
         {
             ind.SendForEvaluation();
-            ind.SetProperty("solution", new[]{value});
+            ind.SetProperty("solution", value);
             ind.SetSolution("solution");
             ind.SetLegality(true);
         }

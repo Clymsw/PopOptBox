@@ -1,4 +1,3 @@
-using System;
 using PopOptBox.Base.Conversion;
 using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Management;
@@ -33,8 +32,7 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.NelderMead
         public override Optimiser CreateOptimiser()
         {
             return new Optimisers.StructuredSearch.NelderMead(
-                CreateSolutionToFitness(),
-                CreatePenalty(),
+                CreateFitnessCalculator(),
                 CreateModel().GetNewDecisionVector(),
                 HyperParameters);
         }
@@ -44,14 +42,11 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.NelderMead
             return new ContinuousProblemModel(decisionSpace);
         }
 
-        protected override Func<double[], double> CreateSolutionToFitness()
+        protected override IFitnessCalculator CreateFitnessCalculator()
         {
-            return SolutionToFitnessSingleObjective.Minimise;
-        }
-
-        protected override Func<double[], double> CreatePenalty()
-        {
-            return Penalty.DeathPenalty;
+            return new FitnessCalculatorSingleObjective(
+                SolutionToFitnessSingleObjective.Minimise,
+                Penalty.DeathPenalty);
         }
     }
 }

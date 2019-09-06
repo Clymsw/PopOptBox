@@ -13,7 +13,7 @@ namespace PopOptBox.Base.Management
     {
         #region Fields
 
-        private readonly List<IndividualContainer> members;
+        private readonly List<Individual> members;
         
         /// <summary>
         /// Whether or not one should expect every individual to have the same length of <see cref="Variables.DecisionSpace"/>. 
@@ -30,11 +30,6 @@ namespace PopOptBox.Base.Management
         /// </summary>
         public bool IsTargetSizeReached => members.Count >= TargetSize;
 
-        /// <summary>
-        /// Whether or not we spend time calculating domination ranks for multi-objective optimisation.
-        /// </summary>
-        public readonly bool UseDomination;
-
         #endregion
 
         #region Constructors
@@ -45,12 +40,10 @@ namespace PopOptBox.Base.Management
         /// <param name="initialPopulation">An array of individuals</param>
         /// <param name="initialSize">Expected max size of population</param>
         /// <param name="constantLengthDv">Whether the Decision Vector should be expected to be constant</param>
-        /// <param name="useDomination">Whether Pareto Front domination calculations will be performed.</param>
         public Population(
             int initialSize = 100,
             IEnumerable<Individual> initialPopulation = null,
-            bool constantLengthDv = true,
-            bool useDomination = true)
+            bool constantLengthDv = true)
         {
             if (initialSize <= 0)
                 throw new ArgumentOutOfRangeException(nameof(initialSize),
@@ -59,16 +52,16 @@ namespace PopOptBox.Base.Management
             
             ConstantLengthDecisionVector = constantLengthDv;
 
-            UseDomination = useDomination;
-            
-            members = new List<IndividualContainer>(TargetSize);
+            members = new List<Individual>(TargetSize);
 
             if (initialPopulation == null)
                 return;
 
             foreach (var ind in initialPopulation)
-                if (ind.State == IndividualState.FitnessAssessed)
-                    AddIndividual(ind, i => { });
+            {
+                // Check on state (fitness) is done here.
+                AddIndividual(ind);
+            }
         }
 
         /// <summary>
@@ -78,7 +71,7 @@ namespace PopOptBox.Base.Management
         {
             return new Population(
                 TargetSize,
-                members.Select(m => m.TheIndividual.Clone()),
+                members.Select(m => m.Clone()),
                 ConstantLengthDecisionVector);
         }
 
@@ -91,7 +84,7 @@ namespace PopOptBox.Base.Management
         /// </summary>
         /// <param name="index">Element index.</param>
         /// <returns>An <see cref="Individual"/>.</returns>
-        public Individual this[int index] => members.ElementAt(index).TheIndividual;
+        public Individual this[int index] => members.ElementAt(index);
 
         /// <summary>
         /// Gets the individual with the best (lowest) Fitness.
@@ -101,7 +94,7 @@ namespace PopOptBox.Base.Management
         public Individual Best()
         {
             return members.Count > 0
-                ? members.First().TheIndividual
+                ? members.First()
                 : throw new InvalidOperationException("Population has no members.");
         }
 
@@ -113,21 +106,8 @@ namespace PopOptBox.Base.Management
         public Individual Worst()
         {
             return members.Count > 0
-                ? members.Last().TheIndividual
+                ? members.Last()
                 : throw new InvalidOperationException("Population has no members.");
-        }
-
-        /// <summary>
-        /// Gets the individuals on the first Pareto Front.
-        /// </summary>
-        /// <returns>An array of <see cref="Individual"/>s.</returns>
-        public IEnumerable<Individual> ParetoFront(int rank = 0)
-        {
-            return UseDomination
-                ? members.Where(i => i.Rank == rank).Select(i => i.TheIndividual)
-                : rank < members.Count 
-                      ? new [] { members[rank].TheIndividual }
-                      : new Individual[0];
         }
 
         /// <summary>
@@ -136,7 +116,7 @@ namespace PopOptBox.Base.Management
         /// <returns>List of doubles: Fitness</returns>
         public IEnumerable<double> GetMemberFitnesses()
         {
-            return members.Select(i => i.TheIndividual.Fitness);
+            return members.Select(i => i.Fitness);
         }
 
         /// <summary>
@@ -145,7 +125,7 @@ namespace PopOptBox.Base.Management
         /// <returns>List of double arrays: Solution Vector</returns>
         public IEnumerable<double[]> GetMemberSolutionVectors()
         {
-            return members.Select(i => i.TheIndividual.SolutionVector);
+            return members.Select(i => i.SolutionVector);
         }
 
         /// <summary>
@@ -154,7 +134,7 @@ namespace PopOptBox.Base.Management
         /// <returns>List of object arrays: Decision Vector</returns>
         public IEnumerable<object[]> GetMemberDecisionVectors()
         {
-            return members.Select(i => i.TheIndividual.DecisionVector.ToArray());
+            return members.Select(i => i.DecisionVector.ToArray());
         }
         
         /// <summary>
@@ -185,47 +165,23 @@ namespace PopOptBox.Base.Management
         /// Adds an <see cref="Individual"/> to the population.
         /// </summary>
         /// <param name="individual">The individual to add.</param>
-        /// <param name="fitnessAllocationMechanism">A delegate for calculating the fitness.</param>
         /// <exception cref="ArgumentException">
         /// Thrown if: 
         /// 1) we are expecting individuals to have the same length Decision Vector and it is not true; 
         /// 2) The Individual is not yet evaluated or fitness assessed.
         /// </exception>
-        public void AddIndividual(Individual individual, Action<Individual> fitnessAllocationMechanism)
+        public void AddIndividual(Individual individual)
         {
             if (ConstantLengthDecisionVector && members.Count > 0)
                 if (individual.DecisionVector.Count != Best().DecisionVector.Count)
                     throw new ArgumentException(
                         "Decision Vector is not the right length!");
             
-            if (individual.State != IndividualState.Evaluated && individual.State != IndividualState.FitnessAssessed)
-                throw new ArgumentException("Individual is not evaluated!");
-            
-            var ind = new IndividualContainer(individual);
-            
-            // Set Rank
-            if (UseDomination)
-            {
-                foreach (var member in members)
-                {
-                    if (ind.IsDominating(member.TheIndividual))
-                    {
-                        ind.Dominating.Add(member.TheIndividual);
-                        member.DominatedBy.Add(individual);
-                    }
-                    else if (member.IsDominating(individual))
-                    {
-                        ind.DominatedBy.Add(member.TheIndividual);
-                        member.Dominating.Add(individual);
-                    }
-                }
-            }
-
-            // Set Fitness
-            fitnessAllocationMechanism(ind.TheIndividual);
+            if (individual.State != IndividualState.FitnessAssessed)
+                throw new ArgumentException("Individual is not evaluated and fitness assessed!");
             
             // Add to population
-            members.Add(ind);
+            members.Add(individual);
 
             Sort();
         }
@@ -235,24 +191,22 @@ namespace PopOptBox.Base.Management
         /// </summary>
         private void Sort()
         {
-            members.Sort((p, q) => p.TheIndividual.Fitness.CompareTo(q.TheIndividual.Fitness));
+            members.Sort((p, q) => p.Fitness.CompareTo(q.Fitness));
         }
 
         /// <summary>
         /// Replaces worst individual with a new one.
         /// </summary>
         /// <param name="individualToInsert">New individual to insert.</param>
-        /// <param name="fitnessAllocationMechanism">A delegate for calculating the fitness.</param>
         /// <exception cref="System.InvalidOperationException">Thrown when the population is empty.</exception>
-        public void ReplaceWorst(Individual individualToInsert, 
-            Action<Individual> fitnessAllocationMechanism)
+        public void ReplaceWorst(Individual individualToInsert)
         {
             if (members.Count == 0)
                 throw new InvalidOperationException("Population has no members.");
             
             RemoveIndividualAt(members.Count - 1);
             
-            AddIndividual(individualToInsert, fitnessAllocationMechanism);
+            AddIndividual(individualToInsert);
         }
 
         /// <summary>
@@ -260,11 +214,9 @@ namespace PopOptBox.Base.Management
         /// </summary>
         /// <param name="index">The index of the individual to remove.</param>
         /// <param name="individualToInsert">New individual to insert.</param>
-        /// <param name="fitnessAllocationMechanism">A delegate for calculating the fitness.</param>
         /// <exception cref="InvalidOperationException">Thrown when the population is empty.</exception>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when the index is not valid.</exception>
-        public void ReplaceIndividualAt(int index, Individual individualToInsert, 
-            Action<Individual> fitnessAllocationMechanism)
+        public void ReplaceIndividualAt(int index, Individual individualToInsert)
         {
             if (members.Count == 0)
                 throw new InvalidOperationException("Population has no members.");
@@ -274,7 +226,7 @@ namespace PopOptBox.Base.Management
 
             RemoveIndividualAt(index);
             
-            AddIndividual(individualToInsert, fitnessAllocationMechanism);
+            AddIndividual(individualToInsert);
         }
 
         /// <summary>
@@ -282,17 +234,15 @@ namespace PopOptBox.Base.Management
         /// </summary>
         /// <param name="individualToRemove">Old individual to remove.</param>
         /// <param name="individualToInsert">New individual to insert.</param>
-        /// <param name="fitnessAllocationMechanism">A delegate for calculating the fitness.</param>
         /// <exception cref="InvalidOperationException">Thrown when the population is empty, or old individual is not present.</exception>
-        public void ReplaceIndividual(Individual individualToRemove, Individual individualToInsert, 
-            Action<Individual> fitnessAllocationMechanism)
+        public void ReplaceIndividual(Individual individualToRemove, Individual individualToInsert)
         {
             if (members.Count == 0)
                 throw new InvalidOperationException("Population has no members.");
 
             try
             {
-                var individualIndex = members.FindIndex(i => i.TheIndividual.Equals(individualToRemove));
+                var individualIndex = members.FindIndex(i => i.Equals(individualToRemove));
                 RemoveIndividualAt(individualIndex);
             }
             catch (ArgumentNullException)
@@ -300,21 +250,11 @@ namespace PopOptBox.Base.Management
                 throw new InvalidOperationException("Old individual was not found in population.");
             }
 
-            AddIndividual(individualToInsert, fitnessAllocationMechanism);
+            AddIndividual(individualToInsert);
         }
 
         private void RemoveIndividualAt(int index)
         {
-            if (UseDomination)
-            {
-                // Update domination counters 
-                foreach (var ind in members[index].Dominating)
-                    members.First(i => i.TheIndividual.Equals(ind)).DominatedBy.Remove(members[index].TheIndividual);
-
-                foreach (var ind in members[index].DominatedBy)
-                    members.First(i => i.TheIndividual.Equals(ind)).Dominating.Remove(members[index].TheIndividual);
-            }
-
             // Remove
             members.RemoveAt(index);
         }
@@ -333,12 +273,12 @@ namespace PopOptBox.Base.Management
 
         public IEnumerator<Individual> GetEnumerator()
         {
-            return members.Select(m => m.TheIndividual).GetEnumerator();
+            return members.Select(m => m).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return members.Select(m => m.TheIndividual).GetEnumerator();
+            return members.Select(m => m).GetEnumerator();
         }
 
         #endregion

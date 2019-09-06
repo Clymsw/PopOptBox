@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Test.Helpers;
 using Xunit;
 
@@ -52,9 +51,9 @@ namespace PopOptBox.Base.Management.Test
         [Fact]
         public void Reinsertion_FitnessAssessedIndividual_NotAllowed()
         {
+            // TODO: Is this the desired behaviour?
             var newInd = ObjectCreators.GetIndividual(builder.StartingDecVec);
-            ObjectCreators.EvaluateIndividual(newInd);
-            newInd.SetFitness(SolutionToFitnessSingleObjective.Minimise);
+            newInd = ObjectCreators.EvaluateIndividualAndSetFitness(newInd);
 
             Assert.Throws<ArgumentException>(() => optimiserMock.ReInsert(new[] { newInd }));
         }

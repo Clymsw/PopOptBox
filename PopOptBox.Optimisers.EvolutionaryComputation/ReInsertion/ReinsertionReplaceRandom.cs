@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using PopOptBox.Base.Management;
 using System.Linq;
 
@@ -7,7 +7,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Reinsertion
     /// <summary>
     /// A re-insertion operator which replaces a randomly-selected individual in the population 
     /// if the candidate individual is better.
-    /// Similar to G3 of Deb et al. (2002)
+    /// Same as G3 of Deb et al. (2002) TODO: Check this is true!
     /// </summary>
     public class ReinsertionReplaceRandom : Operator, IReinsertionOperator
     {
@@ -24,26 +24,26 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Reinsertion
         /// <summary>
         /// Re-inserts an individual if it is fitter than a randomly-selected champion from the population.
         /// </summary>
+        /// <param name="individuals">The <see cref="Individual"/> candidates for re-insertion.</param>
         /// <param name="population">The <see cref="Population"/> to re-insert into.</param>
-        /// <param name="individual">The <see cref="Individual"/> candidate for re-insertion.</param>
-        /// <param name="fitnessAssessment">Delegate used by the <see cref="Population"/> for calculating fitness.</param>
-        /// <returns><see langword="true"/> if re-insertion has occurred.</returns>
-        public bool ReInsert(Population population, Individual individual, Action<Individual> fitnessAssessment)
+        /// <returns>The number of individuals re-inserted.</returns>
+        public int ReInsert(IEnumerable<Individual> individuals, Population population)
         {
-            var championIdx = rngManager.GetLocations(population.Count, maximumNumberOfLocations: 1, lambda: 1);
-            var champion = population[championIdx.ElementAt(0)];
+            var numberInserted = 0;
 
-            fitnessAssessment(individual);
-            
-            if (individual.Fitness < champion.Fitness)
+            foreach (var individual in individuals)
             {
-                population.ReplaceIndividual(champion, individual, i => { });
-                return true;
+                var championIdx = rngManager.GetLocations(population.Count, maximumNumberOfLocations: 1, lambda: 1);
+                var champion = population[championIdx.ElementAt(0)];
+
+                if (individual.Fitness >= champion.Fitness)
+                    continue;
+                
+                population.ReplaceIndividual(champion, individual);
+                numberInserted++;
             }
-            else
-            {
-                return false;
-            }
+
+            return numberInserted;
         }
     }
 }

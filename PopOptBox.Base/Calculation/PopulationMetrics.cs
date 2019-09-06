@@ -9,26 +9,65 @@ namespace PopOptBox.Base.Calculation
     /// <summary>
     /// Helper functions to calculate <see cref="Population"/> metrics, 
     /// for example to support calculating whether an optimisation has converged,
-    /// or for multiobjective optimisation.
+    /// or for multi-objective optimisation.
     /// </summary>
     public static class PopulationMetrics
     {
         /// <summary>
         /// Gets the centroid of the population (the average location of all the decision vectors).
         /// </summary>
-        /// <param name="pop">The population.</param>
+        /// <param name="population">The population.</param>
         /// <returns>A double array representing the centroid location.</returns>
-        public static double[] Centroid(this Population pop)
+        public static double[] Centroid(this Population population)
         {
-            if (!pop.ConstantLengthDecisionVector) 
+            if (!population.ConstantLengthDecisionVector) 
                 throw new InvalidOperationException("This function is not valid for a population with variable length Decision Vectors.");
             
-            var decisionVectors = pop.GetMemberDecisionVectors().Select(dv => dv.Select(d => (double) d));
+            var decisionVectors = population.GetMemberDecisionVectors().Select(dv => dv.Select(d => (double) d));
             var matrix = Matrix<double>.Build.DenseOfColumns(decisionVectors);
             var centroid = matrix.RowSums() / matrix.ColumnCount;
             return centroid.ToArray();
         }
+        
+        #region MultiObjective
+        
+        /// <summary>
+        /// Gets the individuals on the specified Pareto Front.
+        /// </summary>
+        /// <param name="population">The population extended by this method.</param>
+        /// <param name="front">The desired Pareto Front (1 is the first, by tradition).</param>
+        /// <returns>An array of <see cref="Individual"/>s.</returns>
+        public static Individual[] ParetoFront(this Population population, int front = 1)
+        {
+            return population.Best().SolutionVector.Length > 1
+                   ? population
+                       .Where(i => i.GetProperty<int>(OptimiserPropertyNames.ParetoFront) == front).ToArray()
+                   : front < population.Count
+                     ? new [] { population[front - 1] }
+                     : new Individual[0];
+        }
 
+        /// <summary>
+        /// Gets all non-dominated individuals.
+        /// </summary>
+        /// <remarks>
+        /// Should be equivalent to population.ParetoFront(1),
+        /// but depends on different property (from <see cref="OptimiserPropertyNames"/>).
+        /// </remarks>
+        /// <param name="population">The population extended by this method.</param>
+        /// <returns>An array of <see cref="Individual"/>s.</returns>
+        public static Individual[] NonDominatedSet(this Population population)
+        {
+            return population.Best().SolutionVector.Length > 1
+                ? population
+                    .Where(i => i.NonDominationRank() == 0).ToArray()
+                : new[] { population.Best() };
+        }
+
+        #endregion
+
+        #region Convergence
+        
         /// <summary>
         ///     Checks to see if the Fitness of the best and worst individuals in a population
         ///     are closer than a specified amount.
@@ -136,7 +175,7 @@ namespace PopOptBox.Base.Calculation
             this Population pop,
             double[] tolerance)
         {
-            var dvRange = pop.DecisionVectorRangeByFitness();
+            var dvRange = pop.DecisionVectorRangeByFitness().ToArray();
 
             if (dvRange.Count() != tolerance.Length)
                 throw new ArgumentException("Tolerance must have same length as Decision Vector",
@@ -158,5 +197,7 @@ namespace PopOptBox.Base.Calculation
             var withinTolerance = differences.Zip(tolerance, IsWithinTolerance);
             return withinTolerance.All(b => b);
         }
+        
+        #endregion
     }
 }

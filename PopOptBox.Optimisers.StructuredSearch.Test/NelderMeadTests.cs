@@ -1,5 +1,7 @@
 using System;
 using System.Linq;
+using PopOptBox.Base;
+using PopOptBox.Base.Helpers;
 using PopOptBox.Base.Management;
 using PopOptBox.Base.Variables;
 using Xunit;
@@ -22,10 +24,12 @@ namespace PopOptBox.Optimisers.StructuredSearch.Test
             var hyps = NelderMeadHyperParameters.GetDefaultHyperParameters();
             hyps.UpdateHyperParameterValue(
                 NelderMeadHyperParameters.Simplex_Creation_Step_Size, Step_Size);
-            
-            optimiser = new NelderMead(
+            var fitnessCalc = new FitnessCalculatorSingleObjective(
                 v => v.ElementAt(0),
-                v => 1000.0,
+                v => 1000.0);
+
+            optimiser = new NelderMead(
+                fitnessCalc,
                 DecisionVector.CreateFromArray(
                     DecisionSpace.CreateForUniformDoubleArray(Number_Of_Dimensions, double.MinValue, double.MaxValue),
                     Enumerable.Repeat(0.0, Number_Of_Dimensions)),
@@ -62,8 +66,11 @@ namespace PopOptBox.Optimisers.StructuredSearch.Test
                     Enumerable.Repeat(5, Number_Of_Dimensions + 1)));
             Helpers.EvaluateIndividual(wrongIndividual);
 
-            // Should it throw an error?
-            Assert.Throws<ArgumentException>(() => optimiser.ReInsert(new[] {wrongIndividual}));
+            // Act
+            optimiser.ReInsert(new[] { wrongIndividual });
+
+            // This will thrown an error if key is not present.
+            wrongIndividual.GetProperty<string>(OptimiserPropertyNames.ReinsertionError);
         }
         
         [Fact]

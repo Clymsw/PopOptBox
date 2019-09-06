@@ -184,8 +184,7 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
             
             return new Optimisers.EvolutionaryComputation.EvolutionaryAlgorithm(
                 population,
-                CreateSolutionToFitness(),
-                CreatePenalty(),
+                CreateFitnessCalculator(),
                 CreateDecisionVectorGenerator(),
                 parentSelector,
                 recombinationOperator,
@@ -199,14 +198,11 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
             return new ContinuousProblemModel(decisionSpace);
         }
 
-        protected override Func<double[], double> CreateSolutionToFitness()
+        protected override IFitnessCalculator CreateFitnessCalculator()
         {
-            return SolutionToFitnessSingleObjective.Minimise;
-        }
-
-        protected override Func<double[], double> CreatePenalty()
-        {
-            return Penalty.DeathPenalty;
+            return new FitnessCalculatorSingleObjective(
+                SolutionToFitnessSingleObjective.Minimise,
+                Penalty.DeathPenalty);
         }
     }
 }

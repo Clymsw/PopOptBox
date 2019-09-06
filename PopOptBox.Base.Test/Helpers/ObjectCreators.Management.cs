@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
@@ -28,10 +27,17 @@ namespace PopOptBox.Base.Test.Helpers
         internal static Individual EvaluateIndividual(Individual ind, double fitness = 2)
         {
             ind.SendForEvaluation();
-            ind.SetProperty(Solution_Key, new[] {fitness});
+            ind.SetProperty(Solution_Key, fitness);
             ind.SetSolution(Solution_Key);
             ind.SetLegality(true);
 
+            return ind;
+        }
+
+        internal static Individual EvaluateIndividualAndSetFitness(Individual ind, double fitness = 2)
+        {
+            ind = EvaluateIndividual(ind, fitness);
+            ind.SetFitness(fitness);
             return ind;
         }
 
@@ -51,17 +57,18 @@ namespace PopOptBox.Base.Test.Helpers
             public OptimiserMock(
                 DecisionVector decisionVector,
                 Population initialPopulation,
-                Func<double[], double> solutionToFitness,
-                Func<double[], double> penalty) 
-                : base(initialPopulation, solutionToFitness, penalty)
+                IFitnessCalculator fitnessCalculator) 
+                : base(initialPopulation, fitnessCalculator)
             {
                 this.decisionVector = decisionVector;
                 updateDecisionVector(false);
             }
 
-            protected override bool ReInsert(Individual individual)
+            protected override int AssessFitnessAndDecideFate(IEnumerable<Individual> individuals)
             {
-                return Population.Count < 100 && base.ReInsert(individual);
+                return Population.Count < 100 ?
+                    base.AssessFitnessAndDecideFate(individuals)
+                    : 0;
             }
 
             protected override DecisionVector GetNewDecisionVector()
@@ -96,8 +103,7 @@ namespace PopOptBox.Base.Test.Helpers
                 return new OptimiserMock(
                     GetDecisionVector(StartingDecVec),
                     GetEmptyPopulation(PopulationSize),
-                    CreateSolutionToFitness(),
-                    CreatePenalty());
+                    CreateFitnessCalculator());
             }
 
             public override IModel CreateModel()
@@ -105,14 +111,11 @@ namespace PopOptBox.Base.Test.Helpers
                 return new ModelMock(GetDecisionVector(StartingDecVec), GetConverterMock());
             }
 
-            protected override Func<double[], double> CreateSolutionToFitness()
+            protected override IFitnessCalculator CreateFitnessCalculator()
             {
-                return SolutionToFitnessSingleObjective.Minimise;
-            }
-
-            protected override Func<double[], double> CreatePenalty()
-            {
-                return v => PenaltyValue;
+                return new FitnessCalculatorSingleObjective(
+                    SolutionToFitnessSingleObjective.Minimise, 
+                    v => PenaltyValue);
             }
 
             public IConverter<double> GetConverterMock()

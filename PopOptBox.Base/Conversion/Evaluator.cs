@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using PopOptBox.Base.Management;
 
 namespace PopOptBox.Base.Conversion
@@ -9,16 +10,16 @@ namespace PopOptBox.Base.Conversion
     public abstract class Evaluator<TReality> : IEvaluator
     {
         private readonly string definitionKey;
-        private readonly string solutionKey;
+        private readonly string[] solutionKeys;
 
         /// <summary>
         /// Constructs the evaluator.
         /// </summary>
         /// <param name="definitionKey">The <see cref="Individual"/> property name for the reality definition.</param>
-        /// <param name="solutionKey">The <see cref="Individual"/> property name for the evaluated solution.</param>
-        public Evaluator(string definitionKey, string solutionKey)
+        /// <param name="solutionKeys">The array of <see cref="Individual"/> property names for the evaluated solution.</param>
+        public Evaluator(string definitionKey, params string[] solutionKeys)
         {
-            this.solutionKey = solutionKey;
+            this.solutionKeys = solutionKeys;
             this.definitionKey = definitionKey;
         }
 
@@ -61,8 +62,13 @@ namespace PopOptBox.Base.Conversion
 
         private void SetSolution(Individual ind, IEnumerable<double> solVector)
         {
-            ind.SetProperty(solutionKey, solVector);
-            ind.SetSolution(solutionKey);
+            if (solVector.Count() != solutionKeys.Length)
+                throw new System.InvalidOperationException("Solution Vector and solution key names are different lengths.");
+
+            for (int i = 0; i < solutionKeys.Length; i++)
+                ind.SetProperty(solutionKeys[i], solVector.ElementAt(i));
+
+            ind.SetSolution(solutionKeys);
         }
     }
 }
