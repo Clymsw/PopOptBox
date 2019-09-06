@@ -8,10 +8,7 @@ namespace PopOptBox.Base.Helpers
         /// <summary>
         /// Performs the fitness calculation using the contract specified by the constructor of an <see cref="Optimiser"/>.
         /// </summary>
-        /// <param name="individualsOfInterest">The individuals which needs their fitness assigned.</param>
-        /// <param name="restOfPopulation">The other individuals which should be taken into consideration when assigning fitness.</param>
-        void CalculateAndAssignFitness(
-            IEnumerable<Individual> individualsOfInterest,
-            IEnumerable<Individual> restOfPopulation);
+        /// <param name="individuals">The individuals which needs their fitness assigned.</param>
+        void CalculateAndAssignFitness(IEnumerable<Individual> individuals);
     }
 }

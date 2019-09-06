@@ -90,7 +90,7 @@ namespace PopOptBox.Base.Management
         protected virtual int AssessFitnessAndDecideFate(IEnumerable<Individual> individuals)
         {
             var inds = individuals as Individual[] ?? individuals.ToArray();
-            fitnessCalculator.CalculateAndAssignFitness(inds, Population);
+            fitnessCalculator.CalculateAndAssignFitness(inds);
             
             var numberReinserted = 0;
             foreach (var ind in inds)

@@ -110,7 +110,7 @@ namespace PopOptBox.Optimisers.StructuredSearch
         {
             // Assign fitness
             var inds = individuals as Individual[] ?? individuals.ToArray();
-            fitnessCalculator.CalculateAndAssignFitness(inds, null);
+            fitnessCalculator.CalculateAndAssignFitness(inds);
 
             var numberInserted = 0;
             foreach (var individual in inds)

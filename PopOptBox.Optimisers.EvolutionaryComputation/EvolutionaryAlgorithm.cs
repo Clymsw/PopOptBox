@@ -73,17 +73,22 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
             return mutationOperator.Operate(child);
         }
 
-        protected override int AssessFitnessAndDecideFate(IEnumerable<Individual> individuals)
+        protected override int AssessFitnessAndDecideFate(IEnumerable<Individual> individualsToReinsert)
         {
-            var inds = individuals as Individual[] ?? individuals.ToArray();
+            var inds = individualsToReinsert as Individual[] ?? individualsToReinsert.ToArray();
             
-            if (!Population.IsTargetSizeReached)
+            if (Population.Count + inds.Length <= Population.TargetSize)
             {
+                // Calculate fitness independently of existing population.
                 return base.AssessFitnessAndDecideFate(inds);
             }
 
-            // Use EA logic
-            fitnessCalculator.CalculateAndAssignFitness(inds, Population);
+            // Use EA logic :
+            // 1) re-calculate fitness for all individuals (required for multi-objective);
+            // 2) re-insert new individuals into population
+            var tempInds = inds.ToList();
+            tempInds.AddRange(Population);
+            fitnessCalculator.CalculateAndAssignFitness(tempInds);
             return reinsertionOperator.ReInsert(inds, Population);
         }
 

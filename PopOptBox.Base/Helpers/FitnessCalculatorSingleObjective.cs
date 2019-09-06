@@ -28,13 +28,12 @@ namespace PopOptBox.Base.Helpers
         /// Performs the calculation of Solution Vector to Fitness.
         /// If illegal, assigns a penalty, based on the <see cref="DecisionVector"/>
         /// </summary>
-        /// <param name="individualsOfInterest">The individuals to calculate for.</param>
-        /// <param name="restOfPopulation">Not relevant, not used.</param>
+        /// <param name="individuals">The individuals to calculate for.</param>
         /// <returns>The Fitness</returns>
         /// <exception cref="InvalidOperationException">Thrown when the individual is not yet evaluated.</exception>
-        public void CalculateAndAssignFitness(IEnumerable<Individual> individualsOfInterest, IEnumerable<Individual> restOfPopulation = null)
+        public void CalculateAndAssignFitness(IEnumerable<Individual> individuals)
         {
-            foreach (var individual in individualsOfInterest)
+            foreach (var individual in individuals)
             {
                 if (individual.State != IndividualState.Evaluated)
                     throw new InvalidOperationException("Individual is not evaluated!");
