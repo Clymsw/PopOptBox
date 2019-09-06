@@ -7,10 +7,17 @@ namespace PopOptBox.Base.Calculation
     /// <summary>
     /// Implements the Fast Non-Dominated Sorting algorithm proposed by Deb et al (2002)
     /// </summary>
-    public class FastNonDominatedSort
+    public class FastNonDominatedSort : IDominationSorter
     {
         private const string DominationCount = "Domination Count (temporary)";
         
+        /// <summary>
+        /// Performs sorting. Makes use of:
+        /// - <see cref="OptimiserPropertyNames.Dominating"/>
+        /// - <see cref="OptimiserPropertyNames.DominatedBy"/>
+        /// - <see cref="OptimiserPropertyNames.ParetoFront"/>
+        /// </summary>
+        /// <param name="individuals">All individuals to consider while calculating Pareto Fronts and domination.</param>
         public void PerformSort(IEnumerable<Individual> individuals)
         {
             var inds = individuals as Individual[] ?? individuals.ToArray();
