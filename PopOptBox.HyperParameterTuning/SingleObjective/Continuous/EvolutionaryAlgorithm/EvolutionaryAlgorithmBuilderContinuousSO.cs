@@ -58,7 +58,7 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
             {
                 case AvailableOperators.ParentSelector.Tournament:
                     parentSelector = new ParentSelectionTournament(
-                        40,
+                        20,
                         false);
                     break;
                 
@@ -135,8 +135,8 @@ namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.Evolutionary
                 case AvailableOperators.MutationOperators.AddRandomNumber:
                     mutationOperator = new MutationAddRandomNumber(
                         0.1, 
-                        0.5, 
-                        2);
+                        0.1, 
+                        1);
                     break;
                 
                 case AvailableOperators.MutationOperators.RandomSwap:
