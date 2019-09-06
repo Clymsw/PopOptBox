@@ -32,7 +32,7 @@ namespace PopOptBox.Base.Calculation
         #region MultiObjective
 
         /// <summary>
-        /// Implements the Crowding Distance algorithm proposed by Deb et al (2002).
+        /// Implements the Crowding Distance algorithm proposed by Deb et al. (2002).
         /// Note that the individuals provided should be on the same Pareto Front.
         /// Calculates the crowding distance and assigns it into the individual based on the property name provided.
         /// </summary>
