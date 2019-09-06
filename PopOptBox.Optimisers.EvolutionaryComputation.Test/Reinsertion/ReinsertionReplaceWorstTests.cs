@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 using PopOptBox.Base.Management;
-using PopOptBox.Optimisers.EvolutionaryComputation.Reinsertion;
+using PopOptBox.Optimisers.EvolutionaryComputation.Test;
 using Xunit;
 
-namespace PopOptBox.Optimisers.EvolutionaryComputation.Test.Reinsertion
+namespace PopOptBox.Optimisers.EvolutionaryComputation.Reinsertion.Test
 {
     public class ReinsertionReplaceWorstTests
     {

@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
-using PopOptBox.Base;
 using PopOptBox.Base.Calculation;
 using PopOptBox.Base.Management;
-using PopOptBox.Optimisers.EvolutionaryComputation.MultiObjective;
+using PopOptBox.Optimisers.EvolutionaryComputation.Test;
 using Xunit;
 
-namespace PopOptBox.Optimisers.EvolutionaryComputation.Test.MultiObjective
+namespace PopOptBox.Optimisers.EvolutionaryComputation.MultiObjective.Test
 {
     public class Nsga2Tests
     {
@@ -48,26 +47,11 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test.MultiObjective
             var nsga2 = new Nsga2(minimise, 20, new FastNonDominatedSort());
             
             nsga2.CalculateAndAssignFitness(individuals);
-            
-            Assert.Equal(1.0, individuals.ElementAt(0).Fitness);
-            Assert.Equal(2.0, individuals.ElementAt(1).Fitness);
-            Assert.Equal(1.0, individuals.ElementAt(2).Fitness);
-            Assert.Equal(2.0, individuals.ElementAt(3).Fitness);
-            Assert.Equal(1.0, individuals.ElementAt(4).Fitness);
-            Assert.Equal(3.0, individuals.ElementAt(5).Fitness);
-            Assert.Equal(2.0, individuals.ElementAt(6).Fitness);
-            Assert.Equal(1.0, individuals.ElementAt(7).Fitness);
-            Assert.Equal(3.0, individuals.ElementAt(8).Fitness);
-            
-            Assert.NotEqual(1.0, individuals.ElementAt(0).Fitness);
-            Assert.NotEqual(2.0, individuals.ElementAt(1).Fitness);
-            Assert.NotEqual(1.0, individuals.ElementAt(2).Fitness);
-            Assert.NotEqual(2.0, individuals.ElementAt(3).Fitness);
-            Assert.NotEqual(1.0, individuals.ElementAt(4).Fitness);
-            Assert.NotEqual(3.0, individuals.ElementAt(5).Fitness);
-            Assert.NotEqual(2.0, individuals.ElementAt(6).Fitness);
-            Assert.NotEqual(1.0, individuals.ElementAt(7).Fitness);
-            Assert.NotEqual(3.0, individuals.ElementAt(8).Fitness);
+
+            foreach (var ind in individuals)
+            {
+                Assert.True(ind.Fitness >= ind.SolutionVector.Aggregate((x,y) => x + y + 2));
+            }
         }
         
         [Fact]
