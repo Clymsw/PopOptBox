@@ -179,7 +179,7 @@ namespace PopOptBox.Base.Management
         /// <exception cref="InvalidOperationException">Thrown when Individual is not evaluated. <seealso cref="SetSolution"/>.</exception>
         public void SetFitness(double fitness)
         {
-            if (State != IndividualState.Evaluated)
+            if (State != IndividualState.Evaluated && State != IndividualState.FitnessAssessed)
                 throw new InvalidOperationException("Individual is not evaluated!");
 
             Fitness = fitness;

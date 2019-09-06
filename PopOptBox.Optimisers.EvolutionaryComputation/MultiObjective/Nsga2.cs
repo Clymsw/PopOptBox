@@ -81,14 +81,14 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.MultiObjective
                     // Perform crowding distance assignment
                     PopulationMetrics.AssignCrowdingDistance(currentParetoFront, CrowdingDistance);
                     var sortedParetoFront = currentParetoFront
-                        .OrderBy(i => i.GetProperty<double>(CrowdingDistance))
+                        .OrderByDescending(i => i.GetProperty<double>(CrowdingDistance))
                         .ToArray();
                     var crowdingComparison = 0.0;
                     for (int i = 1; i < sortedParetoFront.Length; i++)
                     {
-                        if (sortedParetoFront[i - 1].GetProperty<double>(CrowdingDistance) <
+                        if (sortedParetoFront[i - 1].GetProperty<double>(CrowdingDistance) >
                             sortedParetoFront[i].GetProperty<double>(CrowdingDistance))
-                            crowdingComparison += 0.0001;
+                            crowdingComparison += 1.0 / (currentParetoFront.Length + 10.0); // Small enough that we won't end up more than 1 in total...
                         sortedParetoFront[i].SetFitness(sortedParetoFront[i].Fitness + crowdingComparison);
                     }
                 }

@@ -7,13 +7,16 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test
 {
     public static class Helpers
     {
-        public static List<Individual> CreateEvaluatedIndividualsFromArray(double[][] testValues, double[] fitness)
+        public static List<Individual> CreateNewIndividualsFromArray(double[][] testValues)
         {
             var ds = DecisionSpace.CreateForUniformDoubleArray(testValues.ElementAt(0).Length, double.MinValue, double.MaxValue);
-
             var dvs = testValues.Select(v => DecisionVector.CreateFromArray(ds, v));
-
-            var inds = dvs.Select(v => new Individual(v)).ToList();
+            return dvs.Select(v => new Individual(v)).ToList();
+        }
+        
+        public static List<Individual> CreateEvaluatedIndividualsFromArray(double[][] testValues, double[] fitness)
+        {
+            var inds = CreateNewIndividualsFromArray(testValues);
             for (var i = 0; i < inds.Count; i++)
             {
                 inds.ElementAt(i).EvaluateIndividual(fitness.ElementAt(i));
@@ -23,11 +26,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test
 
         public static List<Individual> CreateFitnessAssessedIndividualsFromArray(double[][] testValues, double[] fitness)
         {
-            var ds = DecisionSpace.CreateForUniformDoubleArray(testValues.ElementAt(0).Length, double.MinValue, double.MaxValue);
-
-            var dvs = testValues.Select(v => DecisionVector.CreateFromArray(ds, v));
-
-            var inds = dvs.Select(v => new Individual(v)).ToList();
+            var inds = CreateNewIndividualsFromArray(testValues);
             for (var i = 0; i < inds.Count; i++)
             {
                 inds.ElementAt(i).EvaluateIndividual(fitness.ElementAt(i));
