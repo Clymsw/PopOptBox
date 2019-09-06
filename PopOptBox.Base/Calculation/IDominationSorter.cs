@@ -15,6 +15,7 @@ namespace PopOptBox.Base.Calculation
         /// - <see cref="OptimiserPropertyNames.ParetoFront"/>
         /// </summary>
         /// <param name="individuals">All individuals to consider while calculating Pareto Fronts and domination.</param>
-        void PerformSort(IEnumerable<Individual> individuals);
+        /// <param name="minimise">An array of the same length as the Solution Vectors, <see langword="true"/> if that objective is to be minimised.</param>
+        void PerformSort(IEnumerable<Individual> individuals, bool[] minimise);
     }
 }

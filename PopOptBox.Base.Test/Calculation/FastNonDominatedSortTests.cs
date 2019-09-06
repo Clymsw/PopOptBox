@@ -9,6 +9,7 @@ namespace PopOptBox.Base.Calculation.Test
     public class FastNonDominatedSortTests
     {
         private readonly List<Individual> individuals;
+        private readonly bool[] minimise;
         
         public FastNonDominatedSortTests()
         {
@@ -28,6 +29,8 @@ namespace PopOptBox.Base.Calculation.Test
                 ObjectCreators.GetIndividual(new double[] {4, 1})  // F3
             };
 
+            minimise = new[] {true, true};
+            
             foreach (var ind in individuals)
             {
                 ind.SendForEvaluation();
@@ -42,7 +45,7 @@ namespace PopOptBox.Base.Calculation.Test
         {
             var sorter = new FastNonDominatedSort();
             
-            sorter.PerformSort(individuals);
+            sorter.PerformSort(individuals, minimise);
 
             Assert.True(individuals.ElementAt(0)
                             .GetProperty<int>(OptimiserPropertyNames.ParetoFront) == 1);

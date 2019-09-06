@@ -62,7 +62,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.MultiObjective
             }
             
             // Calculate Pareto Fronts
-            sorter.PerformSort(inds);
+            sorter.PerformSort(inds, minimise);
 
             // Go through, assigning fitness
             var paretoFront = 1;
@@ -79,7 +79,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.MultiObjective
                 {
                     // We're in the Pareto Front which partially overlaps with the population size.
                     // Perform crowding distance assignment
-                    PopulationMetrics.AssignCrowdingDistance(currentParetoFront, CrowdingDistance);
+                    MultiObjectiveMetrics.AssignCrowdingDistance(currentParetoFront, CrowdingDistance);
                     var sortedParetoFront = currentParetoFront
                         .OrderByDescending(i => i.GetProperty<double>(CrowdingDistance))
                         .ToArray();

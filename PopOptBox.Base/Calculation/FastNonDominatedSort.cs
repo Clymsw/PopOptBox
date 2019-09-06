@@ -10,15 +10,16 @@ namespace PopOptBox.Base.Calculation
     public class FastNonDominatedSort : IDominationSorter
     {
         private const string DominationCount = "Domination Count (temporary)";
-        
+
         /// <summary>
-        /// Performs sorting. Makes use of:
+        /// Performs sorting. Makes use of <see cref="Individual"/> properties:
         /// - <see cref="OptimiserPropertyNames.Dominating"/>
         /// - <see cref="OptimiserPropertyNames.DominatedBy"/>
         /// - <see cref="OptimiserPropertyNames.ParetoFront"/>
         /// </summary>
         /// <param name="individuals">All individuals to consider while calculating Pareto Fronts and domination.</param>
-        public void PerformSort(IEnumerable<Individual> individuals)
+        /// <param name="minimise">An array of the same length as the Solution Vectors, <see langword="true"/> if that objective is to be minimised.</param>
+        public void PerformSort(IEnumerable<Individual> individuals, bool[] minimise)
         {
             var inds = individuals as Individual[] ?? individuals.ToArray();
             
@@ -40,14 +41,14 @@ namespace PopOptBox.Base.Calculation
                     var dominatedByQ = getDominatingList(individualQ);
                     var dominatingQ = getDominatedByList(individualQ);
 
-                    if (individualP.IsDominating(individualQ))
+                    if (individualP.IsDominating(individualQ, minimise))
                     {
                         if (!dominatedByP.Contains(individualQ))
                             dominatedByP.Add(individualQ);
                         if (!dominatingQ.Contains(individualP))
                             dominatingQ.Add(individualP);
                     }
-                    else if (individualQ.IsDominating(individualP))
+                    else if (individualQ.IsDominating(individualP, minimise))
                     {
                         if (!dominatedByQ.Contains(individualP))
                             dominatedByQ.Add(individualP);
