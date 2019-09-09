@@ -6,7 +6,7 @@ using Xunit;
 
 namespace PopOptBox.Base.PopulationCalculation.Test
 {
-    public class PopulationMetricsTests
+    public class PopulationExtensionsTests
     {
         // Single objective
         private readonly Population singleObjectivePopulation;
@@ -16,7 +16,7 @@ namespace PopOptBox.Base.PopulationCalculation.Test
         private const double FitnessDifference = 2;
         private const double DvDifference = 0.3;
 
-        public PopulationMetricsTests()
+        public PopulationExtensionsTests()
         {
             // Set up single-objective population for Convergence and Centroid tests
             bestDv = new[] { 0.1, 0.5, 1.2 };
