@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using PopOptBox.Base.Calculation;
 using PopOptBox.Base.Management;
 using PopOptBox.Optimisers.EvolutionaryComputation.Test;
 using Xunit;
+using PopOptBox.Base.MultiObjectiveCalculation;
 
 namespace PopOptBox.Optimisers.EvolutionaryComputation.MultiObjective.Test
 {

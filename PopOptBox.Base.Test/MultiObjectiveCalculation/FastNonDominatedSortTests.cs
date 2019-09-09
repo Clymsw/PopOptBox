@@ -4,7 +4,7 @@ using PopOptBox.Base.Management;
 using PopOptBox.Base.Test.Helpers;
 using Xunit;
 
-namespace PopOptBox.Base.Calculation.Test
+namespace PopOptBox.Base.MultiObjectiveCalculation.Test
 {
     public class FastNonDominatedSortTests
     {

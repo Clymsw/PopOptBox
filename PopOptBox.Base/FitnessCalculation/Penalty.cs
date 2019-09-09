@@ -1,6 +1,6 @@
 ﻿using PopOptBox.Base.Variables;
 
-namespace PopOptBox.Base.Helpers
+namespace PopOptBox.Base.FitnessCalculation
 {
     /// <summary>
     /// Delegate functions for penalties, <see cref="Management.Optimiser"/>.

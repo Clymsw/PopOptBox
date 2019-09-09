@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using PopOptBox.Base.Variables;
 
-namespace PopOptBox.Base.Calculation
+namespace PopOptBox.Base.PopulationCalculation
 {
     /// <summary>
     /// Helper functions for creating initial <see cref="Management.Population"/>s.

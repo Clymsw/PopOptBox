@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using PopOptBox.Base.Management;
 using PopOptBox.Base.Variables;
 
-namespace PopOptBox.Base.Helpers
+namespace PopOptBox.Base.FitnessCalculation
 {
     public class FitnessCalculatorSingleObjective : IFitnessCalculator
     {

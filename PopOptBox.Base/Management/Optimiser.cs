@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using PopOptBox.Base.Helpers;
+using PopOptBox.Base.FitnessCalculation;
 using PopOptBox.Base.Variables;
 
 namespace PopOptBox.Base.Management

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using PopOptBox.Base.Management;
 
-namespace PopOptBox.Base.Calculation
+namespace PopOptBox.Base.MultiObjectiveCalculation
 {
     /// <summary>
     /// Interface for sorting algorithms to perform non-domination sorting and calculate Pareto Fronts.

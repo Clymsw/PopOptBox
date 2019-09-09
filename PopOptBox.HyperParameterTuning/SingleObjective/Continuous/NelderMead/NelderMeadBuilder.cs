@@ -1,5 +1,5 @@
 using PopOptBox.Base.Conversion;
-using PopOptBox.Base.Helpers;
+using PopOptBox.Base.FitnessCalculation;
 using PopOptBox.Base.Management;
 using PopOptBox.Base.Variables;
 using PopOptBox.Optimisers.StructuredSearch;

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using PopOptBox.Base.Management;
 
-namespace PopOptBox.Base.Helpers
+namespace PopOptBox.Base.FitnessCalculation
 {
     public interface IFitnessCalculator
     {

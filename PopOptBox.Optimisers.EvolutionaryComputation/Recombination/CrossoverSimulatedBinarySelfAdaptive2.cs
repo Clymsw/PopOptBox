@@ -1,6 +1,6 @@
 using System.Linq;
 using MathNet.Numerics.LinearAlgebra;
-using PopOptBox.Base.Calculation;
+using PopOptBox.Base.PopulationCalculation;
 using PopOptBox.Base.Management;
 using PopOptBox.Base.Variables;
 

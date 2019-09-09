@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PopOptBox.Base.Helpers
+namespace PopOptBox.Base.FitnessCalculation
 {
     /// <summary>
     /// Solution Vector to Fitness conversion for resolving multiple objectives to a single objective

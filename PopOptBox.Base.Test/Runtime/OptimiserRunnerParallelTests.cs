@@ -1,4 +1,4 @@
-using PopOptBox.Base.Calculation;
+using PopOptBox.Base.PopulationCalculation;
 using PopOptBox.Base.Test.Helpers;
 using Xunit;
 

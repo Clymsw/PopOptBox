@@ -1,4 +1,4 @@
-﻿namespace PopOptBox.Base.Helpers
+﻿namespace PopOptBox.Base.FitnessCalculation
 {
     /// <summary>
     /// Delegate functions for Solution Vector to Fitness conversion for single objectives

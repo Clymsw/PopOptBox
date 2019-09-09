@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace PopOptBox.Base.Helpers.Test
+namespace PopOptBox.Base.FitnessCalculation.Test
 {
     public class SolutionToFitnessSingleObjectiveTests
     {

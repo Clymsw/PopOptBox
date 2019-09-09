@@ -174,7 +174,7 @@ namespace PopOptBox.Base.Management
         /// <remarks>Can be performed more than once.</remarks>
         /// <param name="fitness">
         /// The fitness value which has been calculated by the <see cref="Optimiser"/>.
-        /// <seealso cref="PopOptBox.Base.Helpers.IFitnessCalculator"/>
+        /// <seealso cref="PopOptBox.Base.FitnessCalculation.IFitnessCalculator"/>
         /// </param>
         /// <exception cref="InvalidOperationException">Thrown when Individual is not evaluated. <seealso cref="SetSolution"/>.</exception>
         public void SetFitness(double fitness)

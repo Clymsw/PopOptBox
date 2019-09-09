@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Transactions;
 using PopOptBox.Base;
-using PopOptBox.Base.Calculation;
-using PopOptBox.Base.Helpers;
+using PopOptBox.Base.FitnessCalculation;
 using PopOptBox.Base.Management;
+using PopOptBox.Base.MultiObjectiveCalculation;
 
 namespace PopOptBox.Optimisers.EvolutionaryComputation.MultiObjective
 {

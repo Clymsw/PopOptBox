@@ -1,6 +1,6 @@
 using System;
 using PopOptBox.Base.Conversion;
-using PopOptBox.Base.Helpers;
+using PopOptBox.Base.FitnessCalculation;
 using PopOptBox.Base.Variables;
 
 namespace PopOptBox.Base.Management

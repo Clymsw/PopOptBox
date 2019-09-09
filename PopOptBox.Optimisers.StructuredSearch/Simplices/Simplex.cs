@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using PopOptBox.Base.Calculation;
+using PopOptBox.Base.PopulationCalculation;
 using PopOptBox.Base.Management;
 using PopOptBox.Base.Variables;
 

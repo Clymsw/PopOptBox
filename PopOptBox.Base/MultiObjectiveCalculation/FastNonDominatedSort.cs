@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using PopOptBox.Base.Management;
 
-namespace PopOptBox.Base.Calculation
+namespace PopOptBox.Base.MultiObjectiveCalculation
 {
     /// <summary>
     /// Implements the Fast Non-Dominated Sorting algorithm proposed by Deb et al (2002)
