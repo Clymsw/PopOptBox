@@ -13,7 +13,7 @@ namespace PopOptBox.Base.Runtime
     public sealed class OptimiserRunnerParallel : OptimiserRunner
     {
         /// <summary>
-        /// The Agent that handes reinserting evaluated individuals and creating new ones
+        /// The Agent that handles reinserting evaluated individuals and creating new ones
         /// </summary>
         private ReinsertionAgent reinsertionAgent;
         /// <summary>
