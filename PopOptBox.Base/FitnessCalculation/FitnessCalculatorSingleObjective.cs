@@ -35,6 +35,9 @@ namespace PopOptBox.Base.FitnessCalculation
         {
             foreach (var individual in individuals)
             {
+                if (individual.State == IndividualState.FitnessAssessed)
+                    continue;
+
                 if (individual.State != IndividualState.Evaluated)
                     throw new InvalidOperationException("Individual is not evaluated!");
 
