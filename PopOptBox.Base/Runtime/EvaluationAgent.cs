@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks.Dataflow;
 using PopOptBox.Base.Conversion;
@@ -42,7 +43,7 @@ namespace PopOptBox.Base.Runtime
             numberEvaluated = 0;
 
             IndividualsForEvaluation = new TransformBlock<Individual, Individual>(
-                Process,
+                (Func<Individual, Individual>)Process,
                 new ExecutionDataflowBlockOptions
                 {
                     CancellationToken = cancelToken,

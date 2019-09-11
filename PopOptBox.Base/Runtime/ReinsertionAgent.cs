@@ -100,7 +100,7 @@ namespace PopOptBox.Base.Runtime
             this.model = model;
 
             IndividualsForReinsertion = new TransformManyBlock<Individual, Individual>(
-                Process,
+                (Func<Individual, IEnumerable<Individual>>)Process,
                 new ExecutionDataflowBlockOptions
                 {
                     CancellationToken = CancellationSource.Token,
