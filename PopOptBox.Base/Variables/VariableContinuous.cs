@@ -38,6 +38,14 @@ namespace PopOptBox.Base.Variables
             double upperBoundForGeneration = 1e6,
             string name = "")
         {
+            if (double.IsNegativeInfinity(lowerBound))
+                throw new ArgumentOutOfRangeException(nameof(lowerBound), 
+                    "Variable range cannot be infinite, use double.MinValue instead (this is default).");
+            
+            if (double.IsPositiveInfinity(upperBound))
+                throw new ArgumentOutOfRangeException(nameof(upperBound), 
+                    "Variable range cannot be infinite, use double.MaxValue instead (this is default).");
+            
             if (upperBound <= lowerBound)
                 throw new ArgumentOutOfRangeException(nameof(upperBound), 
                     "Variable range must be greater than zero.");
