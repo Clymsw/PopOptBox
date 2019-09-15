@@ -103,15 +103,17 @@ namespace PopOptBox.Base.Variables
         /// <returns>True (acceptable) or false (not acceptable).</returns>
         public bool IsAcceptableDecisionVector(IEnumerable<object> vector)
         {
-            if (vector.Count() != dimensions.Count)
+            var elements = vector as object[] ?? vector.ToArray();
+            
+            if (elements.Length != dimensions.Count)
                 return false;
 
             var acceptable = true;
-            for (var i = 0; i < vector.Count(); i++)
+            for (var i = 0; i < elements.Length; i++)
             {
                 try
                 {
-                    var ok = dimensions.ElementAt(i).IsInBounds(vector.ElementAt(i));
+                    var ok = dimensions.ElementAt(i).IsInBounds(elements.ElementAt(i));
                     acceptable &= ok;
                 }
                 catch
@@ -132,11 +134,13 @@ namespace PopOptBox.Base.Variables
         /// <exception cref="FormatException">Thrown when the location provided has incorrect types.</exception>
         public object[] GetNearestLegalLocation(IEnumerable<object> vector)
         {
-            if (vector.Count() != dimensions.Count)
+            var elements = vector as object[] ?? vector.ToArray();
+            
+            if (elements.Length != dimensions.Count)
                 throw new ArgumentOutOfRangeException(nameof(vector),
                     "Vector is of the wrong length.");
             
-            return vector.Select((v, i) => dimensions.ElementAt(i).GetNearestLegalLocation(v)).ToArray();
+            return elements.Select((v, i) => dimensions.ElementAt(i).GetNearestLegalLocation(v)).ToArray();
         }
         
         /// <summary>

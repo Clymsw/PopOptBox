@@ -17,7 +17,7 @@ namespace PopOptBox.Base.Conversion
         /// </summary>
         /// <param name="definitionKey">The <see cref="Individual"/> property name for the reality definition.</param>
         /// <param name="solutionKeys">The array of <see cref="Individual"/> property names for the evaluated solution.</param>
-        public Evaluator(string definitionKey, params string[] solutionKeys)
+        protected Evaluator(string definitionKey, params string[] solutionKeys)
         {
             this.solutionKeys = solutionKeys;
             this.definitionKey = definitionKey;
@@ -62,11 +62,13 @@ namespace PopOptBox.Base.Conversion
 
         private void SetSolution(Individual ind, IEnumerable<double> solVector)
         {
-            if (solVector.Count() != solutionKeys.Length)
+            var vector = solVector as double[] ?? solVector.ToArray();
+            
+            if (vector.Length != solutionKeys.Length)
                 throw new System.InvalidOperationException("Solution Vector and solution key names are different lengths.");
 
             for (int i = 0; i < solutionKeys.Length; i++)
-                ind.SetProperty(solutionKeys[i], solVector.ElementAt(i));
+                ind.SetProperty(solutionKeys[i], vector.ElementAt(i));
 
             ind.SetSolution(solutionKeys);
         }

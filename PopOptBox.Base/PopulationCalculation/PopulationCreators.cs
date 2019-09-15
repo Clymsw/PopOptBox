@@ -21,8 +21,8 @@ namespace PopOptBox.Base.PopulationCalculation
         /// <returns>List of <see cref="DecisionVector"/>s, the same length as the number of dimensions.</returns>
         public static List<DecisionVector> CreateNearLocation(DecisionVector initialLocation, double stepSize)
         {
-            if (stepSize == 0)
-                throw new System.ArgumentOutOfRangeException(nameof(stepSize), "Step size cannot be zero.");
+            if (Math.Abs(stepSize) < double.Epsilon)
+                throw new ArgumentOutOfRangeException(nameof(stepSize), "Step size cannot be zero.");
 
             var newDVs = new List<DecisionVector>();
 
@@ -71,11 +71,7 @@ namespace PopOptBox.Base.PopulationCalculation
 
             for (var i = 1; i <= numberToCreate; i++)
             {
-                var vector = new List<object>();
-                foreach(var dim in space)
-                {
-                    vector.Add(dim.GetNextRandom(rng));
-                }
+                var vector = space.Select(dim => dim.GetNextRandom(rng)).ToList();
                 newDVs.Add(DecisionVector.CreateFromArray(space, vector));
             }
 

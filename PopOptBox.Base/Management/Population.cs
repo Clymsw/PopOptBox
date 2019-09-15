@@ -129,7 +129,7 @@ namespace PopOptBox.Base.Management
         }
 
         /// <summary>
-        /// Get the DVs of all individuals
+        /// Get the Decision Vectors of all individuals
         /// </summary>
         /// <returns>List of object arrays: Decision Vector</returns>
         public IEnumerable<object[]> GetMemberDecisionVectors()
@@ -144,9 +144,9 @@ namespace PopOptBox.Base.Management
         public double FitnessRange() => Worst().Fitness - Best().Fitness;
         
         /// <summary>
-        /// Calculates the difference in Fitness between the best and worst individuals in the population.
+        /// Calculates the average Fitness of the population.
         /// </summary>
-        /// <returns>The Fitness range for the population</returns>
+        /// <returns>The average Fitness of the population</returns>
         public double FitnessAverage() => GetMemberFitnesses().Average();
 
         /// <summary>

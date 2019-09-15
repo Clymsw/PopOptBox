@@ -9,6 +9,7 @@ namespace PopOptBox.Base.Management
     /// <summary>
     /// "Individual" class, which contains information about 
     /// a given single solution for an optimisation problem.
+    /// Immutable by design.
     /// </summary>
     public class Individual
     {
@@ -36,7 +37,7 @@ namespace PopOptBox.Base.Management
         public double Fitness { get; private set; }
 
         /// <summary>
-        /// If the individual is legal or not.
+        /// Whether the individual is legal or not.
         /// </summary>
         public bool Legal { get; private set; }
 
@@ -50,7 +51,7 @@ namespace PopOptBox.Base.Management
         #region Constructors
 
         /// <summary>
-        /// Construct individual, immutable by design.
+        /// Construct individual.
         /// </summary>
         /// <param name="decisionVector">The numerical definition of the individual for the optimisation</param>
         public Individual(DecisionVector decisionVector)

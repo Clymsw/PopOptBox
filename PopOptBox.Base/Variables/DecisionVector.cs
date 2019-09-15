@@ -25,13 +25,14 @@ namespace PopOptBox.Base.Variables
             IEnumerable<object> values)
         {
             this.decisionSpace = decisionSpace;
-
+            var elements = values as object[] ?? values.ToArray();
+            
             //Check that all values are sensible
-            if (!decisionSpace.IsAcceptableDecisionVector(values))
+            if (!decisionSpace.IsAcceptableDecisionVector(elements))
                 throw new ArgumentOutOfRangeException(nameof(values),
                     "These values are not accepted by the decision space");
 
-            vector = values.ToArray();
+            vector = elements;
         }
 
         /// <summary>

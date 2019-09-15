@@ -41,8 +41,8 @@ namespace PopOptBox.Base.MultiObjectiveCalculation
                 throw new ArgumentOutOfRangeException(nameof(minimise),
                     "Minimisation instruction must be same length as the Solution Vector.");
 
-            var sol1 = individual.SolutionVector.Select((v, i) => v * (minimise[i] ? 1 : -1));
-            var sol2 = other.SolutionVector.Select((v, i) => v * (minimise[i] ? 1 : -1));
+            var sol1 = individual.SolutionVector.Select((v, i) => v * (minimise[i] ? 1 : -1)).ToArray();
+            var sol2 = other.SolutionVector.Select((v, i) => v * (minimise[i] ? 1 : -1)).ToArray();
 
             if (sol1.Select((v, i) => v < sol2.ElementAt(i)).Any(b => b))
                 if (sol1.Select((v, i) => v <= sol2.ElementAt(i)).All(b => b))
@@ -61,6 +61,7 @@ namespace PopOptBox.Base.MultiObjectiveCalculation
         /// Calculates the crowding distance and assigns it into the individual based on the property name provided.
         /// </summary>
         /// <param name="individuals">Individuals forming a Pareto Front.</param>
+        /// <param name="propertyName">Name to give to the property inserted into the <see cref="Individual"/>s.</param>
         public static void AssignCrowdingDistance(IEnumerable<Individual> individuals, string propertyName)
         {
             var inds = individuals as Individual[] ?? individuals.ToArray();

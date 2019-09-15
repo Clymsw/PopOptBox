@@ -93,9 +93,9 @@ namespace PopOptBox.Base.PopulationCalculation
             this Population pop,
             double[] tolerance)
         {
-            var dvRange = pop.DecisionVectorRangeByFitness();
+            var dvRange = pop.DecisionVectorRangeByFitness().ToArray();
 
-            if (dvRange.Count() != tolerance.Length)
+            if (dvRange.Length != tolerance.Length)
                 throw new ArgumentException("Tolerance must have same length as Decision Vector",
                     nameof(tolerance));
 
@@ -129,8 +129,8 @@ namespace PopOptBox.Base.PopulationCalculation
         /// </summary>
         /// <param name="pop">population</param>
         /// <param name="tolerance">
-        ///     a vector of tolerances, the same length as the Decision Vector.
-        ///     Any elements with 0 tolerance are ignored
+        ///     A vector of tolerances, the same length as the Decision Vector.
+        ///     Any elements with 0 tolerance are ignored.
         /// </param>
         /// <returns><see langword="true" /> if converged</returns>
         /// <exception cref="ArgumentException">If the individuals do not have the same decision space, or if the tolerance does not have the right length.</exception>
@@ -152,12 +152,12 @@ namespace PopOptBox.Base.PopulationCalculation
 
         private static bool AllWithinTolerances(IEnumerable<double> differences, IEnumerable<double> tolerance)
         {
-            bool IsWithinTolerance(double dif, double tol)
+            bool isWithinTolerance(double dif, double tol)
             {
                 return tol <= 0 || dif <= tol;
             }
 
-            var withinTolerance = differences.Zip(tolerance, IsWithinTolerance);
+            var withinTolerance = differences.Zip(tolerance, isWithinTolerance);
             return withinTolerance.All(b => b);
         }
         
