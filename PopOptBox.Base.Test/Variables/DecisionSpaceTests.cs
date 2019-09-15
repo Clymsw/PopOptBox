@@ -56,6 +56,19 @@ namespace PopOptBox.Base.Variables.Test
         }
 
         [Fact]
+        public void CreatedWithInfiniteBounds_Throws()
+        {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                DecisionSpace.CreateForUniformDoubleArray(Dims, double.NegativeInfinity, double.MaxValue));
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                DecisionSpace.CreateForUniformDoubleArray(Dims, double.NegativeInfinity, 5.6));
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                DecisionSpace.CreateForUniformDoubleArray(Dims, double.MinValue, double.PositiveInfinity));
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+                DecisionSpace.CreateForUniformDoubleArray(Dims, -3.6, double.PositiveInfinity));
+        }
+
+        [Fact]
         public void TwoUniformIntArrays_WithEqualBounds_AreEqual()
         {
             var space1 = DecisionSpace.CreateForUniformIntArray(Dims, MinValueDiscrete, MaxValueDiscrete);
