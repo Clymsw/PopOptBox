@@ -32,9 +32,9 @@ namespace PopOptBox.Problems.SingleObjective.Discrete
 
         public override IEnumerable<double> Evaluate(DecisionVector definition)
         {
-            if (definition.Count != globalOptimum.Count)
+            if (definition.Count != GetGlobalOptimum().Count)
                 throw new System.ArgumentOutOfRangeException(nameof(definition),
-                    $"Route should be a complete tour of {globalOptimum.Count} stops.");
+                    $"Route should be a complete tour of {GetGlobalOptimum().Count} stops.");
 
             return new[] { CalculateTotalTravelDistance(definition.Select(l => (int)l)) };
         }

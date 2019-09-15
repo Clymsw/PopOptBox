@@ -7,7 +7,7 @@ namespace PopOptBox.Problems.SingleObjective
     public abstract class ProblemSingleObjective : Evaluator<DecisionVector>
     {
         private readonly string name;
-        protected readonly DecisionVector globalOptimum;
+        private readonly DecisionVector globalOptimum;
 
         protected ProblemSingleObjective(
             string name, DecisionVector globalOptimum,
