@@ -37,6 +37,9 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation
                     "Largest value must be greater than smallest value.");
             this.minimum = minimum;
             this.maximum = maximum;
+            
+            if (minimum > 0)
+                includeZero = true;
             this.includeZero = includeZero;
             
             if (mutationProbability < 0 || mutationProbability > 1)
@@ -63,9 +66,8 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation
 
             foreach (var location in locationsToMutate)
             {
-                var mutation = rngManager.Rng.Next(minimum, includeZero
-                    ? maximum
-                    : maximum - 1);
+                var mutation = rngManager.Rng.Next(
+                    minimum, includeZero ? maximum : maximum - 1);
                 if (!includeZero)
                     if (mutation >= 0)
                         mutation += 1;

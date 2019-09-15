@@ -93,6 +93,5 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation.Test
             Assert.True(newDv.Where((v, i) => v == testDv.ElementAt(i)).Count()
             <= testDv.Count - 1);
         }
-
     }
 }
