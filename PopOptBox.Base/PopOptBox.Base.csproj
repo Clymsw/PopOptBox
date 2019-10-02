@@ -11,11 +11,7 @@
         <AssemblyName>PopOptBox.Base</AssemblyName>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-      <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
-    </PropertyGroup>
-
-    <ItemGroup>
+  <ItemGroup>
       <PackageReference Include="MathNet.Numerics" Version="4.8.1" />
       <PackageReference Include="System.Threading.Tasks.Dataflow" Version="4.10.0-preview5.19224.8" />
     </ItemGroup>
