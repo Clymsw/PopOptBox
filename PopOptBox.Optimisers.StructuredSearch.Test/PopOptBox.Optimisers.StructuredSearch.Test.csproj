@@ -1,13 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
 
     <AssemblyName>PopOptBox.Optimisers.StructuredSearch.Test</AssemblyName>
 
     <RootNamespace>PopOptBox.Optimisers.StructuredSearch.Test</RootNamespace>
+
+    <LangVersion>8</LangVersion>
+
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
