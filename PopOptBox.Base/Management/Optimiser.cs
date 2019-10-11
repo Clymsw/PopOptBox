@@ -137,7 +137,10 @@ namespace PopOptBox.Base.Management
                 
                 individualsToReinsert.Add(ind);
             }
-            
+
+            if (individualsToReinsert.Count == 0)
+                return 0;
+
             return AssessFitnessAndDecideFate(individualsToReinsert);
         }
 
