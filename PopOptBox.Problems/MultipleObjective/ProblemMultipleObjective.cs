@@ -9,44 +9,35 @@ namespace PopOptBox.Problems.MultipleObjective
     public abstract class ProblemMultipleObjective : Evaluator<DecisionVector>
     {
         private readonly string name;
-        private int numberOfObjectives;
-        private readonly List<DecisionVector> optimalParetoFrontMembers;
+        private readonly int numberOfObjectives;
+        protected readonly DecisionSpace decisionSpace;
         
-        protected ProblemMultipleObjective(
-            string name, IEnumerable<DecisionVector> optimalParetoFrontMembers,
-            string definitionKey, params string[] solutionKeys) : base(definitionKey, solutionKeys)
+        protected ProblemMultipleObjective(string name, DecisionSpace decisionSpace, 
+            string definitionKey, params string[] solutionKeys) 
+            : base(definitionKey, solutionKeys)
         {
-            var optimalParetoFront = optimalParetoFrontMembers.ToList();
-            if (optimalParetoFront.First().Count < 1)
-            {
-                throw new ArgumentOutOfRangeException(
-                    nameof(optimalParetoFrontMembers),
-                    "Number of dimensions must be greater than zero.");
-            }
             this.name = name;
             numberOfObjectives = solutionKeys.Length;
-            this.optimalParetoFrontMembers = optimalParetoFront;
+            this.decisionSpace = decisionSpace;
         }
 
         /// <summary>
-        /// Gets a number of locations specifying the optimal Pareto Front
+        /// Gets a number of locations specifying the optimal Pareto Front.
         /// </summary>
+        /// <param name="numberOfPoints">The maximum number of points on the Pareto Front to return.</param>
         /// <returns>An array of <see cref="DecisionVector"/>s.</returns>
-        public DecisionVector[] GetOptimalParetoFront()
-        {
-            return optimalParetoFrontMembers.ToArray();
-        }
-        
+        public abstract DecisionVector[] GetOptimalParetoFront(int numberOfPoints);
+
         public override bool GetLegality(DecisionVector definition)
         {
             // By definition, if we can construct a Decision Vector in the same decision space, it is legal
-            return definition.GetDecisionSpace().Equals(optimalParetoFrontMembers.First().GetDecisionSpace());
+            return definition.GetDecisionSpace().Equals(decisionSpace);
         }
         
         #region ToString
         public override string ToString()
         {
-            return $"{name} ({optimalParetoFrontMembers.First().Count} dimensions, {numberOfObjectives} objectives)";
+            return $"{name} ({decisionSpace.Count} dimensions, {numberOfObjectives} objectives)";
         }
         #endregion
     }
