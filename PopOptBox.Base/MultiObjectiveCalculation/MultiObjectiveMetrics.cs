@@ -80,7 +80,7 @@ namespace PopOptBox.Base.MultiObjectiveCalculation
                         distance = inds[i].GetProperty<double>(propertyName);
 
                     if (distance == double.MaxValue)
-                        continue;
+                        break;
 
                     tempSorted.ElementAt(i).SetProperty(propertyName,
                         distance +

@@ -12,9 +12,9 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.MultiObjective
     /// </summary>
     public class Nsga2 : IFitnessCalculator
     {
-        private bool[] minimise;
-        private int populationSize;
-        private IDominationSorter sorter;
+        private readonly bool[] minimise;
+        private readonly int populationSize;
+        private readonly IDominationSorter sorter;
         private const string CrowdingDistance = "Crowding Distance (temporary)";
 
         /// <summary>
