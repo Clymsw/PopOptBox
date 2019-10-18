@@ -3,7 +3,7 @@ using PopOptBox.Problems.SingleObjective.Continuous;
 
 namespace PopOptBox.HyperParameterTuning
 {
-    internal static class Options
+    internal static partial class Options
     {
         #region Optimiser
         
@@ -27,7 +27,7 @@ namespace PopOptBox.HyperParameterTuning
             Salomon
         }
         
-        public static ProblemSingleObjectiveContinuous GetProblem(
+        public static ProblemSingleObjectiveContinuous GetSingleObjectiveContinuousProblem(
             ProblemsSingleObjectiveContinuousAvailable problem,
             int numberOfDimensions)
         {

@@ -2,6 +2,7 @@ using PopOptBox.Base.Conversion;
 using PopOptBox.Base.FitnessCalculation;
 using PopOptBox.Base.Management;
 using PopOptBox.Base.Variables;
+using PopOptBox.HyperParameterTuning.Helpers.Continuous;
 using PopOptBox.Optimisers.StructuredSearch;
 
 namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous.NelderMead

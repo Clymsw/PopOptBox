@@ -4,7 +4,7 @@ using PopOptBox.Base.Conversion;
 using PopOptBox.Base.Variables;
 using PopOptBox.Problems.SingleObjective.Continuous;
 
-namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous
+namespace PopOptBox.HyperParameterTuning.Helpers.Continuous
 {
     public class ContinuousProblemModel : Model<DecisionVector>
     {

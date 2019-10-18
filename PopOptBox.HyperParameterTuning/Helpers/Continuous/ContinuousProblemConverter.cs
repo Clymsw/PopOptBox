@@ -1,7 +1,7 @@
 ﻿using PopOptBox.Base.Conversion;
 using PopOptBox.Base.Variables;
 
-namespace PopOptBox.HyperParameterTuning.SingleObjective.Continuous
+namespace PopOptBox.HyperParameterTuning.Helpers.Continuous
 {
     internal class ContinuousProblemConverter : IConverter<DecisionVector>
     {

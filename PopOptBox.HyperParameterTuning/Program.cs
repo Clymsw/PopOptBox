@@ -1,7 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using PopOptBox.Base.Conversion;
 using PopOptBox.Base.PopulationCalculation;
 using PopOptBox.Base.Management;
+using PopOptBox.Base.MultiObjectiveCalculation;
+using PopOptBox.Base.Runtime;
+using PopOptBox.Base.Variables;
+using PopOptBox.HyperParameterTuning.MultipleObjective.Continuous.EvolutionaryAlgorithm;
 using PopOptBox.HyperParameterTuning.SingleObjective.Continuous.EvolutionaryAlgorithm;
 using PopOptBox.HyperParameterTuning.SingleObjective.Continuous.NelderMead;
 using PopOptBox.Problems.Performance;
@@ -14,9 +20,12 @@ namespace PopOptBox.HyperParameterTuning
         private const int Number_Of_Restarts = 100;
         private const double Fitness_Tolerance = 0.01;
         
-        private const Options.ProblemsSingleObjectiveContinuousAvailable ProblemToUse =
+        private const bool RunSingleObjective = false;
+        private const Options.ProblemsSingleObjectiveContinuousAvailable SingleObjectiveProblemToUse =
             Options.ProblemsSingleObjectiveContinuousAvailable.Ellipsoidal;
-
+        private const Options.ProblemsMultipleObjectiveContinuousAvailable MultipleObjectiveProblemToUse =
+            Options.ProblemsMultipleObjectiveContinuousAvailable.Zdt1;
+        
         private const int Number_Of_Dimensions = 6;
         
         private const Options.OptimisersAvailable OptimiserToUse = 
@@ -27,36 +36,39 @@ namespace PopOptBox.HyperParameterTuning
         
         static void Main(string[] args)
         {
-            var problem = Options.GetProblem(ProblemToUse, Number_Of_Dimensions);
-
             OptimiserBuilder builder;
-            
-            switch (OptimiserToUse)
+
+            if (RunSingleObjective)
             {
-                case Options.OptimisersAvailable.NelderMead:
-                    builder = NelderMeadBuilder.GetBuilder(
-                        problem.GetGlobalOptimum().GetDecisionSpace(),
-                        Nelder_Mead_Simplex_Creation_Step_Size);
-                    break;
-                
-                case Options.OptimisersAvailable.EvolutionaryAlgorithm:
-                    builder = EvolutionaryAlgorithmBuilderContinuousSO.GetBuilder(
-                        problem.GetGlobalOptimum().GetDecisionSpace(),
-                        AvailableOperators.ParentSelector.Tournament,
-                        AvailableOperators.RecombinationOperator.Sbx,
-                        AvailableOperators.MutationOperators.None,
-                        AvailableOperators.ReinsertionOperators.ReplaceRandom,
-                        200);
-                    break;
-                
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+                var problem = Options.GetSingleObjectiveContinuousProblem(SingleObjectiveProblemToUse,
+                                    Number_Of_Dimensions);
 
-            var runner = new ProblemPerformanceAssessor<double>(builder, problem,
-                p => p.AbsoluteDecisionVectorConvergence(Convergence_Tolerance));
+                switch (OptimiserToUse)
+                {
+                    case Options.OptimisersAvailable.NelderMead:
+                        builder = NelderMeadBuilder.GetBuilder(
+                            problem.GetGlobalOptimum().GetDecisionSpace(),
+                            Nelder_Mead_Simplex_Creation_Step_Size);
+                        break;
 
-            var results = runner.RunAssessment(
+                    case Options.OptimisersAvailable.EvolutionaryAlgorithm:
+                        builder = EvolutionaryAlgorithmBuilderContinuousSO.GetBuilder(
+                            problem.GetGlobalOptimum().GetDecisionSpace(),
+                            AvailableOperators.ParentSelector.Tournament,
+                            AvailableOperators.RecombinationOperator.Sbx,
+                            AvailableOperators.MutationOperators.AddRandomNumber,
+                            AvailableOperators.ReinsertionOperators.ReplaceRandom,
+                            150);
+                        break;
+
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                var runner = new ProblemPerformanceAssessor<double>(builder, problem,
+                            p => p.AbsoluteDecisionVectorConvergence(Convergence_Tolerance));
+                
+                var results = runner.RunAssessment(
                 Number_Of_Restarts,
                 1000,
                 r => Console.Write("."),
@@ -68,7 +80,34 @@ namespace PopOptBox.HyperParameterTuning
                 },
                 timeOutEvaluations: Math.Max(5000, (int)Math.Pow(Number_Of_Dimensions, 3.0) * 20),
                 numberOfNewIndividualsPerGeneration: OptimiserToUse == Options.OptimisersAvailable.NelderMead ? 1 : Number_Of_New_Individuals_Per_Generation);
-            
+
+                printSingleObjectiveResults(results);
+            }
+            else
+            {
+                var problem = Options.GetMultipleObjectiveContinuousProblem(MultipleObjectiveProblemToUse);
+
+                builder = EvolutionaryAlgorithmBuilderContinuousMO.GetBuilder(
+                    problem.GetOptimalParetoFront(1).First().GetDecisionSpace());
+                
+                var optimiserRunner = new OptimiserRunnerBasic(builder, problem, 
+                    pop => false, r => Console.Write("."));
+
+                optimiserRunner.Run(
+                    reportingFrequency: 1000,
+                    timeOutEvaluations: 10000, 
+                    timeOutDuration: null,
+                    newIndividualsPerGeneration: Number_Of_New_Individuals_Per_Generation);
+
+                new FastNonDominatedSort().PerformSort(optimiserRunner.FinalPopulation, new[] {true, true});
+                var finalFrontier = optimiserRunner.FinalPopulation.ParetoFront(1);
+                var comparison = problem.GetOptimalParetoFront(finalFrontier.Length);
+
+            }
+        }
+
+        private static void printSingleObjectiveResults(List<ProblemPerformanceSingleObjective> results)
+        {
             Console.WriteLine();
 
             Console.WriteLine("Global optimum location: " +
