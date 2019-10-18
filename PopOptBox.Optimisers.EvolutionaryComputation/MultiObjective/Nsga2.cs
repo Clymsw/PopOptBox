@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using PopOptBox.Base;
@@ -17,17 +18,43 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.MultiObjective
         private readonly IDominationSorter sorter;
         private const string CrowdingDistance = "Crowding Distance (temporary)";
 
+        private readonly bool useReferencePoint;
+        private double[] referencePoint;
+
         /// <summary>
         /// Construct the NSGA-II fitness calculation engine.
         /// </summary>
-        /// <param name="minimise"></param>
-        /// <param name="populationSize"></param>
-        /// <param name="sorter"></param>
-        public Nsga2(IEnumerable<bool> minimise, int populationSize, IDominationSorter sorter = null)
+        /// <param name="minimise">For each objective, whether it should be minimised.</param>
+        /// <param name="populationSize">The population size for the <see cref="Optimiser"/>.</param>
+        /// <param name="sorter">The <see cref="IDominationSorter"/> to be used.</param>
+        /// <param name="useReferencePoint">Whether to restrict Pareto Front value to a certain region. Default: false (standard NSGA-II).</param>
+        /// <param name="referencePoint">The reference point to use (the worst acceptable value, not the best). Ignored if useReferencePoint = false.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown if the reference point provided has the wrong dimensionality.</exception>
+        public Nsga2(IEnumerable<bool> minimise, int populationSize, IDominationSorter sorter,
+            bool useReferencePoint = false, IEnumerable<double> referencePoint = null)
         {
             this.minimise = minimise.ToArray();
             this.populationSize = populationSize; 
             this.sorter = sorter ?? new FastNonDominatedSort();
+            
+            this.useReferencePoint = useReferencePoint;
+            if (useReferencePoint)
+            {
+                if (referencePoint == null)
+                    this.referencePoint = this.minimise.Select(i => double.NegativeInfinity).ToArray();
+                else
+                {
+                    var refPoint = referencePoint.ToArray();
+                    if (refPoint.Length != this.minimise.Length)
+                        throw new ArgumentOutOfRangeException(nameof(referencePoint),
+                            "reference point does not have the same number of dimensions as 'minimise'.");
+                    this.referencePoint = refPoint;
+                }
+            }
+            else
+            {
+                this.referencePoint = this.minimise.Select(m => m ? double.MaxValue : double.MinValue).ToArray();
+            }
         }
         
         /// <summary>
@@ -60,6 +87,18 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.MultiObjective
                 return;
             }
             
+            if (useReferencePoint & double.IsInfinity(referencePoint.ElementAt(0)))
+            {
+                // Calculate a reference point
+                for (var m = 0; m < inds[0].SolutionVector.Length; m++)
+                {
+                    // Use the worst value found for each objective, after the initial population generation.
+                    referencePoint[m] = minimise[m]
+                        ? inds.Max(i => i.SolutionVector.ElementAt(m))
+                        : inds.Min(i => i.SolutionVector.ElementAt(m));
+                }
+            }
+            
             // Calculate Pareto Fronts
             sorter.PerformSort(inds, minimise);
 
@@ -78,7 +117,8 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.MultiObjective
                 {
                     // We're in the Pareto Front which partially overlaps with the population size.
                     // Perform crowding distance assignment
-                    MultiObjectiveMetrics.AssignCrowdingDistance(currentParetoFront, CrowdingDistance);
+                    ParetoFrontMetrics.AssignCrowdingDistance(currentParetoFront, CrowdingDistance,
+                        minimise, referencePoint);
                     var sortedParetoFront = currentParetoFront
                         .OrderByDescending(i => i.GetProperty<double>(CrowdingDistance))
                         .ToArray();

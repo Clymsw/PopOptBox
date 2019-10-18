@@ -90,5 +90,24 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.MultiObjective.Test
             Assert.Equal(1.0, individuals.ElementAt(7).Fitness);
             Assert.Equal(3.0, individuals.ElementAt(8).Fitness);
         }
+        
+        [Fact]
+        public void CalculateAndAssignFitness_PopulationSize6_ChoosesReferencePoint_CalculatesFitnessesCorrectly()
+        {
+            var nsga2 = new Nsga2(minimise, 6, new FastNonDominatedSort(),
+                true);
+            
+            nsga2.CalculateAndAssignFitness(individuals);
+            
+            Assert.Equal(1.0, individuals.ElementAt(0).Fitness);
+            Assert.Equal(2.0, individuals.ElementAt(1).Fitness);
+            Assert.Equal(1.0, individuals.ElementAt(2).Fitness);
+            Assert.True(individuals.ElementAt(3).Fitness > 2 && individuals.ElementAt(0).Fitness < 3); // This one is in the middle
+            Assert.Equal(1.0, individuals.ElementAt(4).Fitness);
+            Assert.Equal(3.0, individuals.ElementAt(5).Fitness);
+            Assert.Equal(2.0, individuals.ElementAt(6).Fitness);
+            Assert.Equal(1.0, individuals.ElementAt(7).Fitness);
+            Assert.Equal(3.0, individuals.ElementAt(8).Fitness);
+        }
     }
 }

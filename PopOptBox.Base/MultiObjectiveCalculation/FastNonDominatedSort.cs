@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using PopOptBox.Base.Management;
@@ -19,9 +20,13 @@ namespace PopOptBox.Base.MultiObjectiveCalculation
         /// </summary>
         /// <param name="individuals">All individuals to consider while calculating Pareto Fronts and domination.</param>
         /// <param name="minimise">An array of the same length as the Solution Vectors, <see langword="true"/> if that objective is to be minimised.</param>
+        /// <exception cref="ArgumentOutOfRangeException">Thrown when minimise does not have the same dimensionality as the solution vector.</exception>
         public void PerformSort(IEnumerable<Individual> individuals, bool[] minimise)
         {
             var inds = individuals as Individual[] ?? individuals.ToArray();
+            if (minimise.Length != inds.ElementAt(0).SolutionVector.Length)
+                throw new ArgumentOutOfRangeException(nameof(minimise),
+                    "minimise does not have the right number of dimensions.");
             
             // First loop: calculate domination
             var currentParetoFront = new List<Individual>();
