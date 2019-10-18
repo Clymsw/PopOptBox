@@ -10,7 +10,7 @@ namespace PopOptBox.Problems.MultipleObjective.Continuous
         /// <summary>
         /// Creates an evaluator for the ZDT3 problem.
         /// 30D Decision space constrained on [0,1]
-        /// Two objectives, with Pareto optimal values at [x1, 1 - sqrt(x1) - x1.sin(10.pi.x1)]
+        /// Two minimisation objectives, with Pareto optimal values at [x1, 1 - sqrt(x1) - x1.sin(10.pi.x1)]
         /// </summary>
         public Zdt3() : base(
             "ZDT3", 

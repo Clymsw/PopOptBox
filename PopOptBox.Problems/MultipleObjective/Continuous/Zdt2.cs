@@ -10,7 +10,7 @@ namespace PopOptBox.Problems.MultipleObjective.Continuous
         /// <summary>
         /// Creates an evaluator for the ZDT2 problem.
         /// 30D Decision space constrained on [0,1]
-        /// Two objectives, with Pareto optimal values at [x1, 1 - x1^2]
+        /// Two minimisation objectives, with Pareto optimal values at [x1, 1 - x1^2]
         /// </summary>
         public Zdt2() : base(
             "ZDT2", 
