@@ -9,7 +9,11 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation
     public class MutationCombination : IMutationOperator
     {
         private readonly IMutationOperator[] mutations;
-        
+
+        /// <summary>
+        /// Constructs a mutation operator that aggregates multiple mutations.
+        /// </summary>
+        /// <param name="mutations">The <see cref="IMutationOperator"/>s to aggregate.</param>
         public MutationCombination(params IMutationOperator[] mutations)
         {
             this.mutations = mutations;
