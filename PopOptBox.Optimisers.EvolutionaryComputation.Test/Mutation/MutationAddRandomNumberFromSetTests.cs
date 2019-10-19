@@ -5,11 +5,11 @@ using Xunit;
 
 namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation.Test
 {
-    public class MutationAddRandomFromSetTests
+    public class MutationAddRandomNumberFromSetTests
     {
         private readonly DecisionVector testDv;
 
-        public MutationAddRandomFromSetTests()
+        public MutationAddRandomNumberFromSetTests()
         {
             var discreteDs = DecisionSpace.CreateForUniformIntArray(4, int.MinValue, int.MaxValue);
             var continuousDs = DecisionSpace.CreateForUniformDoubleArray(4, double.MinValue, double.MaxValue);
