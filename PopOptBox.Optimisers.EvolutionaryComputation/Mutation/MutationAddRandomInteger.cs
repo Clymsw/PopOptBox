@@ -55,6 +55,12 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation
             rngManager = new RandomNumberManager();
         }
 
+        /// <summary>
+        /// Gets a new Decision Vector with elements which have potentially been mutated.
+        /// Uses <see cref="IVariable"/> to wrap the added number, ensuring a valid Decision Vector is always created.
+        /// </summary>
+        /// <param name="decisionVector">The existing Decision Vector.</param>
+        /// <returns>A new Decision Vector.</returns>
         public DecisionVector Operate(DecisionVector decisionVector)
         {
             var locationsToMutate = rngManager.GetLocations(
@@ -72,7 +78,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation
                     if (mutation >= 0)
                         mutation += 1;
 
-                newDv[location] += mutation;
+                newDv[location] = Convert.ToDouble(newDs.ElementAt(location).AddOrWrap(newDv[location], mutation));
             }
             
             return DecisionVector.CreateFromArray(newDs, newDv);
