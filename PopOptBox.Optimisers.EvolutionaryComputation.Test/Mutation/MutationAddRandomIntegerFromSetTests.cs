@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using PopOptBox.Base.Variables;
+using PopOptBox.Optimisers.EvolutionaryComputation.Test;
 using Xunit;
 
 namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation.Test
@@ -11,13 +12,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation.Test
 
         public MutationAddRandomIntegerFromSetTests()
         {
-            var discreteDs = DecisionSpace.CreateForUniformIntArray(4, int.MinValue, int.MaxValue);
-            var continuousDs = DecisionSpace.CreateForUniformDoubleArray(4, double.MinValue, double.MaxValue);
-            var variables = discreteDs.ToList();
-            variables.AddRange(continuousDs);
-            testDv = DecisionVector.CreateFromArray(
-                new DecisionSpace(variables),
-                new double[8] { 7, 6, 5, 4, 3.1, 2.1, 1.1, 0.0 });
+            testDv = Helpers.CreateDecisionVectorWithMixedElements();
         }
 
         [Fact]
@@ -78,7 +73,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation.Test
             var changedValue = newDv.Where((v, i) => (double)v != (double)testDv.ElementAt(i)).Select(d => (double)d);
             Assert.True(changedValue.Count() == 1);
             var oldValue = testDv.Where((v, i) => (double)v != (double)newDv.ElementAt(i)).Select(d => (double)d);
-            Assert.Equal(2, Math.Abs(oldValue.First() - changedValue.First()));
+            Assert.True(Math.Abs(Math.Abs(oldValue.First() - changedValue.First()) - 2.0) < 1e-8);
         }
 
         [Fact]

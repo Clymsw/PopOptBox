@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using PopOptBox.Base.Variables;
+using PopOptBox.Optimisers.EvolutionaryComputation.Test;
 using Xunit;
 
 namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation.Test
@@ -11,13 +12,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation.Test
 
         public MutationAddRandomNumberFromSetTests()
         {
-            var discreteDs = DecisionSpace.CreateForUniformIntArray(4, int.MinValue, int.MaxValue);
-            var continuousDs = DecisionSpace.CreateForUniformDoubleArray(4, double.MinValue, double.MaxValue);
-            var variables = discreteDs.ToList();
-            variables.AddRange(continuousDs);
-            testDv = DecisionVector.CreateFromArray(
-                new DecisionSpace(variables),
-                new double[8] { 7, 6, 5, 4, 3.1, 2.1, 1.1, 0.0 });
+            testDv = Helpers.CreateDecisionVectorWithMixedElements();
         }
 
         [Fact]

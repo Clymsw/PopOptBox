@@ -5,7 +5,7 @@ using PopOptBox.Base.Variables;
 
 namespace PopOptBox.Optimisers.EvolutionaryComputation.Test
 {
-    public static class Helpers
+    internal static class Helpers
     {
         public static List<Individual> CreateNewIndividualsFromArray(double[][] testValues)
         {
@@ -33,6 +33,17 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test
                 inds.ElementAt(i).SetFitness(fitness.ElementAt(i));
             }
             return inds;
+        }
+
+        public static DecisionVector CreateDecisionVectorWithMixedElements()
+        {
+            var discreteDs = DecisionSpace.CreateForUniformIntArray(4, int.MinValue, int.MaxValue);
+            var continuousDs = DecisionSpace.CreateForUniformDoubleArray(4, double.MinValue, double.MaxValue);
+            var variables = discreteDs.ToList();
+            variables.AddRange(continuousDs);
+            return DecisionVector.CreateFromArray(
+                new DecisionSpace(variables),
+                new double[8] { 7, 6, 5, 4, 3.1, 2.1, 1.1, 0.0 });
         }
         
         public static void EvaluateIndividual(this Individual ind, double fitness = 1.0)
