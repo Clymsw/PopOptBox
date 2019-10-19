@@ -1,47 +1,43 @@
-﻿using MathNet.Numerics.Distributions;
-using System;
-using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using PopOptBox.Base.Variables;
 
 namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation
 {
     /// <summary>
-    /// A mutation operator for <see cref="VariableContinuous"/> <see cref="DecisionVector"/> elements, which can add a random number drawn from a Normal distribution.
+    /// A mutation operator for <see cref="VariableContinuous"/> <see cref="DecisionVector"/> elements, which can add a random number chosen from a set provided.
     /// </summary>
-    public class MutationAddRandomNumber : Operator, IMutationOperator
+    public class MutationAddRandomNumberFromSet : Operator, IMutationOperator
     {
         private readonly RandomNumberManager rngManager;
-        private readonly double normalStandardDeviation;
+        private readonly double[] numberSet;
         private readonly double mutationProbability;
         private readonly int maximumNumberOfMutations;
 
         /// <summary>
-        /// Constructs a mutation operator that adds a random number from a Normal distribution to zero or more elements in the <see cref="DecisionVector"/>.
+        /// Constructs a mutation operator that adds a number, chosen randomly from a set of numbers provided, to zero or more elements in the <see cref="DecisionVector"/>.
         /// </summary>
-        /// <param name="normalStandardDeviation">The standard deviation of the Normal distribution around zero.</param>
+        /// <param name="numberSet">The set of numbers to choose from.</param>
         /// <param name="mutationProbability">The probability that any mutation will occur.</param>
         /// <param name="maximumNumberOfMutations">The maximum number of times a mutation should be tried.</param>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when any of the input values are illegal.</exception>
-        public MutationAddRandomNumber(double normalStandardDeviation, double mutationProbability, int maximumNumberOfMutations)
-            : base($"Add random number from N(0,{Math.Pow(normalStandardDeviation, 2).ToString("F2", CultureInfo.InvariantCulture)}) " +
-                  $"to up to {maximumNumberOfMutations} locations " +
-                  $"with chance {mutationProbability.ToString("F2", CultureInfo.InvariantCulture)}")
+        public MutationAddRandomNumberFromSet(IEnumerable<double> numberSet, double mutationProbability, int maximumNumberOfMutations) 
+            : base($"Add random number from set of size {numberSet.Count()}")
         {
-            if (normalStandardDeviation <= 0)
-                throw new ArgumentOutOfRangeException(nameof(normalStandardDeviation), 
-                    "Mutation variance must be greater than 0.");
-            this.normalStandardDeviation = normalStandardDeviation;
+            var numbers = numberSet.ToArray();
 
             if (mutationProbability < 0 || mutationProbability > 1)
-                throw new ArgumentOutOfRangeException(nameof(mutationProbability), 
+                throw new ArgumentOutOfRangeException(nameof(mutationProbability),
                     "Mutation probability must be a value between 0 and 1.");
             this.mutationProbability = mutationProbability;
 
             if (maximumNumberOfMutations <= 0)
-                throw new ArgumentOutOfRangeException(nameof(maximumNumberOfMutations), 
+                throw new ArgumentOutOfRangeException(nameof(maximumNumberOfMutations),
                     "Maximum number of mutations must be greater than 0.");
             this.maximumNumberOfMutations = maximumNumberOfMutations;
+
+            this.numberSet = numbers;
 
             rngManager = new RandomNumberManager();
         }
@@ -59,8 +55,8 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation
 
             if (oldVectorContinuousElements.Count == 0)
                 throw new ArgumentException("Decision Vector must have continuous elements",
-                    nameof(decisionVector)); 
-            
+                    nameof(decisionVector));
+
             var locationsToMutate = rngManager.GetLocations(
                 oldVectorContinuousElements.Count, maximumNumberOfMutations,
                 true, mutationProbability);
@@ -84,10 +80,11 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation
 
                 for (var j = 0; j < numTimesToMutate; j++)
                 {
-                    var randomValue = Normal.Sample(rngManager.Rng, 0, normalStandardDeviation);
-                    newDv[i] = newDs.ElementAt(i).AddOrWrap(newDv[i], randomValue);
+                    var mutationLocation = rngManager.Rng.Next(0, numberSet.Length);
+                    newDv[i] = newDs.ElementAt(i).AddOrWrap(newDv[i], numberSet[mutationLocation]);
                 }
             }
+
             return DecisionVector.CreateFromArray(newDs, newDv);
         }
     }

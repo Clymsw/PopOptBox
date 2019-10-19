@@ -8,7 +8,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation
     /// </summary>
     public class MutationCombination : IMutationOperator
     {
-        private IMutationOperator[] mutations;
+        private readonly IMutationOperator[] mutations;
         
         public MutationCombination(params IMutationOperator[] mutations)
         {
