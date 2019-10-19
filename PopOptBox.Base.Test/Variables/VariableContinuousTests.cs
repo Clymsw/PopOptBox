@@ -117,6 +117,15 @@ namespace PopOptBox.Base.Variables.Test
         }
         
         [Theory]
+        [InlineData(3, 6, 2.2)]
+        public void AddOrWrap_PositiveBounds_UsingIntegers_CorrectValuesReturned(int val1, int val2, double expectedResult)
+        {
+            var vbl = new VariableContinuous(1.2, 4.6);
+            var result = vbl.AddOrWrap(val1, val2);
+            Assert.True(Math.Abs(expectedResult - (double)result) < 1e-6);
+        }
+
+        [Theory]
         [InlineData(-1.0, 0.8, -0.2)]
         [InlineData(-1.5, 2.2, -2.8)]
         [InlineData(-1.2, 8.0, -0.2)]

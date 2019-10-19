@@ -120,10 +120,10 @@ namespace PopOptBox.Base.Variables
                 throw new ArgumentOutOfRangeException(nameof(value1), "Value must be legal for this variable.");
 
             if (lowerBound == int.MinValue || upperBound == int.MaxValue)
-                return (int)value1 + (int)value2;
+                return Convert.ToInt32(value1) + Convert.ToInt32(value2);
 
             // Get remainder in the range [1, r+1]
-            var remainder = ((int)value1 + (int)value2 - lowerBound + 1) % (upperBound - lowerBound + 1);
+            var remainder = (Convert.ToInt32(value1) + Convert.ToInt32(value2) - lowerBound + 1) % (upperBound - lowerBound + 1);
             return remainder <= 0 ? upperBound + remainder : lowerBound + remainder - 1;
         }
         
