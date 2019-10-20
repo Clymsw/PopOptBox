@@ -107,8 +107,9 @@ namespace PopOptBox.Base.Runtime
                 foreach (var nextInd in nextInds)
                 {
                     nextInd.SetProperty(
-                    OptimiserPropertyNames.ReinsertionIndex,
-                    timeOutManager.EvaluationsRun);
+                        OptimiserPropertyNames.ReinsertionIndex,
+                        timeOutManager.EvaluationsRun);
+                    timeOutManager.IncrementEvaluationsRun();
                 }
 
                 // Store
@@ -123,8 +124,6 @@ namespace PopOptBox.Base.Runtime
                     BestFound = bestInd;
 
                 // Create individuals for next loop
-                timeOutManager.IncrementEvaluationsRun();
-
                 nextInds = optimiser.GetNextToEvaluate(newIndividualsPerGeneration);
                 
                 // Check for completion
