@@ -28,6 +28,14 @@ namespace PopOptBox.Base.MultiObjectiveCalculation
                 throw new ArgumentOutOfRangeException(nameof(minimise),
                     "minimise does not have the right number of dimensions.");
             
+            // Remove all old values
+            foreach (var ind in inds)
+            {
+                ind.RemoveProperty(OptimiserPropertyNames.DominatedBy);
+                ind.RemoveProperty(OptimiserPropertyNames.Dominating);
+                ind.RemoveProperty(OptimiserPropertyNames.ParetoFront);
+            }
+
             // First loop: calculate domination
             var currentParetoFront = new List<Individual>();
             
