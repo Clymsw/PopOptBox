@@ -155,6 +155,18 @@ namespace PopOptBox.Base.Management
         }
 
         /// <summary>
+        /// Removes the specified property from the property dictionary.
+        /// </summary>
+        /// <remarks>
+        /// Uses <see cref="Dictionary{string, object}.Remove(string)"/>: key does not need to exist.
+        /// </remarks>
+        /// <param name="key">The key for the property to remove.</param>
+        public void RemoveProperty(string key)
+        {
+            properties.Remove(key);
+        }
+
+        /// <summary>
         /// Assigns Solution Vector based on given Property names
         /// </summary>
         /// <param name="keyNames">Names of property keys to set as solution vector.</param>
