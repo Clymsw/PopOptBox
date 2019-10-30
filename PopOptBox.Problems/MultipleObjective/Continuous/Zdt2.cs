@@ -7,17 +7,21 @@ namespace PopOptBox.Problems.MultipleObjective.Continuous
 {
     public class Zdt2 : ProblemMultipleObjective
     {
+        private readonly int numberOfDimensions;
+        
         /// <summary>
         /// Creates an evaluator for the ZDT2 problem.
-        /// 30D Decision space constrained on [0,1]
+        /// N-D Decision space constrained on [0,1]
         /// Two minimisation objectives, with Pareto optimal values at [x1, 1 - x1^2]
         /// </summary>
-        public Zdt2() : base(
+        /// <param name="numberOfDimensions">The number of input dimensions (default is 30)</param>
+        public Zdt2(int numberOfDimensions = 30) : base(
             "ZDT2", 
             DecisionSpace.CreateForUniformDoubleArray(30, 0,1,0,1),
             ContinuousProblemPropertyNames.TheLocation,
             ContinuousProblemPropertyNames.Result1, ContinuousProblemPropertyNames.Result2)
         {
+            this.numberOfDimensions = numberOfDimensions;
         }
 
         public override IEnumerable<double> Evaluate(DecisionVector definition)
@@ -44,7 +48,7 @@ namespace PopOptBox.Problems.MultipleObjective.Continuous
 
         public override DecisionVector[] GetOptimalParetoFront(int numberOfPoints)
         {
-            var xm = Enumerable.Repeat(0.0, 29);
+            var xm = Enumerable.Repeat(0.0, numberOfDimensions - 1);
             var x1 = Enumerable.Range(0, numberOfPoints).Select(
                 i => new List<double> {(double) i / numberOfPoints});
             
