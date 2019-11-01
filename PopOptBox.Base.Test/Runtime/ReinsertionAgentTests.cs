@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks.Dataflow;
 using PopOptBox.Base.PopulationCalculation;
@@ -11,6 +12,7 @@ namespace PopOptBox.Base.Runtime.Test
     public class ReinsertionAgentTests
     {
         private readonly ReinsertionAgent agent;
+        private const int NumberOfNewIndividuals = 2;
         
         public ReinsertionAgentTests()
         {
@@ -23,7 +25,7 @@ namespace PopOptBox.Base.Runtime.Test
                     builder.GetConverterMock()),
                 new TimeOutManager(5, TimeSpan.MaxValue),
                 p => p.AbsoluteDecisionVectorConvergence(1),
-                1)
+                1, NumberOfNewIndividuals)
             {
                 SaveAll = true
             };
@@ -40,12 +42,17 @@ namespace PopOptBox.Base.Runtime.Test
 
             agent.IndividualsForReinsertion.Post(newInd);
 
-            var generatedInd = agent.NewIndividuals.Receive(); // Won't happen without this line.
+            var generatedInds = new List<Individual>();
+            for (var i = 0; i < NumberOfNewIndividuals; i++)
+            {
+                generatedInds.Add(agent.NewIndividuals.Receive()); // Won't happen without this line.
+            }
             
-            Assert.True(generatedInd.GetProperty<DateTime>(OptimiserPropertyNames.CreationTime) > 
+            Assert.Equal(NumberOfNewIndividuals, generatedInds.Count);
+            Assert.True(generatedInds.ElementAt(0).GetProperty<DateTime>(OptimiserPropertyNames.CreationTime) > 
                         newInd.GetProperty<DateTime>(OptimiserPropertyNames.CreationTime));
             
-            Assert.Equal(2, agent.NumberGenerated);
+            Assert.Equal(NumberOfNewIndividuals + 1, agent.NumberGenerated);
             Assert.True(agent.AllEvaluated.Count == 1);
 
             var pop = agent.GetCurrentPopulation();

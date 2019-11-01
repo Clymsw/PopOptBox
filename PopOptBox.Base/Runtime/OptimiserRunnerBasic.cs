@@ -67,6 +67,9 @@ namespace PopOptBox.Base.Runtime
             cancelDemanded = false;
 
             //Setup
+            if (newIndividualsPerGeneration <= 0)
+                throw new ArgumentOutOfRangeException(nameof(newIndividualsPerGeneration),
+                    "At least one new individual must be created each generation.");
             var nextInds = optimiser.GetNextToEvaluate(newIndividualsPerGeneration);
 
             if (timeOutEvaluations == 0)

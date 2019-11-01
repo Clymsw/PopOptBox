@@ -19,6 +19,8 @@ namespace PopOptBox.Base.Runtime
         private readonly TimeOutManager timeOutManager;
         private readonly Func<Population, bool> convergenceCheckers;
 
+        private readonly int numberOfNewIndividualsPerGeneration;
+        
         /// <summary>
         /// The block that handles reinserting returned individuals 
         /// and then creating a new one.
@@ -80,12 +82,14 @@ namespace PopOptBox.Base.Runtime
         /// <param name="timeOutManager">The timeout manager.</param>
         /// <param name="convergenceCheckers">Checks for early termination.</param>
         /// <param name="reportingFrequency">Number of reinsertions between reports on progress.</param>
+        /// <param name="numberOfNewIndividualsPerGeneration">Number of new individuals to generate whenever an individual is evaluated.</param>
         public ReinsertionAgent(
             Optimiser optimiser,
             IModel model,
             TimeOutManager timeOutManager,
             Func<Population, bool> convergenceCheckers,
-            int reportingFrequency)
+            int reportingFrequency,
+            int numberOfNewIndividualsPerGeneration)
         {
             CancellationSource = new CancellationTokenSource();
             this.timeOutManager = timeOutManager;
@@ -98,6 +102,8 @@ namespace PopOptBox.Base.Runtime
 
             this.optimiser = optimiser;
             this.model = model;
+            
+            this.numberOfNewIndividualsPerGeneration = numberOfNewIndividualsPerGeneration;
 
             IndividualsForReinsertion = new TransformManyBlock<Individual, Individual>(
                 (Func<Individual, IEnumerable<Individual>>)Process,
@@ -165,10 +171,8 @@ namespace PopOptBox.Base.Runtime
                 CancellationSource.Cancel();
                 return new List<Individual>();
             }
-            else
-            {
-                return CreateNewIndividuals(1);
-            }
+            
+            return CreateNewIndividuals(numberOfNewIndividualsPerGeneration);
         }
 
         /// <summary>

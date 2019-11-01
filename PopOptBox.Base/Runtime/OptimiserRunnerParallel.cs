@@ -104,7 +104,11 @@ namespace PopOptBox.Base.Runtime
 
             var timeOutManager = new TimeOutManager(timeOutEvaluations, timeOutDurationNotNull);
 
-            SetUpAgents(timeOutManager, reportingFrequency);
+            if (newIndividualsPerGeneration <= 0)
+                throw new ArgumentOutOfRangeException(nameof(newIndividualsPerGeneration),
+                    "At least one new individual must be created each generation.");
+            
+            SetUpAgents(timeOutManager, reportingFrequency, newIndividualsPerGeneration);
 
             reinsertionAgent.SaveAll = storeAll;
 
@@ -147,14 +151,18 @@ namespace PopOptBox.Base.Runtime
         /// </summary>
         /// <param name="timeOutManager">The <see cref="TimeOutManager"/>.</param>
         /// <param name="reportingFrequency">The number of reinsertions between reports on the current population</param>
+        /// <param name="numberOfNewIndividualsPerGeneration">The number of new individuals to generate whenever an individual is reinserted.</param>
         private void SetUpAgents(
             TimeOutManager timeOutManager,
-            int reportingFrequency)
+            int reportingFrequency,
+            int numberOfNewIndividualsPerGeneration)
         {
             reinsertionAgent = new ReinsertionAgent(
                 builder.CreateOptimiser(),
                 builder.CreateModel(),
-                timeOutManager, convergenceCheckers, reportingFrequency);
+                timeOutManager, convergenceCheckers, 
+                reportingFrequency, 
+                numberOfNewIndividualsPerGeneration);
 
             evaluationAgent = new EvaluationAgent(
                 evaluator, reinsertionAgent.CancellationSource.Token);

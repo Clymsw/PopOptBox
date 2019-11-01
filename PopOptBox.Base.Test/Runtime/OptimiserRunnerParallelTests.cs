@@ -21,7 +21,7 @@ namespace PopOptBox.Base.Runtime.Test
         [Fact]
         public void RunOptimisation_CompletesDueToConvergence_WhenPopulationIsFull()
         {
-            runner.Run();
+            runner.Run(newIndividualsPerGeneration: 2);
             
             Assert.Equal(ObjectCreators.OptimiserBuilderMock.PopulationSize, 
                 runner.AllEvaluated.Count);
