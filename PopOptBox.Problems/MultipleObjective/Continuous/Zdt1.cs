@@ -19,7 +19,7 @@ namespace PopOptBox.Problems.MultipleObjective.Continuous
             "ZDT1", 
             DecisionSpace.CreateForUniformDoubleArray(numberOfDimensions, 0,1,0,1),
             ContinuousProblemPropertyNames.TheLocation,
-            ContinuousProblemPropertyNames.Result1, ContinuousProblemPropertyNames.Result2)
+            ContinuousProblemPropertyNames.Result + "1", ContinuousProblemPropertyNames.Result + "2")
         {
             this.numberOfDimensions = numberOfDimensions;
         }
@@ -49,15 +49,15 @@ namespace PopOptBox.Problems.MultipleObjective.Continuous
         public override DecisionVector[] GetOptimalParetoFront(int numberOfPoints)
         {
             var xm = Enumerable.Repeat(0.0, numberOfDimensions - 1);
-            var x1 = Enumerable.Range(0, numberOfPoints).Select(
-                i => new List<double> {(double) i / numberOfPoints});
+            var x1 = Enumerable.Range(0, numberOfPoints)
+                .Select(i => new List<double> {(double) i / numberOfPoints});
             
             var pf = new List<DecisionVector>();
             foreach (var f1 in x1)
             {
                 f1.AddRange(xm.ToArray());
-                pf.Add(DecisionVector.CreateFromArray(decisionSpace,
-                    f1));
+                pf.Add(
+                    DecisionVector.CreateFromArray(decisionSpace, f1));
             }
 
             return pf.ToArray();

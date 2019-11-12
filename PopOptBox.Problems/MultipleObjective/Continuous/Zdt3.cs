@@ -19,7 +19,7 @@ namespace PopOptBox.Problems.MultipleObjective.Continuous
             "ZDT3", 
             DecisionSpace.CreateForUniformDoubleArray(30, 0,1,0,1),
             ContinuousProblemPropertyNames.TheLocation,
-            ContinuousProblemPropertyNames.Result1, ContinuousProblemPropertyNames.Result2)
+            ContinuousProblemPropertyNames.Result + "1", ContinuousProblemPropertyNames.Result + "2")
         {
             this.numberOfDimensions = numberOfDimensions;
         }
