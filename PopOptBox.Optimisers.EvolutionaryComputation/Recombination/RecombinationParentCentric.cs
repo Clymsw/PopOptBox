@@ -2,6 +2,7 @@
 using MathNet.Numerics.LinearAlgebra;
 using System;
 using System.Linq;
+using MathNet.Numerics.Statistics;
 using PopOptBox.Base.Variables;
 
 namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
@@ -55,7 +56,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
                 throw new ArgumentOutOfRangeException(nameof(parents),
                     "There must be at least two parents.");
 
-            // TODO: These calls to .Any() are slow - can be remove the error checking?
+            // TODO: These calls to .Any() are slow - can we remove the error checking?
             if (parents.Any(p => p.GetContinuousElements().Count == 0))
                 throw new ArgumentOutOfRangeException(nameof(parents),
                     "Parents must have non-zero length decision vectors.");
@@ -71,47 +72,50 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination
             // 1a: centroid of all parents
             var centroid = parentDVs.RowSums().Divide(parents.Count());
 
-            // 1b: vector distance from mother to centroid
+            // 1b: vector distance from centroid to mother (following Deb's C code, not paper)
             var motherCentroidVectorDistance = centroid - motherDV;
-
-            // 1c: absolute distance from mother to centroid
-            var motherCentroidAbsDistance = Distance.Euclidean(motherDV, centroid);
-
-            // 1d: mean perpendicular distance from other parents to mother
+            var motherCentroidAbsoluteDistance = motherCentroidVectorDistance.L2Norm();
+            if (motherCentroidAbsoluteDistance < 1e-20)
+                return DecisionVector.CreateForEmpty();
+            
+            // 1c: vector distance from other parents to mother
             var otherParentDVs = parentDVs.RemoveColumn(0);
-            var distances = from otherParent in otherParentDVs.EnumerateColumns()
-                            let currentVectorDistance = otherParent - motherDV
-                            let currentAbsDistance = Distance.Euclidean(otherParent, motherDV)
-                            let testCos = (currentVectorDistance * motherCentroidVectorDistance) / (motherCentroidAbsDistance * currentAbsDistance)
-                            let testSin = Math.Sqrt(1 - Math.Pow(testCos, 2))
-                            select currentAbsDistance * testSin;
+            var parentMotherVectorDistances = otherParentDVs.EnumerateColumns()
+                .Select(v => v - motherDV).ToArray();
+            var parentMotherAbsoluteDistances = parentMotherVectorDistances.Select(v => v.L2Norm()).ToArray();
+            if (parentMotherAbsoluteDistances.Any(d => d < 1e-20))
+                return DecisionVector.CreateForEmpty();
 
-            var meanPerpendicularDistance = distances.Average();
+            // 1d: perpendicular distances from other parents to centroid-mother vector
+            var orthogonalDistances = parentMotherVectorDistances
+                .Select((v,i) => parentMotherAbsoluteDistances.ElementAt(i) * 
+                                 Math.Sqrt(1.0 - Math.Pow(
+                                               v.DotProduct(motherCentroidVectorDistance) /
+                                               (parentMotherAbsoluteDistances.ElementAt(i) * motherCentroidAbsoluteDistance), 
+                                               2.0)));
+            var meanOrthogonalDistance = orthogonalDistances.Mean();
 
             // 2: Now create a new individual
             var normRnd = new MathNet.Numerics.Distributions.Normal(rngManager.Rng);
-            var samples = new double[motherDV.Count];
-            normRnd.Samples(samples);
+            var samplesEta = new double[motherDV.Count];
+            normRnd.Samples(samplesEta);
 
-            var newRandomDv = Vector<double>.Build.DenseOfArray(samples)
-                .Multiply(meanPerpendicularDistance)
-                .Multiply(sigmaEta);
+            var newRandomDv = Vector<double>.Build.DenseOfArray(samplesEta)
+                .Multiply(sigmaEta * meanOrthogonalDistance);
 
             //Remove component of randomness in direction of ?
             var offset1 = motherCentroidVectorDistance
-                .Multiply(newRandomDv * motherCentroidVectorDistance)
-                .Multiply(1 / Math.Pow(motherCentroidAbsDistance, 2));
+                .Multiply(newRandomDv.DotProduct(motherCentroidVectorDistance))
+                .Divide(Math.Pow(motherCentroidAbsoluteDistance, 2.0));
             newRandomDv -= offset1;
 
             var offset2 = motherCentroidVectorDistance
-                .Multiply(sigmaZeta)
-                .Multiply(normRnd.Sample());
+                .Multiply(sigmaZeta * normRnd.Sample());
             newRandomDv += offset2;
 
             // Modification of Deb2002 which should maintain stability.
-            // See Deb's actual C code...
-            var finalDv = motherDV +
-                newRandomDv.Multiply(1 / Math.Sqrt(motherDV.Count));
+            var finalDv = motherDV + 
+                          newRandomDv.Divide(Math.Sqrt(motherDV.Count));
 
             return DecisionVector.CreateFromArray(parents.First().GetDecisionSpace(), finalDv.ToArray());
         }
