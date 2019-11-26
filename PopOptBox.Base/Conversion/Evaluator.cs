@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using PopOptBox.Base.Management;
@@ -40,9 +41,19 @@ namespace PopOptBox.Base.Conversion
             }
             else
             {
-                var solution = Evaluate(definition);
-                SetSolution(ind, solution);
-                ind.SetLegality(true);
+                try
+                {
+                    var solution = Evaluate(definition);
+                    SetSolution(ind, solution);
+                    ind.SetLegality(true);
+                }
+                catch (Exception e)
+                {
+                    // Rethrow error.
+                    SetSolution(ind, new double[0]);
+                    ind.SetLegality(false);
+                    throw new InvalidOperationException("An unknown error was thrown during evaluation.", e);
+                }
             }
         }
 
