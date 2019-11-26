@@ -55,8 +55,7 @@ namespace PopOptBox.Base.Runtime
             this.evaluator = evaluator;
             this.convergenceCheckers = convergenceCheckers;
 
-            reportingAgent = new ActionBlock<Population>(
-                reporters);
+            reportingAgent = new ActionBlock<Population>(reporters);
 
             NumberOfIndividualsToStart = builder.CreateOptimiser().Population.TargetSize / 4;
             if (NumberOfIndividualsToStart < 4)
