@@ -123,7 +123,9 @@ namespace PopOptBox.Base.Runtime
 
             //Set up link so that new individuals created 
             // are pushed to the output buffer
-            IndividualsForReinsertion.LinkTo(NewIndividuals);
+            IndividualsForReinsertion.LinkTo(
+                NewIndividuals,
+                new DataflowLinkOptions() { PropagateCompletion = true});
         }
 
         /// <summary>
