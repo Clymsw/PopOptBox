@@ -57,7 +57,9 @@ namespace PopOptBox.Base.Runtime
                 });
 
             // Setup link so that evaluated individuals are pushed to the output buffer.
-            IndividualsForEvaluation.LinkTo(EvaluatedIndividuals);
+            IndividualsForEvaluation.LinkTo(
+                EvaluatedIndividuals,
+                new DataflowLinkOptions() { PropagateCompletion = true});
         }
 
         /// <summary>
@@ -68,6 +70,7 @@ namespace PopOptBox.Base.Runtime
         private Individual Process(Individual ind)
         {
             evaluator.Evaluate(ind);
+
             Interlocked.Increment(ref numberEvaluated);
 
             return ind;
