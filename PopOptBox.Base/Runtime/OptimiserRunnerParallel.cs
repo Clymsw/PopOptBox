@@ -169,16 +169,19 @@ namespace PopOptBox.Base.Runtime
             //Create link so that newly created individuals from the ReinsertionAgent
             // are pushed to the EvaluationAgent
             reinsertionAgent.NewIndividuals.LinkTo(
-                evaluationAgent.IndividualsForEvaluation);
+                evaluationAgent.IndividualsForEvaluation,
+                new DataflowLinkOptions() { PropagateCompletion = true});
 
             //Create link so that evaluated individuals from the EvaluationAgent
             // are pushed to the ReinsertionAgent
             evaluationAgent.EvaluatedIndividuals.LinkTo(
-                reinsertionAgent.IndividualsForReinsertion);
+                reinsertionAgent.IndividualsForReinsertion,
+                new DataflowLinkOptions() { PropagateCompletion = true});
 
             //Create link so that reports from the ReinsertionAgent
             // are pushed to the reporting delegates
-            reinsertionAgent.Reports.LinkTo(reportingAgent);
+            reinsertionAgent.Reports.LinkTo(reportingAgent,
+                new DataflowLinkOptions() { PropagateCompletion = true});
         }
     }
 }
