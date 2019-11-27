@@ -35,25 +35,26 @@ namespace PopOptBox.Base.Conversion
                 throw new System.InvalidOperationException("Individual is not ready for evaluation.");
 
             var definition = ind.GetProperty<TReality>(definitionKey);
+            
             if (!GetLegality(definition))
             {
                 ind.SetLegality(false);
+                SetSolution(ind, new double[solutionKeys.Length]);
+                return;
             }
-            else
+            
+            try
             {
-                try
-                {
-                    var solution = Evaluate(definition);
-                    SetSolution(ind, solution);
-                    ind.SetLegality(true);
-                }
-                catch (Exception e)
-                {
-                    // Rethrow error.
-                    SetSolution(ind, new double[0]);
-                    ind.SetLegality(false);
-                    throw new InvalidOperationException("An unknown error was thrown during evaluation.", e);
-                }
+                var solution = Evaluate(definition);
+                SetSolution(ind, solution);
+                ind.SetLegality(true);
+            }
+            catch (Exception e)
+            {
+                // Rethrow error.
+                SetSolution(ind, new double[solutionKeys.Length]);
+                ind.SetLegality(false);
+                throw new InvalidOperationException("An unknown error was thrown during evaluation.", e);
             }
         }
 
