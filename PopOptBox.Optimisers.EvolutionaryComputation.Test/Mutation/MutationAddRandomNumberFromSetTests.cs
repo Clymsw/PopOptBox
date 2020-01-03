@@ -64,7 +64,8 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation.Test
             var changedValue = newDv.Where((v, i) => (double)v != (double)testDv.ElementAt(i)).Select(d => (double)d);
             Assert.True(changedValue.Count() == 1);
             var oldValue = testDv.Where((v, i) => (double)v != (double)newDv.ElementAt(i)).Select(d => (double)d);
-            Assert.Equal(2, Math.Abs(oldValue.First() - changedValue.First()));
+
+            Assert.True(Math.Abs(oldValue.First() - changedValue.First()) - 2.0 < 1e-6);
         }
 
         [Fact]

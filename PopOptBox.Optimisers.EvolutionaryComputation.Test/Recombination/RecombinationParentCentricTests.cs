@@ -30,7 +30,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination.Test
         [Fact]
         public void Operate_SmallSpreadingCoefficients_ReturnsNearMother()
         {
-            var pcx = new RecombinationParentCentric(0.2, 0.2);
+            var pcx = new RecombinationParentCentric(0.001, 0.001);
             var children = new List<DecisionVector>();
             for (var i = 0; i < 100; i++)
             {
@@ -40,6 +40,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Recombination.Test
             var distances = children.Select(c => Distance.Euclidean(
                 c.Select(d => (double)d).ToArray(), 
                 parents[0].Select(d => (double)d).ToArray()));
+
             Assert.True(distances.All(d => d < 1e-2));
         }
     }
