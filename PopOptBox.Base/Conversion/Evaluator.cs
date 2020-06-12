@@ -38,8 +38,7 @@ namespace PopOptBox.Base.Conversion
             
             if (!GetLegality(definition))
             {
-                ind.SetLegality(false);
-                SetSolution(ind, new double[solutionKeys.Length]);
+                ind.SetIllegal();
                 return;
             }
             
@@ -47,14 +46,11 @@ namespace PopOptBox.Base.Conversion
             {
                 var solution = Evaluate(definition);
                 SetSolution(ind, solution);
-                ind.SetLegality(true);
             }
             catch (Exception e)
             {
-                // Rethrow error.
-                SetSolution(ind, new double[solutionKeys.Length]);
-                ind.SetLegality(false);
-                throw new InvalidOperationException("An unknown error was thrown during evaluation.", e);
+                ind.SetIllegal();
+                ind.SetProperty(OptimiserPropertyNames.EvaluationError, e);
             }
         }
 

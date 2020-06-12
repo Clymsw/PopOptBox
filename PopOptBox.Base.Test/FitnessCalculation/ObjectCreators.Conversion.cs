@@ -55,7 +55,7 @@ namespace PopOptBox.Base.Test.Helpers
 
             public override IEnumerable<double> Evaluate(double definition)
             {
-                throw new System.ArgumentOutOfRangeException(nameof(definition), ErrorMessage);
+                throw new ArgumentOutOfRangeException(nameof(definition), ErrorMessage);
             }
 
             public override bool GetLegality(double definition)

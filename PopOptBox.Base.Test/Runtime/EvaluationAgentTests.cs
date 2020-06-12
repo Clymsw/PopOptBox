@@ -31,7 +31,7 @@ namespace PopOptBox.Base.Runtime.Test
         }
 
         [Fact]
-        public void ErrorIsPropagated()
+        public void ErrorIsStoredAndNotThrown()
         {
             var errorAgent = new EvaluationAgent(new ObjectCreators.EvaluatorWithErrorMock(), CancellationToken.None);
             
@@ -40,7 +40,9 @@ namespace PopOptBox.Base.Runtime.Test
             newInd.SendForEvaluation();
             
             errorAgent.IndividualsForEvaluation.Post(newInd);
-            Assert.Throws<InvalidOperationException>(() => errorAgent.EvaluatedIndividuals.Receive());
+            errorAgent.EvaluatedIndividuals.Receive(); // Won't happen without this line.
+            
+            Assert.Contains(OptimiserPropertyNames.EvaluationError, newInd.GetPropertyNames());
         }
     }
 }

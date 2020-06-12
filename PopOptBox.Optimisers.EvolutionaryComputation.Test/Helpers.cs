@@ -51,7 +51,6 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Test
             ind.SendForEvaluation();
             ind.SetProperty("solution", fitness);
             ind.SetSolution("solution");
-            ind.SetLegality(true);
         }
     }
 }

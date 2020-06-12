@@ -33,5 +33,10 @@ namespace PopOptBox.Base
         /// If an error has been encountered on reinsertion, it is stored here.
         /// </summary>
         public const string ReinsertionError = "Reinsertion error";
+
+        /// <summary>
+        /// If an error has been encountered on evaluation, it is stored here.
+        /// </summary>
+        public const string EvaluationError = "Evaluation error";
     }
 }

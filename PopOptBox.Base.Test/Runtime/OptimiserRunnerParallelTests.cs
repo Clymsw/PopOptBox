@@ -45,7 +45,7 @@ namespace PopOptBox.Base.Runtime.Test
             }
             catch (AggregateException e)
             {
-                Assert.IsType<InvalidOperationException>(e.InnerExceptions.Last());
+                Assert.IsType<InvalidOperationException>(e.InnerException);
                 failed = true;
             }
             Assert.True(failed);
