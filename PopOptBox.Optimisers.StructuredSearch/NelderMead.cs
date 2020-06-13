@@ -22,7 +22,7 @@ namespace PopOptBox.Optimisers.StructuredSearch
         private readonly List<NelderMeadSimplexOperations> tempProgress =
             new List<NelderMeadSimplexOperations>();
 
-        private Individual tempReflect;
+        private Individual? tempReflect;
 
         //History management
         public NelderMeadSteps LastStep { get; private set; }
@@ -166,65 +166,69 @@ namespace PopOptBox.Optimisers.StructuredSearch
                         {
                             // Reflection vertex lies inside the population, accept it.
                             Population.ReplaceWorst(individual);
-                            ChooseReflect();
-                            Reset();
+                            chooseReflect();
+                            reset();
                             numberInserted++;
                         }
                         else if (individual.Fitness < bestFitness)
                         {
                             // Reflection vertex is better than the best, try expansion.
                             CurrentOperation = NelderMeadSimplexOperations.E;
-                            TryExpand();
+                            tryExpand();
                         }
                         else if (individual.Fitness < worstFitness & individual.Fitness >= nextToWorstFitness)
                         {
                             // Reflection vertex is strictly better than worst, 
                             //  but is worse than every other vertex, try contract out.
                             CurrentOperation = NelderMeadSimplexOperations.C;
-                            TryContractOut();
+                            tryContractOut();
                         }
                         else if (individual.Fitness >= worstFitness)
                         {
                             // Reflection vertex is the worst we've found, try contract in.
                             CurrentOperation = NelderMeadSimplexOperations.K;
-                            TryContractIn();
+                            tryContractIn();
                         }
 
                         tempReflect = individual;
                         break;
 
                     case (NelderMeadSimplexOperations.E):
+#pragma warning disable CS8602 // Dereference of a possibly null reference. R is always run first.
                         if (individual.Fitness < tempReflect.Fitness)
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                         {
                             // Expansion vertex is better than reflection vertex, accept it.
                             Population.ReplaceWorst(individual);
-                            ChooseExpand();
+                            chooseExpand();
                         }
                         else
                         {
                             // Expansion vertex is worse than reflection vertex, accept reflection.
                             Population.ReplaceWorst(tempReflect);
-                            ChooseReflect();
+                            chooseReflect();
                         }
 
-                        Reset();
+                        reset();
                         numberInserted++;
                         break;
 
                     case (NelderMeadSimplexOperations.C):
+#pragma warning disable CS8602 // Dereference of a possibly null reference. R is always run first.
                         if (individual.Fitness <= tempReflect.Fitness)
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                         {
                             // Contract Outside vertex is better than reflection vertex, accept it.
                             Population.ReplaceWorst(individual);
-                            ChooseContractOut();
-                            Reset();
+                            chooseContractOut();
+                            reset();
                             numberInserted++;
                         }
                         else
                         {
                             // Contract Outside vertex is worse than reflection vertex, shrink.
                             CurrentOperation = NelderMeadSimplexOperations.S;
-                            TryShrink();
+                            tryShrink();
                         }
 
                         break;
@@ -234,23 +238,23 @@ namespace PopOptBox.Optimisers.StructuredSearch
                         {
                             //Contract Inside vertex is better than the worst, accept it.
                             Population.ReplaceWorst(individual);
-                            ChooseContractIn();
-                            Reset();
+                            chooseContractIn();
+                            reset();
                             numberInserted++;
                         }
                         else
                         {
                             // Contract Inside vertex is worst, shrink.
                             CurrentOperation = NelderMeadSimplexOperations.S;
-                            TryShrink();
+                            tryShrink();
                         }
 
                         break;
 
                     case (NelderMeadSimplexOperations.S):
                         Population.ReplaceWorst(individual);
-                        ChooseShrink();
-                        Reset();
+                        chooseShrink();
+                        reset();
                         numberInserted++;
                         break;
 
@@ -263,10 +267,10 @@ namespace PopOptBox.Optimisers.StructuredSearch
             return numberInserted;
         }
 
-        private void Reset()
+        private void reset()
         {
             CurrentOperation = NelderMeadSimplexOperations.R;
-            TryReflect();
+            tryReflect();
             tempReflect = null;
         }
 
@@ -274,27 +278,27 @@ namespace PopOptBox.Optimisers.StructuredSearch
 
         #region Try
 
-        private void TryReflect()
+        private void tryReflect()
         {
             tempProgress.Add(NelderMeadSimplexOperations.R);
         }
 
-        private void TryExpand()
+        private void tryExpand()
         {
             tempProgress.Add(NelderMeadSimplexOperations.E);
         }
 
-        private void TryContractOut()
+        private void tryContractOut()
         {
             tempProgress.Add(NelderMeadSimplexOperations.C);
         }
 
-        private void TryContractIn()
+        private void tryContractIn()
         {
             tempProgress.Add(NelderMeadSimplexOperations.K);
         }
 
-        private void TryShrink()
+        private void tryShrink()
         {
             tempProgress.Add(NelderMeadSimplexOperations.S);
         }
@@ -303,7 +307,7 @@ namespace PopOptBox.Optimisers.StructuredSearch
 
         #region Choose
 
-        private void ChooseReflect()
+        private void chooseReflect()
         {
             LastStep = CurrentOperation == NelderMeadSimplexOperations.R
                 ? NelderMeadSteps.rR
@@ -311,25 +315,25 @@ namespace PopOptBox.Optimisers.StructuredSearch
             tempProgress.Clear();
         }
 
-        private void ChooseExpand()
+        private void chooseExpand()
         {
             LastStep = NelderMeadSteps.reE;
             tempProgress.Clear();
         }
 
-        private void ChooseContractOut()
+        private void chooseContractOut()
         {
             LastStep = NelderMeadSteps.rcC;
             tempProgress.Clear();
         }
 
-        private void ChooseContractIn()
+        private void chooseContractIn()
         {
             LastStep = NelderMeadSteps.rkK;
             tempProgress.Clear();
         }
 
-        private void ChooseShrink()
+        private void chooseShrink()
         {
             LastStep = tempProgress[1] == NelderMeadSimplexOperations.C
                 ? NelderMeadSteps.rcsS

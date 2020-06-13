@@ -15,7 +15,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation
         /// Tries to ensure thread-safe RNG.
         /// </summary>
         /// <param name="rng">A random number generator.</param>
-        public RandomNumberManager(RandomSource rng = null)
+        public RandomNumberManager(RandomSource? rng = null)
         {
             Rng = rng ?? new MersenneTwister(threadSafe: true);
         }

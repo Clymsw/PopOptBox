@@ -12,7 +12,7 @@ namespace PopOptBox.Base.FitnessCalculation
         /// </summary>
         /// <param name="decisionVector">Decision Vector is not used.</param>
         /// <returns><see cref="double.MaxValue"/></returns>
-        public static double DeathPenalty(DecisionVector decisionVector = null)
+        public static double DeathPenalty(DecisionVector? decisionVector = null)
         {
             // Optimisers minimise, therefore this is the worst possible value.
             return double.MaxValue;

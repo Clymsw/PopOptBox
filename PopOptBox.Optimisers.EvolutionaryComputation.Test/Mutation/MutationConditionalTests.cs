@@ -27,7 +27,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation.Test
         [Fact]
         public void Construct_NullConditions_Throws()
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            Assert.Throws<NullReferenceException>(() =>
                 new MutationConditional(
                     insideMutation, 
                     null));

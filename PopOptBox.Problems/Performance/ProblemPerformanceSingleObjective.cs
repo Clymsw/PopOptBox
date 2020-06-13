@@ -17,10 +17,10 @@ namespace PopOptBox.Problems.Performance
     public sealed class ProblemPerformanceSingleObjective
     {
         // Definitions
-        private readonly string optimiserDescription; 
+        private readonly string optimiserDescription;
         private readonly ProblemSingleObjective problem;
 
-        private double[] globalOptimumSolution;
+        public readonly double[] GlobalOptimumSolution;
 
         // Results
         private readonly DateTime startRunTime;
@@ -36,16 +36,21 @@ namespace PopOptBox.Problems.Performance
         /// <param name="problem">The problem description.</param>
         /// <param name="results">The completed optimisation runner.</param>
         public ProblemPerformanceSingleObjective(
-            string optimiserDescription, 
+            string optimiserDescription,
             ProblemSingleObjective problem,
             OptimiserRunner results)
         {
             this.optimiserDescription = optimiserDescription;
             this.problem = problem;
 
-            startRunTime = results.StartTime;
+            if (results.StartTime == null || results.BestFound == null || results.AllEvaluated == null)
+                throw new ArgumentNullException(nameof(results), "Optimisation has not been run.");
+
+            startRunTime = (DateTime)results.StartTime;
             bestFound = results.BestFound;
             allEvaluated = results.AllEvaluated;
+
+            GlobalOptimumSolution = problem.Evaluate(problem.GetGlobalOptimum()).ToArray();
         }
 
         #endregion
@@ -56,9 +61,9 @@ namespace PopOptBox.Problems.Performance
 
         public DecisionVector BestLocation => bestFound.DecisionVector;
 
-        public double[] GlobalOptimumSolution => calculateGlobalOptimumSolution();
+        
 
-        public double[] BestSolution => bestFound.SolutionVector;
+        public double[]? BestSolution => bestFound.SolutionVector;
         public double BestFitness => bestFound.Fitness;
 
         public TimeSpan TimeToFindBest => bestFound
@@ -79,21 +84,11 @@ namespace PopOptBox.Problems.Performance
             .OrderBy(t => t)
             .Last();
 
-        
         #endregion
 
         public override string ToString()
         {
             return $"Testing {optimiserDescription} on {problem}, reached {string.Join(" - ", bestFound.SolutionVector.Select(d => d.ToString("F3", NumberFormatInfo.InvariantInfo)))}.";
-        }
-
-        private double[] calculateGlobalOptimumSolution()
-        {
-            if (globalOptimumSolution == null)
-            {
-                globalOptimumSolution = problem.Evaluate(problem.GetGlobalOptimum()).ToArray();
-            }
-            return globalOptimumSolution;
         }
     }
 }

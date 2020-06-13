@@ -15,11 +15,11 @@ namespace PopOptBox.Base.Runtime
         /// <summary>
         /// The Agent that handles reinserting evaluated individuals and creating new ones
         /// </summary>
-        private ReinsertionAgent reinsertionAgent;
+        private ReinsertionAgent? reinsertionAgent;
         /// <summary>
         /// The Agent that handles evaluating individuals in parallel
         /// </summary>
-        private EvaluationAgent evaluationAgent;
+        private EvaluationAgent? evaluationAgent;
 
         /// <summary>
         /// The block that handles pushing reports to the reporting delegates provided
@@ -67,7 +67,10 @@ namespace PopOptBox.Base.Runtime
         /// </summary>
         public override void Cancel()
         {
-            reinsertionAgent.CancellationSource.Cancel();
+            if (reinsertionAgent != null)
+            {
+                reinsertionAgent.CancellationSource.Cancel();
+            }
         }
 
         /// <summary>
@@ -107,7 +110,10 @@ namespace PopOptBox.Base.Runtime
                 throw new ArgumentOutOfRangeException(nameof(newIndividualsPerGeneration),
                     "At least one new individual must be created each generation.");
             
-            SetUpAgents(timeOutManager, reportingFrequency, newIndividualsPerGeneration);
+            setUpAgents(timeOutManager, reportingFrequency, newIndividualsPerGeneration);
+
+            if (reinsertionAgent == null || evaluationAgent == null)
+                throw new ApplicationException("Failed to initialise TPL buffers.");
 
             reinsertionAgent.SaveAll = storeAll;
 
@@ -151,7 +157,7 @@ namespace PopOptBox.Base.Runtime
         /// <param name="timeOutManager">The <see cref="TimeOutManager"/>.</param>
         /// <param name="reportingFrequency">The number of reinsertions between reports on the current population</param>
         /// <param name="numberOfNewIndividualsPerGeneration">The number of new individuals to generate whenever an individual is reinserted.</param>
-        private void SetUpAgents(
+        private void setUpAgents(
             TimeOutManager timeOutManager,
             int reportingFrequency,
             int numberOfNewIndividualsPerGeneration)

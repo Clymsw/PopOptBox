@@ -19,7 +19,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.MultiObjective
         private const string CrowdingDistance = "Crowding Distance (temporary)";
 
         private readonly bool useReferencePoint;
-        private double[] referencePoint;
+        private readonly double[] referencePoint;
 
         /// <summary>
         /// Construct the NSGA-II fitness calculation engine.
@@ -31,7 +31,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.MultiObjective
         /// <param name="referencePoint">The reference point to use (the worst acceptable value, not the best). Ignored if useReferencePoint = false.</param>
         /// <exception cref="ArgumentOutOfRangeException">Thrown if the reference point provided has the wrong dimensionality.</exception>
         public Nsga2(IEnumerable<bool> minimise, int populationSize, IDominationSorter sorter,
-            bool useReferencePoint = false, IEnumerable<double> referencePoint = null)
+            bool useReferencePoint = false, IEnumerable<double>? referencePoint = null)
         {
             this.minimise = minimise.ToArray();
             this.populationSize = populationSize; 

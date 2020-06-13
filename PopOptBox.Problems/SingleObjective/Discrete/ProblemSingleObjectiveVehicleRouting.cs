@@ -21,15 +21,15 @@ namespace PopOptBox.Problems.SingleObjective.Discrete
             this.locations = locations.ToList();
 
             // Initialise distances
-            CreateLocationDistanceMap();
+            locationDistanceMap = new double[this.locations.Count, this.locations.Count];
+            createLocationDistanceMap();
         }
 
         /// <summary>
         /// Pre-processor to work out distances between locations
         /// </summary>
-        private void CreateLocationDistanceMap()
+        private void createLocationDistanceMap()
         {
-            locationDistanceMap = new double[locations.Count, locations.Count];
             for (var firstLoc = 0; firstLoc < locations.Count; firstLoc++)
             {
                 for (var secondLoc = firstLoc + 1; secondLoc < locations.Count; secondLoc++)

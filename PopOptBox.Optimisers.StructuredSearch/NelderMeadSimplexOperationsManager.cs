@@ -17,7 +17,7 @@ namespace PopOptBox.Optimisers.StructuredSearch
         {
             get => reflectionCoefficient;
             set =>
-                ParseCoefficientsAndBuild(
+                parseCoefficientsAndBuild(
                     value,
                     expansionCoefficient,
                     contractionCoefficient,
@@ -29,7 +29,7 @@ namespace PopOptBox.Optimisers.StructuredSearch
         {
             get => expansionCoefficient;
             set =>
-                ParseCoefficientsAndBuild(
+                parseCoefficientsAndBuild(
                     reflectionCoefficient,
                     value,
                     contractionCoefficient,
@@ -41,7 +41,7 @@ namespace PopOptBox.Optimisers.StructuredSearch
         {
             get => contractionCoefficient;
             set =>
-                ParseCoefficientsAndBuild(
+                parseCoefficientsAndBuild(
                     reflectionCoefficient,
                     expansionCoefficient,
                     value,
@@ -53,7 +53,7 @@ namespace PopOptBox.Optimisers.StructuredSearch
         {
             get => shrinkageCoefficient;
             set =>
-                ParseCoefficientsAndBuild(
+                parseCoefficientsAndBuild(
                     reflectionCoefficient,
                     expansionCoefficient,
                     contractionCoefficient,
@@ -73,11 +73,11 @@ namespace PopOptBox.Optimisers.StructuredSearch
 
         #region Simplex Operators
 
-        private ReflectExpandContract reflect;
-        private ReflectExpandContract expand;
-        private ReflectExpandContract contractOut;
-        private ReflectExpandContract contractIn;
-        private Shrink shrink;
+        private ReflectExpandContract? reflect;
+        private ReflectExpandContract? expand;
+        private ReflectExpandContract? contractOut;
+        private ReflectExpandContract? contractIn;
+        private Shrink? shrink;
         #endregion
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace PopOptBox.Optimisers.StructuredSearch
         /// <exception cref="ArgumentOutOfRangeException">Thrown when coefficients are not meaningful.</exception>
         public NelderMeadSimplexOperationsManager(HyperParameterManager coefficients)
         {
-            ParseCoefficientsAndBuild(
+            parseCoefficientsAndBuild(
                 coefficients.GetHyperParameterValue<double>(NelderMeadHyperParameters.Reflection_Coefficient),
                 coefficients.GetHyperParameterValue<double>(NelderMeadHyperParameters.Expansion_Coefficient),
                 coefficients.GetHyperParameterValue<double>(NelderMeadHyperParameters.Contraction_Coefficient),
@@ -109,6 +109,7 @@ namespace PopOptBox.Optimisers.StructuredSearch
         {
             switch (operation)
             {
+#pragma warning disable CS8602 // Dereference of a possibly null reference. Initialised in buildOperators()
                 case (NelderMeadSimplexOperations.R):
                     return reflect.Operate(currentSimplex);
                 case (NelderMeadSimplexOperations.E):
@@ -119,6 +120,7 @@ namespace PopOptBox.Optimisers.StructuredSearch
                     return contractIn.Operate(currentSimplex);
                 case (NelderMeadSimplexOperations.S):
                     return shrink.Operate(currentSimplex);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
                 default:
                     throw new ArgumentOutOfRangeException(nameof(operation), operation, "This operation is not understood.");
             }
@@ -128,7 +130,7 @@ namespace PopOptBox.Optimisers.StructuredSearch
         /// Ensures all coefficients are present and correct. 
         /// </summary>
         /// <remarks>Many of the basic checks are performed by the <see cref="DecisionSpace"/>s in <see cref="NelderMeadHyperParameters"/>.</remarks>
-        private void ParseCoefficientsAndBuild(
+        private void parseCoefficientsAndBuild(
             double reflectCoefficient, 
             double expandCoefficient, 
             double contractCoefficient, 
@@ -164,10 +166,10 @@ namespace PopOptBox.Optimisers.StructuredSearch
                 throw new ArgumentOutOfRangeException(nameof(shrinkCoefficient),
                     "Shrinkage Coefficient must be between 0 and 1.");
 
-            BuildOperators();
+            buildOperators();
         }
 
-        private void BuildOperators()
+        private void buildOperators()
         {
             reflect = new ReflectExpandContract(reflectionCoefficient);
             expand = new ReflectExpandContract(reflectionCoefficient * expansionCoefficient);
