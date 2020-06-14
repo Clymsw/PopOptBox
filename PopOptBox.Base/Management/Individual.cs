@@ -41,10 +41,7 @@ namespace PopOptBox.Base.Management
         /// </summary>
         public bool Legal { get; private set; }
 
-        /// <summary>
-        /// Current state of the individual.
-        /// </summary>
-        public IndividualState State = IndividualState.New;
+        public IndividualState State { get; private set; } = IndividualState.New;
 
         #endregion
 
