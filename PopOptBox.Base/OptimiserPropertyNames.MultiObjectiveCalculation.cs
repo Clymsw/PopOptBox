@@ -1,5 +1,9 @@
 namespace PopOptBox.Base
 {
+    /// <summary>
+    /// The list of names for properties which are automatically created in an <see cref="PopOptBox.Base.Management.Individual"/>
+    /// during the optimisation.
+    /// </summary>
     public static partial class OptimiserPropertyNames
     {
         /// <summary>

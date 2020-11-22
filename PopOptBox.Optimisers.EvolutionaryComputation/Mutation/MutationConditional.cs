@@ -22,7 +22,7 @@ namespace PopOptBox.Optimisers.EvolutionaryComputation.Mutation
         {
             this.mutation = mutation;
 
-            if (conditions == null || conditions.Length == 0)
+            if (conditions.Length == 0)
                 throw new ArgumentOutOfRangeException(nameof(conditions), "The conditions cannot be null or empty.");
 
             this.conditions = conditions;

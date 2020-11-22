@@ -59,5 +59,16 @@ namespace PopOptBox.Base.Runtime.Test
             Assert.True(pop.Count == 1);
             Assert.Equal(newInd, pop[0]);
         }
+        
+        [Fact]
+        public void ErrorIsPropagated()
+        {
+            var newInd = agent.CreateNewIndividuals(1).ElementAt(0);
+            Assert.Equal(IndividualState.Evaluating, newInd.State);
+            
+            agent.IndividualsForReinsertion.Post(newInd);
+            
+            Assert.Throws<InvalidOperationException>(() => agent.NewIndividuals.Receive());
+        }
     }
 }

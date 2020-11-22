@@ -42,7 +42,7 @@ namespace PopOptBox.Base.Management
         /// <param name="constantLengthDv">Whether the Decision Vector should be expected to be constant</param>
         public Population(
             int initialSize = 100,
-            IEnumerable<Individual> initialPopulation = null,
+            IEnumerable<Individual>? initialPopulation = null,
             bool constantLengthDv = true)
         {
             if (initialSize <= 0)
@@ -183,13 +183,13 @@ namespace PopOptBox.Base.Management
             // Add to population
             members.Add(individual);
 
-            Sort();
+            sort();
         }
 
         /// <summary>
         /// Sorts array by Fitness, best (lowest!) at top.
         /// </summary>
-        private void Sort()
+        private void sort()
         {
             members.Sort((p, q) => p.Fitness.CompareTo(q.Fitness));
         }
@@ -204,7 +204,7 @@ namespace PopOptBox.Base.Management
             if (members.Count == 0)
                 throw new InvalidOperationException("Population has no members.");
             
-            RemoveIndividualAt(members.Count - 1);
+            removeIndividualAt(members.Count - 1);
             
             AddIndividual(individualToInsert);
         }
@@ -224,7 +224,7 @@ namespace PopOptBox.Base.Management
             if (index < 0 || index >= members.Count)
                 throw new ArgumentOutOfRangeException(nameof(index), $"{index} is not a valid index into the population.");
 
-            RemoveIndividualAt(index);
+            removeIndividualAt(index);
             
             AddIndividual(individualToInsert);
         }
@@ -243,7 +243,7 @@ namespace PopOptBox.Base.Management
             try
             {
                 var individualIndex = members.FindIndex(i => i.Equals(individualToRemove));
-                RemoveIndividualAt(individualIndex);
+                removeIndividualAt(individualIndex);
             }
             catch (ArgumentNullException)
             {
@@ -253,7 +253,7 @@ namespace PopOptBox.Base.Management
             AddIndividual(individualToInsert);
         }
 
-        private void RemoveIndividualAt(int index)
+        private void removeIndividualAt(int index)
         {
             // Remove
             members.RemoveAt(index);

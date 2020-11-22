@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using MathNet.Numerics.Random;
 using PopOptBox.Base.Conversion;
 using PopOptBox.Base.Variables;
 
@@ -38,6 +40,27 @@ namespace PopOptBox.Base.Test.Helpers
             public override bool GetLegality(double definition)
             {
                 return true;
+            }
+        }
+
+        internal class EvaluatorWithErrorMock : Evaluator<double>
+        {
+            public const string ErrorMessage = "What a terrible definition!";
+            private readonly bool individualsAreLegal;
+            
+            public EvaluatorWithErrorMock(bool individualsAreLegal = true) : base(Definition_Key, Solution_Key)
+            {
+                this.individualsAreLegal = individualsAreLegal;
+            }
+
+            public override IEnumerable<double> Evaluate(double definition)
+            {
+                throw new ArgumentOutOfRangeException(nameof(definition), ErrorMessage);
+            }
+
+            public override bool GetLegality(double definition)
+            {
+                return individualsAreLegal;
             }
         }
     }

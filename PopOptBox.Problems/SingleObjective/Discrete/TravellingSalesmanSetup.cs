@@ -11,10 +11,13 @@ namespace PopOptBox.Problems.SingleObjective.Discrete
         public TravellingSalesmanSetup(string problemFilePath)
         {
             Locations = new List<double[]>();
-            ParseProblemFile(problemFilePath);
+            ShortName = "";
+            LongName = "";
+            parseProblemFile(problemFilePath);
 
             string solutionFilePath = problemFilePath.Replace(".tsp", ".opt.tour");
-            ParseSolutionFile(solutionFilePath);
+            OptimumRoute = new int[0];
+            parseSolutionFile(solutionFilePath);
         }
 
         #endregion
@@ -28,76 +31,71 @@ namespace PopOptBox.Problems.SingleObjective.Discrete
 
         #endregion
 
-        private void ParseProblemFile(string filePath)
+        private void parseProblemFile(string filePath)
         {
-            using (var reader = new StreamReader(File.OpenRead(@filePath)))
+            using var reader = new StreamReader(File.OpenRead(@filePath));
+            while (!reader.EndOfStream)
             {
-                while (!reader.EndOfStream)
+                var line = reader.ReadLine();
+
+                // See if it's a header line
+                var testForHeader = line.Split(':');
+
+                if (testForHeader[0] == "NAME")
                 {
-                    var line = reader.ReadLine();
+                    ShortName = testForHeader[1];
+                    continue;
+                }
 
-                    // See if it's a header line
-                    var testForHeader = line.Split(':');
+                if (testForHeader[0] == "COMMENT")
+                {
+                    LongName = testForHeader[1];
+                    continue;
+                }
 
-                    if (testForHeader[0] == "NAME")
-                    {
-                        ShortName = testForHeader[1];
-                        continue;
-                    }
+                // See if there's useful data
+                var testForData = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-                    if (testForHeader[0] == "COMMENT")
-                    {
-                        LongName = testForHeader[1];
-                        continue;
-                    }
+                if (testForData[0] == "EOF")
+                    break;
+                //int.TryParse(testForData[0], out int cityIndex);
 
-                    // See if there's useful data
-                    var testForData = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
-                    if (testForData[0] == "EOF")
-                        break;
-
-                    int.TryParse(testForData[0], out int cityIndex);
-
-                    if (testForData.Length == 3)
-                    {
-                        //We've reached the coordinates
-                        double.TryParse(testForData[1], out double x);
-                        double.TryParse(testForData[2], out double y);
-                        Locations.Add(new double[2] { x, y });
-                    }
+                if (testForData.Length == 3)
+                {
+                    //We've reached the coordinates
+                    double.TryParse(testForData[1], out double x);
+                    double.TryParse(testForData[2], out double y);
+                    Locations.Add(new double[2] { x, y });
                 }
             }
         }
 
-        private void ParseSolutionFile(string filePath)
+        private void parseSolutionFile(string filePath)
         {
-            using (var reader = new StreamReader(File.OpenRead(@filePath)))
+            List<int> optimumTour = new List<int>();
+
+            using var reader = new StreamReader(File.OpenRead(@filePath));
+            while (!reader.EndOfStream)
             {
-                List<int> optimumTour = new List<int>();
+                var line = reader.ReadLine();
 
-                while (!reader.EndOfStream)
+                var test = line.Split(':');
+
+                if (test[0] == "EOF")
+                    break;
+
+                int.TryParse(test[0], out int cityIndex);
+
+                if (cityIndex > 0)
                 {
-                    var line = reader.ReadLine();
-
-                    var test = line.Split(':');
-
-                    if (test[0] == "EOF")
-                        break;
-
-                    int.TryParse(test[0], out int cityIndex);
-
-                    if (cityIndex > 0)
-                    {
-                        optimumTour.Add(cityIndex - 1);
-                    }
+                    optimumTour.Add(cityIndex - 1);
                 }
-
-                // Routes return to origin
-                optimumTour.Add(optimumTour[0]);
-
-                OptimumRoute = optimumTour.ToArray();
             }
+
+            // Routes return to origin
+            optimumTour.Add(optimumTour[0]);
+
+            OptimumRoute = optimumTour.ToArray();
         }
     }
 }

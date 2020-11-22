@@ -22,8 +22,11 @@ namespace PopOptBox.Base.PopulationCalculation.Test
             bestDv = new[] { 0.1, 0.5, 1.2 };
             worstDv = new[] { 0.1, bestDv[1] + DvDifference, 1.2 };
 
-            var ind1 = ObjectCreators.EvaluateIndividualAndSetFitness(ObjectCreators.GetIndividual(worstDv), BestFitness + FitnessDifference);
-            var ind2 = ObjectCreators.EvaluateIndividualAndSetFitness(ObjectCreators.GetIndividual(bestDv), BestFitness);
+            var ind1 = ObjectCreators.GetIndividual(worstDv);
+            var ind2 = ObjectCreators.GetIndividual(bestDv);
+
+            ObjectCreators.EvaluateIndividualAndSetFitness(ind1, BestFitness + FitnessDifference);
+            ObjectCreators.EvaluateIndividualAndSetFitness(ind2, BestFitness);
 
             singleObjectivePopulation = ObjectCreators.GetEmptyPopulation(140, true);
             singleObjectivePopulation.AddIndividual(ind1);
@@ -35,9 +38,8 @@ namespace PopOptBox.Base.PopulationCalculation.Test
         [Fact]
         public void Centroid_DifferentLengthDecisionVectors_Throws()
         {
-            var newInd = ObjectCreators.EvaluateIndividualAndSetFitness(
-                ObjectCreators.GetIndividual(Enumerable.Repeat<double>(1.2, bestDv.Length+1)), 
-                BestFitness + FitnessDifference);
+            var newInd = ObjectCreators.GetIndividual(Enumerable.Repeat<double>(1.2, bestDv.Length + 1));
+            ObjectCreators.EvaluateIndividualAndSetFitness(newInd, BestFitness + FitnessDifference);
             
             var pop2 = ObjectCreators.GetEmptyPopulation(5, false);
             pop2.AddIndividual(singleObjectivePopulation.Best());

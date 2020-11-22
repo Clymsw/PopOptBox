@@ -87,6 +87,7 @@ namespace PopOptBox.Base.Management
         /// <remarks>A basic implementation to override.</remarks>
         /// <param name="individuals">The individuals to try to reinsert.</param>
         /// <returns>The number of individuals actually inserted.</returns>
+        /// <exception cref="InvalidOperationException">Propagates error from <see cref="Population"/> insertion.</exception>
         protected virtual int AssessFitnessAndDecideFate(IEnumerable<Individual> individuals)
         {
             var inds = individuals as Individual[] ?? individuals.ToArray();
@@ -114,6 +115,7 @@ namespace PopOptBox.Base.Management
         /// </summary>
         /// <param name="individuals">List of <see cref="Individual"/>s to reinsert.</param>
         /// <returns>The number of individuals successfully reinserted.</returns>
+        /// <exception cref="InvalidOperationException">Thrown when any individual is incorrect.</exception>
         public int ReInsert(IEnumerable<Individual> individuals)
         {
             var individualsToReinsert = new List<Individual>();
@@ -121,7 +123,12 @@ namespace PopOptBox.Base.Management
             foreach (var ind in individuals)
             {
                 if (ind.State != IndividualState.Evaluated)
-                    throw new ArgumentException("Individual is not evaluated!");
+                    throw new InvalidOperationException("Individual is not evaluated!");
+
+                if (ind.GetPropertyNames().Contains(OptimiserPropertyNames.EvaluationError))
+                    throw new InvalidOperationException(
+                        "Individual evaluation failed, arresting optimisation.",
+                        ind.GetProperty<Exception>(OptimiserPropertyNames.EvaluationError));
 
                 ind.SetProperty(
                     OptimiserPropertyNames.ReinsertionTime,

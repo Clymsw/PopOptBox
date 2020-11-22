@@ -67,5 +67,32 @@ namespace PopOptBox.Base.MultiObjectiveCalculation.Test
                             .GetProperty<int>(OptimiserPropertyNames.ParetoFront) == 3);
         }
         
+        [Fact]
+        public void ManyIndividuals_AllocatesParetoFrontToAll()
+        {
+            var rng = new System.Random();
+
+            var shouldMinimise = new[] { true, true, true };
+            var inds = new List<Individual>();
+            for (var i = 0; i < 200; i++)
+            {
+                inds.Add(ObjectCreators.GetIndividual(new[] { rng.NextDouble(), rng.NextDouble(), rng.NextDouble() }));
+            }
+
+            foreach (var ind in inds)
+            {
+                ind.SendForEvaluation();
+                ind.SetProperty("sol1", ind.DecisionVector[0]);
+                ind.SetProperty("sol2", ind.DecisionVector[1]);
+                ind.SetProperty("sol3", ind.DecisionVector[2]);
+                ind.SetSolution("sol1", "sol2", "sol3");
+            }
+
+            var sorter = new FastNonDominatedSort();
+
+            sorter.PerformSort(inds, shouldMinimise);
+
+            Assert.True(inds.All(i => i.GetProperty<int>(OptimiserPropertyNames.ParetoFront) > 0));
+        }
     }
 }

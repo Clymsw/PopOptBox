@@ -44,7 +44,7 @@ namespace PopOptBox.Base.Management
         /// <summary>
         /// Current state of the individual.
         /// </summary>
-        public IndividualState State = IndividualState.New;
+        public IndividualState State { get; private set; } = IndividualState.New;
 
         #endregion
 
@@ -57,6 +57,7 @@ namespace PopOptBox.Base.Management
         public Individual(DecisionVector decisionVector)
         {
             DecisionVector = decisionVector;
+            SolutionVector = new double[0];
         }
 
         /// <summary>
@@ -66,7 +67,7 @@ namespace PopOptBox.Base.Management
         {
             var newIndividual = new Individual(DecisionVector)
             {
-                SolutionVector = (double[])SolutionVector?.Clone(),
+                SolutionVector = (double[])SolutionVector.Clone(),
                 Fitness = Fitness,
                 Legal = Legal,
                 State = State,
@@ -167,7 +168,7 @@ namespace PopOptBox.Base.Management
         }
 
         /// <summary>
-        /// Assigns Solution Vector based on given Property names
+        /// Assigns Solution Vector based on given Property names and sets State to <see cref="IndividualState.Evaluated"/>.
         /// </summary>
         /// <param name="keyNames">Names of property keys to set as solution vector.</param>
         /// <exception cref="ArgumentOutOfRangeException">Thrown when any property name does not exist.</exception>
@@ -178,6 +179,7 @@ namespace PopOptBox.Base.Management
 
             SolutionVector = keyNames.Select(GetProperty<double>).ToArray();
 
+            Legal = true;
             State = IndividualState.Evaluated;
         }
 
@@ -201,12 +203,15 @@ namespace PopOptBox.Base.Management
         }
 
         /// <summary>
-        /// Sets the legality of the individual.
+        /// Sets the individual as illegal and the state as <see cref="IndividualState.Evaluated"/>.
         /// </summary>
-        /// <param name="legal">Set <see langword="true"/> when the individual is legal.</param>
-        public void SetLegality(bool legal)
+        public void SetIllegal()
         {
-            Legal = legal;
+            if (State != IndividualState.Evaluating)
+                throw new InvalidOperationException("Individual is not evaluating!");
+
+            Legal = false;
+            State = IndividualState.Evaluated;
         }
 
         #endregion
@@ -219,7 +224,7 @@ namespace PopOptBox.Base.Management
                 return false;
 
             return DecisionVector.Equals(other.DecisionVector) &&
-                   (SolutionVector?.SequenceEqual(other.SolutionVector) ?? true);
+                   SolutionVector.SequenceEqual(other.SolutionVector);
         }
 
         public override int GetHashCode()

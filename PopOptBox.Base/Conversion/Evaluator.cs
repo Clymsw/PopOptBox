@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using PopOptBox.Base.Management;
@@ -34,15 +35,22 @@ namespace PopOptBox.Base.Conversion
                 throw new System.InvalidOperationException("Individual is not ready for evaluation.");
 
             var definition = ind.GetProperty<TReality>(definitionKey);
+            
             if (!GetLegality(definition))
             {
-                ind.SetLegality(false);
+                ind.SetIllegal();
+                return;
             }
-            else
+            
+            try
             {
                 var solution = Evaluate(definition);
                 SetSolution(ind, solution);
-                ind.SetLegality(true);
+            }
+            catch (Exception e)
+            {
+                ind.SetIllegal();
+                ind.SetProperty(OptimiserPropertyNames.EvaluationError, e);
             }
         }
 

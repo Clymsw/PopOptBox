@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Moq;
@@ -24,21 +25,31 @@ namespace PopOptBox.Base.Test.Helpers
             return new Individual(dv);
         }
 
-        internal static Individual EvaluateIndividual(Individual ind, double fitness = 2)
+        internal static void EvaluateIndividual(Individual ind, double fitness = 2)
         {
             ind.SendForEvaluation();
             ind.SetProperty(Solution_Key, fitness);
             ind.SetSolution(Solution_Key);
-            ind.SetLegality(true);
-
-            return ind;
         }
 
-        internal static Individual EvaluateIndividualAndSetFitness(Individual ind, double fitness = 2)
+        internal static void EvaluateIndividualAsIllegal(Individual ind)
         {
-            ind = EvaluateIndividual(ind, fitness);
+            ind.SendForEvaluation();
+            ind.SetIllegal();
+        }
+
+        internal static void EvaluateIndividualHasError(Individual ind, Exception ex)
+        {
+            ind.SendForEvaluation();
+            ind.SetIllegal();
+            ind.SetProperty(OptimiserPropertyNames.EvaluationError, ex);
+        }
+
+
+        internal static void EvaluateIndividualAndSetFitness(Individual ind, double fitness = 2)
+        {
+            EvaluateIndividual(ind, fitness);
             ind.SetFitness(fitness);
-            return ind;
         }
 
         internal static Population GetEmptyPopulation(

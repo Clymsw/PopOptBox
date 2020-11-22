@@ -13,22 +13,22 @@ namespace PopOptBox.Base.Runtime
         /// <summary>
         /// The time the optimisation was started.
         /// </summary>
-        public DateTime StartTime { get; protected set; }
+        public DateTime? StartTime { get; protected set; }
 
         /// <summary>
         /// The final result (single objective).
         /// </summary>
-        public Individual BestFound { get; protected set; }
+        public Individual? BestFound { get; protected set; }
 
         /// <summary>
         /// A stored list of all individuals which have been tried.
         /// </summary>
-        public List<Individual> AllEvaluated { get; protected set; }
+        public List<Individual>? AllEvaluated { get; protected set; }
 
         /// <summary>
         /// The final population the optimiser had when it terminated.
         /// </summary>
-        public Population FinalPopulation { get; protected set; }
+        public Population? FinalPopulation { get; protected set; }
 
         /// <summary>
         /// Runs the optimisation.

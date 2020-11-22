@@ -15,7 +15,7 @@ namespace PopOptBox.Base.Runtime
         private readonly Func<Population, bool> convergenceCheckers;
         private readonly Action<Population> reporters;
 
-        private TimeOutManager timeOutManager;
+        private TimeOutManager? timeOutManager;
         private volatile bool cancelDemanded;
 
         /// <summary>
@@ -35,6 +35,7 @@ namespace PopOptBox.Base.Runtime
             this.evaluator = evaluator;
             this.convergenceCheckers = convergenceCheckers;
             this.reporters = reporters;
+            cancelDemanded = false; // For certainty!
         }
 
         /// <summary>

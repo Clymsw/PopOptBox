@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using PopOptBox.Base.PopulationCalculation;
 using PopOptBox.Base.Test.Helpers;
 using Xunit;
@@ -25,6 +27,40 @@ namespace PopOptBox.Base.Runtime.Test
             
             Assert.Equal(ObjectCreators.OptimiserBuilderMock.PopulationSize, 
                 runner.AllEvaluated.Count);
+        }
+        
+        [Fact]
+        public void Run_EvaluatorThrowsError_ErrorWrappedAndThrown()
+        {
+            var errorRunner = new OptimiserRunnerParallel(
+                builder,
+                new ObjectCreators.EvaluatorWithErrorMock(),
+                p => p.AbsoluteDecisionVectorConvergence(1),
+                p => { });
+
+            var failed = false;
+            try
+            {
+                errorRunner.Run();
+            }
+            catch (AggregateException e)
+            {
+                Assert.IsType<InvalidOperationException>(e.InnerException);
+                failed = true;
+            }
+            Assert.True(failed);
+        }
+        
+        [Fact]
+        public void Run_IndividualIsIllegal_AssignsPenaltyValue()
+        {
+            var illegalRunner = new OptimiserRunnerParallel(
+                builder,
+                new ObjectCreators.EvaluatorWithErrorMock(false),
+                p => p.AbsoluteDecisionVectorConvergence(1),
+                p => { });
+            illegalRunner.Run();
+            Assert.True(illegalRunner.AllEvaluated.All(i => i.Fitness == ObjectCreators.OptimiserBuilderMock.PenaltyValue));
         }
     }
 }

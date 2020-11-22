@@ -36,7 +36,7 @@ namespace PopOptBox.Base.Management.Test
         {
             var newInd = ObjectCreators.GetIndividual(builder.StartingDecVec);
             
-            Assert.Throws<ArgumentException>(() => optimiserMock.ReInsert(new[] {newInd}));
+            Assert.Throws<InvalidOperationException>(() => optimiserMock.ReInsert(new[] {newInd}));
         }
         
         [Fact]
@@ -45,17 +45,40 @@ namespace PopOptBox.Base.Management.Test
             var newInd = ObjectCreators.GetIndividual(builder.StartingDecVec);
             newInd.SendForEvaluation();
 
-            Assert.Throws<ArgumentException>(() => optimiserMock.ReInsert(new[] {newInd}));
+            Assert.Throws<InvalidOperationException>(() => optimiserMock.ReInsert(new[] {newInd}));
         }
-
+        
         [Fact]
         public void Reinsertion_FitnessAssessedIndividual_NotAllowed()
         {
             // TODO: Is this the desired behaviour?
             var newInd = ObjectCreators.GetIndividual(builder.StartingDecVec);
-            newInd = ObjectCreators.EvaluateIndividualAndSetFitness(newInd);
+            ObjectCreators.EvaluateIndividualAndSetFitness(newInd);
 
-            Assert.Throws<ArgumentException>(() => optimiserMock.ReInsert(new[] { newInd }));
+            Assert.Throws<InvalidOperationException>(() => optimiserMock.ReInsert(new[] { newInd }));
+        }
+
+        [Fact]
+        public void Reinsertion_FailedIndividual_RethrowsError()
+        {
+            var newInd = ObjectCreators.GetIndividual(builder.StartingDecVec);
+            ObjectCreators.EvaluateIndividualHasError(newInd,
+                new ArgumentOutOfRangeException("Test failure."));
+
+            Assert.Throws<InvalidOperationException>(() => optimiserMock.ReInsert(new[] { newInd }));
+        }
+
+        [Fact]
+        public void Reinsertion_IllegalIndividual_Allowed()
+        {
+            var newInd = ObjectCreators.GetIndividual(builder.StartingDecVec);
+            ObjectCreators.EvaluateIndividualAsIllegal(newInd);
+
+            optimiserMock.ReInsert(new[] { newInd });
+
+            Assert.Equal(
+                ObjectCreators.OptimiserBuilderMock.PenaltyValue,
+                newInd.Fitness);
         }
 
         [Fact]
