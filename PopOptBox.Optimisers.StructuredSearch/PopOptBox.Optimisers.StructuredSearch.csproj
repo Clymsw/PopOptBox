@@ -1,12 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
-    <ApplicationIcon />
-    <Win32Resource />
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>PopOptBox.Optimisers.StructuredSearch</AssemblyName>
     <RootNamespace>PopOptBox.Optimisers.StructuredSearch</RootNamespace>
-    <LangVersion>8</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 

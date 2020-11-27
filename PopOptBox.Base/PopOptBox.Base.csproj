@@ -1,16 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
         <RootNamespace>PopOptBox.Base</RootNamespace>
-        <ApplicationIcon />
-        <Win32Resource />
-        <AssemblyVersion>2.0.0.0</AssemblyVersion>
-        <Version>2.0.0</Version>
-        <NeutralLanguage>en-GB</NeutralLanguage>
         <AssemblyName>PopOptBox.Base</AssemblyName>
-        <LangVersion>8</LangVersion>
         <Nullable>enable</Nullable>
+        <OutputType>Library</OutputType>
     </PropertyGroup>
 
   <ItemGroup>
