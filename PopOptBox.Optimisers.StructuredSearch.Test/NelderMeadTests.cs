@@ -18,7 +18,7 @@ namespace PopOptBox.Optimisers.StructuredSearch.Test
         private const double Worst_Fitness = 3.0;
         private const double Fitness_Step = 0.1;
         private double bestFitness;
-            
+
         public NelderMeadTests()
         {
             var hyps = NelderMeadHyperParameters.GetDefaultHyperParameters();

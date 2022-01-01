@@ -36,25 +36,5 @@ namespace PopOptBox.Optimisers.StructuredSearch.Simplices
                 best.GetDecisionSpace(),
                 newLocation);
         }
-        
-        #region Equals, GetHashCode
-
-        public override bool Equals(object obj)
-        {
-            if (!(obj is Shrink other))
-                return false;
-
-            return Coefficient == other.Coefficient;
-        }
-
-        public override int GetHashCode()
-        {
-            return new
-            {
-                Coefficient
-            }.GetHashCode();
-        }
-
-        #endregion
     }
 }

@@ -78,5 +78,25 @@ namespace PopOptBox.Optimisers.StructuredSearch.Simplices
                 simplex.Best().DecisionVector.GetDecisionSpace(),
                 centroid.AsArray());
         }
+
+        #region Equals, GetHashCode
+
+        public override bool Equals(object obj)
+        {
+            if (obj is not ReflectExpandContract other)
+                return false;
+
+            return Coefficient == other.Coefficient;
+        }
+
+        public override int GetHashCode()
+        {
+            return new
+            {
+                Coefficient
+            }.GetHashCode();
+        }
+
+        #endregion
     }
 }

@@ -20,7 +20,7 @@ namespace PopOptBox.Optimisers.StructuredSearch
             = NelderMeadSimplexOperations.R;
 
         private readonly List<NelderMeadSimplexOperations> tempProgress =
-            new List<NelderMeadSimplexOperations>();
+            new();
 
         private Individual? tempReflect;
 
@@ -37,7 +37,7 @@ namespace PopOptBox.Optimisers.StructuredSearch
         /// List (length 0-1) of vertices which have been sent out during optimisation
         /// </summary>
         protected readonly List<DecisionVector> VerticesNotEvaluated =
-            new List<DecisionVector>();
+            new();
 
         #endregion
 
