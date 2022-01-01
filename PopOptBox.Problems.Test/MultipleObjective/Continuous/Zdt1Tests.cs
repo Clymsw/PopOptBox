@@ -49,5 +49,28 @@ namespace PopOptBox.Problems.MultipleObjective.Continuous.Test
             Assert.True(Math.Abs(values[2] - result.ElementAt(0)) < 1e-6);
             Assert.True(Math.Abs(values[3] - result.ElementAt(1)) < 1e-6);
         }
+
+        [Theory]
+        [InlineData(new double[] {0.0000360993,0.9939917271, 0.1202737561,0.6531949307, 0.3566538692,0.4027949521, 0.6557341303,0.1902258770, 1.0000000000,0.0000000000})]
+        public void GeneratesOptimalFrontCorrectly(double[] values)
+        {
+            var evaluator = new Zdt1(2);
+
+            var numPoints = values.Length / 2;
+
+            var front = evaluator.GetOptimalParetoFront(numPoints);
+            var frontSols = front.Select(x => evaluator.Evaluate(x));
+
+            int p = 0;
+            foreach (var point in frontSols)
+            {
+                var testPoint1 = values[p * 2];
+                var testPoint2 = values[1 + p * 2];
+                Assert.True(Math.Abs(testPoint1 - point.ElementAt(0)) < 1e-3);
+                Assert.True(Math.Abs(testPoint2 - point.ElementAt(1)) < 1e-3);
+                p++;
+            }
+
+        }
     }
 }

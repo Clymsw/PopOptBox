@@ -17,7 +17,7 @@ namespace PopOptBox.Problems.MultipleObjective.Continuous
         /// <param name="numberOfDimensions">The number of input dimensions (default is 30)</param>
         public Zdt1(int numberOfDimensions = 30) : base(
             "ZDT1", 
-            DecisionSpace.CreateForUniformDoubleArray(numberOfDimensions, 0,1,0,1),
+            DecisionSpace.CreateForUniformDoubleArray(numberOfDimensions, 0, 1+1e12, 0, 1+1e12),
             ContinuousProblemPropertyNames.TheLocation,
             ContinuousProblemPropertyNames.Result + "1", ContinuousProblemPropertyNames.Result + "2")
         {
@@ -31,13 +31,8 @@ namespace PopOptBox.Problems.MultipleObjective.Continuous
 
             var f1 = (double)definition.ElementAt(0);
 
-            var g = 0.0;
-            for (var i = 1; i < numDims; i++)
-            {
-                g += (double) definition.ElementAt(i) / (numDims - 1);
-            }
-            g *= 9;
-            g += 1;
+            var g = definition.Sum(d => (double)d) - f1;
+            g = 1.0 + (9.0 / (numDims - 1.0) * g);
 
             var h = 1 - Math.Sqrt(f1 / g);
 
@@ -50,7 +45,7 @@ namespace PopOptBox.Problems.MultipleObjective.Continuous
         {
             var xm = Enumerable.Repeat(0.0, numberOfDimensions - 1);
             var x1 = Enumerable.Range(0, numberOfPoints)
-                .Select(i => new List<double> {(double) i / numberOfPoints});
+                .Select(i => new List<double> { (double)i / (numberOfPoints - 1) });
             
             var pf = new List<DecisionVector>();
             foreach (var f1 in x1)
