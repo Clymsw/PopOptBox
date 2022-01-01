@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>PopOptBox.Optimisers.EvolutionaryComputation</AssemblyName>
     <RootNamespace>PopOptBox.Optimisers.EvolutionaryComputation</RootNamespace>
     <Nullable>enable</Nullable>
