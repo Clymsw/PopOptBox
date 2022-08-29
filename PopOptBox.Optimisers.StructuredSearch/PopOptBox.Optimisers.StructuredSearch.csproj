@@ -11,4 +11,8 @@
     <ProjectReference Include="..\PopOptBox.Base\PopOptBox.Base.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Parallel\" />
+  </ItemGroup>
+
 </Project>
